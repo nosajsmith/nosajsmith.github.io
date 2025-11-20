@@ -1,0 +1,22 @@
+{
+  "plans": [
+    {
+      "unit_id": "2DIV",
+      "phase": 1,
+      "title": "Main thrust",
+      "link_objective": "OBJ_HOLD_RIDGE",
+      "path": [[6,5], [8,5], [10,5]],
+      "min_odds": 1.2,
+      "required_adjacent": true
+    },
+    {
+      "unit_id": "ENG1",
+      "phase": 1,
+      "title": "Bridge team",
+      "path": [[5,5], [7,5]]
+    }
+  ],
+  "lanes": [
+    { "name": "east", "path": [[5,5],[12,5]], "width": 2 }
+  ]
+}

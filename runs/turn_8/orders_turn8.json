@@ -1,0 +1,26 @@
+[
+  {
+    "unit_id": "R_CAV",
+    "action": "attack",
+    "reason": "AI(Group 1) strike 1DIV",
+    "turn": 8,
+    "priority": "high",
+    "status": "executed",
+    "target_id": "1DIV",
+    "target_xy": null,
+    "meta": null,
+    "rejection_reason": null
+  },
+  {
+    "unit_id": "R_RAID",
+    "action": "attack",
+    "reason": "AI(Group 1) strike 1DIV",
+    "turn": 8,
+    "priority": "high",
+    "status": "executed",
+    "target_id": "1DIV",
+    "target_xy": null,
+    "meta": null,
+    "rejection_reason": null
+  }
+]

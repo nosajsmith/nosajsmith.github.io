@@ -1,0 +1,15 @@
+[
+  {
+    "attackers": [
+      "3DIV",
+      "R_ART1"
+    ],
+    "defender_id": "ENG1",
+    "outcome": "attacker_success",
+    "atk_strength": 20,
+    "def_strength": 10,
+    "atk_losses": 0,
+    "def_losses": 1,
+    "notes": ""
+  }
+]

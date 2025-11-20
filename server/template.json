@@ -1,0 +1,13 @@
+{
+  "name": "template",
+  "metadata": { "author": "you", "notes": "duplicate and edit" },
+  "start_turn": 1,
+  "blue_units": [
+    { "id": "B-1", "name": "RCT-1", "type": "infantry", "strength": 100, "fatigue": 5, "hq": "1st Corps", "pos": [0, 0] },
+    { "id": "B-2", "name": "RCT-2", "type": "infantry", "strength": 95, "fatigue": 4, "hq": "1st Corps", "pos": [-1, 1] }
+  ],
+  "red_units": [
+    { "id": "R-1", "name": "NK Div", "type": "infantry", "strength": 90, "fatigue": 6, "hq": "II Corps", "pos": [2, 0] }
+  ],
+  "objectives": [[1, 0], [2, 1]]
+}

@@ -1,0 +1,30 @@
+{
+  "events": [
+    {
+      "name": "Reserve arrives",
+      "when": { "turn": 2 },
+      "action": "spawn_unit",
+      "unit": {
+        "unit_id": "RES1",
+        "name": "Reserve Brigade",
+        "position": [6, 4],
+        "fatigue": 20,
+        "supply": 80,
+        "entrenchment": 0
+      }
+    },
+    {
+      "name": "2DIV morale shock if low supply",
+      "when": { "turn": { ">=": 1 }, "unit_id": "2DIV", "unit_attr": { "supply": "<=30" } },
+      "action": "modify_unit",
+      "unit_id": "2DIV",
+      "changes": { "fatigue": 80, "stance": "retreat" }
+    },
+    {
+      "name": "Weather worsens",
+      "when": { "turn": 3 },
+      "action": "message",
+      "text": "Heavy rain—movement reduced next turn."
+    }
+  ]
+}

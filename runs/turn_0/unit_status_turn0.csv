@@ -1,0 +1,6 @@
+unit_id,name,x,y,fatigue,supply,entrenchment,exposure,stance,suppressed_turns,side,morale,cohesion,shaken,routed
+IICORPS_HQ,II Corps HQ,0,0,0,100,0,0,normal,0,BLUE,70,75,0,0
+2DIV,2nd Infantry Division,0,0,0,100,0,0,normal,0,BLUE,70,75,0,0
+ENG1,1st Engineer Bn,0,0,0,100,0,0,normal,0,BLUE,70,75,0,0
+3DIV,3rd Infantry Division (Red),0,0,0,100,0,0,normal,0,RED,70,80,0,0
+R_ART1,1st Artillery Regt (Red),0,0,0,100,0,0,normal,0,RED,70,75,0,0

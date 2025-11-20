@@ -1,0 +1,30 @@
+- name: "Fallback When Flanked"
+  trigger: "enemy breakthrough"
+  scope: "division"
+  conditions:
+    fatigue: "> 60"
+    supply: "< 40"
+    flanked: true
+  action: "fallback"
+  priority: high
+  recommendation_text: "Division is fatigued and under flank threat. Recommend fallback."
+
+- name: "Rest After Prolonged Combat"
+  trigger: "unit exhausted"
+  scope: "any"
+  conditions:
+    fatigue: "> 75"
+    days_in_combat: "> 3"
+    casualties: "> 20"
+  action: "rest"
+  recommendation_text: "Recommend rest for unit after extended combat and losses."
+
+- name: "Hold Key Objective"
+  trigger: "hold objective"
+  scope: "HQ"
+  conditions:
+    objective_controlled: true
+    supply: "> 50"
+    fatigue: "< 50"
+  action: "hold"
+  priority: normal

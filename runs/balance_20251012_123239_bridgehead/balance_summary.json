@@ -1,0 +1,23 @@
+{
+  "count": 10,
+  "means": {
+    "red_losses": 0,
+    "objectives_total": 5,
+    "blue_losses": 0,
+    "objectives_secured": 2,
+    "objectives_failed": 2,
+    "score": 25,
+    "turns": 8,
+    "route_uptime": 1.0
+  },
+  "stdevs": {
+    "red_losses": 0.0,
+    "objectives_total": 0.0,
+    "blue_losses": 0.0,
+    "objectives_secured": 0.0,
+    "objectives_failed": 0.0,
+    "score": 0.0,
+    "turns": 0.0,
+    "route_uptime": 0.0
+  }
+}

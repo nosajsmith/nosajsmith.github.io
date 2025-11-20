@@ -1,0 +1,50 @@
+[
+  {
+    "duration": 2,
+    "start_token": "been",
+    "end_token": "running",
+    "span_tokens": [
+      "been",
+      "running"
+    ]
+  },
+  {
+    "duration": 1,
+    "start_token": "She",
+    "end_token": "She",
+    "span_tokens": [
+      "She"
+    ]
+  },
+  {
+    "duration": 2,
+    "start_token": "the",
+    "end_token": "meeting",
+    "span_tokens": [
+      "the",
+      "meeting"
+    ]
+  },
+  {
+    "duration": 4,
+    "start_token": "the",
+    "end_token": "team",
+    "span_tokens": [
+      "the",
+      "United",
+      "Nations",
+      "team"
+    ]
+  },
+  {
+    "duration": 4,
+    "start_token": "the",
+    "end_token": "route",
+    "span_tokens": [
+      "the",
+      "air",
+      "supply",
+      "route"
+    ]
+  }
+]

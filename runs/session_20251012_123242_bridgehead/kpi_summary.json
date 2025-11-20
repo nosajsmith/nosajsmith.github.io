@@ -1,0 +1,11 @@
+{
+  "scenario": "scenarios/bridgehead.json",
+  "turns": 8,
+  "score": 25,
+  "objectives_total": 5,
+  "objectives_secured": 2,
+  "objectives_failed": 2,
+  "route_uptime": 1.0,
+  "blue_losses": 0,
+  "red_losses": 0
+}

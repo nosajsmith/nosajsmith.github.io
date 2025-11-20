@@ -1,0 +1,36 @@
+{
+  "turn": 0,
+  "delivered": [
+    {
+      "id": "C_BLUE_MAIN_1",
+      "name": "Blue Main Replacements",
+      "route": "RTE_BLUE_MAIN",
+      "status": "active",
+      "delivered": {
+        "infantry": 20,
+        "armor": 4,
+        "supplies": 50
+      },
+      "ratio": 1.0
+    }
+  ],
+  "lost": [],
+  "skipped": [],
+  "pools": {
+    "BLUE": {
+      "inf": 116,
+      "arm": 30,
+      "art": 20,
+      "generic": 80,
+      "infantry": 2200,
+      "armor": 440,
+      "supplies": 5500
+    },
+    "RED": {
+      "inf": 120,
+      "arm": 30,
+      "art": 20,
+      "generic": 80
+    }
+  }
+}

@@ -1,0 +1,136 @@
+[
+  {
+    "unit_id": "3DIV",
+    "action": "attack",
+    "priority": "high",
+    "status": "pending",
+    "text": "attack",
+    "target_id": "IICORPS_HQ",
+    "data": {
+      "release_turn": 3
+    }
+  },
+  {
+    "unit_id": "R_ART1",
+    "action": "attack",
+    "priority": "high",
+    "status": "pending",
+    "text": "attack",
+    "target_id": "IICORPS_HQ",
+    "data": {
+      "release_turn": 3
+    }
+  },
+  {
+    "unit_id": "3DIV",
+    "action": "move_to",
+    "priority": "high",
+    "status": "pending",
+    "text": "Advance toward IICORPS_HQ for attack.",
+    "target_id": null,
+    "data": {
+      "target_xy": [
+        0,
+        0
+      ],
+      "release_turn": 3
+    }
+  },
+  {
+    "unit_id": "R_ART1",
+    "action": "move_to",
+    "priority": "high",
+    "status": "pending",
+    "text": "Advance toward IICORPS_HQ for attack.",
+    "target_id": null,
+    "data": {
+      "target_xy": [
+        0,
+        0
+      ],
+      "release_turn": 3
+    }
+  },
+  {
+    "unit_id": "3DIV",
+    "action": "attack",
+    "priority": "high",
+    "status": "pending",
+    "text": "attack",
+    "target_id": "IICORPS_HQ",
+    "data": {
+      "release_turn": 4
+    }
+  },
+  {
+    "unit_id": "R_ART1",
+    "action": "attack",
+    "priority": "high",
+    "status": "pending",
+    "text": "attack",
+    "target_id": "IICORPS_HQ",
+    "data": {
+      "release_turn": 4
+    }
+  },
+  {
+    "unit_id": "3DIV",
+    "action": "move_to",
+    "priority": "high",
+    "status": "pending",
+    "text": "Advance toward IICORPS_HQ for attack.",
+    "target_id": null,
+    "data": {
+      "target_xy": [
+        0,
+        0
+      ],
+      "release_turn": 4
+    }
+  },
+  {
+    "unit_id": "R_ART1",
+    "action": "move_to",
+    "priority": "high",
+    "status": "pending",
+    "text": "Advance toward IICORPS_HQ for attack.",
+    "target_id": null,
+    "data": {
+      "target_xy": [
+        0,
+        0
+      ],
+      "release_turn": 4
+    }
+  },
+  {
+    "unit_id": "3DIV",
+    "action": "move_to",
+    "priority": "high",
+    "status": "pending",
+    "text": "Advance toward IICORPS_HQ for attack.",
+    "target_id": null,
+    "data": {
+      "target_xy": [
+        0,
+        0
+      ],
+      "release_turn": 4
+    }
+  },
+  {
+    "unit_id": "R_ART1",
+    "action": "move_to",
+    "priority": "high",
+    "status": "pending",
+    "text": "Advance toward IICORPS_HQ for attack.",
+    "target_id": null,
+    "data": {
+      "target_xy": [
+        0,
+        0
+      ],
+      "release_turn": 4
+    }
+  }
+]

@@ -1,0 +1,15 @@
+[
+  {
+    "attackers": [
+      "3DIV",
+      "R_ART1"
+    ],
+    "defender_id": "2DIV",
+    "outcome": "attacker_win",
+    "atk_strength": 2.4,
+    "def_strength": 1.14,
+    "atk_losses": 1,
+    "def_losses": 7,
+    "notes": "frontage=2 support=0 odds=2.11 roll=1.12 eff=2.36"
+  }
+]

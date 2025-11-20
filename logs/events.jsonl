@@ -1,0 +1,15 @@
+{"ts": 1762099604.4917605, "type": "client_connect", "data": {"remote": "local"}}
+{"ts": 1762099611.9912293, "type": "auto_execute", "data": {"orders": [{"id": "ai_b1_265372", "unit_id": "b1", "order_type": "probe", "target_hex": [46, 28], "priority": 3}, {"id": "ai_b2_596930", "unit_id": "b2", "order_type": "probe", "target_hex": [46, 28], "priority": 3}, {"id": "ai_b3_645403", "unit_id": "b3", "order_type": "engineer", "target_hex": [46, 28], "priority": 3}], "report": {"movements": [], "combats": []}}}
+{"ts": 1762099613.4146316, "type": "turn_advanced", "data": {"turn": 2}}
+{"ts": 1762099614.863001, "type": "turn_advanced", "data": {"turn": 3}}
+{"ts": 1762100795.729405, "type": "client_disconnect", "data": {"remote": "local"}}
+{"ts": 1762100796.7702727, "type": "client_connect", "data": {"remote": "local"}}
+{"ts": 1762100799.9285364, "type": "client_disconnect", "data": {"remote": "local"}}
+{"ts": 1762199141.1667478, "type": "client_connect", "data": {"remote": "local"}}
+{"ts": 1762199163.1796484, "type": "client_disconnect", "data": {"remote": "local"}}
+{"ts": 1762199166.2577088, "type": "client_connect", "data": {"remote": "local"}}
+{"ts": 1762199272.6370652, "type": "auto_execute", "data": {"orders": [{"id": "ai_b1_305396", "unit_id": "b1", "order_type": "hold", "target_hex": [48, 30], "priority": 3}, {"id": "ai_b2_566253", "unit_id": "b2", "order_type": "hold", "target_hex": [46, 30], "priority": 3}, {"id": "ai_b3_638600", "unit_id": "b3", "order_type": "hold", "target_hex": [48, 30], "priority": 3}], "report": {"movements": [], "combats": []}}}
+{"ts": 1762199273.33716, "type": "turn_advanced", "data": {"turn": 4}}
+{"ts": 1762199275.6203847, "type": "turn_advanced", "data": {"turn": 5}}
+{"ts": 1762199275.98634, "type": "turn_advanced", "data": {"turn": 6}}
+{"ts": 1762288945.8260317, "type": "client_disconnect", "data": {"remote": "local"}}

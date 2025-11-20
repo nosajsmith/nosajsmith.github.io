@@ -1,0 +1,29 @@
+- name: "Fallback When Flanked"
+  trigger: "enemy breakthrough"
+  scope: "division"
+  conditions:
+    fatigue: "> 60"
+    supply: "< 50"
+    flanked: true
+  action: "fallback"
+  priority: high
+  recommendation_text: "Unit is fatigued and flanked. Recommend fallback."
+
+- name: "Engineer Rest Suggestion"
+  trigger: "unit exhausted"
+  scope: "engineer"
+  conditions:
+    fatigue: "> 50"
+    entrenchment: "> 2"
+  action: "rest"
+  priority: normal
+  recommendation_text: "Engineer unit is overworked. Recommend rest."
+
+- name: "HQ Hold Directive"
+  trigger: "hold objective"
+  scope: "HQ"
+  conditions:
+    supply: "> 60"
+    fatigue: "< 40"
+  action: "hold"
+  recommendation_text: "HQ is supplied and rested. Recommend hold."

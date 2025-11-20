@@ -1,0 +1,6 @@
+unit_id,name,x,y,fatigue,supply,entrenchment,exposure,stance,suppressed_turns,side,morale,cohesion,shaken,routed
+2DIV,2DIV,10,10,11,90.91999999999999,0,0,normal,0,BLUE,64,42,1,0
+ENG1,ENG1,11,10,0,90.90800000000002,0,0,normal,0,BLUE,64,49,0,0
+3DIV,3DIV,9,9,6,90.0,0,0,normal,0,RED,64,62,0,0
+R_ART1,R_ART1,9,8,6,90.0,0,0,normal,0,RED,64,53,0,0
+RES1,Reserve Brigade,6,4,5,74.0,0,0,normal,0,BLUE,70,75,0,0

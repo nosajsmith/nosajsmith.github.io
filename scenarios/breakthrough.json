@@ -1,0 +1,9 @@
+{
+  "units": [
+    {"unit_id": "BLUE_DEF1", "name": "BLUE_DEF1", "side": "BLUE", "position": [8, 10], "fatigue": 30, "supply": 65, "entrenchment": 20},
+    {"unit_id": "BLUE_DEF2", "name": "BLUE_DEF2", "side": "BLUE", "position": [9, 10], "fatigue": 35, "supply": 60, "entrenchment": 18},
+    {"unit_id": "RED_T1", "name": "RED_T1", "side": "RED", "position": [12, 10], "fatigue": 15, "supply": 60, "entrenchment": 0},
+    {"unit_id": "RED_T2", "name": "RED_T2", "side": "RED", "position": [12, 11], "fatigue": 15, "supply": 60, "entrenchment": 0},
+    {"unit_id": "RED_INF", "name": "RED_INF", "side": "RED", "position": [13, 10], "fatigue": 20, "supply": 60, "entrenchment": 0}
+  ]
+}

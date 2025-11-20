@@ -1,0 +1,25 @@
+server:
+  host: "localhost"
+  port: 8766
+  health_port: 8770         # NEW: HTTP /healthz
+
+ai:
+  seed: 9001
+  stance: "balanced"
+
+world:
+  red_units:
+    - { id: "r1", name: "NK 1st", type: "inf", strength: 75, fatigue: 20, pos: [46, 30] }
+  objectives: [[48, 30], [46, 28]]
+
+logging:
+  level: "INFO"
+  logging:
+  path: "C:/MWE/logs/bridge.log"
+  events_path: "C:/MWE/logs/events.jsonl"
+  max_bytes: 1048576
+  backups: 5
+
+security:
+  # Optional: if set, client must send {cmd:"auth", token:"..."} before other commands
+  token: ""

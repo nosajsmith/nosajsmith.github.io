@@ -1,0 +1,36 @@
+{
+  "turn": 2,
+  "score": 25,
+  "objectives": [
+    {
+      "id": "HOLD_RIDGE",
+      "type": "hold",
+      "unit_id": "2DIV",
+      "pos": [
+        10,
+        5
+      ],
+      "radius": 1,
+      "deadline": 1,
+      "points": 25,
+      "title": "Hold the Ridge",
+      "desc": "Keep 2DIV near (10,5) through turn 1 (inclusive).",
+      "awarded": false
+    },
+    {
+      "id": "OCCUPY_BRIDGE",
+      "type": "occupy",
+      "pos": [
+        7,
+        4
+      ],
+      "radius": 0,
+      "deadline": 2,
+      "points": 20,
+      "title": "Secure the Bridge",
+      "desc": "Any friendly unit occupies (7,4) by turn 2.",
+      "awarded": false
+    }
+  ],
+  "awarded": []
+}

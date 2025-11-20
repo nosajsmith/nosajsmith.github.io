@@ -1,0 +1,68 @@
+{
+  "title": "Demo – Ridge & Bridge",
+  "turn_start": 0,
+  "map": { "width": 20, "height": 20 },
+  "units": [
+    {
+      "unit_id": "IICORPS_HQ",
+      "name": "II Corps HQ",
+      "side": "BLUE",
+      "role": "HQ",
+      "x": 5,
+      "y": 5,
+      "fatigue": 10,
+      "supply": 90,
+      "entrenchment": 0,
+      "exposure": 0,
+      "stance": "hold"
+    },
+    {
+      "unit_id": "2DIV",
+      "name": "2nd Infantry Division",
+      "side": "BLUE",
+      "x": 6,
+      "y": 5,
+      "fatigue": 35,
+      "supply": 80,
+      "entrenchment": 10,
+      "exposure": 10,
+      "stance": "hold"
+    },
+    {
+      "unit_id": "ENG1",
+      "name": "1st Engineer Bn",
+      "side": "BLUE",
+      "x": 5,
+      "y": 5,
+      "fatigue": 20,
+      "supply": 85,
+      "entrenchment": 0,
+      "exposure": 5,
+      "stance": "hold"
+    },
+    {
+      "unit_id": "3DIV",
+      "name": "3rd Infantry Division (Red)",
+      "side": "RED",
+      "x": 8,
+      "y": 5,
+      "fatigue": 25,
+      "supply": 75,
+      "entrenchment": 5,
+      "exposure": 10,
+      "stance": "hold"
+    },
+    {
+      "unit_id": "R_ART1",
+      "name": "1st Artillery Regt (Red)",
+      "side": "RED",
+      "x": 9,
+      "y": 6,
+      "fatigue": 15,
+      "supply": 70,
+      "entrenchment": 0,
+      "exposure": 5,
+      "stance": "hold"
+    }
+  ]
+}

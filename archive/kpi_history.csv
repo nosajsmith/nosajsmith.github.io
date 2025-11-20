@@ -1,0 +1,3 @@
+scenario,turns,score,objectives_secured,objectives_failed,route_uptime,blue_losses,red_losses
+scenarios/bridgehead.json,8,25,2,2,1.0,0,0
+scenarios/bridgehead.json,8,25,2,2,1.0,0,0

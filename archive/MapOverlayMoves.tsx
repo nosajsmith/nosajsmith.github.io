@@ -1,0 +1,1 @@
+export default function MapOverlayMoves(){return(<canvas width={800} height={480}></canvas>)}
