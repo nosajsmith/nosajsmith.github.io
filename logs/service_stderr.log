@@ -8717,3 +8717,7 @@ C:\MWE\server\mwe_bridge_p8.py:9: DeprecationWarning: websockets.server.WebSocke
 2025-11-18 20:35:36,104 | INFO | server listening on 127.0.0.1:8766
 2025-11-18 20:35:36,104 | INFO | Bridge P8 listening on ws://localhost:8766
 2025-11-18 23:35:59,573 | INFO | 127.0.0.1 [18/Nov/2025:23:35:59 -0500] "GET /favicon.ico HTTP/1.1" 404 174 "http://127.0.0.1:8770/healthz" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0"
+2025-11-20 13:34:54,181 | INFO | 127.0.0.1 [20/Nov/2025:13:34:54 -0500] "GET /healthz HTTP/1.1" 200 189 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0"
+2025-11-20 13:34:54,248 | INFO | 127.0.0.1 [20/Nov/2025:13:34:54 -0500] "GET /favicon.ico HTTP/1.1" 404 174 "http://127.0.0.1:8770/healthz" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0"
+2025-11-20 13:34:54,305 | INFO | 127.0.0.1 [20/Nov/2025:13:34:54 -0500] "GET /healthz HTTP/1.1" 200 189 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0"
+2025-11-20 13:34:54,374 | INFO | 127.0.0.1 [20/Nov/2025:13:34:54 -0500] "GET /favicon.ico HTTP/1.1" 404 174 "http://127.0.0.1:8770/healthz" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0"
