@@ -1,0 +1,53 @@
+{
+  "id": "mini_gc_1942",
+  "name": "Mini Guadalcanal 1942",
+  "description": "Tiny test scenario for MWE engine skeleton.",
+  "start_day": 1,
+  "map": {
+    "tiles": [
+      {
+        "id": "SEA-001",
+        "terrain": "Ocean"
+      },
+      {
+        "id": "LUNGA",
+        "terrain": "Jungle",
+        "is_port": true,
+        "is_airfield": true,
+        "base_move_cost": 2
+      },
+      {
+        "id": "TULAGI",
+        "terrain": "Jungle",
+        "is_port": true,
+        "base_move_cost": 2
+      }
+    ]
+  },
+  "units": [
+    {
+      "id": "US-1MAR",
+      "name": "1st Marine Division",
+      "side": "Allied",
+      "unit_type": "Infantry",
+      "location_id": "LUNGA",
+      "strength": 100,
+      "fatigue": 10,
+      "morale": 70,
+      "supply": 80,
+      "readiness": 60
+    },
+    {
+      "id": "JP-35BDE",
+      "name": "35th Infantry Brigade",
+      "side": "Axis",
+      "unit_type": "Infantry",
+      "location_id": "TULAGI",
+      "strength": 90,
+      "fatigue": 5,
+      "morale": 65,
+      "supply": 70,
+      "readiness": 55
+    }
+  ]
+}

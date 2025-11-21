@@ -8,7 +8,7 @@ from typing import Dict
 
 from engine.core.time_system import GameTime
 from engine.core.unit_model import UnitRepository, UnitState
-from .base_staff import StaffSection
+from engine.staff.base_staff import StaffSection   # <-- FIXED HERE
 
 
 @dataclass
@@ -28,7 +28,6 @@ class G4Logistics(StaffSection):
             self._update_unit_supply(unit)
 
     def on_day_end(self, t: GameTime) -> None:
-        # Run logistics at the end of each day
         self.run_daily_cycle(t)
 
     def _update_unit_supply(self, unit: UnitState) -> None:
@@ -38,5 +37,5 @@ class G4Logistics(StaffSection):
         self.last_report[unit.id] = SupplyStatus(
             unit_id=unit.id,
             supply_pct=unit.supply,
-            notes=f"Supply changed from {old_supply} to {unit.supply}",
+            notes=f"Supply changed from {old_supply} to {unit.supply}"
         )

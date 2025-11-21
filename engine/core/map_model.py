@@ -1,5 +1,9 @@
 """
 Map model for MWE.
+
+Very simple start:
+- Map is a collection of areas/hexes
+- Each tile has terrain and movement cost
 """
 
 from __future__ import annotations
@@ -19,7 +23,7 @@ class Terrain(str, Enum):
 
 @dataclass
 class MapTile:
-    id: str
+    id: str                 # e.g. hex code or area name
     terrain: Terrain
     base_move_cost: int = 1
     is_port: bool = False
@@ -27,6 +31,12 @@ class MapTile:
 
 
 class GameMap:
+    """
+    Simple container for map tiles.
+
+    Later you can add neighbors, distance calculations, etc.
+    """
+
     def __init__(self) -> None:
         self._tiles: Dict[str, MapTile] = {}
 
