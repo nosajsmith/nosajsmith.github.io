@@ -1,0 +1,37 @@
+{
+  "personalities": {
+    "macarthur": {
+      "label": "MacArthur – Aggressive Offensive",
+      "aggressiveness": 0.85,
+      "risk_tolerance": 0.85,
+      "rest_priority": 0.30,
+      "supply_weight": 0.50,
+      "min_attack_force_ratio": 0.85,
+      "preferred_operational_range_days": 5,
+      "min_readiness_to_attack": 35,
+      "min_morale_to_attack": 35
+    },
+    "nimitz": {
+      "label": "Nimitz – Balanced Methodical",
+      "aggressiveness": 0.55,
+      "risk_tolerance": 0.50,
+      "rest_priority": 0.60,
+      "supply_weight": 0.80,
+      "min_attack_force_ratio": 1.1,
+      "preferred_operational_range_days": 7,
+      "min_readiness_to_attack": 45,
+      "min_morale_to_attack": 45
+    },
+    "slim": {
+      "label": "Slim – Cautious Defensive",
+      "aggressiveness": 0.35,
+      "risk_tolerance": 0.30,
+      "rest_priority": 0.85,
+      "supply_weight": 0.90,
+      "min_attack_force_ratio": 1.25,
+      "preferred_operational_range_days": 10,
+      "min_readiness_to_attack": 55,
+      "min_morale_to_attack": 55
+    }
+  }
+}
