@@ -229,8 +229,25 @@ class G3Operations(StaffSection):
         terrain = tile.terrain if tile is not None else Terrain.PLAINS
         terr = _terrain_profile(terrain)
 
+        # Weather modifiers
+        weather = getattr(t, "weather", "Clear")
+        if weather == "Rain":
+            terr["attacker_mult"] *= 0.9
+            terr["defender_mult"] *= 0.95
+            terr["max_frontage"] *= 0.9
+        elif weather == "Storm":
+            terr["attacker_mult"] *= 0.75
+            terr["defender_mult"] *= 0.9
+            terr["max_frontage"] *= 0.7
+        elif weather == "Monsoon":
+            terr["attacker_mult"] *= 0.6
+            terr["defender_mult"] *= 0.85
+            terr["max_frontage"] *= 0.5
+
         # Decide attacker/defender
         attacker_side, defender_side = self._determine_roles(allies, axis)
+        ...
+
 
         # Split into attacker/defender lists
         if attacker_side == Side.ALLIED:

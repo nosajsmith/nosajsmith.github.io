@@ -2,6 +2,7 @@
   "personalities": {
     "macarthur": {
       "label": "MacArthur – Aggressive Offensive",
+      "portrait": "macarthur.png",
       "aggressiveness": 0.85,
       "risk_tolerance": 0.85,
       "rest_priority": 0.30,
@@ -13,6 +14,7 @@
     },
     "nimitz": {
       "label": "Nimitz – Balanced Methodical",
+      "portrait": "nimitz.png",
       "aggressiveness": 0.55,
       "risk_tolerance": 0.50,
       "rest_priority": 0.60,
@@ -24,6 +26,7 @@
     },
     "slim": {
       "label": "Slim – Cautious Defensive",
+      "portrait": "slim.png",
       "aggressiveness": 0.35,
       "risk_tolerance": 0.30,
       "rest_priority": 0.85,

@@ -39,7 +39,7 @@ def load_scenario(
     - starting GameTime
     - GameMap
     - UnitRepository
-    - metadata dict (id, name, description)
+    - metadata dict (id, name, description, plus extras)
     """
     path = _scenario_path(scenario_id)
     if not os.path.exists(path):
@@ -82,10 +82,16 @@ def load_scenario(
         )
         units.add(unit)
 
-    metadata = {
+    # --- Scenario metadata & expanded data ----------------------------------
+    metadata: Dict[str, Any] = {
         "id": data.get("id", scenario_id),
         "name": data.get("name", ""),
         "description": data.get("description", ""),
+        # New fields for Phase 7:
+        "weather": data.get("weather", "Unknown"),
+        "supply_sources": data.get("supply_sources", []),
+        "objectives": data.get("objectives", []),
+        "reinforcements": data.get("reinforcements", []),
     }
 
     return game_time, game_map, units, metadata

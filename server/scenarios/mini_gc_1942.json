@@ -3,6 +3,8 @@
   "name": "Mini Guadalcanal 1942",
   "description": "Tiny test scenario for MWE engine skeleton.",
   "start_day": 1,
+  "weather": "Clear",
+
   "map": {
     "tiles": [
       {
@@ -24,6 +26,43 @@
       }
     ]
   },
+
+  "supply_sources": [
+    {
+      "location_id": "LUNGA",
+      "side": "Allied",
+      "daily_supply": 10,
+      "description": "Allied beachhead and airfield supply."
+    },
+    {
+      "location_id": "TULAGI",
+      "side": "Axis",
+      "daily_supply": 6,
+      "description": "Japanese forward supply point."
+    }
+  ],
+
+  "objectives": [
+    {
+      "location_id": "LUNGA",
+      "side": "Allied",
+      "value": 50,
+      "description": "Secure and hold the beachhead and airfield."
+    },
+    {
+      "location_id": "TULAGI",
+      "side": "Allied",
+      "value": 100,
+      "description": "Eliminate Axis presence on Tulagi."
+    },
+    {
+      "location_id": "TULAGI",
+      "side": "Axis",
+      "value": 50,
+      "description": "Hold Tulagi against Allied assault."
+    }
+  ],
+
   "units": [
     {
       "id": "US-1MAR",
@@ -45,6 +84,22 @@
       "location_id": "TULAGI",
       "strength": 90,
       "fatigue": 5,
+      "morale": 65,
+      "supply": 70,
+      "readiness": 55
+    }
+  ],
+
+  "reinforcements": [
+    {
+      "id": "US-2MAR",
+      "name": "2nd Marine Regiment (Reinf)",
+      "side": "Allied",
+      "unit_type": "Infantry",
+      "arrival_day": 3,
+      "entry_location_id": "LUNGA",
+      "strength": 80,
+      "fatigue": 10,
       "morale": 65,
       "supply": 70,
       "readiness": 55

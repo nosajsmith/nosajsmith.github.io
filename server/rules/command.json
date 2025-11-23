@@ -1,0 +1,8 @@
+{
+  "base_delay_days": 1,
+  "max_delay_days": 4,
+  "disruption_chance": 0.15,
+  "extra_delay_on_disruption": 1,
+  "hq_quality_factor": 0.5,
+  "distance_delay_per_step": 1
+}
