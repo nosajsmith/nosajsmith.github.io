@@ -1,0 +1,28 @@
+{
+  "convoys": [
+    {
+      "id": "C_BLUE_MAIN_1",
+      "name": "Blue Main Replacements",
+      "route_id": "RTE_BLUE_MAIN",
+      "side": "BLUE",
+      "cadence": "every:2",
+      "payload": { "infantry": 20, "armor": 4, "supplies": 50 },
+      "loss_chance_cut": 1.0,
+      "loss_chance_degraded": 0.45,
+      "loss_chance_active": 0.12,
+      "throughput_scale": true
+    },
+    {
+      "id": "C_RED_EAST_1",
+      "name": "Red Eastern Lift",
+      "route_id": "RTE_RED_EAST",
+      "side": "RED",
+      "cadence": "turns:1,4,7",
+      "payload": { "infantry": 25, "armor": 3, "supplies": 40 },
+      "loss_chance_cut": 1.0,
+      "loss_chance_degraded": 0.4,
+      "loss_chance_active": 0.1,
+      "throughput_scale": true
+    }
+  ]
+}

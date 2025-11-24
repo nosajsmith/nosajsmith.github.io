@@ -1,0 +1,29 @@
+{
+  "turn": 1,
+  "delivered": [],
+  "lost": [],
+  "skipped": [
+    {
+      "id": "C_RED_EAST_1",
+      "name": "Red Eastern Lift",
+      "reason": "route_not_found"
+    }
+  ],
+  "pools": {
+    "BLUE": {
+      "inf": 116,
+      "arm": 30,
+      "art": 20,
+      "generic": 80,
+      "infantry": 2180,
+      "armor": 436,
+      "supplies": 5450
+    },
+    "RED": {
+      "inf": 120,
+      "arm": 30,
+      "art": 20,
+      "generic": 80
+    }
+  }
+}

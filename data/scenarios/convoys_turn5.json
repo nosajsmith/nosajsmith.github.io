@@ -1,0 +1,23 @@
+{
+  "turn": 5,
+  "delivered": [],
+  "lost": [],
+  "skipped": [],
+  "pools": {
+    "BLUE": {
+      "inf": 116,
+      "arm": 30,
+      "art": 20,
+      "generic": 80,
+      "infantry": 1980,
+      "armor": 396,
+      "supplies": 4950
+    },
+    "RED": {
+      "inf": 120,
+      "arm": 30,
+      "art": 20,
+      "generic": 80
+    }
+  }
+}

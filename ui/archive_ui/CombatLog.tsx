@@ -1,0 +1,1 @@
+export default function CombatLog(){return(<div>Combat Log placeholder – connect to ws://localhost:8766</div>)}

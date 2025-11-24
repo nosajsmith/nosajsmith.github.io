@@ -1,0 +1,97 @@
+{
+  "turn": 0,
+  "score": 25,
+  "objectives": [
+    {
+      "id": "HOLD_RIDGE",
+      "title": "Hold the Ridge",
+      "desc": "Keep any BLUE unit within 1 of (10,5) through turn 3.",
+      "type": "hold_hex",
+      "params": {
+        "pos": [
+          10,
+          5
+        ],
+        "side": "BLUE",
+        "radius": 1,
+        "through_turn": 3
+      },
+      "points": 25,
+      "status": "failed",
+      "created_turn": 0,
+      "awarded_turn": null,
+      "failed_turn": 4,
+      "progress": {}
+    },
+    {
+      "id": "SECURE_BRIDGE",
+      "title": "Secure the Bridge",
+      "desc": "By turn 2, any BLUE unit occupies (7,4).",
+      "type": "occupy_by",
+      "params": {
+        "pos": [
+          7,
+          4
+        ],
+        "side": "BLUE",
+        "by_turn": 2
+      },
+      "points": 25,
+      "status": "failed",
+      "created_turn": 0,
+      "awarded_turn": null,
+      "failed_turn": 3,
+      "progress": {}
+    },
+    {
+      "id": "SUSTAIN_2DIV",
+      "title": "Sustain 2DIV",
+      "desc": "Get 2DIV supply to 90% or higher.",
+      "type": "unit_supply_ge",
+      "params": {
+        "unit_id": "2DIV",
+        "supply": 90
+      },
+      "points": 15,
+      "status": "secured",
+      "created_turn": 0,
+      "awarded_turn": 0,
+      "failed_turn": null,
+      "progress": {}
+    },
+    {
+      "id": "KEEP_ROUTE_UP",
+      "title": "Keep Main Route Open",
+      "desc": "RTE_BLUE_MAIN remains active this turn.",
+      "type": "route_state",
+      "params": {
+        "route_id": "RTE_BLUE_MAIN",
+        "state": "active"
+      },
+      "points": 10,
+      "status": "secured",
+      "created_turn": 0,
+      "awarded_turn": 0,
+      "failed_turn": null,
+      "progress": {}
+    },
+    {
+      "id": "CUT_MAIN_CONSEC",
+      "title": "Stress Test: Cut Route 2 Turns",
+      "desc": "Demolish RTE_BLUE_MAIN for 2 consecutive turns (demo objective).",
+      "type": "cut_route_consecutive",
+      "params": {
+        "route_id": "RTE_BLUE_MAIN",
+        "turns": 2
+      },
+      "points": 10,
+      "status": "pending",
+      "created_turn": 0,
+      "awarded_turn": null,
+      "failed_turn": null,
+      "progress": {
+        "cut_streak": 0
+      }
+    }
+  ]
+}

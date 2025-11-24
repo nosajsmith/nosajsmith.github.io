@@ -1,0 +1,17 @@
+{
+  "BLUE": {
+    "inf": 116,
+    "arm": 30,
+    "art": 20,
+    "generic": 80,
+    "infantry": 2200,
+    "armor": 440,
+    "supplies": 5500
+  },
+  "RED": {
+    "inf": 120,
+    "arm": 30,
+    "art": 20,
+    "generic": 80
+  }
+}

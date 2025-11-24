@@ -1,0 +1,34 @@
+{
+  "units": [
+    {
+      "unit_id": "2DIV",
+      "name": "2nd Division",
+      "position": [10, 5],
+      "fatigue": 60,
+      "supply": 40,
+      "entrenchment": 1
+    },
+    {
+      "unit_id": "3DIV",
+      "name": "3rd Division",
+      "position": [11, 6],
+      "fatigue": 45,
+      "supply": 70
+    },
+    {
+      "unit_id": "ENG1",
+      "name": "Engineer Battalion 1",
+      "position": [9, 4],
+      "fatigue": 20,
+      "supply": 90,
+      "entrenchment": 3
+    },
+    {
+      "unit_id": "HQ1",
+      "name": "I Corps HQ",
+      "position": [8, 5],
+      "fatigue": 30,
+      "supply": 80
+    }
+  ]
+}

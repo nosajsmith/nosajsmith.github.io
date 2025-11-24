@@ -1,0 +1,6 @@
+{
+  "default": { "path": "scenario.json", "notes": "Your current working scenario" },
+  "bridgehead": { "path": "scenarios/bridgehead.json", "notes": "Hold the bridgehead vs RED assaults" },
+  "interdiction": { "path": "scenarios/interdiction.json", "notes": "Protect convoys while RED raids routes" },
+  "breakthrough": { "path": "scenarios/breakthrough.json", "notes": "RED concentrates for a breach" }
+}
