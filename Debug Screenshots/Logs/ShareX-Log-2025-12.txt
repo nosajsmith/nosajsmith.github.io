@@ -1,0 +1,39 @@
+﻿2025-12-02 09:39:06.726 - ShareX starting.
+2025-12-02 09:39:06.729 - Version: 18.0.1
+2025-12-02 09:39:06.729 - Build: Release
+2025-12-02 09:39:06.730 - Command line: "C:\Program Files\ShareX\ShareX.dll"
+2025-12-02 09:39:06.730 - Personal path: C:\MWE\Debug Screenshots
+2025-12-02 09:39:06.730 - Personal path detection method: PersonalPath.cfg file (C:\Users\nosaj\OneDrive\Documents\ShareX\PersonalPath.cfg)
+2025-12-02 09:39:06.731 - Operating system: Windows 10 Pro (64-bit)
+2025-12-02 09:39:06.732 - .NET version: 9.0.8
+2025-12-02 09:39:06.732 - Running as elevated process: False
+2025-12-02 09:39:06.763 - ApplicationConfig file does not exist: C:\MWE\Debug Screenshots\ApplicationConfig.json
+2025-12-02 09:39:06.763 - ApplicationConfig file does not exist: C:\MWE\Debug Screenshots\ApplicationConfig.json.temp
+2025-12-02 09:39:06.763 - ApplicationConfig file does not exist: C:\MWE\Debug Screenshots\Backup\ApplicationConfig.json
+2025-12-02 09:39:06.763 - Loading new ApplicationConfig instance.
+2025-12-02 09:39:06.939 - Language changed to: English (United States)
+2025-12-02 09:39:06.939 - MainForm init started.
+2025-12-02 09:39:06.939 - UploadersConfig file does not exist: C:\MWE\Debug Screenshots\UploadersConfig.json
+2025-12-02 09:39:06.939 - UploadersConfig file does not exist: C:\MWE\Debug Screenshots\UploadersConfig.json.temp
+2025-12-02 09:39:06.939 - UploadersConfig file does not exist: C:\MWE\Debug Screenshots\Backup\UploadersConfig.json
+2025-12-02 09:39:06.939 - Loading new UploadersConfig instance.
+2025-12-02 09:39:06.944 - HotkeysConfig file does not exist: C:\MWE\Debug Screenshots\HotkeysConfig.json
+2025-12-02 09:39:06.944 - HotkeysConfig file does not exist: C:\MWE\Debug Screenshots\HotkeysConfig.json.temp
+2025-12-02 09:39:06.944 - HotkeysConfig file does not exist: C:\MWE\Debug Screenshots\Backup\HotkeysConfig.json
+2025-12-02 09:39:06.944 - Loading new HotkeysConfig instance.
+2025-12-02 09:39:07.610 - MainForm init finished.
+2025-12-02 09:39:07.797 - Hotkey registered: Hotkey: Ctrl + Print Screen, Description: Capture region, Job: RectangleRegion
+2025-12-02 09:39:07.797 - Hotkey registered: Hotkey: Print Screen, Description: Capture entire screen, Job: PrintScreen
+2025-12-02 09:39:07.797 - Hotkey registered: Hotkey: Alt + Print Screen, Description: Capture active window, Job: ActiveWindow
+2025-12-02 09:39:07.797 - Hotkey registered: Hotkey: Shift + Print Screen, Description: Start/Stop screen recording, Job: ScreenRecorder
+2025-12-02 09:39:07.797 - Hotkey registered: Hotkey: Ctrl + Shift + Print Screen, Description: Start/Stop screen recording (GIF), Job: ScreenRecorderGIF
+2025-12-02 09:39:07.798 - HotkeyManager started.
+2025-12-02 09:39:07.799 - WatchFolderManager started.
+2025-12-02 09:39:07.850 - Startup time: 1254 ms
+2025-12-02 10:09:47.598 - ApplicationConfig save started: C:\MWE\Debug Screenshots\ApplicationConfig.json
+2025-12-02 10:09:47.598 - UploadersConfig save started: C:\MWE\Debug Screenshots\UploadersConfig.json
+2025-12-02 10:09:47.599 - HotkeysConfig save started: C:\MWE\Debug Screenshots\HotkeysConfig.json
+2025-12-02 10:09:47.728 - HotkeysConfig save successful: C:\MWE\Debug Screenshots\HotkeysConfig.json
+2025-12-02 10:09:47.822 - UploadersConfig save successful: C:\MWE\Debug Screenshots\UploadersConfig.json
+2025-12-02 10:09:48.005 - ApplicationConfig save successful: C:\MWE\Debug Screenshots\ApplicationConfig.json
+2025-12-02 13:06:20.718 - Executing: Capture region

@@ -1,40 +1,55 @@
 """
-Map model for MWE.
+Game Map Model for MWE
+Compatible with Phase 8 engine and scenario loader.
 """
 
 from __future__ import annotations
-from dataclasses import dataclass
-from enum import Enum
 from typing import Dict, Optional
+from enum import Enum
 
 
-class Terrain(str, Enum):
-    OCEAN = "Ocean"
-    COAST = "Coast"
-    PLAINS = "Plains"
-    JUNGLE = "Jungle"
-    MOUNTAIN = "Mountain"
-    URBAN = "Urban"
+class Terrain(Enum):
+    CLEAR = "CLEAR"
+    JUNGLE = "JUNGLE"
+    MOUNTAIN = "MOUNTAIN"
+    WATER = "WATER"
 
 
-@dataclass
 class MapTile:
-    id: str
-    terrain: Terrain
-    base_move_cost: int = 1
-    is_port: bool = False
-    is_airfield: bool = False
+    """
+    A single hex/tile on the map.
+    """
+
+    def __init__(
+        self,
+        tile_id: str,
+        terrain: Terrain = Terrain.CLEAR,
+        base_move_cost: int = 1,
+        is_port: bool = False,
+        is_airfield: bool = False,
+    ) -> None:
+        self.id = tile_id
+        self.terrain = terrain
+        self.base_move_cost = base_move_cost
+        self.is_port = is_port
+        self.is_airfield = is_airfield
 
 
 class GameMap:
-    def __init__(self) -> None:
-        self._tiles: Dict[str, MapTile] = {}
+    """
+    New Phase 8-compatible map model:
+    GameMap(tiles: Dict[str, MapTile])
+    """
 
-    def add_tile(self, tile: MapTile) -> None:
-        self._tiles[tile.id] = tile
+    def __init__(self, tiles: Dict[str, MapTile]) -> None:
+        self.tiles: Dict[str, MapTile] = tiles
 
-    def get(self, tile_id: str) -> Optional[MapTile]:
-        return self._tiles.get(tile_id)
+    def get_tile(self, tile_id: str) -> Optional[MapTile]:
+        return self.tiles.get(tile_id)
 
-    def all_tiles(self):
-        return list(self._tiles.values())
+    def neighbors(self, tile_id: str) -> list[str]:
+        """
+        Placeholder adjacency. You can define neighbors in scenario metadata later.
+        For now, return an empty list to avoid errors.
+        """
+        return []

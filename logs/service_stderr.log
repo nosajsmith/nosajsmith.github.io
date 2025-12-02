@@ -8721,3 +8721,101 @@ C:\MWE\server\mwe_bridge_p8.py:9: DeprecationWarning: websockets.server.WebSocke
 2025-11-20 13:34:54,248 | INFO | 127.0.0.1 [20/Nov/2025:13:34:54 -0500] "GET /favicon.ico HTTP/1.1" 404 174 "http://127.0.0.1:8770/healthz" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0"
 2025-11-20 13:34:54,305 | INFO | 127.0.0.1 [20/Nov/2025:13:34:54 -0500] "GET /healthz HTTP/1.1" 200 189 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0"
 2025-11-20 13:34:54,374 | INFO | 127.0.0.1 [20/Nov/2025:13:34:54 -0500] "GET /favicon.ico HTTP/1.1" 404 174 "http://127.0.0.1:8770/healthz" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0"
+2025-11-21 16:13:29,534 | INFO | 127.0.0.1 [21/Nov/2025:16:13:29 -0500] "GET /healthz HTTP/1.1" 200 189 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0"
+2025-11-21 16:13:29,589 | INFO | 127.0.0.1 [21/Nov/2025:16:13:29 -0500] "GET /favicon.ico HTTP/1.1" 404 174 "http://127.0.0.1:8770/healthz" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0"
+2025-11-26 15:08:26,504 | INFO | server closing
+2025-11-26 15:08:26,508 | INFO | server closed
+Traceback (most recent call last):
+  File "C:\Program Files\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Program Files\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\MWE\server\mwe_bridge_p8.py", line 149, in main
+    await asyncio.Future()
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\MWE\server\mwe_bridge_p8.py", line 152, in <module>
+    asyncio.run(main())
+    ~~~~~~~~~~~^^^^^^^^
+  File "C:\Program Files\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Program Files\Python313\Lib\asyncio\runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+C:\MWE\server\mwe_bridge_p8.py:9: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated
+  from websockets.server import WebSocketServerProtocol
+2025-11-26 15:09:22,436 | INFO | Scenario dir: C:\MWE\scenarios
+2025-11-26 15:09:22,437 | INFO | Healthz running on http://127.0.0.1:8770/healthz
+2025-11-26 15:09:22,459 | INFO | server listening on 127.0.0.1:8766
+2025-11-26 15:09:22,460 | INFO | server listening on [::1]:8766
+2025-11-26 15:09:22,460 | INFO | Bridge P8 listening on ws://localhost:8766
+2025-12-02 01:31:11,961 | INFO | server closing
+2025-12-02 01:31:11,966 | INFO | server closed
+Traceback (most recent call last):
+  File "C:\Program Files\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Program Files\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\MWE\server\mwe_bridge_p8.py", line 149, in main
+    await asyncio.Future()
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\MWE\server\mwe_bridge_p8.py", line 152, in <module>
+    asyncio.run(main())
+    ~~~~~~~~~~~^^^^^^^^
+  File "C:\Program Files\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Program Files\Python313\Lib\asyncio\runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+C:\MWE\server\mwe_bridge_p8.py:9: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated
+  from websockets.server import WebSocketServerProtocol
+2025-12-02 01:31:51,361 | INFO | Scenario dir: C:\MWE\scenarios
+2025-12-02 01:31:51,362 | INFO | Healthz running on http://127.0.0.1:8770/healthz
+2025-12-02 01:31:51,620 | INFO | server listening on [::1]:8766
+2025-12-02 01:31:51,620 | INFO | server listening on 127.0.0.1:8766
+2025-12-02 01:31:51,620 | INFO | Bridge P8 listening on ws://localhost:8766
+2025-12-02 01:33:24,433 | INFO | server closing
+2025-12-02 01:33:24,434 | INFO | server closed
+Traceback (most recent call last):
+  File "C:\Program Files\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Program Files\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\MWE\server\mwe_bridge_p8.py", line 149, in main
+    await asyncio.Future()
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\MWE\server\mwe_bridge_p8.py", line 152, in <module>
+    asyncio.run(main())
+    ~~~~~~~~~~~^^^^^^^^
+  File "C:\Program Files\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Program Files\Python313\Lib\asyncio\runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+C:\MWE\server\mwe_bridge_p8.py:9: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated
+  from websockets.server import WebSocketServerProtocol
+2025-12-02 01:33:53,787 | INFO | Scenario dir: C:\MWE\scenarios
+2025-12-02 01:33:53,788 | INFO | Healthz running on http://127.0.0.1:8770/healthz
+2025-12-02 01:33:53,809 | INFO | server listening on [::1]:8766
+2025-12-02 01:33:53,809 | INFO | server listening on 127.0.0.1:8766
+2025-12-02 01:33:53,809 | INFO | Bridge P8 listening on ws://localhost:8766
