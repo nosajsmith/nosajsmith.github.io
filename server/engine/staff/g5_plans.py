@@ -129,7 +129,8 @@ class G5Plans(StaffSection):
         enemy = [u for u in self.units.all_units() if u.side == Side.AXIS]
 
         if not friendly or not enemy:
-            self.last_briefing = "G-5: No planning possible — one side not present."
+            # Remove "G-5:" prefix so EngineAPI can tag src cleanly
+            self.last_briefing = "No planning possible — one side not present."
             return
 
         # Evaluate attack and rest options

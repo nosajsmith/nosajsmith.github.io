@@ -37,3 +37,158 @@
 2025-12-02 10:09:47.822 - UploadersConfig save successful: C:\MWE\Debug Screenshots\UploadersConfig.json
 2025-12-02 10:09:48.005 - ApplicationConfig save successful: C:\MWE\Debug Screenshots\ApplicationConfig.json
 2025-12-02 13:06:20.718 - Executing: Capture region
+2025-12-02 23:25:24.841 - Executing: Capture region
+2025-12-02 23:25:28.289 - Task in queue. Job: Job, Type: Image, Host: Imgur
+2025-12-02 23:25:28.610 - Task status: Preparing
+2025-12-02 23:25:28.661 - Image copied to clipboard.
+2025-12-02 23:25:28.702 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_J9O0xtXsX8.png
+2025-12-02 23:25:39.904 - Task completed. File name: cmd_J9O0xtXsX8.png, Duration: 11291 ms
+2025-12-02 23:25:42.633 - URL opened: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_J9O0xtXsX8.png
+2025-12-02 23:25:54.970 - Executing: Open main window
+2025-12-02 23:40:14.210 - Executing: Capture region
+2025-12-02 23:40:14.628 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-02 23:40:14.668 - Task status: Preparing
+2025-12-02 23:40:14.683 - Image copied to clipboard.
+2025-12-02 23:40:14.693 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\kTPV608UQ8.png
+2025-12-02 23:40:14.728 - Task completed. File name: kTPV608UQ8.png, Duration: 59 ms
+2025-12-02 23:40:15.273 - Executing: Capture region
+2025-12-02 23:40:49.680 - ApplicationConfig save started: C:\MWE\Debug Screenshots\ApplicationConfig.json
+2025-12-02 23:40:49.681 - UploadersConfig save started: C:\MWE\Debug Screenshots\UploadersConfig.json
+2025-12-02 23:40:49.682 - HotkeysConfig save started: C:\MWE\Debug Screenshots\HotkeysConfig.json
+2025-12-02 23:40:49.728 - HotkeysConfig save successful: C:\MWE\Debug Screenshots\HotkeysConfig.json
+2025-12-02 23:40:49.761 - UploadersConfig save successful: C:\MWE\Debug Screenshots\UploadersConfig.json
+2025-12-02 23:40:49.836 - ApplicationConfig save successful: C:\MWE\Debug Screenshots\ApplicationConfig.json
+2025-12-03 17:31:31.854 - Executing: Capture region
+2025-12-03 17:31:34.499 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-03 17:31:34.532 - Task status: Preparing
+2025-12-03 17:31:34.628 - Image copied to clipboard.
+2025-12-03 17:31:34.699 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_DNHhrXlGXM.png
+2025-12-03 17:31:34.740 - Task completed. File name: cmd_DNHhrXlGXM.png, Duration: 208 ms
+2025-12-03 17:43:53.762 - Executing: Capture region
+2025-12-03 17:43:54.931 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-03 17:43:54.966 - Task status: Preparing
+2025-12-03 17:43:55.059 - Image copied to clipboard.
+2025-12-03 17:43:55.129 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_fFaafPcGyd.png
+2025-12-03 17:43:55.169 - Task completed. File name: cmd_fFaafPcGyd.png, Duration: 203 ms
+2025-12-03 17:50:21.680 - Executing: Capture region
+2025-12-03 17:50:24.407 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-03 17:50:24.454 - Task status: Preparing
+2025-12-03 17:50:24.554 - Image copied to clipboard.
+2025-12-03 17:50:24.622 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_xNZd0G5SF2.png
+2025-12-03 17:50:24.662 - Task completed. File name: cmd_xNZd0G5SF2.png, Duration: 209 ms
+2025-12-03 17:57:14.681 - Executing: Capture region
+2025-12-03 17:57:17.171 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-03 17:57:17.216 - Task status: Preparing
+2025-12-03 17:57:17.311 - Image copied to clipboard.
+2025-12-03 17:57:17.380 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_UFN1iBkl9e.png
+2025-12-03 17:57:17.423 - Task completed. File name: cmd_UFN1iBkl9e.png, Duration: 208 ms
+2025-12-03 18:01:36.007 - Executing: Capture region
+2025-12-03 18:01:37.764 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-03 18:01:37.825 - Task status: Preparing
+2025-12-03 18:01:37.879 - Image copied to clipboard.
+2025-12-03 18:01:37.914 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_IaWCyEifQ9.png
+2025-12-03 18:01:37.940 - Task completed. File name: cmd_IaWCyEifQ9.png, Duration: 115 ms
+2025-12-05 03:39:07.808 - GitHub update check failed.:
+System.Net.Http.HttpRequestException: No such host is known. (api.github.com:443)
+ ---> System.Net.Sockets.SocketException (11001): No such host is known.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.InjectNewHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at ShareX.HelpersLib.WebHelpers.DownloadStringAsync(String url)
+   at ShareX.HelpersLib.GitHubUpdateChecker.GetLatestRelease()
+   at ShareX.HelpersLib.GitHubUpdateChecker.GetLatestRelease(Boolean includePreRelease)
+   at ShareX.HelpersLib.GitHubUpdateChecker.CheckUpdateAsync()
+2025-12-05 04:39:07.761 - GitHub update check failed.:
+System.Net.Http.HttpRequestException: No such host is known. (api.github.com:443)
+ ---> System.Net.Sockets.SocketException (11001): No such host is known.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.InjectNewHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at ShareX.HelpersLib.WebHelpers.DownloadStringAsync(String url)
+   at ShareX.HelpersLib.GitHubUpdateChecker.GetLatestRelease()
+   at ShareX.HelpersLib.GitHubUpdateChecker.GetLatestRelease(Boolean includePreRelease)
+   at ShareX.HelpersLib.GitHubUpdateChecker.CheckUpdateAsync()
+2025-12-05 05:39:07.767 - GitHub update check failed.:
+System.Net.Http.HttpRequestException: No such host is known. (api.github.com:443)
+ ---> System.Net.Sockets.SocketException (11001): No such host is known.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.InjectNewHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at ShareX.HelpersLib.WebHelpers.DownloadStringAsync(String url)
+   at ShareX.HelpersLib.GitHubUpdateChecker.GetLatestRelease()
+   at ShareX.HelpersLib.GitHubUpdateChecker.GetLatestRelease(Boolean includePreRelease)
+   at ShareX.HelpersLib.GitHubUpdateChecker.CheckUpdateAsync()
+2025-12-05 06:39:07.759 - GitHub update check failed.:
+System.Net.Http.HttpRequestException: No such host is known. (api.github.com:443)
+ ---> System.Net.Sockets.SocketException (11001): No such host is known.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.InjectNewHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at ShareX.HelpersLib.WebHelpers.DownloadStringAsync(String url)
+   at ShareX.HelpersLib.GitHubUpdateChecker.GetLatestRelease()
+   at ShareX.HelpersLib.GitHubUpdateChecker.GetLatestRelease(Boolean includePreRelease)
+   at ShareX.HelpersLib.GitHubUpdateChecker.CheckUpdateAsync()
+2025-12-05 18:07:44.175 - Executing: Capture region
+2025-12-05 18:07:45.062 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-05 18:07:45.105 - Task status: Preparing
+2025-12-05 18:07:45.139 - Image copied to clipboard.
+2025-12-05 18:07:45.164 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_aqXqIrB9VM.png
+2025-12-05 18:07:45.182 - Task completed. File name: cmd_aqXqIrB9VM.png, Duration: 77 ms
+2025-12-05 18:11:34.240 - Executing: Capture region
+2025-12-05 18:11:38.790 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-05 18:11:38.834 - Task status: Preparing
+2025-12-05 18:11:38.873 - Image copied to clipboard.
+2025-12-05 18:11:38.899 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_0ShQDPO5nP.png
+2025-12-05 18:11:38.924 - Task completed. File name: cmd_0ShQDPO5nP.png, Duration: 90 ms
+2025-12-05 18:31:32.581 - Executing: Capture region
+2025-12-05 18:31:37.201 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-05 18:31:37.250 - Task status: Preparing
+2025-12-05 18:31:37.281 - Image copied to clipboard.
+2025-12-05 18:31:37.301 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_Sbfg6yjkFt.png
+2025-12-05 18:31:37.322 - Task completed. File name: cmd_Sbfg6yjkFt.png, Duration: 72 ms
+2025-12-05 19:49:37.832 - Executing: Capture region
+2025-12-05 19:49:43.814 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-05 19:49:43.867 - Task status: Preparing
+2025-12-05 19:49:43.896 - Image copied to clipboard.
+2025-12-05 19:49:43.918 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_fcZ1rJPlce.png
+2025-12-05 19:49:43.938 - Task completed. File name: cmd_fcZ1rJPlce.png, Duration: 71 ms

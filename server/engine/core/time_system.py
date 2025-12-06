@@ -1,16 +1,16 @@
 """
-Time system for MWE.
+Time system for MWE engine.
 
-- Tracks day / phase
-- Notifies registered listeners at day start, daily cycle, and day end
-- Integrates with WeatherEngine to set daily weather
+Tracks:
+- day number
+- phase ("day" for now)
+- weather (simple placeholder)
+
+Also defines a simple TimeListener base class used by staff sections.
 """
 
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Dict, Protocol
-
-from engine.core.weather_engine import WeatherEngine
 
 
 @dataclass
@@ -19,54 +19,51 @@ class GameTime:
     phase: str = "day"
     weather: str = "Clear"
 
+    def advance(self) -> None:
+        """Increment one day and roll simple placeholder weather."""
+        self.day += 1
 
-class TimeListener(Protocol):
-    def on_day_start(self, t: GameTime) -> None: ...
-    def run_daily_cycle(self, t: GameTime) -> None: ...
-    def on_day_end(self, t: GameTime) -> None: ...
+        # Simple weather cycle placeholder
+        if self.day % 5 == 0:
+            self.weather = "Storm"
+        elif self.day % 3 == 0:
+            self.weather = "Rain"
+        else:
+            self.weather = "Clear"
 
 
 class TimeSystem:
-    def __init__(self) -> None:
-        self.time = GameTime()
-        self._listeners: Dict[str, TimeListener] = {}
-        self._weather_engine = WeatherEngine(self.time.weather)
+    """
+    Wrapper used by EngineAPI.
+    Holds a GameTime and exposes advance().
+    """
 
-    # ------------------------------------------------------------------ weather
+    def __init__(self, start_day: int = 1):
+        self.time = GameTime(day=start_day)
 
-    def set_initial_weather(self, weather: str) -> None:
-        """
-        Set initial weather (e.g. from scenario metadata) before running days.
-        """
-        self.time.weather = weather
-        self._weather_engine.current_weather = weather
+    def advance(self) -> None:
+        self.time.advance()
 
-    # ------------------------------------------------------------------ listeners
+    def get(self) -> GameTime:
+        return self.time
 
-    def register_listener(self, name: str, listener: TimeListener) -> None:
-        self._listeners[name] = listener
 
-    # ------------------------------------------------------------------ advance
+class TimeListener:
+    """
+    Minimal base class for anything that wants day/phase notifications.
+    StaffSection subclasses inherit from this.
 
-    def advance_one_day(self) -> None:
-        """
-        Advance one full day:
-        - Increment day
-        - Determine weather
-        - Call on_day_start, run_daily_cycle, on_day_end on all listeners
-        """
-        # Advance day count
-        self.time.day += 1
+    Implementations can override:
+      - on_day_start
+      - on_day_end
+      - run_daily_cycle
+    """
 
-        # Determine and set weather for this new day
-        self.time.weather = self._weather_engine.advance_day(self.time.day)
+    def on_day_start(self, t: GameTime) -> None:
+        pass
 
-        # Notify listeners
-        for listener in self._listeners.values():
-            listener.on_day_start(self.time)
+    def on_day_end(self, t: GameTime) -> None:
+        pass
 
-        for listener in self._listeners.values():
-            listener.run_daily_cycle(self.time)
-
-        for listener in self._listeners.values():
-            listener.on_day_end(self.time)
+    def run_daily_cycle(self, t: GameTime) -> None:
+        pass

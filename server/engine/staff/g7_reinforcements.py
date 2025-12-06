@@ -58,7 +58,7 @@ class G7Reinforcements(StaffSection):
                 self._already_arrived_ids.add(unit_id)
 
                 msg = (
-                    f"G-7 Reinforcements: {new_unit.id} ({new_unit.name}) "
+                    f"{new_unit.id} ({new_unit.name}) "
                     f"arrived at {new_unit.location_id} on Day {t.day}"
                 )
                 self.arrived_log.append(msg)

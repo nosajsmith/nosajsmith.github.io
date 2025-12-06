@@ -52,7 +52,7 @@ class G4Logistics(StaffSection):
             before = u.supply
             u.supply = max(0, u.supply - consumption)
             self.last_log.append(
-                f"G-4: {u.id} consumed {consumption}, supply {before}->{u.supply}"
+                f"{u.id} consumed {consumption}, supply {before}->{u.supply}"
             )
 
     def _apply_supply_sources(self, t: GameTime) -> None:
@@ -93,6 +93,6 @@ class G4Logistics(StaffSection):
                 u.readiness = min(100, u.readiness + 2)
 
                 self.last_log.append(
-                    f"G-4: {u.id} resupplied +{per_unit} at {loc_id}, "
+                    f"{u.id} resupplied +{per_unit} at {loc_id}, "
                     f"supply {before_sup}->{u.supply}"
                 )

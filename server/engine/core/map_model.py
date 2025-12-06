@@ -9,10 +9,18 @@ from enum import Enum
 
 
 class Terrain(Enum):
+    """
+    Terrain types used by the engine and scenarios.
+
+    Includes both older names (PLAINS, OCEAN) and newer ones so that
+    existing scenarios continue to load.
+    """
+    PLAINS = "PLAINS"
     CLEAR = "CLEAR"
     JUNGLE = "JUNGLE"
     MOUNTAIN = "MOUNTAIN"
     WATER = "WATER"
+    OCEAN = "OCEAN"
 
 
 class MapTile:
@@ -23,7 +31,7 @@ class MapTile:
     def __init__(
         self,
         tile_id: str,
-        terrain: Terrain = Terrain.CLEAR,
+        terrain: Terrain = Terrain.PLAINS,
         base_move_cost: int = 1,
         is_port: bool = False,
         is_airfield: bool = False,
@@ -37,7 +45,7 @@ class MapTile:
 
 class GameMap:
     """
-    New Phase 8-compatible map model:
+    Phase 8-compatible map model:
     GameMap(tiles: Dict[str, MapTile])
     """
 

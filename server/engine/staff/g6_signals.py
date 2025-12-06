@@ -130,7 +130,7 @@ class G6Signals(StaffSection):
         self.pending.append(po)
 
         msg = (
-            f"G-6: Queued order for {unit_id} -> {target_location_id}, "
+            f"Queued order for {unit_id} -> {target_location_id}, "
             f"posture={posture.name}, issued D+{t.day}, ETA D+{deliver_day}"
         )
         if via_hq_id:
@@ -194,7 +194,7 @@ class G6Signals(StaffSection):
                     t=t,
                 )
                 msg = (
-                    f"G-6: Delivered order to {po.unit_id} at D+{t.day} "
+                    f"Delivered order to {po.unit_id} at D+{t.day} "
                     f"(issued D+{po.issued_day}, via HQ={po.via_hq_id})"
                 )
                 self.last_log.append(msg)
