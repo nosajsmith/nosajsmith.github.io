@@ -6,11 +6,7 @@ Modes:
 - semi_auto: prepares orders; could be executed based on a flag
 - full_auto: directly issues move/attack orders to G-3
 
-Personality:
-- macarthur (default, aggressive)
-- nimitz
-- slim
-- plus any other personalities defined in rules/planning.json
+Personality definitions in rules/planning.json override defaults.
 """
 
 from __future__ import annotations
@@ -55,7 +51,7 @@ class G5Plans(StaffSection):
         self.personality_key = personality
         self.personality: Dict[str, Any] = self._load_personality(personality)
 
-        # Output
+        # Output state
         self.last_recommendations: List[PlanRecommendation] = []
         self.last_briefing: str = ""
 
@@ -70,8 +66,7 @@ class G5Plans(StaffSection):
 
     def _load_personality(self, key: str) -> Dict[str, Any]:
         """
-        Load planning personality from rules/planning.json.
-        Falls back to default if file missing.
+        Load planning personalities from rules/planning.json.
         """
         rules_path = os.path.join(self._rules_dir(), "planning.json")
         default_mac = {
@@ -102,15 +97,11 @@ class G5Plans(StaffSection):
 
     @property
     def portrait_path(self) -> str:
-        """
-        Returns the absolute path to the portrait for the current personality,
-        or an empty string if none is defined.
-        """
         portrait = self.personality.get("portrait")
         if not portrait:
             return ""
 
-        rules_dir = self._rules_dir()  # ...\server\rules
+        rules_dir = self._rules_dir()  # .../server/rules
         assets_dir = os.path.join(rules_dir, "..", "assets", "portraits")
         full_path = os.path.join(assets_dir, portrait)
         return os.path.abspath(full_path)
@@ -118,7 +109,6 @@ class G5Plans(StaffSection):
     # ----------------------------------------------------------------- timing
 
     def on_day_start(self, t: GameTime) -> None:
-        # Plans at start of day, before G-3 executes operations
         self.run_daily_cycle(t)
 
     def run_daily_cycle(self, t: GameTime) -> None:
@@ -129,16 +119,14 @@ class G5Plans(StaffSection):
         enemy = [u for u in self.units.all_units() if u.side == Side.AXIS]
 
         if not friendly or not enemy:
-            # Remove "G-5:" prefix so EngineAPI can tag src cleanly
             self.last_briefing = "No planning possible — one side not present."
             return
 
-        # Evaluate attack and rest options
         attack_rec = self._evaluate_best_attack(friendly, enemy)
         rest_rec = self._evaluate_best_rest(friendly)
 
-        # Personality tuning
         rest_priority = float(self.personality.get("rest_priority", 0.3))
+
         if attack_rec:
             self.last_recommendations.append(attack_rec)
         if rest_rec and rest_priority > 0.2:
@@ -154,6 +142,7 @@ class G5Plans(StaffSection):
     def _evaluate_best_attack(
         self, friendly: List[UnitState], enemy: List[UnitState]
     ) -> Optional[PlanRecommendation]:
+
         enemy_by_loc: Dict[str, List[UnitState]] = {}
         for e in enemy:
             enemy_by_loc.setdefault(e.location_id, []).append(e)
@@ -175,13 +164,12 @@ class G5Plans(StaffSection):
             if u.supply < 40:
                 continue
 
-            for loc, e_units in enemy_by_loc.items():
-                e_str = sum(e.strength for e in e_units)
+            for loc, enemy_units in enemy_by_loc.items():
+                e_str = sum(e.strength for e in enemy_units)
                 if e_str <= 0:
                     continue
 
                 ratio = u.strength / e_str
-
                 score = ratio * 50
                 score += (u.morale - 50) * 0.5
                 score += (u.readiness - 50) * 0.5
@@ -252,10 +240,12 @@ class G5Plans(StaffSection):
         attack_rec: Optional[PlanRecommendation],
         rest_rec: Optional[PlanRecommendation],
     ) -> None:
+
         lines = []
         lines.append(f"G-5 WAR PLAN BRIEFING — Day {t.day}")
         lines.append(
-            f"Personality: {self.personality_key} ({self.personality.get('label', '')})"
+            f"Personality: {self.personality_key} "
+            f"({self.personality.get('label', '')})"
         )
         lines.append(f"Mode: {self.mode}\n")
 
@@ -270,13 +260,24 @@ class G5Plans(StaffSection):
 
         if rest_rec:
             lines.append(
-                f"- Recommended rest: {rest_rec.unit_id} "
-                f"({rest_rec.reason})"
+                f"- Recommended rest: {rest_rec.unit_id} ({rest_rec.reason})"
             )
         else:
             lines.append("- No rest/refit priorities identified.")
 
         if self.mode in ("semi_auto", "full_auto"):
-            lines.append("\nNOTE: Some recommendations may have been auto-issued to G-3.")
+            lines.append(
+                "\nNOTE: Some recommendations may have been auto-issued to G-3."
+            )
 
         self.last_briefing = "\n".join(lines)
+
+    # ----------------------------------------------------------- EngineAPI compatibility
+
+    def generate_briefing(self, t: GameTime) -> str:
+        """
+        Called by EngineAPI.process_turn() in Phase 8.
+        Updates recommendation and returns briefing text.
+        """
+        self.run_daily_cycle(t)
+        return self.last_briefing

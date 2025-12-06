@@ -192,3 +192,33 @@ System.Net.Http.HttpRequestException: No such host is known. (api.github.com:443
 2025-12-05 19:49:43.896 - Image copied to clipboard.
 2025-12-05 19:49:43.918 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_fcZ1rJPlce.png
 2025-12-05 19:49:43.938 - Task completed. File name: cmd_fcZ1rJPlce.png, Duration: 71 ms
+2025-12-05 19:57:26.134 - Executing: Capture region
+2025-12-05 19:57:28.395 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-05 19:57:28.451 - Task status: Preparing
+2025-12-05 19:57:28.480 - Image copied to clipboard.
+2025-12-05 19:57:28.500 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_YWcFGE9IDt.png
+2025-12-05 19:57:28.519 - Task completed. File name: cmd_YWcFGE9IDt.png, Duration: 68 ms
+2025-12-06 10:55:23.549 - Executing: Capture region
+2025-12-06 10:55:27.142 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-06 10:55:27.215 - Task status: Preparing
+2025-12-06 10:55:27.252 - Image copied to clipboard.
+2025-12-06 10:55:27.281 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_SWfnvKtJJa.png
+2025-12-06 10:55:27.300 - Task completed. File name: cmd_SWfnvKtJJa.png, Duration: 85 ms
+2025-12-06 11:05:20.315 - Executing: Capture region
+2025-12-06 11:05:24.453 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-06 11:05:24.519 - Task status: Preparing
+2025-12-06 11:05:24.537 - Image copied to clipboard.
+2025-12-06 11:05:24.548 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_DHSiOOcz4x.png
+2025-12-06 11:05:24.566 - Task completed. File name: cmd_DHSiOOcz4x.png, Duration: 47 ms
+2025-12-06 11:11:34.939 - Executing: Capture region
+2025-12-06 11:11:40.758 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-06 11:11:40.839 - Task status: Preparing
+2025-12-06 11:11:40.872 - Image copied to clipboard.
+2025-12-06 11:11:40.897 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_2woDImi0nE.png
+2025-12-06 11:11:40.920 - Task completed. File name: cmd_2woDImi0nE.png, Duration: 81 ms
+2025-12-06 12:38:05.133 - Executing: Capture region
+2025-12-06 12:38:07.402 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-06 12:38:07.477 - Task status: Preparing
+2025-12-06 12:38:07.526 - Image copied to clipboard.
+2025-12-06 12:38:07.562 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_uSbWGWD9ak.png
+2025-12-06 12:38:07.587 - Task completed. File name: cmd_uSbWGWD9ak.png, Duration: 110 ms
