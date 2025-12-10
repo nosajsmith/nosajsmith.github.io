@@ -1,0 +1,175 @@
+{
+  "id": "gc_1942_historical",
+  "name": "Guadalcanal 1942 (Historical Skeleton)",
+  "description": "Work-in-progress full Guadalcanal campaign for MWE.",
+  "start_day": 1,
+  "weather": "Clear",
+
+  "map": {
+    "tiles": [
+      {
+        "id": "LUNGA",
+        "name": "Lunga Point",
+        "terrain": "JUNGLE",
+        "is_port": false,
+        "is_airfield": true,
+        "base_move_cost": 2
+      },
+      {
+        "id": "TULAGI",
+        "name": "Tulagi",
+        "terrain": "JUNGLE",
+        "is_port": true,
+        "is_airfield": false,
+        "base_move_cost": 2
+      },
+      {
+        "id": "KOKUMBONA",
+        "name": "Kokumbona",
+        "terrain": "JUNGLE",
+        "is_port": false,
+        "is_airfield": false,
+        "base_move_cost": 2
+      },
+      {
+        "id": "CAPE_ESPERANCE",
+        "name": "Cape Esperance",
+        "terrain": "COAST",
+        "is_port": false,
+        "is_airfield": false,
+        "base_move_cost": 1
+      }
+    ]
+  },
+
+  "units": [
+    {
+      "id": "US-1MAR",
+      "name": "1st Marine Division",
+      "side": "Allied",
+      "unit_type": "INFANTRY",
+      "strength": 100,
+      "fatigue": 10,
+      "morale": 70,
+      "supply": 80,
+      "readiness": 60,
+      "location_id": "LUNGA"
+    },
+    {
+      "id": "US-AMERICAL",
+      "name": "Americal Division",
+      "side": "Allied",
+      "unit_type": "INFANTRY",
+      "strength": 95,
+      "fatigue": 0,
+      "morale": 65,
+      "supply": 85,
+      "readiness": 55,
+      "location_id": "LUNGA"
+    },
+    {
+      "id": "JP-35BDE",
+      "name": "35th Infantry Brigade",
+      "side": "Axis",
+      "unit_type": "INFANTRY",
+      "strength": 90,
+      "fatigue": 5,
+      "morale": 65,
+      "supply": 70,
+      "readiness": 55,
+      "location_id": "TULAGI"
+    },
+    {
+      "id": "JP-2DIV",
+      "name": "2nd Division Elements",
+      "side": "Axis",
+      "unit_type": "INFANTRY",
+      "strength": 95,
+      "fatigue": 0,
+      "morale": 70,
+      "supply": 75,
+      "readiness": 60,
+      "location_id": "KOKUMBONA"
+    }
+  ],
+
+  "supply_sources": [
+    {
+      "location_id": "LUNGA",
+      "side": "Allied",
+      "daily_supply": 15
+    },
+    {
+      "location_id": "TULAGI",
+      "side": "Axis",
+      "daily_supply": 8
+    },
+    {
+      "location_id": "KOKUMBONA",
+      "side": "Axis",
+      "daily_supply": 10
+    }
+  ],
+
+  "objectives": [
+    {
+      "location_id": "LUNGA",
+      "side": "Allied",
+      "value": 50,
+      "description": "Secure and hold the beachhead and airfield."
+    },
+    {
+      "location_id": "TULAGI",
+      "side": "Allied",
+      "value": 75,
+      "description": "Eliminate Axis presence on Tulagi."
+    },
+    {
+      "location_id": "KOKUMBONA",
+      "side": "Allied",
+      "value": 50,
+      "description": "Push Japanese forces west toward Cape Esperance."
+    },
+    {
+      "location_id": "TULAGI",
+      "side": "Axis",
+      "value": 50,
+      "description": "Hold Tulagi against Allied assault."
+    },
+    {
+      "location_id": "LUNGA",
+      "side": "Axis",
+      "value": 75,
+      "description": "Recapture Henderson Field and drive the Marines into the sea."
+    }
+  ],
+
+  "reinforcements": [
+    {
+      "id": "US-2MAR",
+      "name": "2nd Marine Regiment",
+      "side": "Allied",
+      "unit_type": "INFANTRY",
+      "strength": 80,
+      "fatigue": 0,
+      "morale": 65,
+      "supply": 90,
+      "readiness": 70,
+      "entry_location_id": "LUNGA",
+      "arrival_day": 3
+    },
+    {
+      "id": "JP-KAWAGUCHI",
+      "name": "Kawaguchi Detachment",
+      "side": "Axis",
+      "unit_type": "INFANTRY",
+      "strength": 85,
+      "fatigue": 0,
+      "morale": 70,
+      "supply": 80,
+      "readiness": 65,
+      "entry_location_id": "KOKUMBONA",
+      "arrival_day": 4
+    }
+  ]
+}

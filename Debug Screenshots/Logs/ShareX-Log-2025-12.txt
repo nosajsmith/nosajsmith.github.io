@@ -222,3 +222,105 @@ System.Net.Http.HttpRequestException: No such host is known. (api.github.com:443
 2025-12-06 12:38:07.526 - Image copied to clipboard.
 2025-12-06 12:38:07.562 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_uSbWGWD9ak.png
 2025-12-06 12:38:07.587 - Task completed. File name: cmd_uSbWGWD9ak.png, Duration: 110 ms
+2025-12-06 16:30:52.003 - ApplicationConfig save started: C:\MWE\Debug Screenshots\ApplicationConfig.json
+2025-12-06 16:30:52.003 - UploadersConfig save started: C:\MWE\Debug Screenshots\UploadersConfig.json
+2025-12-06 16:30:52.004 - HotkeysConfig save started: C:\MWE\Debug Screenshots\HotkeysConfig.json
+2025-12-06 16:30:52.074 - HotkeysConfig save successful: C:\MWE\Debug Screenshots\HotkeysConfig.json
+2025-12-06 16:30:52.130 - UploadersConfig save successful: C:\MWE\Debug Screenshots\UploadersConfig.json
+2025-12-06 16:30:52.211 - ApplicationConfig save successful: C:\MWE\Debug Screenshots\ApplicationConfig.json
+2025-12-07 08:15:43.466 - Executing: Capture region
+2025-12-07 08:15:46.967 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-07 08:15:46.992 - Task status: Preparing
+2025-12-07 08:15:47.046 - Image copied to clipboard.
+2025-12-07 08:15:47.091 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_VkS66itCHB.png
+2025-12-07 08:15:47.106 - Task completed. File name: cmd_VkS66itCHB.png, Duration: 114 ms
+2025-12-07 08:25:36.960 - Executing: Capture region
+2025-12-07 08:25:40.982 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-07 08:25:41.001 - Task status: Preparing
+2025-12-07 08:25:41.034 - Image copied to clipboard.
+2025-12-07 08:25:41.057 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\ChatGPT_Auy544nG7w.png
+2025-12-07 08:25:41.069 - Task completed. File name: ChatGPT_Auy544nG7w.png, Duration: 67 ms
+2025-12-07 12:13:51.197 - Executing: Capture region
+2025-12-07 12:13:53.530 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-07 12:13:53.555 - Task status: Preparing
+2025-12-07 12:13:53.613 - Image copied to clipboard.
+2025-12-07 12:13:53.658 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_D3hD2nA2HD.png
+2025-12-07 12:13:53.678 - Task completed. File name: cmd_D3hD2nA2HD.png, Duration: 123 ms
+2025-12-07 12:49:13.030 - Executing: Capture region
+2025-12-07 12:49:17.098 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-07 12:49:17.124 - Task status: Preparing
+2025-12-07 12:49:17.160 - Image copied to clipboard.
+2025-12-07 12:49:17.180 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_Lxn5H9wkls.png
+2025-12-07 12:49:17.193 - Task completed. File name: cmd_Lxn5H9wkls.png, Duration: 70 ms
+2025-12-07 13:23:33.357 - Executing: Capture region
+2025-12-07 13:23:37.273 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-07 13:23:37.300 - Task status: Preparing
+2025-12-07 13:23:37.333 - Image copied to clipboard.
+2025-12-07 13:23:37.374 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\War_in_the_Pacific_Admiral_Edition_noLLA_KfyNAsN7X7.png
+2025-12-07 13:23:37.378 - Task completed. File name: War_in_the_Pacific_Admiral_Edition_noLLA_KfyNAsN7X7.png, Duration: 78 ms
+2025-12-07 13:23:46.779 - Executing: Capture region
+2025-12-07 13:23:54.063 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-07 13:23:54.085 - Task status: Preparing
+2025-12-07 13:23:54.122 - Image copied to clipboard.
+2025-12-07 13:23:54.150 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\War_in_the_Pacific_Admiral_Edition_noLLA_XCeoNhh9y8.png
+2025-12-07 13:23:54.156 - Task completed. File name: War_in_the_Pacific_Admiral_Edition_noLLA_XCeoNhh9y8.png, Duration: 71 ms
+2025-12-08 09:00:30.744 - Executing: Capture region
+2025-12-08 09:00:33.133 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-08 09:00:33.154 - Task status: Preparing
+2025-12-08 09:00:33.180 - Image copied to clipboard.
+2025-12-08 09:00:33.203 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_BKv1CjK33g.png
+2025-12-08 09:00:33.213 - Task completed. File name: cmd_BKv1CjK33g.png, Duration: 59 ms
+2025-12-08 09:45:08.694 - Executing: Capture region
+2025-12-08 09:45:10.608 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-08 09:45:10.635 - Task status: Preparing
+2025-12-08 09:45:10.703 - Image copied to clipboard.
+2025-12-08 09:45:10.750 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_9CKRWg1W8D.png
+2025-12-08 09:45:10.769 - Task completed. File name: cmd_9CKRWg1W8D.png, Duration: 137 ms
+2025-12-08 10:57:22.587 - Executing: Capture region
+2025-12-08 10:57:24.980 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-08 10:57:25.004 - Task status: Preparing
+2025-12-08 10:57:25.072 - Image copied to clipboard.
+2025-12-08 10:57:25.120 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_ogyw1NR7Kl.png
+2025-12-08 10:57:25.142 - Task completed. File name: cmd_ogyw1NR7Kl.png, Duration: 138 ms
+2025-12-08 11:38:52.365 - Executing: Capture region
+2025-12-08 11:38:54.532 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-08 11:38:54.552 - Task status: Preparing
+2025-12-08 11:38:54.619 - Image copied to clipboard.
+2025-12-08 11:38:54.663 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_losUw27hKD.png
+2025-12-08 11:38:54.682 - Task completed. File name: cmd_losUw27hKD.png, Duration: 129 ms
+2025-12-08 12:05:26.287 - Executing: Capture region
+2025-12-08 12:05:28.054 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-08 12:05:28.089 - Task status: Preparing
+2025-12-08 12:05:28.159 - Image copied to clipboard.
+2025-12-08 12:05:28.207 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_JBrRqTVpKs.png
+2025-12-08 12:05:28.232 - Task completed. File name: cmd_JBrRqTVpKs.png, Duration: 145 ms
+2025-12-08 12:19:39.512 - Executing: Capture region
+2025-12-08 12:19:40.793 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-08 12:19:40.827 - Task status: Preparing
+2025-12-08 12:19:44.716 - Image copied to clipboard.
+2025-12-08 12:19:44.753 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_hBRwOJPk9U.png
+2025-12-08 12:19:44.777 - Task completed. File name: cmd_hBRwOJPk9U.png, Duration: 3950 ms
+2025-12-08 12:19:49.228 - Executing: Capture region
+2025-12-08 12:19:51.104 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-08 12:19:51.131 - Task status: Preparing
+2025-12-08 12:19:51.326 - Image copied to clipboard.
+2025-12-08 12:19:51.367 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_blAoOu6OdD.png
+2025-12-08 12:19:51.391 - Task completed. File name: cmd_blAoOu6OdD.png, Duration: 263 ms
+2025-12-08 13:02:42.179 - Executing: Capture region
+2025-12-08 13:02:43.846 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-08 13:02:43.875 - Task status: Preparing
+2025-12-08 13:02:43.937 - Image copied to clipboard.
+2025-12-08 13:02:43.977 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_ZyzXBpq4vL.png
+2025-12-08 13:02:43.999 - Task completed. File name: cmd_ZyzXBpq4vL.png, Duration: 124 ms
+2025-12-08 13:20:23.133 - Executing: Capture region
+2025-12-08 13:20:24.633 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-08 13:20:24.667 - Task status: Preparing
+2025-12-08 13:20:24.738 - Image copied to clipboard.
+2025-12-08 13:20:24.781 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_0Z4I3zMRef.png
+2025-12-08 13:20:24.805 - Task completed. File name: cmd_0Z4I3zMRef.png, Duration: 141 ms
+2025-12-08 20:29:41.665 - Executing: Capture region
+2025-12-08 20:29:46.104 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-08 20:29:46.158 - Task status: Preparing
+2025-12-08 20:29:46.182 - Image copied to clipboard.
+2025-12-08 20:29:46.193 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\firefox_nZxIshM0nD.png
+2025-12-08 20:29:46.196 - Task completed. File name: firefox_nZxIshM0nD.png, Duration: 39 ms

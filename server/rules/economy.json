@@ -1,0 +1,60 @@
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Dict, Any
+import os
+import json
+
+from engine.core.unit_model import Side
+
+
+@dataclass
+class EconomyState:
+    pp: Dict[Side, int]
+    pp_per_day: Dict[Side, int]
+    max_stockpile: int
+
+    def advance_one_day(self) -> None:
+        for side in Side:
+            gain = self.pp_per_day.get(side, 0)
+            current = self.pp.get(side, 0)
+            new_val = min(self.max_stockpile, current + gain)
+            self.pp[side] = new_val
+
+
+def _rules_dir() -> str:
+    core_dir = os.path.dirname(os.path.abspath(__file__))
+    engine_dir = os.path.dirname(core_dir)
+    rules_dir = os.path.join(engine_dir, "..", "rules")
+    return os.path.abspath(rules_dir)
+
+
+def load_economy_state() -> EconomyState:
+    rules_path = os.path.join(_rules_dir(), "economy.json")
+
+    defaults = {
+        "allied_pp_per_day": 10,
+        "axis_pp_per_day": 8,
+        "max_stockpile": 9999,
+    }
+
+    try:
+        with open(rules_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        defaults.update(data)
+    except:
+        pass
+
+    pp_per_day = {
+        Side.ALLIED: int(defaults.get("allied_pp_per_day", 10)),
+        Side.AXIS: int(defaults.get("axis_pp_per_day", 8)),
+    }
+
+    pp = {
+        Side.ALLIED: 0,
+        Side.AXIS: 0,
+    }
+
+    max_stockpile = int(defaults.get("max_stockpile", 9999))
+
+    return EconomyState(pp=pp, pp_per_day=pp_per_day, max_stockpile=max_stockpile)
