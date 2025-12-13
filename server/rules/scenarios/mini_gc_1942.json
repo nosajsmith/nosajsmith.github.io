@@ -1,0 +1,107 @@
+{
+  "id": "mini_gc_1942",
+  "name": "Mini Guadalcanal 1942",
+  "description": "Tiny test scenario for MWE engine skeleton.",
+  "start_day": 1,
+  "weather": "Clear",
+
+  "map": {
+    "tiles": {
+      "LUNGA": {
+        "name": "Lunga Point",
+        "terrain": "PLAINS",
+        "neighbors": ["TULAGI"],
+        "is_port": false,
+        "is_airfield": true
+      },
+      "TULAGI": {
+        "name": "Tulagi",
+        "terrain": "JUNGLE",
+        "neighbors": ["LUNGA"],
+        "is_port": true,
+        "is_airfield": false
+      }
+    }
+  },
+
+  "units": [
+    {
+      "id": "US-1MAR",
+      "name": "1st Marine Division",
+      "side": "ALLIED",
+      "unit_type": "INFANTRY",
+      "strength": 100,
+      "fatigue": 10,
+      "morale": 70,
+      "supply": 80,
+      "readiness": 60,
+      "location_id": "LUNGA",
+      "posture": "DEFEND"
+    },
+    {
+      "id": "JP-35BDE",
+      "name": "35th Infantry Brigade",
+      "side": "AXIS",
+      "unit_type": "INFANTRY",
+      "strength": 90,
+      "fatigue": 5,
+      "morale": 65,
+      "supply": 70,
+      "readiness": 55,
+      "location_id": "TULAGI",
+      "posture": "DEFEND"
+    }
+  ],
+
+  "supply_sources": [
+    {
+      "location_id": "LUNGA",
+      "side": "ALLIED",
+      "daily_supply": 10,
+      "description": "US beachhead and airfield supply."
+    },
+    {
+      "location_id": "TULAGI",
+      "side": "AXIS",
+      "daily_supply": 6,
+      "description": "Japanese forward supply point."
+    }
+  ],
+
+  "objectives": [
+    {
+      "location_id": "LUNGA",
+      "side": "ALLIED",
+      "value": 50,
+      "description": "Secure and hold the beachhead and airfield."
+    },
+    {
+      "location_id": "TULAGI",
+      "side": "ALLIED",
+      "value": 100,
+      "description": "Eliminate Axis presence on Tulagi."
+    },
+    {
+      "location_id": "TULAGI",
+      "side": "AXIS",
+      "value": 50,
+      "description": "Hold Tulagi against Allied assault."
+    }
+  ],
+
+  "reinforcements": [
+    {
+      "id": "US-2MAR",
+      "name": "2nd Marine Regiment (Reinf)",
+      "side": "ALLIED",
+      "unit_type": "INFANTRY",
+      "strength": 80,
+      "fatigue": 0,
+      "morale": 65,
+      "supply": 90,
+      "readiness": 70,
+      "arrival_day": 3,
+      "entry_location_id": "LUNGA"
+    }
+  ]
+}

@@ -324,3 +324,83 @@ System.Net.Http.HttpRequestException: No such host is known. (api.github.com:443
 2025-12-08 20:29:46.182 - Image copied to clipboard.
 2025-12-08 20:29:46.193 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\firefox_nZxIshM0nD.png
 2025-12-08 20:29:46.196 - Task completed. File name: firefox_nZxIshM0nD.png, Duration: 39 ms
+2025-12-10 01:29:16.802 - ShareX closing.
+2025-12-10 01:29:16.838 - ApplicationConfig save started: C:\MWE\Debug Screenshots\ApplicationConfig.json
+2025-12-10 01:29:17.063 - ApplicationConfig save successful: C:\MWE\Debug Screenshots\ApplicationConfig.json
+2025-12-10 01:29:17.064 - UploadersConfig save started: C:\MWE\Debug Screenshots\UploadersConfig.json
+2025-12-10 01:29:17.145 - UploadersConfig save successful: C:\MWE\Debug Screenshots\UploadersConfig.json
+2025-12-10 01:29:17.146 - HotkeysConfig save started: C:\MWE\Debug Screenshots\HotkeysConfig.json
+2025-12-10 01:29:17.186 - HotkeysConfig save successful: C:\MWE\Debug Screenshots\HotkeysConfig.json
+2025-12-10 01:29:17.186 - ShareX closed.
+2025-12-10 07:14:15.616 - ShareX starting.
+2025-12-10 07:14:15.619 - Version: 18.0.1
+2025-12-10 07:14:15.619 - Build: Release
+2025-12-10 07:14:15.619 - Command line: "C:\Program Files\ShareX\ShareX.dll" -silent
+2025-12-10 07:14:15.620 - Personal path: C:\MWE\Debug Screenshots
+2025-12-10 07:14:15.620 - Personal path detection method: PersonalPath.cfg file (C:\Users\nosaj\OneDrive\Documents\ShareX\PersonalPath.cfg)
+2025-12-10 07:14:15.621 - Operating system: Windows 10 Pro (64-bit)
+2025-12-10 07:14:15.623 - .NET version: 9.0.8
+2025-12-10 07:14:15.623 - Running as elevated process: False
+2025-12-10 07:14:15.645 - Flags: SilentRun
+2025-12-10 07:14:15.836 - ApplicationConfig load started: C:\MWE\Debug Screenshots\ApplicationConfig.json
+2025-12-10 07:14:18.670 - ApplicationConfig load finished: C:\MWE\Debug Screenshots\ApplicationConfig.json
+2025-12-10 07:14:19.257 - Language changed to: English (United States)
+2025-12-10 07:14:19.257 - MainForm init started.
+2025-12-10 07:14:19.258 - UploadersConfig load started: C:\MWE\Debug Screenshots\UploadersConfig.json
+2025-12-10 07:14:19.568 - UploadersConfig load finished: C:\MWE\Debug Screenshots\UploadersConfig.json
+2025-12-10 07:14:19.570 - HotkeysConfig load started: C:\MWE\Debug Screenshots\HotkeysConfig.json
+2025-12-10 07:14:19.616 - HotkeysConfig load finished: C:\MWE\Debug Screenshots\HotkeysConfig.json
+2025-12-10 07:14:20.628 - MainForm init finished.
+2025-12-10 07:14:21.102 - Hotkey registered: Hotkey: Ctrl + Print Screen, Description: Capture region, Job: RectangleRegion
+2025-12-10 07:14:21.103 - Hotkey registered: Hotkey: Print Screen, Description: Capture entire screen, Job: PrintScreen
+2025-12-10 07:14:21.103 - Hotkey registered: Hotkey: Alt + Print Screen, Description: Capture active window, Job: ActiveWindow
+2025-12-10 07:14:21.103 - Hotkey registered: Hotkey: Shift + Print Screen, Description: Start/Stop screen recording, Job: ScreenRecorder
+2025-12-10 07:14:21.103 - Hotkey registered: Hotkey: Ctrl + Shift + Print Screen, Description: Start/Stop screen recording (GIF), Job: ScreenRecorderGIF
+2025-12-10 07:14:21.104 - HotkeyManager started.
+2025-12-10 07:14:21.108 - WatchFolderManager started.
+2025-12-10 07:14:21.135 - Startup time: 6232 ms
+2025-12-10 07:14:21.138 - CommandLine: -silent
+2025-12-11 07:21:19.363 - Executing: Capture region
+2025-12-11 07:21:25.033 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-11 07:21:25.259 - Task status: Preparing
+2025-12-11 07:21:25.320 - Image copied to clipboard.
+2025-12-11 07:21:25.371 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\firefox_VgvAjNziLb.png
+2025-12-11 07:21:25.395 - Task completed. File name: firefox_VgvAjNziLb.png, Duration: 133 ms
+2025-12-11 07:21:29.645 - Executing: Capture region
+2025-12-11 07:21:33.100 - Executing: Open main window
+2025-12-11 07:21:55.722 - ApplicationConfig save started: C:\MWE\Debug Screenshots\ApplicationConfig.json
+2025-12-11 07:21:55.741 - UploadersConfig save started: C:\MWE\Debug Screenshots\UploadersConfig.json
+2025-12-11 07:21:55.743 - HotkeysConfig save started: C:\MWE\Debug Screenshots\HotkeysConfig.json
+2025-12-11 07:21:55.797 - HotkeysConfig save successful: C:\MWE\Debug Screenshots\HotkeysConfig.json
+2025-12-11 07:21:55.830 - UploadersConfig save successful: C:\MWE\Debug Screenshots\UploadersConfig.json
+2025-12-11 07:21:55.915 - ApplicationConfig save successful: C:\MWE\Debug Screenshots\ApplicationConfig.json
+2025-12-11 17:10:04.332 - Executing: Capture region
+2025-12-11 17:10:09.613 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-11 17:10:09.624 - Task status: Preparing
+2025-12-11 17:10:09.647 - Image copied to clipboard.
+2025-12-11 17:10:09.664 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_bImOGDO3cR.png
+2025-12-11 17:10:09.675 - Task completed. File name: cmd_bImOGDO3cR.png, Duration: 51 ms
+2025-12-11 17:12:57.094 - Executing: Capture region
+2025-12-11 17:12:58.952 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-11 17:12:58.967 - Task status: Preparing
+2025-12-11 17:12:59.063 - Image copied to clipboard.
+2025-12-11 17:12:59.121 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_kYIMqitdtL.png
+2025-12-11 17:12:59.154 - Task completed. File name: cmd_kYIMqitdtL.png, Duration: 188 ms
+2025-12-11 21:05:56.888 - Executing: Capture region
+2025-12-11 21:06:00.364 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-11 21:06:00.375 - Task status: Preparing
+2025-12-11 21:06:00.393 - Image copied to clipboard.
+2025-12-11 21:06:00.407 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_BAIIzjZdEU.png
+2025-12-11 21:06:00.415 - Task completed. File name: cmd_BAIIzjZdEU.png, Duration: 41 ms
+2025-12-11 22:07:30.012 - Executing: Capture region
+2025-12-11 22:07:32.758 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-11 22:07:32.770 - Task status: Preparing
+2025-12-11 22:07:32.857 - Image copied to clipboard.
+2025-12-11 22:07:32.919 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_CexJAqBitv.png
+2025-12-11 22:07:32.954 - Task completed. File name: cmd_CexJAqBitv.png, Duration: 184 ms
+2025-12-12 00:26:31.221 - Executing: Capture region
+2025-12-12 00:26:38.765 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-12 00:26:38.778 - Task status: Preparing
+2025-12-12 00:26:38.868 - Image copied to clipboard.
+2025-12-12 00:26:38.947 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_ASLsujjEx4.png
+2025-12-12 00:26:38.983 - Task completed. File name: cmd_ASLsujjEx4.png, Duration: 206 ms

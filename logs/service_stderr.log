@@ -8819,3 +8819,42 @@ C:\MWE\server\mwe_bridge_p8.py:9: DeprecationWarning: websockets.server.WebSocke
 2025-12-02 01:33:53,809 | INFO | server listening on [::1]:8766
 2025-12-02 01:33:53,809 | INFO | server listening on 127.0.0.1:8766
 2025-12-02 01:33:53,809 | INFO | Bridge P8 listening on ws://localhost:8766
+C:\MWE\server\mwe_bridge_p8.py:9: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated
+  from websockets.server import WebSocketServerProtocol
+2025-12-10 01:30:41,502 | INFO | Scenario dir: C:\MWE\scenarios
+2025-12-10 01:30:41,503 | INFO | Healthz running on http://127.0.0.1:8770/healthz
+2025-12-10 01:30:41,539 | INFO | server listening on 127.0.0.1:8766
+2025-12-10 01:30:41,539 | INFO | server listening on [::1]:8766
+2025-12-10 01:30:41,539 | INFO | Bridge P8 listening on ws://localhost:8766
+2025-12-10 01:31:38,324 | INFO | server closing
+2025-12-10 01:31:38,325 | INFO | server closed
+Traceback (most recent call last):
+  File "C:\Program Files\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Program Files\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\MWE\server\mwe_bridge_p8.py", line 149, in main
+    await asyncio.Future()
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\MWE\server\mwe_bridge_p8.py", line 152, in <module>
+    asyncio.run(main())
+    ~~~~~~~~~~~^^^^^^^^
+  File "C:\Program Files\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Program Files\Python313\Lib\asyncio\runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+C:\MWE\server\mwe_bridge_p8.py:9: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated
+  from websockets.server import WebSocketServerProtocol
+2025-12-10 01:32:05,695 | INFO | Scenario dir: C:\MWE\scenarios
+2025-12-10 01:32:05,696 | INFO | Healthz running on http://127.0.0.1:8770/healthz
+2025-12-10 01:32:05,716 | INFO | server listening on 127.0.0.1:8766
+2025-12-10 01:32:05,716 | INFO | server listening on [::1]:8766
+2025-12-10 01:32:05,716 | INFO | Bridge P8 listening on ws://localhost:8766

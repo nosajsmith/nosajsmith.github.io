@@ -1,104 +1,112 @@
 """
 Scenario loader for MWE.
 
-Reads JSON scenarios from:  ...\server\rules\scenarios\<id>.json
+Reads JSON scenarios from:
+  ...\server\rules\scenarios\<id>.json
 
-Exposes one main function:
-
-    load_scenario(scenario_id) -> (GameTime, GameMap, UnitRepository, meta)
-
-`meta` is a small dict with scenario metadata + extra lists
-(supply sources, objectives, reinforcements) that staff sections use.
+Exposes:
+  load_scenario(scenario_id) -> (start_time, game_map, units_repo, meta)
 """
 
 from __future__ import annotations
 
 import json
 import os
-from typing import Dict, Any, List, Tuple
+from typing import Dict, Any, Tuple, List
 
 from engine.core.time_system import GameTime
 from engine.core.map_model import GameMap, MapTile, Terrain
-from engine.core.unit_model import UnitRepository, UnitState, Side, UnitType
+from engine.core.unit_model import (
+    UnitState,
+    UnitRepository,
+    Side,
+    UnitType,
+    Posture,
+)
 
 
 # ---------------------------------------------------------------------------
-# Paths
+# Path helpers
 # ---------------------------------------------------------------------------
+
 
 def _rules_dir() -> str:
     """
     Returns the absolute path to ...\server\rules
+    (assuming this file is at ...\server\engine\scenario_loader.py)
     """
-    here = os.path.dirname(os.path.abspath(__file__))     # ...\server\engine
-    server_dir = os.path.dirname(here)                    # ...\server
-    rules_dir = os.path.join(server_dir, "rules")         # ...\server\rules
+    this_dir = os.path.dirname(os.path.abspath(__file__))  # ...\server\engine
+    server_dir = os.path.dirname(this_dir)                 # ...\server
+    rules_dir = os.path.join(server_dir, "rules")
     return os.path.abspath(rules_dir)
 
 
 def _scenario_path(scenario_id: str) -> str:
     """
-    Return full path to the scenario JSON file.
-    Assumes: ...\server\rules\scenarios\<id>.json
+    Build the path to a scenario JSON file.
+
+    Assumes:
+      ...\server\rules\scenarios\<id>.json
     """
-    rules = _rules_dir()
-    scen_dir = os.path.join(rules, "scenarios")
-    return os.path.join(scen_dir, f"{scenario_id}.json")
+    rules_dir = _rules_dir()
+    scenarios_dir = os.path.join(rules_dir, "scenarios")
+    return os.path.join(scenarios_dir, f"{scenario_id}.json")
 
 
 # ---------------------------------------------------------------------------
 # Builders
 # ---------------------------------------------------------------------------
 
+
 def _build_time(data: Dict[str, Any]) -> GameTime:
+    """
+    Build initial GameTime from scenario data.
+
+    GameTime(...) currently expects:
+      day: int
+      phase: str  (we'll just start at "day")
+      weather: str
+    """
     start_day = int(data.get("start_day", 1))
     weather = data.get("weather", "Clear")
-    return GameTime(day=start_day, phase="day", weather=weather, turn=1)
+    # NOTE: GameTime does NOT take a 'turn' keyword; just (day, phase, weather).
+    return GameTime(day=start_day, phase="day", weather=weather)
 
 
 def _build_map(data: Dict[str, Any]) -> GameMap:
     """
-    Build GameMap from scenario JSON.
+    Build a GameMap from the scenario's location definitions.
 
-    Expected JSON layout:
+    Expected JSON shape (simplified):
 
-      "tiles": [
-        {
-          "id": "LUNGA",
-          "name": "Lunga",
+      "locations": {
+        "LUNGA": {
+          "name": "Lunga Beachhead",
           "terrain": "PLAINS",
-          "neighbors": ["TULAGI"],
           "is_port": true,
           "is_airfield": true,
           "base_move_cost": 1
         },
-        ...
-      ]
+        "TULAGI": {
+          "name": "Tulagi",
+          "terrain": "JUNGLE"
+        }
+      }
     """
-    tiles_list: List[Dict[str, Any]] = data.get("tiles", []) or []
-
     tiles: Dict[str, MapTile] = {}
 
-    for tdef in tiles_list:
-        tile_id = tdef.get("id")
-        if not tile_id:
-            continue
-
-        name = tdef.get("name", tile_id)
-
-        terrain_name = str(tdef.get("terrain", "PLAINS")).upper()
+    loc_defs: Dict[str, Any] = data.get("locations", {})
+    for tile_id, tdef in loc_defs.items():
+        terrain_str = str(tdef.get("terrain", "PLAINS")).upper()
         try:
-            terrain = Terrain[terrain_name]
+            terrain = Terrain[terrain_str]
         except KeyError:
             terrain = Terrain.PLAINS
 
-        neighbors = list(tdef.get("neighbors", []))
-
         tile = MapTile(
-            id=tile_id,
-            name=name,
+            tile_id=tile_id,  # <-- IMPORTANT: matches MapTile dataclass
+            name=tdef.get("name", tile_id),
             terrain=terrain,
-            neighbors=neighbors,
             is_port=bool(tdef.get("is_port", False)),
             is_airfield=bool(tdef.get("is_airfield", False)),
             base_move_cost=int(tdef.get("base_move_cost", 1)),
@@ -110,9 +118,9 @@ def _build_map(data: Dict[str, Any]) -> GameMap:
 
 def _build_units(data: Dict[str, Any]) -> UnitRepository:
     """
-    Build UnitRepository from scenario JSON.
+    Build UnitRepository from scenario data.
 
-    Expected layout:
+    Expected JSON shape (simplified):
 
       "units": [
         {
@@ -126,30 +134,36 @@ def _build_units(data: Dict[str, Any]) -> UnitRepository:
           "supply": 80,
           "readiness": 60,
           "location_id": "LUNGA",
+          "posture": "DEFEND",
           "hq_unit_id": null
-        },
-        ...
+        }
       ]
     """
-    units_list: List[Dict[str, Any]] = data.get("units", []) or []
+    repo = UnitRepository()   # <-- no arguments
 
-    repo = UnitRepository()
-    for udef in units_list:
-        uid = udef.get("id")
-        if not uid:
-            continue
-
-        name = udef.get("name", uid)
-
+    for udef in data.get("units", []):
         side_str = udef.get("side", "ALLIED")
         unit_type_str = udef.get("unit_type", "INFANTRY")
+        posture_str = udef.get("posture", "DEFEND")
 
-        side = Side(side_str)
-        unit_type = UnitType(unit_type_str)
+        try:
+            side = Side(side_str)
+        except ValueError:
+            side = Side.ALLIED
+
+        try:
+            unit_type = UnitType(unit_type_str)
+        except ValueError:
+            unit_type = UnitType.INFANTRY
+
+        try:
+            posture = Posture(posture_str)
+        except ValueError:
+            posture = Posture.DEFEND
 
         u = UnitState(
-            id=uid,
-            name=name,
+            id=udef["id"],
+            name=udef.get("name", udef["id"]),
             side=side,
             unit_type=unit_type,
             strength=int(udef.get("strength", 100)),
@@ -158,28 +172,33 @@ def _build_units(data: Dict[str, Any]) -> UnitRepository:
             supply=int(udef.get("supply", 100)),
             readiness=int(udef.get("readiness", 50)),
             location_id=udef.get("location_id", ""),
+            posture=posture,
             hq_unit_id=udef.get("hq_unit_id"),
         )
         repo.add(u)
 
     return repo
 
-
 # ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
 
+
 def load_scenario(scenario_id: str) -> Tuple[GameTime, GameMap, UnitRepository, Dict[str, Any]]:
     """
-    Load a scenario and return:
-      - start_time (GameTime)
-      - game_map (GameMap)
-      - units_repo (UnitRepository)
-      - meta (dict with scenario summary + extras)
+    High-level loader used by EngineAPI.
+
+    Returns:
+      (start_time, game_map, units_repo, meta)
+
+    meta is a small dict the UI/bridge can use as scenario metadata.
     """
     path = _scenario_path(scenario_id)
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"Scenario JSON not found: {path}")
+
     with open(path, "r", encoding="utf-8") as f:
-        data = json.load(f)
+        data: Dict[str, Any] = json.load(f)
 
     start_time = _build_time(data)
     game_map = _build_map(data)
@@ -189,12 +208,12 @@ def load_scenario(scenario_id: str) -> Tuple[GameTime, GameMap, UnitRepository, 
         "id": data.get("id", scenario_id),
         "name": data.get("name", scenario_id),
         "description": data.get("description", ""),
-        "start_day": start_time.day,
-        "weather": start_time.weather,
-        # Extras used by staff sections:
-        "supply_sources": data.get("supply_sources", []) or [],
-        "objectives": data.get("objectives", []) or [],
-        "reinforcements": data.get("reinforcements", []) or [],
+        "start_day": data.get("start_day", 1),
+        "weather": data.get("weather", "Clear"),
+        # Pass through for G-4 / G-7 / G-8:
+        "objectives": data.get("objectives", []),
+        "supply_sources": data.get("supply_sources", []),
+        "reinforcements": data.get("reinforcements", []),
     }
 
     return start_time, game_map, units_repo, meta

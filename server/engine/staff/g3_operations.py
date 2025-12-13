@@ -115,15 +115,24 @@ def _terrain_profile(terrain: Terrain) -> Dict[str, float]:
 
 
 def _unit_frontage_cost(u: UnitState) -> float:
+    """
+    Frontage “slot” cost for a unit on the line.
+
+    For now we keep it simple and only special-case types we KNOW
+    exist in UnitType. Everything else counts as 1.0.
+    """
     from engine.core.unit_model import UnitType  # avoid circular import at top
-    if u.unit_type == UnitType.ARMORED:
-        return 2.0
-    if u.unit_type == UnitType.HQ:
+
+    # If your UnitType enum grows later (e.g. ARMORED, NAVAL, AIR),
+    # you can expand this mapping safely.
+    if hasattr(UnitType, "HQ") and u.unit_type == UnitType.HQ:
         return 0.5
-    if u.unit_type == UnitType.SUPPORT:
+    if hasattr(UnitType, "SUPPORT") and u.unit_type == UnitType.SUPPORT:
         return 0.75
-    # Infantry, naval, air (abstracted)
+
+    # Default cost for infantry and anything else
     return 1.0
+
 
 
 def _side_stats(units: List[UnitState]) -> Tuple[int, float, float, float]:

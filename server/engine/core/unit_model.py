@@ -1,9 +1,24 @@
+"""
+Unit model for MWE.
+
+Contains:
+  - Enum Side (ALLIED / AXIS)
+  - Enum UnitType
+  - Enum Posture
+  - UnitState dataclass
+  - UnitRepository container
+"""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Dict, Optional, Iterable
 from enum import Enum
-from typing import Dict, List, Optional
 
+
+# ---------------------------------------------------------------------------
+# ENUMS
+# ---------------------------------------------------------------------------
 
 class Side(str, Enum):
     ALLIED = "ALLIED"
@@ -12,20 +27,22 @@ class Side(str, Enum):
 
 class UnitType(str, Enum):
     INFANTRY = "INFANTRY"
-    ARMORED = "ARMORED"
-    HQ = "HQ"
-    SUPPORT = "SUPPORT"
-    NAVAL = "NAVAL"
+    ARMOR = "ARMOR"
     AIR = "AIR"
+    NAVAL = "NAVAL"
 
 
 class Posture(str, Enum):
-    MOVE = "MOVE"
     ATTACK = "ATTACK"
     DEFEND = "DEFEND"
+    MOVE = "MOVE"
     REST = "REST"
     REFIT = "REFIT"
 
+
+# ---------------------------------------------------------------------------
+# UNIT STATE
+# ---------------------------------------------------------------------------
 
 @dataclass
 class UnitState:
@@ -33,47 +50,57 @@ class UnitState:
     name: str
     side: Side
     unit_type: UnitType
-    strength: int
-    fatigue: int
-    morale: int
-    supply: int
-    readiness: int
-    location_id: str
+
+    strength: int = 100
+    fatigue: int = 0
+    morale: int = 50
+    supply: int = 100
+    readiness: int = 50
+
+    location_id: str = ""
     posture: Posture = Posture.DEFEND
+
     hq_unit_id: Optional[str] = None
 
-    def to_dict(self) -> Dict:
-        return {
-            "id": self.id,
-            "name": self.name,
-            "side": self.side.value,
-            "unit_type": self.unit_type.value,
-            "strength": self.strength,
-            "fatigue": self.fatigue,
-            "morale": self.morale,
-            "supply": self.supply,
-            "readiness": self.readiness,
-            "location_id": self.location_id,
-            "posture": self.posture.name,
-            "hq_unit_id": self.hq_unit_id,
-        }
 
+# ---------------------------------------------------------------------------
+# UNIT REPOSITORY
+# ---------------------------------------------------------------------------
 
 class UnitRepository:
+    """
+    Stores UnitState objects and provides search helpers.
+    THIS VERSION ACCEPTS NO CONSTRUCTOR ARGUMENTS.
+    """
+
     def __init__(self) -> None:
-        self._units: Dict[str, UnitState] = {}
+        self.units: Dict[str, UnitState] = {}
 
     def add(self, unit: UnitState) -> None:
-        self._units[unit.id] = unit
+        self.units[unit.id] = unit
 
     def get(self, unit_id: str) -> Optional[UnitState]:
-        return self._units.get(unit_id)
+        return self.units.get(unit_id)
 
-    def remove(self, unit_id: str) -> None:
-        self._units.pop(unit_id, None)
+    def all_units(self) -> Iterable[UnitState]:
+        return self.units.values()
 
-    def all_units(self) -> List[UnitState]:
-        return list(self._units.values())
-
+    # Used by EngineAPI.get_game_state()
     def to_dict(self) -> Dict[str, Dict]:
-        return {uid: u.to_dict() for uid, u in self._units.items()}
+        return {
+            uid: {
+                "id": u.id,
+                "name": u.name,
+                "side": u.side.value,
+                "unit_type": u.unit_type.value,
+                "strength": u.strength,
+                "fatigue": u.fatigue,
+                "morale": u.morale,
+                "supply": u.supply,
+                "readiness": u.readiness,
+                "location_id": u.location_id,
+                "posture": u.posture.value,
+                "hq_unit_id": u.hq_unit_id,
+            }
+            for uid, u in self.units.items()
+        }
