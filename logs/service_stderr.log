@@ -8858,3 +8858,28 @@ C:\MWE\server\mwe_bridge_p8.py:9: DeprecationWarning: websockets.server.WebSocke
 2025-12-10 01:32:05,716 | INFO | server listening on 127.0.0.1:8766
 2025-12-10 01:32:05,716 | INFO | server listening on [::1]:8766
 2025-12-10 01:32:05,716 | INFO | Bridge P8 listening on ws://localhost:8766
+2025-12-16 11:01:49,775 | INFO | server closing
+2025-12-16 11:01:49,786 | INFO | server closed
+Traceback (most recent call last):
+  File "C:\Program Files\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Program Files\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\MWE\server\mwe_bridge_p8.py", line 149, in main
+    await asyncio.Future()
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\MWE\server\mwe_bridge_p8.py", line 152, in <module>
+    asyncio.run(main())
+    ~~~~~~~~~~~^^^^^^^^
+  File "C:\Program Files\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Program Files\Python313\Lib\asyncio\runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt

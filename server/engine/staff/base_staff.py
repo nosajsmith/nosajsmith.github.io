@@ -1,24 +1,22 @@
-"""
-Base class for all staff sections.
-"""
-
 from __future__ import annotations
-from abc import ABC, abstractmethod
-from engine.core.time_system import TimeListener, GameTime
+
+from typing import Dict, Any, List, Protocol
+
+from engine.core.time_system import GameTime
+from engine.core.map_model import GameMap
 from engine.core.unit_model import UnitRepository
 
 
-class StaffSection(TimeListener, ABC):
-    def __init__(self, name: str, units: UnitRepository) -> None:
-        self.name = name
+class StaffSection(Protocol):
+    def on_day_start(self, t: GameTime) -> None: ...
+    def get_logs(self) -> List[Dict[str, Any]]: ...
+
+
+class EngineContext:
+    """
+    Shared context handed to staff sections.
+    """
+    def __init__(self, game_map: GameMap, units: UnitRepository, log_sink: List[Dict[str, Any]]) -> None:
+        self.game_map = game_map
         self.units = units
-
-    def on_day_start(self, t: GameTime) -> None:
-        pass
-
-    def on_day_end(self, t: GameTime) -> None:
-        pass
-
-    @abstractmethod
-    def run_daily_cycle(self, t: GameTime) -> None:
-        pass
+        self.log_sink = log_sink
