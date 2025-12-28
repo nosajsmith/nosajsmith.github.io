@@ -691,3 +691,9 @@ System.Net.Http.HttpRequestException: No such host is known. (api.github.com:443
 2025-12-27 21:54:16.855 - Image copied to clipboard.
 2025-12-27 21:54:16.870 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\WarInTheEast2_KbfsmB0o8m.png
 2025-12-27 21:54:16.878 - Task completed. File name: WarInTheEast2_KbfsmB0o8m.png, Duration: 43 ms
+2025-12-27 22:50:43.426 - Executing: Capture region
+2025-12-27 22:50:43.962 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-27 22:50:43.974 - Task status: Preparing
+2025-12-27 22:50:43.981 - Image copied to clipboard.
+2025-12-27 22:50:43.987 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\BL6yccQP39.png
+2025-12-27 22:50:43.990 - Task completed. File name: BL6yccQP39.png, Duration: 16 ms
