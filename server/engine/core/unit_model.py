@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from enum import Enum
-from typing import Dict, Optional, Any, List
+from typing import Dict, List, Optional, Any
 
 
 class Side(str, Enum):
@@ -18,15 +18,14 @@ class UnitType(str, Enum):
     NAVAL = "NAVAL"
     AIR = "AIR"
 
-    # Alias to kill the "ARMORED" bunker forever
-    ARMORED = "ARMOR"
-
 
 class Posture(str, Enum):
     HOLD = "HOLD"
+    MOVE = "MOVE"
     ATTACK = "ATTACK"
     DEFEND = "DEFEND"
-    MOVE = "MOVE"
+    REST = "REST"
+    REFIT = "REFIT"
 
 
 @dataclass
@@ -35,51 +34,61 @@ class UnitState:
     name: str
     side: Side
     unit_type: UnitType
-    strength: int = 100
+    strength: int
+
     fatigue: int = 0
     morale: int = 50
-    supply: int = 50
+    supply: int = 100
     readiness: int = 50
+
     location_id: str = ""
     posture: Posture = Posture.HOLD
+
+    # Optional command relationship (used by scenario_loader / future command rules)
     hq_unit_id: Optional[str] = None
+
+    def to_dict(self) -> Dict[str, Any]:
+        d = asdict(self)
+        # Enums -> values for JSON friendliness
+        d["side"] = self.side.value
+        d["unit_type"] = self.unit_type.value
+        d["posture"] = self.posture.value
+        return d
 
 
 class UnitRepository:
     """
-    IMPORTANT:
-    - __init__ takes NO args (matches the error you hit)
-    - use add() to load units
-    """
-    def __init__(self) -> None:
-        self.units: Dict[str, UnitState] = {}
+    Minimal, stable repository interface used across staff sections.
 
-    def add(self, unit: UnitState) -> None:
-        self.units[unit.id] = unit
+    Required by staff:
+      - all_units()
+      - get(id)
+      - add(unit)
+      - to_list()
+    """
+
+    def __init__(self) -> None:
+        self._by_id: Dict[str, UnitState] = {}
+
+    def add(self, u: UnitState) -> None:
+        self._by_id[u.id] = u
 
     def get(self, unit_id: str) -> Optional[UnitState]:
-        return self.units.get(unit_id)
+        return self._by_id.get(unit_id)
 
-    def all(self) -> List[UnitState]:
-        return list(self.units.values())
+    def remove(self, unit_id: str) -> None:
+        if unit_id in self._by_id:
+            del self._by_id[unit_id]
+
+    def all_units(self) -> List[UnitState]:
+        return list(self._by_id.values())
 
     def to_list(self) -> List[Dict[str, Any]]:
-        out: List[Dict[str, Any]] = []
-        for u in self.units.values():
-            out.append(
-                {
-                    "id": u.id,
-                    "name": u.name,
-                    "side": u.side.value,
-                    "unit_type": u.unit_type.value,
-                    "strength": u.strength,
-                    "fatigue": u.fatigue,
-                    "morale": u.morale,
-                    "supply": u.supply,
-                    "readiness": u.readiness,
-                    "location_id": u.location_id,
-                    "posture": u.posture.value,
-                    "hq_unit_id": u.hq_unit_id,
-                }
-            )
-        return out
+        return [u.to_dict() for u in self.all_units()]
+
+    @staticmethod
+    def from_units(units: List[UnitState]) -> "UnitRepository":
+        repo = UnitRepository()
+        for u in units:
+            repo.add(u)
+        return repo

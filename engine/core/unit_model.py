@@ -1,37 +1,31 @@
-"""
-Unit model for MWE.
-
-Keeps track of:
-- static info (name, side, type)
-- dynamic state (strength, fatigue, supply, morale)
-"""
-
 from __future__ import annotations
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import Dict, Optional
+
+from dataclasses import dataclass, asdict
+from enum import Enum
+from typing import Dict, List, Optional, Any
 
 
 class Side(str, Enum):
-    ALLIED = "Allied"
-    AXIS = "Axis"      # or "Japan" later if you prefer
+    ALLIED = "ALLIED"
+    AXIS = "AXIS"
 
 
 class UnitType(str, Enum):
+    INFANTRY = "INFANTRY"
+    ARMOR = "ARMOR"
+    ARTILLERY = "ARTILLERY"
     HQ = "HQ"
-    INFANTRY = "Infantry"
-    ARMORED = "Armored"
-    NAVAL = "Naval"
-    AIR = "Air"
-    SUPPORT = "Support"
+    NAVAL = "NAVAL"
+    AIR = "AIR"
 
 
 class Posture(str, Enum):
-    REST = "Rest"
-    DEFEND = "Defend"
-    ATTACK = "Attack"
-    MOVE = "Move"
-    REFIT = "Refit"
+    HOLD = "HOLD"
+    MOVE = "MOVE"
+    ATTACK = "ATTACK"
+    DEFEND = "DEFEND"
+    REST = "REST"
+    REFIT = "REFIT"
 
 
 @dataclass
@@ -40,48 +34,61 @@ class UnitState:
     name: str
     side: Side
     unit_type: UnitType
+    strength: int
 
-    # Dynamic combat state
-    strength: int = 100       # abstract combat power
-    fatigue: int = 0          # 0–100
-    morale: int = 50          # 0–100
-    supply: int = 100         # 0–100 (% of needs met)
-    readiness: int = 50       # 0–100
+    fatigue: int = 0
+    morale: int = 50
+    supply: int = 100
+    readiness: int = 50
 
-    posture: Posture = Posture.REST
-    location_id: str = "UNKNOWN"   # link to map hex/area
+    location_id: str = ""
+    posture: Posture = Posture.HOLD
+
+    # Optional command relationship (used by scenario_loader / future command rules)
     hq_unit_id: Optional[str] = None
 
-    def is_combat_effective(self) -> bool:
-        """Very rough first-pass rule."""
-        return self.strength > 20 and self.supply > 30 and self.fatigue < 80
+    def to_dict(self) -> Dict[str, Any]:
+        d = asdict(self)
+        # Enums -> values for JSON friendliness
+        d["side"] = self.side.value
+        d["unit_type"] = self.unit_type.value
+        d["posture"] = self.posture.value
+        return d
 
 
 class UnitRepository:
     """
-    Simple in-memory unit store.
+    Minimal, stable repository interface used across staff sections.
 
-    Later this can load/save from scenario files, DB, etc.
+    Required by staff:
+      - all_units()
+      - get(id)
+      - add(unit)
+      - to_list()
     """
 
     def __init__(self) -> None:
-        self._units: Dict[str, UnitState] = {}
+        self._by_id: Dict[str, UnitState] = {}
 
-    # CRUD operations ---------------------------------------------------------
-
-    def add(self, unit: UnitState) -> None:
-        self._units[unit.id] = unit
+    def add(self, u: UnitState) -> None:
+        self._by_id[u.id] = u
 
     def get(self, unit_id: str) -> Optional[UnitState]:
-        return self._units.get(unit_id)
+        return self._by_id.get(unit_id)
 
-    def all_units(self):
-        return list(self._units.values())
+    def remove(self, unit_id: str) -> None:
+        if unit_id in self._by_id:
+            del self._by_id[unit_id]
 
-    # Convenience helpers -----------------------------------------------------
+    def all_units(self) -> List[UnitState]:
+        return list(self._by_id.values())
 
-    def by_side(self, side: Side):
-        return [u for u in self._units.values() if u.side == side]
+    def to_list(self) -> List[Dict[str, Any]]:
+        return [u.to_dict() for u in self.all_units()]
 
-    def at_location(self, location_id: str):
-        return [u for u in self._units.values() if u.location_id == location_id]
+    @staticmethod
+    def from_units(units: List[UnitState]) -> "UnitRepository":
+        repo = UnitRepository()
+        for u in units:
+            repo.add(u)
+        return repo

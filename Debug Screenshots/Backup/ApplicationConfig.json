@@ -830,8 +830,8 @@
   "ImageHistorySettings": {
     "RememberWindowState": true,
     "WindowState": {
-      "Location": "0, 0",
-      "Size": "0, 0",
+      "Location": "1422, 900",
+      "Size": "1010, 700",
       "IsMaximized": false
     },
     "ThumbnailSize": "150, 150",

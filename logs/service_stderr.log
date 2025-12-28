@@ -8883,3 +8883,42 @@ Traceback (most recent call last):
   File "C:\Program Files\Python313\Lib\asyncio\runners.py", line 123, in run
     raise KeyboardInterrupt()
 KeyboardInterrupt
+C:\MWE\server\mwe_bridge_p8.py:9: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated
+  from websockets.server import WebSocketServerProtocol
+2025-12-16 11:02:39,031 | INFO | Scenario dir: C:\MWE\scenarios
+2025-12-16 11:02:39,032 | INFO | Healthz running on http://127.0.0.1:8770/healthz
+2025-12-16 11:02:39,052 | INFO | server listening on [::1]:8766
+2025-12-16 11:02:39,053 | INFO | server listening on 127.0.0.1:8766
+2025-12-16 11:02:39,053 | INFO | Bridge P8 listening on ws://localhost:8766
+2025-12-21 20:04:33,255 | INFO | server closing
+2025-12-21 20:04:33,260 | INFO | server closed
+Traceback (most recent call last):
+  File "C:\Program Files\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Program Files\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\MWE\server\mwe_bridge_p8.py", line 149, in main
+    await asyncio.Future()
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\MWE\server\mwe_bridge_p8.py", line 152, in <module>
+    asyncio.run(main())
+    ~~~~~~~~~~~^^^^^^^^
+  File "C:\Program Files\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Program Files\Python313\Lib\asyncio\runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+C:\MWE\server\mwe_bridge_p8.py:9: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated
+  from websockets.server import WebSocketServerProtocol
+2025-12-21 20:05:20,736 | INFO | Scenario dir: C:\MWE\scenarios
+2025-12-21 20:05:20,736 | INFO | Healthz running on http://127.0.0.1:8770/healthz
+2025-12-21 20:05:20,761 | INFO | server listening on [::1]:8766
+2025-12-21 20:05:20,761 | INFO | server listening on 127.0.0.1:8766
+2025-12-21 20:05:20,761 | INFO | Bridge P8 listening on ws://localhost:8766

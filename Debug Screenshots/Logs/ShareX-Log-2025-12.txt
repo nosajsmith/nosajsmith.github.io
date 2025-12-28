@@ -500,3 +500,194 @@ System.Net.Http.HttpRequestException: No such host is known. (api.github.com:443
    at ShareX.HelpersLib.GitHubUpdateChecker.GetLatestRelease()
    at ShareX.HelpersLib.GitHubUpdateChecker.GetLatestRelease(Boolean includePreRelease)
    at ShareX.HelpersLib.GitHubUpdateChecker.CheckUpdateAsync()
+2025-12-16 17:06:30.978 - Executing: Capture region
+2025-12-16 17:06:42.603 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-16 17:06:42.801 - Task status: Preparing
+2025-12-16 17:06:42.851 - Image copied to clipboard.
+2025-12-16 17:06:42.884 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\explorer_EmOhTdVijY.png
+2025-12-16 17:06:42.904 - Task completed. File name: explorer_EmOhTdVijY.png, Duration: 99 ms
+2025-12-18 12:04:06.052 - GitHub update check failed.:
+System.Net.Http.HttpRequestException: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond. (api.github.com:443)
+ ---> System.Net.Sockets.SocketException (10060): A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.InjectNewHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at ShareX.HelpersLib.WebHelpers.DownloadStringAsync(String url)
+   at ShareX.HelpersLib.GitHubUpdateChecker.GetLatestRelease()
+   at ShareX.HelpersLib.GitHubUpdateChecker.GetLatestRelease(Boolean includePreRelease)
+   at ShareX.HelpersLib.GitHubUpdateChecker.CheckUpdateAsync()
+2025-12-18 16:32:43.429 - Executing: Capture region
+2025-12-18 16:32:47.732 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-18 16:32:47.746 - Task status: Preparing
+2025-12-18 16:32:47.778 - Image copied to clipboard.
+2025-12-18 16:32:47.814 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\firefox_OrqBUUor1N.png
+2025-12-18 16:32:47.825 - Task completed. File name: firefox_OrqBUUor1N.png, Duration: 79 ms
+2025-12-19 09:00:08.476 - Executing: Capture region
+2025-12-19 09:00:14.526 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-19 09:00:14.536 - Task status: Preparing
+2025-12-19 09:00:14.659 - Image copied to clipboard.
+2025-12-19 09:00:14.737 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\firefox_dthJtWO8qK.png
+2025-12-19 09:00:14.749 - Task completed. File name: firefox_dthJtWO8qK.png, Duration: 212 ms
+2025-12-19 12:38:38.872 - Executing: Capture region
+2025-12-19 12:38:41.755 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-19 12:38:41.798 - Task status: Preparing
+2025-12-19 12:38:41.878 - Image copied to clipboard.
+2025-12-19 12:38:41.941 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\firefox_yedob4LmCS.png
+2025-12-19 12:38:41.951 - Task completed. File name: firefox_yedob4LmCS.png, Duration: 156 ms
+2025-12-19 17:29:09.960 - Executing: Capture region
+2025-12-19 17:29:13.992 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-19 17:29:14.041 - Task status: Preparing
+2025-12-19 17:29:14.089 - Image copied to clipboard.
+2025-12-19 17:29:14.137 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\firefox_Lv7CjNXd84.png
+2025-12-19 17:29:14.147 - Task completed. File name: firefox_Lv7CjNXd84.png, Duration: 122 ms
+2025-12-19 17:29:37.354 - Executing: Capture region
+2025-12-19 17:29:40.324 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-19 17:29:40.393 - Task status: Preparing
+2025-12-19 17:29:40.455 - Image copied to clipboard.
+2025-12-19 17:29:40.495 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\firefox_3ciHMEMj4t.png
+2025-12-19 17:29:40.507 - Task completed. File name: firefox_3ciHMEMj4t.png, Duration: 122 ms
+2025-12-19 17:30:08.841 - Executing: Capture region
+2025-12-19 17:30:12.240 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-19 17:30:12.260 - Task status: Preparing
+2025-12-19 17:30:12.321 - Image copied to clipboard.
+2025-12-19 17:30:12.400 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\firefox_U5hneK286m.png
+2025-12-19 17:30:12.414 - Task completed. File name: firefox_U5hneK286m.png, Duration: 154 ms
+2025-12-19 17:30:29.920 - Executing: Capture region
+2025-12-19 17:30:31.389 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-19 17:30:31.413 - Task status: Preparing
+2025-12-19 17:30:31.435 - Image copied to clipboard.
+2025-12-19 17:30:31.439 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\POjWlIimEg.png
+2025-12-19 17:30:31.442 - Task completed. File name: POjWlIimEg.png, Duration: 30 ms
+2025-12-19 17:30:38.037 - ApplicationConfig save started: C:\MWE\Debug Screenshots\ApplicationConfig.json
+2025-12-19 17:30:38.037 - UploadersConfig save started: C:\MWE\Debug Screenshots\UploadersConfig.json
+2025-12-19 17:30:38.038 - HotkeysConfig save started: C:\MWE\Debug Screenshots\HotkeysConfig.json
+2025-12-19 17:30:38.117 - HotkeysConfig save successful: C:\MWE\Debug Screenshots\HotkeysConfig.json
+2025-12-19 17:30:38.134 - UploadersConfig save successful: C:\MWE\Debug Screenshots\UploadersConfig.json
+2025-12-19 17:30:38.239 - ApplicationConfig save successful: C:\MWE\Debug Screenshots\ApplicationConfig.json
+2025-12-19 17:31:21.136 - Executing: Capture region
+2025-12-19 17:31:23.761 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-19 17:31:23.775 - Task status: Preparing
+2025-12-19 17:31:23.832 - Image copied to clipboard.
+2025-12-19 17:31:23.871 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\firefox_ckOAJUWGi8.png
+2025-12-19 17:31:23.884 - Task completed. File name: firefox_ckOAJUWGi8.png, Duration: 112 ms
+2025-12-19 17:31:56.649 - Executing: Capture region
+2025-12-19 17:31:59.326 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-19 17:31:59.363 - Task status: Preparing
+2025-12-19 17:31:59.515 - Image copied to clipboard.
+2025-12-19 17:31:59.552 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\firefox_Wp7VGKxeqo.png
+2025-12-19 17:31:59.564 - Task completed. File name: firefox_Wp7VGKxeqo.png, Duration: 211 ms
+2025-12-19 17:32:21.696 - Executing: Capture region
+2025-12-19 17:32:24.439 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-19 17:32:24.482 - Task status: Preparing
+2025-12-19 17:32:24.553 - Image copied to clipboard.
+2025-12-19 17:32:24.619 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\firefox_hUZYf6wcIV.png
+2025-12-19 17:32:24.634 - Task completed. File name: firefox_hUZYf6wcIV.png, Duration: 155 ms
+2025-12-19 17:32:38.231 - Executing: Capture region
+2025-12-19 17:32:40.569 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-19 17:32:40.642 - Task status: Preparing
+2025-12-19 17:32:40.743 - Image copied to clipboard.
+2025-12-19 17:32:40.824 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\firefox_SzpsHL9ZiA.png
+2025-12-19 17:32:40.837 - Task completed. File name: firefox_SzpsHL9ZiA.png, Duration: 198 ms
+2025-12-19 17:33:09.072 - Executing: Capture region
+2025-12-19 17:33:13.969 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-19 17:33:14.009 - Task status: Preparing
+2025-12-19 17:33:14.094 - Image copied to clipboard.
+2025-12-19 17:33:14.157 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\firefox_7RO8IBp4HD.png
+2025-12-19 17:33:14.171 - Task completed. File name: firefox_7RO8IBp4HD.png, Duration: 162 ms
+2025-12-19 17:34:27.316 - ApplicationConfig save started: C:\MWE\Debug Screenshots\ApplicationConfig.json
+2025-12-19 17:34:27.317 - UploadersConfig save started: C:\MWE\Debug Screenshots\UploadersConfig.json
+2025-12-19 17:34:27.317 - HotkeysConfig save started: C:\MWE\Debug Screenshots\HotkeysConfig.json
+2025-12-19 17:34:27.360 - HotkeysConfig save successful: C:\MWE\Debug Screenshots\HotkeysConfig.json
+2025-12-19 17:34:27.384 - UploadersConfig save successful: C:\MWE\Debug Screenshots\UploadersConfig.json
+2025-12-19 17:34:27.504 - ApplicationConfig save successful: C:\MWE\Debug Screenshots\ApplicationConfig.json
+2025-12-20 10:00:00.774 - Executing: Capture region
+2025-12-20 10:00:05.001 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-20 10:00:05.014 - Task status: Preparing
+2025-12-20 10:00:05.034 - Image copied to clipboard.
+2025-12-20 10:00:05.050 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\cmd_4FRSA6G9n7.png
+2025-12-20 10:00:05.060 - Task completed. File name: cmd_4FRSA6G9n7.png, Duration: 47 ms
+2025-12-21 20:04:19.588 - ShareX closing.
+2025-12-21 20:04:19.603 - ApplicationConfig save started: C:\MWE\Debug Screenshots\ApplicationConfig.json
+2025-12-21 20:04:20.103 - ApplicationConfig save successful: C:\MWE\Debug Screenshots\ApplicationConfig.json
+2025-12-21 20:04:20.104 - UploadersConfig save started: C:\MWE\Debug Screenshots\UploadersConfig.json
+2025-12-21 20:04:20.176 - UploadersConfig save successful: C:\MWE\Debug Screenshots\UploadersConfig.json
+2025-12-21 20:04:20.177 - HotkeysConfig save started: C:\MWE\Debug Screenshots\HotkeysConfig.json
+2025-12-21 20:04:20.206 - HotkeysConfig save successful: C:\MWE\Debug Screenshots\HotkeysConfig.json
+2025-12-21 20:06:36.276 - ShareX starting.
+2025-12-21 20:06:36.279 - Version: 18.0.1
+2025-12-21 20:06:36.279 - Build: Release
+2025-12-21 20:06:36.280 - Command line: "C:\Program Files\ShareX\ShareX.dll" -silent
+2025-12-21 20:06:36.280 - Personal path: C:\MWE\Debug Screenshots
+2025-12-21 20:06:36.281 - Personal path detection method: PersonalPath.cfg file (C:\Users\nosaj\OneDrive\Documents\ShareX\PersonalPath.cfg)
+2025-12-21 20:06:36.281 - Operating system: Windows 10 Pro (64-bit)
+2025-12-21 20:06:36.283 - .NET version: 9.0.8
+2025-12-21 20:06:36.283 - Running as elevated process: False
+2025-12-21 20:06:36.305 - Flags: SilentRun
+2025-12-21 20:06:36.503 - ApplicationConfig load started: C:\MWE\Debug Screenshots\ApplicationConfig.json
+2025-12-21 20:06:37.987 - ApplicationConfig load finished: C:\MWE\Debug Screenshots\ApplicationConfig.json
+2025-12-21 20:06:38.480 - Language changed to: English (United States)
+2025-12-21 20:06:38.480 - MainForm init started.
+2025-12-21 20:06:38.481 - UploadersConfig load started: C:\MWE\Debug Screenshots\UploadersConfig.json
+2025-12-21 20:06:38.725 - UploadersConfig load finished: C:\MWE\Debug Screenshots\UploadersConfig.json
+2025-12-21 20:06:38.727 - HotkeysConfig load started: C:\MWE\Debug Screenshots\HotkeysConfig.json
+2025-12-21 20:06:38.774 - HotkeysConfig load finished: C:\MWE\Debug Screenshots\HotkeysConfig.json
+2025-12-21 20:06:39.367 - MainForm init finished.
+2025-12-21 20:06:39.533 - Hotkey registered: Hotkey: Ctrl + Print Screen, Description: Capture region, Job: RectangleRegion
+2025-12-21 20:06:39.533 - Hotkey registered: Hotkey: Print Screen, Description: Capture entire screen, Job: PrintScreen
+2025-12-21 20:06:39.533 - Hotkey registered: Hotkey: Alt + Print Screen, Description: Capture active window, Job: ActiveWindow
+2025-12-21 20:06:39.533 - Hotkey registered: Hotkey: Shift + Print Screen, Description: Start/Stop screen recording, Job: ScreenRecorder
+2025-12-21 20:06:39.533 - Hotkey registered: Hotkey: Ctrl + Shift + Print Screen, Description: Start/Stop screen recording (GIF), Job: ScreenRecorderGIF
+2025-12-21 20:06:39.534 - HotkeyManager started.
+2025-12-21 20:06:39.534 - WatchFolderManager started.
+2025-12-21 20:06:39.551 - Startup time: 3495 ms
+2025-12-21 20:06:39.553 - CommandLine: -silent
+2025-12-21 20:06:39.658 - GitHub update check failed.:
+System.Net.Http.HttpRequestException: No such host is known. (api.github.com:443)
+ ---> System.Net.Sockets.SocketException (11001): No such host is known.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.InjectNewHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at ShareX.HelpersLib.WebHelpers.DownloadStringAsync(String url)
+   at ShareX.HelpersLib.GitHubUpdateChecker.GetLatestRelease()
+   at ShareX.HelpersLib.GitHubUpdateChecker.GetLatestRelease(Boolean includePreRelease)
+   at ShareX.HelpersLib.GitHubUpdateChecker.CheckUpdateAsync()
+2025-12-23 15:53:51.626 - Executing: Capture region
+2025-12-23 15:53:56.425 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-23 15:53:56.660 - Task status: Preparing
+2025-12-23 15:53:56.786 - Image copied to clipboard.
+2025-12-23 15:53:56.800 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\firefox_hF7jDvor0S.png
+2025-12-23 15:53:56.807 - Task completed. File name: firefox_hF7jDvor0S.png, Duration: 145 ms
+2025-12-23 16:13:44.268 - Executing: Capture region
+2025-12-23 16:13:49.346 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-23 16:13:49.359 - Task status: Preparing
+2025-12-23 16:13:49.387 - Image copied to clipboard.
+2025-12-23 16:13:49.414 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\firefox_5ctOOqVHsh.png
+2025-12-23 16:13:49.421 - Task completed. File name: firefox_5ctOOqVHsh.png, Duration: 62 ms
+2025-12-23 16:13:57.014 - Executing: Capture region
+2025-12-27 10:22:06.256 - Executing: Capture region
+2025-12-27 21:54:10.717 - Executing: Capture region
+2025-12-27 21:54:16.822 - Task in queue. Job: Job, Type: Image, Host: 
+2025-12-27 21:54:16.834 - Task status: Preparing
+2025-12-27 21:54:16.855 - Image copied to clipboard.
+2025-12-27 21:54:16.870 - Image saved to file: C:\MWE\Debug Screenshots\Screenshots\2025-12\WarInTheEast2_KbfsmB0o8m.png
+2025-12-27 21:54:16.878 - Task completed. File name: WarInTheEast2_KbfsmB0o8m.png, Duration: 43 ms
