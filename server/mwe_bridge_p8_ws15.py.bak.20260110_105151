@@ -1,0 +1,137 @@
+"""
+mwe_bridge_p8_ws15.py — Phase 8 Bridge (websockets v15 compatible)
+"""
+
+import asyncio
+import json
+import logging
+import os
+from dataclasses import dataclass
+from typing import Any, Dict
+
+import websockets
+from aiohttp import web
+
+from scenario_store import (
+    list_scenarios,
+    read_scenario,
+    write_scenario,
+    DEFAULT_SCENARIO_DIR,
+)
+
+# ------------------------------------------------------------
+# Logging
+# ------------------------------------------------------------
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(message)s",
+)
+
+# ------------------------------------------------------------
+# Engine skeleton (Phase 8)
+# ------------------------------------------------------------
+
+@dataclass
+class EngineClock:
+    turn_number: int = 1
+
+@dataclass
+class EngineKPIs:
+    supply_pct: int = 90
+    readiness_pct: int = 85
+    morale_pct: int = 88
+
+class EngineState:
+    def __init__(self):
+        self.clock = EngineClock()
+        self.kpis = EngineKPIs()
+
+ENGINE = EngineState()
+
+# ------------------------------------------------------------
+# WebSocket handler
+# ------------------------------------------------------------
+
+async def handle_ws(ws, path: str):
+    logging.info(f"WS connected path={path}")
+
+    try:
+        async for raw in ws:
+            msg = json.loads(raw)
+            cmd = msg.get("cmd")
+            args = msg.get("args", {})
+
+            if cmd == "ping":
+                await ws.send(json.dumps({"status": "ok"}))
+
+            elif cmd == "list_scenarios":
+                await ws.send(json.dumps({
+                    "status": "ok",
+                    "scenarios": list_scenarios(),
+                }))
+
+            elif cmd == "load_scenario":
+                name = args["name"]
+                data = read_scenario(name)
+                await ws.send(json.dumps({
+                    "status": "ok",
+                    "scenario": data,
+                }))
+
+            elif cmd == "save_scenario":
+                write_scenario(args)
+                await ws.send(json.dumps({"status": "ok"}))
+
+            else:
+                await ws.send(json.dumps({
+                    "status": "error",
+                    "error": f"unknown cmd: {cmd}",
+                }))
+
+    except Exception:
+        logging.exception("WS handler error")
+
+# ------------------------------------------------------------
+# Health endpoint
+# ------------------------------------------------------------
+
+async def healthz(_):
+    return web.json_response({
+        "status": "ok",
+        "clients": 0,
+    })
+
+# ------------------------------------------------------------
+# Main
+# ------------------------------------------------------------
+
+async def main():
+    ws_port = 8766
+    health_port = 8770
+    scen_dir = os.getenv("MWE_SCENARIO_DIR", DEFAULT_SCENARIO_DIR)
+
+    logging.info(f"Scenario dir: {scen_dir}")
+
+    # HTTP health server
+    app = web.Application()
+    app.router.add_get("/healthz", healthz)
+    runner = web.AppRunner(app)
+    await runner.setup()
+    site = web.TCPSite(runner, "127.0.0.1", health_port)
+    await site.start()
+
+    logging.info(f"Healthz running on http://127.0.0.1:{health_port}/healthz")
+
+    # WebSocket server (v15: handler takes ONE arg)
+    async def ws_entry(ws):
+        path = getattr(getattr(ws, "request", None), "path", "/")
+        await handle_ws(ws, path)
+
+    async with websockets.serve(ws_entry, "127.0.0.1", ws_port):
+        logging.info(f"Bridge P8 listening on ws://localhost:{ws_port}")
+        await asyncio.Future()  # run forever
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
