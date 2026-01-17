@@ -1,0 +1,190 @@
+"""
+mwe_bridge_p8_ws15.py — Phase 8 Bridge (WebSocket + healthz)
+
+WS Protocol v1.0:
+Request:
+  { "id": "...", "proto": "1.0", "cmd": "...", "args": {...} }
+
+Response (ok):
+  { "id": "...", "proto": "1.0", "cmd": "...", "status": "ok", "data": {...} }
+
+Response (error):
+  { "id": "...", "proto": "1.0", "cmd": "...", "status": "error",
+    "error": { "code": "...", "message": "...", "details": {...} } }
+"""
+
+from __future__ import annotations
+
+import asyncio
+import json
+import logging
+import os
+from typing import Any, Dict, Set
+
+import websockets
+from aiohttp import web
+
+from scenario_store import (
+    list_scenarios,
+    read_scenario,
+    write_scenario,
+    DEFAULT_SCENARIO_DIR,
+)
+
+WS_HOST = "127.0.0.1"
+WS_PORT = 8766
+HEALTH_HOST = "127.0.0.1"
+HEALTH_PORT = 8770
+
+PROTO = "1.0"
+
+log = logging.getLogger("mwe.bridge")
+
+
+def _ok(req: Dict[str, Any], data: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        "id": req.get("id", ""),
+        "proto": PROTO,
+        "cmd": req.get("cmd", ""),
+        "status": "ok",
+        "data": data,
+    }
+
+
+def _err(req: Dict[str, Any], code: str, message: str, details: Dict[str, Any] | None = None) -> Dict[str, Any]:
+    return {
+        "id": req.get("id", ""),
+        "proto": PROTO,
+        "cmd": req.get("cmd", ""),
+        "status": "error",
+        "error": {
+            "code": code,
+            "message": message,
+            "details": details or {},
+        },
+    }
+
+
+def _safe_json_loads(raw: str) -> Dict[str, Any] | None:
+    try:
+        obj = json.loads(raw)
+    except Exception:
+        return None
+    if not isinstance(obj, dict):
+        return None
+    return obj
+
+
+def _validate_req(req: Dict[str, Any]) -> str | None:
+    # Return error string if invalid else None
+    if req.get("proto") != PROTO:
+        return "bad proto"
+    if not isinstance(req.get("cmd"), str) or not req["cmd"]:
+        return "missing cmd"
+    if "id" in req and not isinstance(req["id"], str):
+        return "bad id"
+    if "args" in req and not isinstance(req["args"], dict):
+        return "bad args"
+    return None
+
+
+CLIENTS: Set[int] = set()
+
+
+async def handle_ws(ws):
+    cid = id(ws)
+    CLIENTS.add(cid)
+    log.info("WS connected peer=%s", getattr(ws, "remote_address", None))
+    try:
+        async for raw in ws:
+            req = _safe_json_loads(raw)
+            if req is None:
+                await ws.send(json.dumps(_err({"id": "", "cmd": ""}, "bad_request", "Request must be JSON object")))
+                continue
+
+            why = _validate_req(req)
+            if why:
+                await ws.send(json.dumps(_err(req, "bad_request", f"Invalid request: {why}")))
+                continue
+
+            cmd = req["cmd"]
+            args = req.get("args", {})
+
+            try:
+                if cmd == "ping":
+                    await ws.send(json.dumps(_ok(req, {"pong": True})))
+
+                elif cmd == "list_scenarios":
+                    scenarios = list_scenarios(DEFAULT_SCENARIO_DIR)
+                    await ws.send(json.dumps(_ok(req, {"scenarios": scenarios})))
+
+                elif cmd == "load_scenario":
+                    name = args.get("name")
+                    if not isinstance(name, str) or not name.strip():
+                        await ws.send(json.dumps(_err(req, "bad_request", "args.name must be a non-empty string")))
+                        continue
+
+                    data = read_scenario(name, DEFAULT_SCENARIO_DIR)
+                    if data is None:
+                        await ws.send(json.dumps(_err(req, "not_found", f"Scenario not found: {name}")))
+                        continue
+                    if not isinstance(data, dict):
+                        await ws.send(json.dumps(_err(req, "internal", "Scenario store returned non-dict scenario", {"type": str(type(data))})))
+                        continue
+
+                    await ws.send(json.dumps(_ok(req, {"scenario": data})))
+
+                elif cmd == "save_scenario":
+                    name = args.get("name")
+                    scenario = args.get("scenario")
+                    if not isinstance(name, str) or not name.strip():
+                        await ws.send(json.dumps(_err(req, "bad_request", "args.name must be a non-empty string")))
+                        continue
+                    if not isinstance(scenario, dict):
+                        await ws.send(json.dumps(_err(req, "bad_request", "args.scenario must be an object/dict")))
+                        continue
+
+                    written = write_scenario(name, scenario, DEFAULT_SCENARIO_DIR)
+                    await ws.send(json.dumps(_ok(req, {"saved": True, "name": os.path.basename(name), "scenario": written})))
+
+                else:
+                    await ws.send(json.dumps(_err(req, "bad_request", f"Unknown cmd: {cmd}")))
+
+            except Exception as e:
+                log.exception("WS handler error")
+                await ws.send(json.dumps(_err(req, "internal", "Unhandled exception", {"error": repr(e)})))
+
+    finally:
+        CLIENTS.discard(cid)
+        log.info("WS disconnected")
+
+
+async def healthz(request: web.Request) -> web.Response:
+    return web.json_response({"status": "ok", "clients": len(CLIENTS)})
+
+
+async def main():
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s | %(levelname)s | %(message)s",
+    )
+
+    os.makedirs(DEFAULT_SCENARIO_DIR, exist_ok=True)
+    log.info("Scenario dir: %s", DEFAULT_SCENARIO_DIR)
+
+    # health server
+    app = web.Application()
+    app.router.add_get("/healthz", healthz)
+    runner = web.AppRunner(app)
+    await runner.setup()
+    site = web.TCPSite(runner, HEALTH_HOST, HEALTH_PORT)
+    await site.start()
+    log.info("Healthz running on http://%s:%d/healthz", HEALTH_HOST, HEALTH_PORT)
+
+    async with websockets.serve(handle_ws, WS_HOST, WS_PORT):
+        log.info("Bridge P8 listening on ws://%s:%d", WS_HOST, WS_PORT)
+        await asyncio.Future()  # run forever
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

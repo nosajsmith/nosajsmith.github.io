@@ -1,0 +1,68 @@
+{
+  "meta": {
+    "_roundtrip": true
+  },
+  "name": "breakthrough_roundtrip",
+  "units": [
+    {
+      "entrenchment": 20,
+      "fatigue": 30,
+      "name": "BLUE_DEF1",
+      "position": [
+        8,
+        10
+      ],
+      "side": "BLUE",
+      "supply": 65,
+      "unit_id": "BLUE_DEF1"
+    },
+    {
+      "entrenchment": 18,
+      "fatigue": 35,
+      "name": "BLUE_DEF2",
+      "position": [
+        9,
+        10
+      ],
+      "side": "BLUE",
+      "supply": 60,
+      "unit_id": "BLUE_DEF2"
+    },
+    {
+      "entrenchment": 0,
+      "fatigue": 15,
+      "name": "RED_T1",
+      "position": [
+        12,
+        10
+      ],
+      "side": "RED",
+      "supply": 60,
+      "unit_id": "RED_T1"
+    },
+    {
+      "entrenchment": 0,
+      "fatigue": 15,
+      "name": "RED_T2",
+      "position": [
+        12,
+        11
+      ],
+      "side": "RED",
+      "supply": 60,
+      "unit_id": "RED_T2"
+    },
+    {
+      "entrenchment": 0,
+      "fatigue": 20,
+      "name": "RED_INF",
+      "position": [
+        13,
+        10
+      ],
+      "side": "RED",
+      "supply": 60,
+      "unit_id": "RED_INF"
+    }
+  ]
+}

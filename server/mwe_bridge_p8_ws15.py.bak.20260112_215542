@@ -1,0 +1,204 @@
+"""
+mwe_bridge_p8_ws15.py — Phase 8 Bridge Service (Websockets v15 compatible)
+
+- WebSocket server: ws://127.0.0.1:8766
+- Health endpoint:  http://127.0.0.1:8770/healthz
+
+Commands (proto=1):
+  - ping
+  - engine_status
+  - list_scenarios
+  - read_scenario      args: {"name": "<scenario_name>"}
+  - write_scenario     args: {"name": "<scenario_name>", "scenario": <object>}
+"""
+
+from __future__ import annotations
+
+import asyncio
+import json
+import logging
+import os
+from dataclasses import dataclass
+from typing import Any, Dict, Optional, Set
+
+import websockets
+from aiohttp import web
+
+from mwe_protocol import parse_message, ok, err
+
+# scenario_store is expected to live alongside this file in /server
+from scenario_store import (
+    list_scenarios,
+    read_scenario,
+    write_scenario,
+    DEFAULT_SCENARIO_DIR,
+)
+
+# ---------------- Logging ----------------
+
+LOG_LEVEL = os.environ.get("MWE_LOG_LEVEL", "INFO").upper()
+logging.basicConfig(
+    level=getattr(logging, LOG_LEVEL, logging.INFO),
+    format="%(asctime)s | %(levelname)s | %(message)s",
+)
+log = logging.getLogger("mwe-bridge")
+
+# ---------------- Engine skeleton ----------------
+
+@dataclass
+class EngineClock:
+    turn_number: int = 1
+
+@dataclass
+class EngineKPIs:
+    supply_pct: int = 90
+    readiness_pct: int = 85
+    morale_pct: int = 88
+
+class EngineState:
+    def __init__(self) -> None:
+        self.clock = EngineClock()
+        self.kpis = EngineKPIs()
+
+    def status_payload(self) -> Dict[str, Any]:
+        return {
+            "turn": self.clock.turn_number,
+            "kpis": {
+                "supply_pct": self.kpis.supply_pct,
+                "readiness_pct": self.kpis.readiness_pct,
+                "morale_pct": self.kpis.morale_pct,
+            },
+        }
+
+# ---------------- Healthz ----------------
+
+CLIENTS: Set[Any] = set()
+
+async def healthz(_: web.Request) -> web.Response:
+    return web.json_response(ok({"clients": len(CLIENTS)}))
+
+async def start_health_server(host: str, port: int) -> web.AppRunner:
+    app = web.Application()
+    app.router.add_get("/healthz", healthz)
+
+    runner = web.AppRunner(app)
+    await runner.setup()
+    site = web.TCPSite(runner, host, port)
+    await site.start()
+
+    log.info("Healthz running on http://%s:%s/healthz", host, port)
+    return runner
+
+# ---------------- Command dispatch ----------------
+
+def _require(args: Dict[str, Any], key: str, typ: type) -> Optional[Dict[str, Any]]:
+    if key not in args:
+        return err("missing_arg", f"Missing required arg: {key}")
+    if not isinstance(args[key], typ):
+        return err("bad_arg", f"Arg '{key}' must be {typ.__name__}.", details={"got": str(type(args[key]))})
+    return None
+
+async def dispatch(cmd: str, args: Dict[str, Any], engine: EngineState, scenario_dir: str) -> Dict[str, Any]:
+    # ---- core
+    if cmd == "ping":
+        return ok({"reply": "pong"})
+
+    if cmd == "engine_status":
+        return ok(engine.status_payload())
+
+    # ---- scenarios
+    if cmd == "list_scenarios":
+        try:
+            items = list_scenarios(scenario_dir)
+            return ok({"scenarios": items})
+        except Exception as e:
+            return err("scenario_error", "Failed to list scenarios.", details={"error": str(e)})
+
+    if cmd == "read_scenario":
+        bad = _require(args, "name", str)
+        if bad:
+            return bad
+        name = args["name"]
+        try:
+            scen = read_scenario(scenario_dir, name)
+            return ok({"name": name, "scenario": scen})
+        except FileNotFoundError:
+            return err("not_found", f"Scenario not found: {name}")
+        except Exception as e:
+            return err("scenario_error", "Failed to read scenario.", details={"error": str(e), "name": name})
+
+    if cmd == "write_scenario":
+        bad = _require(args, "name", str) or _require(args, "scenario", dict)
+        if bad:
+            return bad
+        name = args["name"]
+        scen_obj = args["scenario"]
+        try:
+            write_scenario(scenario_dir, name, scen_obj)
+            return ok({"saved": True, "name": name})
+        except Exception as e:
+            return err("scenario_error", "Failed to write scenario.", details={"error": str(e), "name": name})
+
+    return err("unknown_cmd", f"Unknown cmd: {cmd}")
+
+# ---------------- WebSocket handler (v15 style) ----------------
+
+async def ws_handler(ws) -> None:
+    CLIENTS.add(ws)
+    log.info("connection open (clients=%d)", len(CLIENTS))
+
+    # Engine is per-process right now (simple & fine for Phase 8)
+    # If you later want per-connection state, move this into handler.
+    # For now, one shared EngineState in main() passes via closure; see main().
+    try:
+        async for msg in ws:
+            req, perr = parse_message(msg)
+            if perr:
+                await ws.send(json.dumps(perr))
+                continue
+
+            try:
+                resp = await dispatch(req.cmd, req.args, ws_handler.engine, ws_handler.scenario_dir)
+                await ws.send(json.dumps(resp))
+            except Exception as e:
+                await ws.send(json.dumps(err(
+                    "internal_error",
+                    "Unhandled exception in command handler.",
+                    details={"error": str(e), "cmd": req.cmd},
+                )))
+    finally:
+        CLIENTS.discard(ws)
+        log.info("connection closed (clients=%d)", len(CLIENTS))
+
+# attach “globals” via function attributes (simple, explicit)
+ws_handler.engine = EngineState()
+ws_handler.scenario_dir = DEFAULT_SCENARIO_DIR
+
+# ---------------- Main ----------------
+
+async def main() -> None:
+    host = os.environ.get("MWE_BRIDGE_HOST", "127.0.0.1")
+    port = int(os.environ.get("MWE_BRIDGE_PORT", "8766"))
+
+    health_host = os.environ.get("MWE_HEALTH_HOST", "127.0.0.1")
+    health_port = int(os.environ.get("MWE_HEALTH_PORT", "8770"))
+
+    scenario_dir = os.environ.get("MWE_SCENARIO_DIR", DEFAULT_SCENARIO_DIR)
+    ws_handler.scenario_dir = scenario_dir
+
+    log.info("Scenario dir: %s", scenario_dir)
+
+    # Start health server
+    health_runner = await start_health_server(health_host, health_port)
+
+    # Start websocket server
+    async with websockets.serve(ws_handler, host, port):
+        log.info("Bridge P8 listening on ws://%s:%s", host, port)
+        # run forever
+        await asyncio.Future()
+
+    # If we ever exit the serve context, cleanup health server
+    await health_runner.cleanup()
+
+if __name__ == "__main__":
+    asyncio.run(main())
