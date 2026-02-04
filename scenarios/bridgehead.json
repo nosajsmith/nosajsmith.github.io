@@ -1,8 +1,60 @@
 {
   "units": [
-    {"unit_id": "2DIV", "name": "2DIV", "side": "BLUE", "position": [9, 9], "fatigue": 20, "supply": 70, "entrenchment": 15},
-    {"unit_id": "ENG1", "name": "ENG1", "side": "BLUE", "position": [10, 9], "fatigue": 15, "supply": 75, "entrenchment": 10},
-    {"unit_id": "3DIV", "name": "3DIV", "side": "RED", "position": [12, 9], "fatigue": 25, "supply": 60, "entrenchment": 5},
-    {"unit_id": "R_ART1", "name": "R_ART1", "side": "RED", "position": [13, 8], "fatigue": 10, "supply": 60, "entrenchment": 0}
+    {
+      "unit_id": "2DIV",
+      "name": "2DIV",
+      "side": "BLUE",
+      "position": [
+        9,
+        9
+      ],
+      "fatigue": 20,
+      "supply": 70,
+      "entrenchment": 15,
+      "x": 3,
+      "y": 4
+    },
+    {
+      "unit_id": "ENG1",
+      "name": "ENG1",
+      "side": "BLUE",
+      "position": [
+        10,
+        9
+      ],
+      "fatigue": 15,
+      "supply": 75,
+      "entrenchment": 10,
+      "x": 4,
+      "y": 4
+    },
+    {
+      "unit_id": "3DIV",
+      "name": "3DIV",
+      "side": "RED",
+      "position": [
+        12,
+        9
+      ],
+      "fatigue": 25,
+      "supply": 60,
+      "entrenchment": 5,
+      "x": 18,
+      "y": 4
+    },
+    {
+      "unit_id": "R_ART1",
+      "name": "R_ART1",
+      "side": "RED",
+      "position": [
+        13,
+        8
+      ],
+      "fatigue": 10,
+      "supply": 60,
+      "entrenchment": 0,
+      "x": 19,
+      "y": 4
+    }
   ]
 }

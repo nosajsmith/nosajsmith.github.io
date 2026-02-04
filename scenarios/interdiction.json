@@ -1,8 +1,60 @@
 {
   "units": [
-    {"unit_id": "1DIV", "name": "1DIV", "side": "BLUE", "position": [6, 5], "fatigue": 10, "supply": 80, "entrenchment": 5},
-    {"unit_id": "SUP1", "name": "SUP1", "side": "BLUE", "position": [5, 5], "fatigue": 5, "supply": 90, "entrenchment": 0},
-    {"unit_id": "R_CAV", "name": "R_CAV", "side": "RED", "position": [12, 5], "fatigue": 20, "supply": 55, "entrenchment": 0},
-    {"unit_id": "R_RAID", "name": "R_RAID", "side": "RED", "position": [11, 6], "fatigue": 15, "supply": 55, "entrenchment": 0}
+    {
+      "unit_id": "1DIV",
+      "name": "1DIV",
+      "side": "BLUE",
+      "position": [
+        6,
+        5
+      ],
+      "fatigue": 10,
+      "supply": 80,
+      "entrenchment": 5,
+      "x": 3,
+      "y": 4
+    },
+    {
+      "unit_id": "SUP1",
+      "name": "SUP1",
+      "side": "BLUE",
+      "position": [
+        5,
+        5
+      ],
+      "fatigue": 5,
+      "supply": 90,
+      "entrenchment": 0,
+      "x": 4,
+      "y": 4
+    },
+    {
+      "unit_id": "R_CAV",
+      "name": "R_CAV",
+      "side": "RED",
+      "position": [
+        12,
+        5
+      ],
+      "fatigue": 20,
+      "supply": 55,
+      "entrenchment": 0,
+      "x": 18,
+      "y": 4
+    },
+    {
+      "unit_id": "R_RAID",
+      "name": "R_RAID",
+      "side": "RED",
+      "position": [
+        11,
+        6
+      ],
+      "fatigue": 15,
+      "supply": 55,
+      "entrenchment": 0,
+      "x": 19,
+      "y": 4
+    }
   ]
 }

@@ -1,127 +1,90 @@
-"""
-scenario_store.py — Small, strict JSON scenario store.
-
-Contract:
-- list_scenarios() -> list[str] of filenames (e.g. "breakthrough.json")
-- read_scenario(name) -> dict | None   (NEVER returns dataclass objects)
-- write_scenario(name, data: dict) -> dict (written data)
-"""
-
 from __future__ import annotations
 
 import json
 import os
-from dataclasses import dataclass, asdict
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+DEFAULT_SCENARIO_DIR = os.environ.get(
+    "MWE_SCENARIO_DIR",
+    str(Path(__file__).resolve().parent.parent / "scenarios")
+)
 
-DEFAULT_SCENARIO_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "scenarios")
+def _scen_dir() -> Path:
+    return Path(DEFAULT_SCENARIO_DIR).resolve()
 
+def list_scenarios() -> List[str]:
+    d = _scen_dir()
+    if not d.exists():
+        return []
+    return sorted([p.name for p in d.glob("*.json") if p.is_file()])
 
-# --- Optional dataclasses (kept for future, but store returns dicts) ---
+def _safe_name(name: str) -> Optional[str]:
+    if not name or "/" in name or "\\" in name:
+        return None
+    if not name.endswith(".json"):
+        return None
+    return name
 
-@dataclass
-class Unit:
-    id: str
-    name: str
-    side: str = "BLUE"
-    x: int = 0
-    y: int = 0
-    strength: int = 100
+def read_scenario(name: str) -> Optional[Dict[str, Any]]:
+    name = _safe_name(name)
+    if not name:
+        return None
+    p = _scen_dir() / name
+    if not p.exists() or not p.is_file():
+        return None
+    obj = json.loads(p.read_text(encoding="utf-8"))
+    if not isinstance(obj, dict):
+        return None
+    # ensure units list exists
+    if not isinstance(obj.get("units"), list):
+        obj["units"] = []
+    return obj
 
+def write_scenario(name: str, obj: Dict[str, Any]) -> bool:
+    name = _safe_name(name)
+    if not name:
+        return False
+    p = _scen_dir() / name
+    if not p.exists() or not p.is_file():
+        return False
 
-@dataclass
-class Scenario:
-    name: str
-    units: List[Unit]
-    meta: Dict[str, Any] | None = None
+    # atomic write
+    tmp = p.with_suffix(".json.tmp")
+    tmp.write_text(json.dumps(obj, indent=2, sort_keys=False) + "\n", encoding="utf-8")
+    tmp.replace(p)
+    return True
 
-
-def _ensure_dir(path: str) -> None:
-    os.makedirs(path, exist_ok=True)
-
-
-def _norm_filename(name: str) -> str:
-    """
-    Normalize scenario references:
-    - strips directories
-    - forces .json extension
-    """
-    base = os.path.basename(name.strip())
-    if not base.endswith(".json"):
-        base += ".json"
-    return base
-
-
-def _scenario_path(scenario_dir: str, name: str) -> str:
-    return os.path.join(scenario_dir, _norm_filename(name))
-
-
-def list_scenarios(scenario_dir: str = DEFAULT_SCENARIO_DIR) -> List[str]:
-    _ensure_dir(scenario_dir)
-    items: List[str] = []
-    for fn in os.listdir(scenario_dir):
-        if fn.lower().endswith(".json") and os.path.isfile(os.path.join(scenario_dir, fn)):
-            items.append(fn)
-    items.sort()
-    return items
-
-
-def read_scenario(name: str, scenario_dir: str = DEFAULT_SCENARIO_DIR) -> Optional[Dict[str, Any]]:
-    _ensure_dir(scenario_dir)
-    path = _scenario_path(scenario_dir, name)
-    if not os.path.exists(path):
+def move_unit(name: str, unit_id: str, q: int, r: int) -> Optional[Dict[str, Any]]:
+    scn = read_scenario(name)
+    if not scn:
         return None
 
-    try:
-        with open(path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-    except json.JSONDecodeError as e:
-        # Return a dict describing the parse issue instead of raising.
-        return {
-            "_invalid_json": True,
-            "error": f"JSONDecodeError: {e}",
-            "file": os.path.basename(path),
-        }
-    except Exception as e:
-        return {
-            "_read_error": True,
-            "error": repr(e),
-            "file": os.path.basename(path),
-        }
+    units = scn.get("units", [])
+    if not isinstance(units, list):
+        scn["units"] = []
+        units = scn["units"]
 
-    # Strict contract: scenario content MUST be a dict for the bridge.
-    if not isinstance(data, dict):
+    changed = False
+    for u in units:
+        if not isinstance(u, dict):
+            continue
+        uid = str(u.get("unit_id") or u.get("id") or u.get("name") or "")
+        if uid != str(unit_id):
+            continue
+
+        # canonical: position:[q,r]
+        u["position"] = [int(q), int(r)]
+        # legacy compat if you want
+        u["x"] = int(q)
+        u["y"] = int(r)
+
+        changed = True
+        break
+
+    if not changed:
         return None
-    return data
 
-
-def write_scenario(name: str, data: Dict[str, Any], scenario_dir: str = DEFAULT_SCENARIO_DIR) -> Dict[str, Any]:
-    _ensure_dir(scenario_dir)
-    path = _scenario_path(scenario_dir, name)
-
-    if not isinstance(data, dict):
-        raise TypeError(f"write_scenario expects dict, got {type(data)}")
-
-    # Always ensure some minimal shape
-    data.setdefault("name", os.path.splitext(_norm_filename(name))[0])
-    data.setdefault("units", [])
-    data.setdefault("meta", {})
-
-    tmp_path = path + ".tmp"
-    with open(tmp_path, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2, sort_keys=True)
-        f.write("\n")
-    os.replace(tmp_path, path)
-    return data
-
-
-# --- Helpers for future expansion (not used by the bridge today) ---
-
-def scenario_to_dict(s: Scenario) -> Dict[str, Any]:
-    d = asdict(s)
-    return d
-
-
-def unit_to_dict(u: Unit) -> Dict[str, Any]:
-    return asdict(u)
+    if not write_scenario(name, scn):
+        return None
+    return scn

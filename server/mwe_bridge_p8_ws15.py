@@ -142,6 +142,23 @@ async def handle_cmd(req: Dict[str, Any]) -> Dict[str, Any]:
         return jok(req_id, cmd, {"scenarios": names})
 
     if cmd == "load_scenario":
+
+    if cmd == "move_unit":
+        args = msg.get("args") or {}
+        name = args.get("name", "")
+        unit_id = args.get("unit_id", "")
+        q = args.get("q", None)
+        r = args.get("r", None)
+
+        require(name != "", "bad_request", "move_unit requires args.name")
+        require(unit_id != "", "bad_request", "move_unit requires args.unit_id")
+        require(isinstance(q, int) and isinstance(r, int), "bad_request", "move_unit requires int args.q/args.r")
+
+        from server.scenario_store import move_unit
+        scn = move_unit(name, unit_id, q, r)
+        require(scn is not None, "not_found", "scenario or unit not found")
+
+        return ok(msg_id, {"scenario": scn})
         name = normalize_scenario_name(str(args.get("name", "") or ""))
         require(name != "", "bad_request", "load_scenario requires args.name")
         data = read_scenario(name)
