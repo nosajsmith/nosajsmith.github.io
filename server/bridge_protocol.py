@@ -19,6 +19,7 @@ K_ERROR = "error"
 
 # Commands
 CMD_PING = "ping"
+CMD_CAPABILITIES = "capabilities"
 CMD_GET_STATE = "get_state"
 CMD_STATUS = "status"
 CMD_LIST_SCENARIOS = "list_scenarios"

@@ -22,6 +22,7 @@ def main() -> int:
 
     from engine_core import EngineCore  # noqa: E402
     from bridge_protocol import (  # noqa: E402
+        CMD_CAPABILITIES,
         CMD_LIST_SCENARIOS,
         CMD_PING,
     )
@@ -34,6 +35,11 @@ def main() -> int:
     scenarios = core.apply(CMD_LIST_SCENARIOS, {})
     _require(isinstance(scenarios, dict), "list_scenarios failed")
     _require(isinstance(scenarios.get("scenarios"), list), "list_scenarios did not return list")
+
+    capabilities = core.apply(CMD_CAPABILITIES, {})
+    _require(isinstance(capabilities, dict), "capabilities failed")
+    _require(capabilities.get("proto") is not None, "capabilities missing proto")
+    _require(isinstance(capabilities.get("commands"), list), "capabilities commands not list")
 
     missing_cmd = core.apply("", {})
     _require(missing_cmd.get("ok") is False, "missing cmd should return ok=false")

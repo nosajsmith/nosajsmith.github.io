@@ -19,6 +19,7 @@ from scenario_store import (
 )
 
 from bridge_protocol import (
+    CMD_CAPABILITIES,
     CMD_GET_STATE,
     CMD_LIST_SCENARIOS,
     CMD_LOAD_SCENARIO,
@@ -76,11 +77,20 @@ class EngineCore:
         self.scenario_dir = os.path.abspath(scenario_dir or DEFAULT_SCENARIO_DIR)
         self._handlers = {
             CMD_PING: self._handle_ping,
+            CMD_CAPABILITIES: self._handle_capabilities,
             CMD_GET_STATE: self._handle_get_state,
             CMD_LIST_SCENARIOS: self._handle_list_scenarios,
             CMD_LOAD_SCENARIO: self._handle_load_scenario,
             CMD_SAVE_SCENARIO: self._handle_save_scenario,
         }
+        self._command_specs = [
+            {"name": CMD_PING, "description": "Health check; returns pong."},
+            {"name": CMD_CAPABILITIES, "description": "List supported commands and metadata."},
+            {"name": CMD_GET_STATE, "description": "Return current engine state snapshot."},
+            {"name": CMD_LIST_SCENARIOS, "description": "List available scenario files."},
+            {"name": CMD_LOAD_SCENARIO, "description": "Load a scenario by name.", "args": {"required": ["name"]}},
+            {"name": CMD_SAVE_SCENARIO, "description": "Save a scenario by name.", "args": {"required": ["name", "scenario"]}},
+        ]
 
     def apply(self, cmd: str | None, args: Dict[str, Any] | None) -> Dict[str, Any]:
         """
@@ -113,6 +123,9 @@ class EngineCore:
 
     def _handle_ping(self, args: Dict[str, Any]) -> Dict[str, Any]:
         return {"pong": True}
+
+    def _handle_capabilities(self, args: Dict[str, Any]) -> Dict[str, Any]:
+        return {"proto": PROTO, "commands": list(self._command_specs)}
 
     def _handle_get_state(self, args: Dict[str, Any]) -> Dict[str, Any]:
         return self.state.to_dict()
