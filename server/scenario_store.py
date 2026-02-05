@@ -10,11 +10,12 @@ DEFAULT_SCENARIO_DIR = os.environ.get(
     str(Path(__file__).resolve().parent.parent / "scenarios")
 )
 
-def _scen_dir() -> Path:
-    return Path(DEFAULT_SCENARIO_DIR).resolve()
+def _scen_dir(scenario_dir: str | None = None) -> Path:
+    base_dir = scenario_dir or DEFAULT_SCENARIO_DIR
+    return Path(base_dir).resolve()
 
-def list_scenarios() -> List[str]:
-    d = _scen_dir()
+def list_scenarios(scenario_dir: str | None = None) -> List[str]:
+    d = _scen_dir(scenario_dir)
     if not d.exists():
         return []
     return sorted([p.name for p in d.glob("*.json") if p.is_file()])
@@ -26,11 +27,11 @@ def _safe_name(name: str) -> Optional[str]:
         return None
     return name
 
-def read_scenario(name: str) -> Optional[Dict[str, Any]]:
+def read_scenario(name: str, scenario_dir: str | None = None) -> Optional[Dict[str, Any]]:
     name = _safe_name(name)
     if not name:
         return None
-    p = _scen_dir() / name
+    p = _scen_dir(scenario_dir) / name
     if not p.exists() or not p.is_file():
         return None
     obj = json.loads(p.read_text(encoding="utf-8"))
@@ -41,11 +42,11 @@ def read_scenario(name: str) -> Optional[Dict[str, Any]]:
         obj["units"] = []
     return obj
 
-def write_scenario(name: str, obj: Dict[str, Any]) -> bool:
+def write_scenario(name: str, obj: Dict[str, Any], scenario_dir: str | None = None) -> bool:
     name = _safe_name(name)
     if not name:
         return False
-    p = _scen_dir() / name
+    p = _scen_dir(scenario_dir) / name
     if not p.exists() or not p.is_file():
         return False
 

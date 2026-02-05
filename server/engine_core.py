@@ -18,6 +18,14 @@ from scenario_store import (
     DEFAULT_SCENARIO_DIR,
 )
 
+from bridge_protocol import (
+    CMD_GET_STATE,
+    CMD_LIST_SCENARIOS,
+    CMD_LOAD_SCENARIO,
+    CMD_PING,
+    CMD_SAVE_SCENARIO,
+)
+
 PROTO = "1.0"
 
 # ---------------- Engine state (starter) ----------------
@@ -66,53 +74,84 @@ class EngineCore:
     def __init__(self, scenario_dir: str | None = None) -> None:
         self.state = EngineState()
         self.scenario_dir = os.path.abspath(scenario_dir or DEFAULT_SCENARIO_DIR)
+        self._handlers = {
+            CMD_PING: self._handle_ping,
+            CMD_GET_STATE: self._handle_get_state,
+            CMD_LIST_SCENARIOS: self._handle_list_scenarios,
+            CMD_LOAD_SCENARIO: self._handle_load_scenario,
+            CMD_SAVE_SCENARIO: self._handle_save_scenario,
+        }
 
-    def apply(self, cmd: str, args: Dict[str, Any]) -> Dict[str, Any]:
+    def apply(self, cmd: str | None, args: Dict[str, Any] | None) -> Dict[str, Any]:
         """
         Returns ONLY the 'data' payload for an OK response.
-        Raises EngineError for expected errors.
+        On error, returns {"ok": False, "error": {...}}.
         """
         args = args or {}
 
-        if cmd == "ping":
-            return {"pong": True}
+        try:
+            cmd_name = str(cmd or "").strip()
+            if not cmd_name:
+                raise EngineError("bad_request", "Missing cmd", {})
 
-        if cmd == "get_state":
-            return self.state.to_dict()
+            handler = self._handlers.get(cmd_name)
+            if handler is None:
+                raise EngineError("unknown_cmd", f"Unknown cmd: {cmd_name}", {"cmd": cmd_name})
 
-        if cmd == "list_scenarios":
-            names = list_scenarios(self.scenario_dir)
-            # normalize
-            if not isinstance(names, list):
-                raise EngineError("internal", "Scenario store returned non-list scenarios", {"type": str(type(names))})
-            return {"scenarios": [str(x) for x in names]}
+            return handler(args)
+        except EngineError as exc:
+            return {"ok": False, "error": exc.to_error()}
+        except Exception as exc:
+            return {
+                "ok": False,
+                "error": {
+                    "code": "internal",
+                    "message": "Unhandled exception",
+                    "details": {"error": str(exc)},
+                },
+            }
 
-        if cmd == "load_scenario":
-            name = str(args.get("name", "")).strip()
-            if not name:
-                raise EngineError("bad_request", "Missing args.name", {})
-            data = read_scenario(self.scenario_dir, name)
-            if data is None:
-                raise EngineError("not_found", f"Scenario not found: {name}", {})
-            # ensure dict-like for UI friendliness
-            if is_dataclass(data):
-                data = asdict(data)
-            if not isinstance(data, dict):
-                raise EngineError("internal", "Scenario store returned non-dict scenario", {"type": str(type(data))})
-            return {"name": name, "scenario": _to_jsonable(data)}
+    def _handle_ping(self, args: Dict[str, Any]) -> Dict[str, Any]:
+        return {"pong": True}
 
-        if cmd == "save_scenario":
-            name = str(args.get("name", "")).strip()
-            scenario = args.get("scenario", None)
-            if not name:
-                raise EngineError("bad_request", "Missing args.name", {})
-            if not isinstance(scenario, dict):
-                raise EngineError("bad_request", "Missing/invalid args.scenario (must be object)", {"type": str(type(scenario))})
-            # write_scenario may accept dict; that's what our current bridge flow relies on.
-            write_scenario(self.scenario_dir, name, scenario)
-            return {"saved": True, "name": name}
+    def _handle_get_state(self, args: Dict[str, Any]) -> Dict[str, Any]:
+        return self.state.to_dict()
 
-        raise EngineError("unknown_cmd", f"Unknown cmd: {cmd}", {})
+    def _handle_list_scenarios(self, args: Dict[str, Any]) -> Dict[str, Any]:
+        names = list_scenarios(self.scenario_dir)
+        # normalize
+        if not isinstance(names, list):
+            raise EngineError("internal", "Scenario store returned non-list scenarios", {"type": str(type(names))})
+        return {"scenarios": [str(x) for x in names]}
+
+    def _handle_load_scenario(self, args: Dict[str, Any]) -> Dict[str, Any]:
+        name = str(args.get("name", "")).strip()
+        if not name:
+            raise EngineError("bad_request", "Missing args.name", {})
+        data = read_scenario(name, self.scenario_dir)
+        if data is None:
+            raise EngineError("not_found", f"Scenario not found: {name}", {})
+        # ensure dict-like for UI friendliness
+        if is_dataclass(data):
+            data = asdict(data)
+        if not isinstance(data, dict):
+            raise EngineError("internal", "Scenario store returned non-dict scenario", {"type": str(type(data))})
+        return {"name": name, "scenario": _to_jsonable(data)}
+
+    def _handle_save_scenario(self, args: Dict[str, Any]) -> Dict[str, Any]:
+        name = str(args.get("name", "")).strip()
+        scenario = args.get("scenario", None)
+        if not name:
+            raise EngineError("bad_request", "Missing args.name", {})
+        if not isinstance(scenario, dict):
+            raise EngineError(
+                "bad_request",
+                "Missing/invalid args.scenario (must be object)",
+                {"type": str(type(scenario))},
+            )
+        # write_scenario may accept dict; that's what our current bridge flow relies on.
+        write_scenario(name, scenario, self.scenario_dir)
+        return {"saved": True, "name": name}
 
 class EngineError(Exception):
     def __init__(self, code: str, message: str, details: Dict[str, Any] | None = None) -> None:
