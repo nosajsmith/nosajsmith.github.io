@@ -1,255 +1,154 @@
 """
-mwe_bridge_p8_ws15.py — Phase 8 Bridge Service (WS + healthz)
+mwe_bridge_p8_ws15.py — Phase 8 Bridge Service (WebSockets v15 compatible)
 
-WS: ws://127.0.0.1:8766
-HTTP health: http://127.0.0.1:8770/healthz
+Default: ws://127.0.0.1:8766
 
-Protocol v1.0 request:
-{
-  "id": "string",
-  "proto": "1.0",
-  "cmd": "string",
-  "args": {}
-}
+Commands:
+  - ping
+  - list_scenarios
+  - load_scenario   payload: {"name": "<scenario_name>"}
 
-Response:
-OK:
-{ "id": "...", "proto": "1.0", "cmd": "...", "status": "ok", "data": {...} }
-
-ERR:
-{ "id": "...", "proto": "1.0", "cmd": "...", "status": "error",
-  "error": {"code":"...", "message":"...", "details":{...}} }
+Protocol:
+  Uses server/protocol.py envelopes:
+    Request: {"cmd","req_id","payload","v"}
+    Response OK: {"ok":true,"req_id","payload","v"}
+    Response ERR: {"ok":false,"req_id","error":{"code","message"},"v"}
 """
 
+from __future__ import annotations
+
+import argparse
 import asyncio
 import json
-import logging
 import os
-from dataclasses import dataclass
-from typing import Any, Dict, Set, Optional
+import time
+from typing import Any, Dict
 
 import websockets
-from aiohttp import web
 
-from scenario_store import (
-    list_scenarios,
-    read_scenario,
-    write_scenario,
-    DEFAULT_SCENARIO_DIR,
+from logging_setup import setup_bridge_logger
+from protocol import (
+    CMD_LIST_SCENARIOS,
+    CMD_LOAD_SCENARIO,
+    CMD_PING,
+    ERR_BAD_REQUEST,
+    ERR_INTERNAL,
+    ERR_NOT_FOUND,
+    ERR_UNKNOWN_CMD,
+    mk_err,
+    mk_ok,
+    normalize_request,
 )
 
-PROTO = "1.0"
-WS_HOST = "127.0.0.1"
-WS_PORT = 8766
+# Keep imports minimal and explicit.
+from scenario_store import list_scenarios, load_scenario  # type: ignore
 
-HTTP_HOST = "127.0.0.1"
-HTTP_PORT = 8770
 
-clients: Set[object] = set()
+DEFAULT_HOST = os.environ.get("MWE_BRIDGE_HOST", "127.0.0.1")
+DEFAULT_PORT = int(os.environ.get("MWE_BRIDGE_PORT", "8766"))
+DEFAULT_SCENARIO_DIR = os.environ.get(
+    "MWE_SCENARIO_DIR",
+    os.path.join(os.path.dirname(__file__), "scenarios"),
+)
 
-# ---------------- Engine state ----------------
+log = setup_bridge_logger()
 
-@dataclass
-class EngineClock:
-    turn_number: int = 1
 
-@dataclass
-class EngineKPIs:
-    supply_pct: int = 90
-    readiness_pct: int = 85
-    morale_pct: int = 88
+async def dispatch(cmd: str, payload: Dict[str, Any], scenario_dir: str) -> Dict[str, Any]:
+    """
+    Returns a *payload dict* (not envelope). Envelope is handled by caller.
+    """
+    if cmd == CMD_PING:
+        return {"pong": True, "ts": time.time()}
 
-class EngineState:
-    def __init__(self) -> None:
-        self.clock = EngineClock()
-        self.kpis = EngineKPIs()
+    if cmd == CMD_LIST_SCENARIOS:
+        items = list_scenarios(scenario_dir)
+        return {"scenarios": items}
 
-ENGINE = EngineState()
-
-# ---------------- Helpers ----------------
-
-def jerr(req_id: str, cmd: str, code: str, message: str, details: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-    return {
-        "id": req_id,
-        "proto": PROTO,
-        "cmd": cmd,
-        "status": "error",
-        "error": {
-            "code": code,
-            "message": message,
-            "details": details or {},
-        },
-    }
-
-def jok(req_id: str, cmd: str, data: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-    return {
-        "id": req_id,
-        "proto": PROTO,
-        "cmd": cmd,
-        "status": "ok",
-        "data": data or {},
-    }
-
-def require(cond: bool, code: str, msg: str, details: Optional[Dict[str, Any]] = None):
-    if not cond:
-        raise ValueError(json.dumps({"code": code, "msg": msg, "details": details or {}}))
-
-def safe_json_loads(raw: str) -> Any:
-    try:
-        return json.loads(raw)
-    except Exception as e:
-        raise ValueError(json.dumps({"code": "bad_request", "msg": f"Invalid JSON: {e}", "details": {}}))
-
-def normalize_scenario_name(name: str) -> str:
-    # Keep this intentionally conservative. You can harden more later.
-    name = name.strip()
-    return name
-
-# ---------------- Command handlers ----------------
-
-async def handle_cmd(req: Dict[str, Any]) -> Dict[str, Any]:
-    req_id = str(req.get("id", "")).strip()
-    cmd = str(req.get("cmd", "")).strip()
-    proto = req.get("proto", None)
-    args = req.get("args", {})
-    if args is None:
-        args = {}
-
-    # Envelope validation
-    require(req_id != "", "bad_request", "Missing/empty id")
-    require(cmd != "", "bad_request", "Missing/empty cmd")
-    require(proto == PROTO, "bad_request", f"Unsupported proto: {proto}", {"expected": PROTO})
-    require(isinstance(args, dict), "bad_request", "args must be an object")
-
-    # Commands
-    if cmd == "ping":
-        return jok(req_id, cmd, {"pong": True})
-
-    if cmd == "get_state":
-        return jok(req_id, cmd, {
-            "clock": {"turn_number": ENGINE.clock.turn_number},
-            "kpis": {
-                "supply_pct": ENGINE.kpis.supply_pct,
-                "readiness_pct": ENGINE.kpis.readiness_pct,
-                "morale_pct": ENGINE.kpis.morale_pct,
-            }
-        })
-
-    if cmd == "list_scenarios":
-        names = list_scenarios()
-        # ensure JSON-friendly
-        names = [str(x) for x in (names or [])]
-        return jok(req_id, cmd, {"scenarios": names})
-
-    if cmd == "load_scenario":
-
-    if cmd == "move_unit":
-        args = msg.get("args") or {}
-        name = args.get("name", "")
-        unit_id = args.get("unit_id", "")
-        q = args.get("q", None)
-        r = args.get("r", None)
-
-        require(name != "", "bad_request", "move_unit requires args.name")
-        require(unit_id != "", "bad_request", "move_unit requires args.unit_id")
-        require(isinstance(q, int) and isinstance(r, int), "bad_request", "move_unit requires int args.q/args.r")
-
-        from server.scenario_store import move_unit
-        scn = move_unit(name, unit_id, q, r)
-        require(scn is not None, "not_found", "scenario or unit not found")
-
-        return ok(msg_id, {"scenario": scn})
-        name = normalize_scenario_name(str(args.get("name", "") or ""))
-        require(name != "", "bad_request", "load_scenario requires args.name")
-        data = read_scenario(name)
-
-        # Expected by protocol: "scenario" must be a JSON object
+    if cmd == CMD_LOAD_SCENARIO:
+        name = payload.get("name")
+        if not isinstance(name, str) or not name.strip():
+            raise ValueError("payload.name must be a non-empty string")
+        data = load_scenario(scenario_dir, name.strip())
+        # If scenario_store returns None on missing, treat as not_found.
         if data is None:
-            return jerr(req_id, cmd, "not_found", f"Scenario not found: {name}", {})
-        if not isinstance(data, dict):
-            return jerr(req_id, cmd, "internal", "Scenario store returned non-dict scenario", {"type": str(type(data))})
+            raise FileNotFoundError(f"Scenario not found: {name.strip()}")
+        return {"scenario": data}
 
-        return jok(req_id, cmd, {"name": name, "scenario": data})
+    raise KeyError(f"Unknown cmd: {cmd}")
 
-    if cmd == "save_scenario":
-        name = normalize_scenario_name(str(args.get("name", "") or ""))
-        scenario = args.get("scenario", None)
-        require(name != "", "bad_request", "save_scenario requires args.name")
-        require(isinstance(scenario, dict), "bad_request", "save_scenario requires args.scenario object")
 
-        ok = write_scenario(name, scenario)
-        # write_scenario may return bool or None; treat truthy as ok
-        return jok(req_id, cmd, {"saved": bool(ok) or True, "name": name})
-
-    return jerr(req_id, cmd, "bad_request", f"Unknown cmd: {cmd}", {})
-
-# ---------------- WS server ----------------
-
-async def ws_handler(ws):
-    clients.add(ws)
+async def ws_handler(ws) -> None:
     peer = getattr(ws, "remote_address", None)
-    logging.info("WS connected peer=%s", peer)
+    log.info("ws_connected peer=%s", peer)
+
     try:
         async for raw in ws:
-            req = safe_json_loads(raw)
-            if not isinstance(req, dict):
-                # cannot infer proper envelope; send generic
-                await ws.send(json.dumps(jerr("", "", "bad_request", "Request must be a JSON object", {})))
+            t0 = time.perf_counter()
+
+            # Parse JSON
+            try:
+                msg = json.loads(raw)
+            except Exception as e:
+                resp = mk_err("", ERR_BAD_REQUEST, f"Invalid JSON: {e}")
+                await ws.send(json.dumps(resp))
+                log.warning("bad_json peer=%s err=%s", peer, e)
                 continue
 
-            req_id = str(req.get("id", "")).strip()
-            cmd = str(req.get("cmd", "")).strip()
-
+            # Validate request envelope
             try:
-                resp = await handle_cmd(req)
-            except ValueError as ve:
-                # our "require" throws ValueError with JSON payload
-                try:
-                    payload = json.loads(str(ve))
-                    resp = jerr(req_id or "", cmd or "", payload.get("code","bad_request"), payload.get("msg","Bad request"), payload.get("details", {}))
-                except Exception:
-                    resp = jerr(req_id or "", cmd or "", "bad_request", str(ve), {})
+                req = normalize_request(msg)
             except Exception as e:
-                logging.exception("WS handler error")
-                resp = jerr(req_id or "", cmd or "", "internal", "Unhandled exception", {"error": str(e)})
+                resp = mk_err("", ERR_BAD_REQUEST, f"Invalid request: {e}")
+                await ws.send(json.dumps(resp))
+                log.warning("bad_request peer=%s err=%s", peer, e)
+                continue
+
+            cmd = req["cmd"]
+            req_id = req["req_id"]
+            payload = req["payload"]
+
+            # Execute
+            try:
+                out_payload = await dispatch(cmd, payload, DEFAULT_SCENARIO_DIR)
+                resp = mk_ok(req_id, out_payload)
+
+            except ValueError as e:
+                resp = mk_err(req_id, ERR_BAD_REQUEST, str(e))
+
+            except FileNotFoundError as e:
+                resp = mk_err(req_id, ERR_NOT_FOUND, str(e))
+
+            except KeyError as e:
+                resp = mk_err(req_id, ERR_UNKNOWN_CMD, str(e))
+
+            except Exception as e:
+                resp = mk_err(req_id, ERR_INTERNAL, "Unhandled exception")
+                log.exception("internal_error req_id=%s cmd=%s err=%r", req_id, cmd, e)
+
+            elapsed_ms = int((time.perf_counter() - t0) * 1000)
+            log.info("req_id=%s cmd=%s ok=%s elapsed_ms=%d", req_id, cmd, resp.get("ok"), elapsed_ms)
 
             await ws.send(json.dumps(resp))
+
     finally:
-        clients.discard(ws)
-        logging.info("WS disconnected")
+        log.info("ws_disconnected peer=%s", peer)
 
-# ---------------- healthz ----------------
 
-async def healthz(_request):
-    return web.json_response({"status": "ok", "clients": len(clients)})
-
-async def start_http_app():
-    app = web.Application()
-    app.router.add_get("/healthz", healthz)
-
-    runner = web.AppRunner(app)
-    await runner.setup()
-    site = web.TCPSite(runner, HTTP_HOST, HTTP_PORT)
-    await site.start()
-    logging.info("Healthz running on http://%s:%d/healthz", HTTP_HOST, HTTP_PORT)
-
-# ---------------- main ----------------
-
-async def main():
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s | %(levelname)s | %(message)s",
-    )
-
-    # Ensure scenario dir exists
-    os.makedirs(DEFAULT_SCENARIO_DIR, exist_ok=True)
-    logging.info("Scenario dir: %s", DEFAULT_SCENARIO_DIR)
-
-    await start_http_app()
-
-    async with websockets.serve(ws_handler, WS_HOST, WS_PORT):
-        logging.info("Bridge P8 listening on ws://%s:%d", WS_HOST, WS_PORT)
+async def main_async(host: str, port: int) -> None:
+    async with websockets.serve(ws_handler, host, port):
+        log.info("bridge_p8_listening url=ws://%s:%d scenario_dir=%s", host, port, DEFAULT_SCENARIO_DIR)
         await asyncio.Future()  # run forever
 
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--host", default=DEFAULT_HOST)
+    ap.add_argument("--port", type=int, default=DEFAULT_PORT)
+    args = ap.parse_args()
+
+    asyncio.run(main_async(args.host, args.port))
+
+
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
