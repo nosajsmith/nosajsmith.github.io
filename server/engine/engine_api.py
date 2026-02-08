@@ -205,3 +205,164 @@ class EngineAPI:
 
     def clear_logs(self) -> None:
         self._logs.clear()
+
+    # -----------------------------
+    # Phase 8.5a: unit inspection + order effects (stub)
+    # Adds ONLY: get_unit_state(), apply_order_effect()
+    # -----------------------------
+    def _clamp_0_100(self, v):
+        try:
+            iv = int(round(float(v)))
+        except Exception:
+            iv = 0
+        if iv < 0:
+            return 0
+        if iv > 100:
+            return 100
+        return iv
+
+    def _get_unit_obj(self, unit_id: str):
+        # EngineAPI in this repo is initialized by load_scenario(); enforce that minimally.
+        if unit_id is None or str(unit_id).strip() == "":
+            raise ValueError("unit_id must be a non-empty string")
+        uid = str(unit_id).strip()
+
+        def match_unit(u):
+            # Support both dict units and object units with either id or unit_id fields.
+            if u is None:
+                return False
+            if isinstance(u, dict):
+                return str(u.get("id", "")).strip() == uid or str(u.get("unit_id", "")).strip() == uid
+            return str(getattr(u, "id", "")).strip() == uid or str(getattr(u, "unit_id", "")).strip() == uid
+
+        def try_store(store):
+            # Store may be dict-like, list-like, or have common accessors.
+            if store is None:
+                return None
+
+            # Direct dict lookup
+            if isinstance(store, dict):
+                if uid in store:
+                    return store[uid]
+                # Sometimes keyed by other thing; scan values
+                for v in store.values():
+                    if match_unit(v):
+                        return v
+
+            # List scan
+            if isinstance(store, list):
+                for v in store:
+                    if match_unit(v):
+                        return v
+
+            # Common accessors: get(), by_id, units, units_by_id, all()
+            if hasattr(store, "get") and callable(getattr(store, "get")):
+                try:
+                    v = store.get(uid)
+                    if v is not None:
+                        return v
+                except Exception:
+                    pass
+
+            for attr in ("by_id", "units_by_id", "units", "_units"):
+                if hasattr(store, attr):
+                    v = getattr(store, attr)
+                    found = try_store(v)
+                    if found is not None:
+                        return found
+
+            if hasattr(store, "all") and callable(getattr(store, "all")):
+                try:
+                    v = store.all()
+                    found = try_store(v)
+                    if found is not None:
+                        return found
+                except Exception:
+                    pass
+
+            return None
+
+        # 1) Try common EngineAPI attributes and nested engine/controller holders.
+        candidates = []
+
+        # Direct common names
+        for name in ("units_repo", "unit_repo", "units", "units_by_id", "gs", "game_state", "state", "engine"):
+            if hasattr(self, name):
+                candidates.append(getattr(self, name))
+
+        # Also search one level deeper for engine-like objects
+        for obj in list(candidates):
+            for name in ("gs", "game_state", "state", "units_repo", "unit_repo", "units", "units_by_id"):
+                if hasattr(obj, name):
+                    candidates.append(getattr(obj, name))
+
+        # Try each candidate store
+        for c in candidates:
+            found = try_store(c)
+            if found is not None:
+                return found
+
+        # 2) Last resort: scan all attributes on EngineAPI (safe, bounded)
+        for _, v in vars(self).items():
+            found = try_store(v)
+            if found is not None:
+                return found
+
+        raise KeyError(f"Unit not found: {uid}")
+
+    def _get_stat(
+self, u, key: str, default: int = 0) -> int:
+        if isinstance(u, dict):
+            return self._clamp_0_100(u.get(key, default))
+        return self._clamp_0_100(getattr(u, key, default))
+
+    def _set_stat(self, u, key: str, value) -> None:
+        v = self._clamp_0_100(value)
+        if isinstance(u, dict):
+            u[key] = v
+        else:
+            setattr(u, key, v)
+
+    def get_unit_state(self, unit_id: str):
+        u = self._get_unit_obj(unit_id)
+        return {
+            "id": unit_id if not isinstance(u, dict) else u.get("id", unit_id),
+            "fatigue": self._get_stat(u, "fatigue", 0),
+            "readiness": self._get_stat(u, "readiness", 0),
+            "morale": self._get_stat(u, "morale", 0),
+            "supply": self._get_stat(u, "supply", 0),
+        }
+
+    def apply_order_effect(self, kind: str, unit_id: str, intent: str = ""):
+        from engine.order_effects_stub import effect_delta, clamp_0_100
+
+        u = self._get_unit_obj(unit_id)
+        before = {
+            "fatigue": self._get_stat(u, "fatigue", 0),
+            "readiness": self._get_stat(u, "readiness", 0),
+            "morale": self._get_stat(u, "morale", 0),
+            "supply": self._get_stat(u, "supply", 0),
+        }
+
+        delta, note = effect_delta(kind)
+
+        after = {
+            "fatigue": clamp_0_100(before["fatigue"] + delta["fatigue"]),
+            "readiness": clamp_0_100(before["readiness"] + delta["readiness"]),
+            "morale": clamp_0_100(before["morale"] + delta["morale"]),
+            "supply": clamp_0_100(before["supply"] + delta["supply"]),
+        }
+
+        self._set_stat(u, "fatigue", after["fatigue"])
+        self._set_stat(u, "readiness", after["readiness"])
+        self._set_stat(u, "morale", after["morale"])
+        self._set_stat(u, "supply", after["supply"])
+
+        realized = {
+            "fatigue": after["fatigue"] - before["fatigue"],
+            "readiness": after["readiness"] - before["readiness"],
+            "morale": after["morale"] - before["morale"],
+            "supply": after["supply"] - before["supply"],
+        }
+
+        return {"before": before, "after": after, "delta": realized, "note": note}
