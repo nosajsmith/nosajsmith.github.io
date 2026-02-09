@@ -26,6 +26,10 @@ class BridgeShell:
         self.ai_enabled = False
         self.ai = BalckAIV1(side="AXIS")
 
+        # Phase 8.7: AI cadence/backpressure
+        self.ai_last_submit_hour = -999
+        self.ai_min_interval_hours = 6
+
     # ---- Staff helpers (local, minimal, non-invasive) ----
 
     def _staff_reset(self) -> None:
@@ -118,12 +122,31 @@ class BridgeShell:
 
             # Phase 8.4: bleed staff load after time advances
             self.staff.advance_time(dt_hours)
-
-            # Phase 8.6: AI submits orders after time + staff update
+            # Phase 8.6/8.7: AI submits orders after time + staff update (with cadence/backpressure)
             ai_submitted: list[dict] = []
-            if self.ai_enabled:
-                intents = self.ai.decide_orders(self, int(result))
-                for o in intents:
+
+            def _has_pending_ai_event() -> bool:
+                try:
+                    pending = self.event_queue.pending()
+                    if isinstance(pending, list):
+                        return any(isinstance(ev, dict) and ev.get("issuer") == "ai" for ev in pending)
+                except Exception:
+                    pass
+                return False
+
+            now_hr = int(result)
+            staff_load = int(getattr(self.staff, "load", 0))
+            staff_cap = int(getattr(self.staff, "staff_capacity", 4))
+            staff_overloaded = staff_load > (staff_cap + 1)
+
+            cadence_ok = (now_hr - int(getattr(self, "ai_last_submit_hour", -999))) >= int(getattr(self, "ai_min_interval_hours", 6))
+            pending_ok = not _has_pending_ai_event()
+
+            if self.ai_enabled and cadence_ok and pending_ok and (not staff_overloaded):
+                intents = self.ai.decide_orders(self, now_hr)
+                if intents:
+                    # One order max per cadence window (restraint)
+                    o = intents[0]
                     base_eta = float(o.get("eta_hours", 6))
                     effective_eta = float(self.staff.estimate_latency(base_eta))
                     self.staff.submit_order()
@@ -138,6 +161,9 @@ class BridgeShell:
                     ev["issuer"] = "ai"
                     scheduled = self.event_queue.schedule(ev)
                     ai_submitted.append(scheduled)
+
+                    # Record cadence timestamp
+                    self.ai_last_submit_hour = now_hr
 
             # Resolve events as before
             ready = self.event_queue.resolve_up_to(int(result))
