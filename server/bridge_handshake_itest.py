@@ -1,219 +1,174 @@
-"""
-Simple JSON command-line "bridge" to talk to EngineAPI.
+from typing import Any, Dict, List
 
-This simulates what the real UI bridge will do later.
+from ai.balck_v1 import BalckAIV1
 
-Commands (JSON on a single line):
-
-  {"cmd": "load_scenario", "args": {"id": "mini_gc_1942"}}
-  {"cmd": "start_game"}
-  {"cmd": "process_turn"}
-  {"cmd": "apply_player_action", "args": {...}}
-  {"cmd": "get_state"}
-  {"cmd": "get_logs"}
-  {"cmd": "clock.step", "args": {"dt_hours": 6}}
-  {"cmd": "orders.submit", "args": {"kind":"attack","unit_id":"US-1MAR","eta_hours":12,"intent":"Probe"}}
-  {"cmd": "orders.pending"}
-  {"cmd": "quit"}
-"""
-
-from __future__ import annotations
-import json
-import sys
-from typing import Any, Dict
-
-import sys
-from pathlib import Path
-
-# Ensure repo root is on sys.path so `import server.*` works
-ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
-
-from engine.engine_api import EngineAPI
-
-# Phase 8 HARDING primitives
-from server.sim_time import SimTime
-from server.event_queue import EventQueue
-from server.orders_v1 import make_order_event
+from sim_time import SimTime
+from event_queue import EventQueue
+from orders_v1 import make_order_event
+from scenario_store import list_scenarios, read_scenario
+from staff_model_v1 import StaffModelV1
 
 
 class BridgeShell:
-    def __init__(self) -> None:
-        self.api = EngineAPI()
-        self.loaded = False
-        self.time = SimTime()
-        self.q = EventQueue()
+    def __init__(self, scenario_dir: str):
+        self.scenario_dir = scenario_dir
 
-    def handle(self, packet: Dict[str, Any]) -> Dict[str, Any]:
-        cmd = packet.get("cmd")
+        # Core engine systems
+        self.sim_time = SimTime()
+        self.event_queue = EventQueue()
+        # Phase 8.4: Staff Friction v1 (delay-only)
+        # Default capacity, no config lookup
+        self.staff = StaffModelV1()
 
-        # Compat: accept either "args" (old bridge) or "payload" (protocol tests)
-        args = packet.get("args")
-        payload = packet.get("payload")
-        if args is None and isinstance(payload, dict):
-            args = payload
-        if args is None:
-            args = {}
-        if not isinstance(args, dict):
-            return {"status": "error", "error": "args/payload must be an object"}
+        self.scenario = None
 
-        try:
-            if cmd == "ping":
-                return {"status": "ok", "payload": {"pong": True}}
+        # Phase 8.6: Balck AI v1 (harness)
+        self.ai_enabled = False
+        self.ai = BalckAIV1(side="AXIS")
 
-            if cmd == "help":
-                return {
-                    "status": "ok",
-                    "commands": [
-                        "ping",
-                        "help",
-                        "list_scenarios",
-                        "load_scenario",
-                        "start_game",
-                        "process_turn",
-                        "apply_player_action",
-                        "get_state",
-                        "get_logs",
-                        "orders.submit",
-                        "orders.pending",
-                        "clock.step",
-                        "quit",
-                    ],
-                    "note": 'Use either {"args": {...}} or {"payload": {...}}',
-                }
+    # ---- Staff helpers (local, minimal, non-invasive) ----
 
-            if cmd == "list_scenarios":
-                # Minimal for now. We can wire to a real scenario store next.
-                return {"status": "ok", "scenarios": ["mini_gc_1942"]}
+    def _staff_reset(self) -> None:
+        """Reset staff load to zero on scenario load."""
+        if hasattr(self.staff, "reset") and callable(self.staff.reset):
+            self.staff.reset()
+            return
+        if hasattr(self.staff, "load"):
+            self.staff.load = 0.0
+            return
+        if hasattr(self.staff, "staff_load"):
+            self.staff.staff_load = 0.0
 
-            if cmd == "load_scenario":
-                sid = args.get("id") or args.get("name") or "mini_gc_1942"
-                meta = self.api.load_scenario(sid)
-                self.loaded = True
-                self.time.reset()
-                self.q.clear()
-                return {"status": "ok", "meta": meta}
+    def _staff_load_value(self) -> float:
+        if hasattr(self.staff, "load"):
+            return float(self.staff.load)
+        if hasattr(self.staff, "staff_load"):
+            return float(self.staff.staff_load)
+        return 0.0
 
-            if cmd == "start_game":
-                if not self.loaded:
-                    return {"status": "error", "error": "No scenario loaded."}
-                state = self.api.start_game()
-                return {"status": "ok", "state": state}
+    # ---- Command dispatcher ----
 
-            if cmd == "process_turn":
-                self._ensure_loaded()
-                state = self.api.process_turn()
-                return {"status": "ok", "state": state}
+    def handle(self, cmd: str, args: Dict[str, Any]) -> Dict[str, Any]:
+        if cmd == "ping":
+            return {"ok": True}
 
-            if cmd == "apply_player_action":
-                self._ensure_loaded()
-                result = self.api.apply_player_action(args)
-                return {"status": "ok", "result": result}
+        if cmd == "ai.enable":
+            self.ai_enabled = bool(args.get("enabled", False))
+            return {"ok": True, "ai_enabled": self.ai_enabled}
 
-            if cmd == "get_state":
-                self._ensure_loaded()
-                state = self.api.get_game_state()
-                return {"status": "ok", "state": state}
+        if cmd == "ai.status":
+            return {"ok": True, "ai_enabled": bool(self.ai_enabled)}
 
-            if cmd == "get_logs":
-                self._ensure_loaded()
-                logs = self.api.get_logs()
-                return {"status": "ok", "logs": logs}
+        if cmd == "list_scenarios":
+            names = list_scenarios(self.scenario_dir)
+            return {"ok": True, "scenarios": names}
 
-            # ---- Phase 8 HARDING: Orders as future events ----
-            if cmd == "orders.submit":
-                self._ensure_loaded()
+        if cmd == "load_scenario":
+            name = args["name"]
+            self.scenario = read_scenario(name, self.scenario_dir)
 
-                kind = args.get("kind")
-                unit_id = args.get("unit_id")
-                eta = args.get("eta_hours", 6)
-                intent = args.get("intent", "")
+            # Phase 8.4 requirement: reset staff on scenario load
+            self._staff_reset()
 
-                try:
-                    eta = int(eta)
-                except Exception:
-                    return {"status": "error", "error": "eta_hours must be an int"}
+            # Phase 8.6: reset AI on scenario load
+            self.ai_enabled = False
 
-                try:
+            return {"ok": True, "scenario": self.scenario}
+
+        if cmd == "orders.submit":
+            # Phase 8.4: delay-only staff friction
+            base_eta_hours = float(args["eta_hours"])
+
+            effective_eta_hours = float(
+                self.staff.estimate_latency(base_eta_hours)
+            )
+
+            # Increment staff load for each submitted order
+            self.staff.submit_order()
+
+            # Schedule order using effective ETA
+            sched_args = dict(args)
+            sched_args["eta_hours"] = effective_eta_hours
+            issued_at = int(self.sim_time.now())
+            event = make_order_event(
+                kind=str(args.get("kind", "")),
+                unit_id=str(args.get("unit_id", "")),
+                issued_at=issued_at,
+                eta_hours=int(effective_eta_hours),
+                intent=str(args.get("intent", "")),
+            )
+
+            scheduled = self.event_queue.schedule(event)
+
+            return {
+                "ok": True,
+                "base_eta_hours": base_eta_hours,
+                "effective_eta_hours": effective_eta_hours,
+                "staff_load": int(self.staff.load),
+                "scheduled": scheduled,
+            }
+
+        if cmd == "clock.step":
+            dt_hours = int((args or {}).get("dt_hours", 0))
+            if dt_hours <= 0:
+                return {"ok": False, "error": "dt_hours must be int > 0"}
+
+            # Advance time normally (SimTime uses advance())
+            result = self.sim_time.advance(dt_hours)
+
+            # Phase 8.4: bleed staff load after time advances
+            self.staff.advance_time(dt_hours)
+
+            # Phase 8.6: AI submits orders after time + staff update
+            ai_submitted: list[dict] = []
+            if self.ai_enabled:
+                intents = self.ai.decide_orders(self, int(result))
+                for o in intents:
+                    base_eta = float(o.get("eta_hours", 6))
+                    effective_eta = float(self.staff.estimate_latency(base_eta))
+                    self.staff.submit_order()
+
                     ev = make_order_event(
-                        kind=str(kind) if kind is not None else "",
-                        unit_id=str(unit_id) if unit_id is not None else "",
-                        issued_at=self.time.now(),
-                        eta_hours=eta,
-                        intent=str(intent) if intent is not None else "",
+                        kind=str(o.get("kind", "")),
+                        unit_id=str(o.get("unit_id", "")),
+                        issued_at=int(self.sim_time.now()),
+                        eta_hours=int(effective_eta),
+                        intent=str(o.get("intent", "")),
                     )
-                except Exception as e:
-                    return {"status": "error", "error": str(e)}
+                    ev["issuer"] = "ai"
+                    scheduled = self.event_queue.schedule(ev)
+                    ai_submitted.append(scheduled)
 
-                scheduled = self.q.schedule(ev)
-                return {"status": "ok", "payload": {"event": scheduled}}
+            # Resolve events as before
+            ready = self.event_queue.resolve_up_to(int(result))
 
-            if cmd == "orders.pending":
-                return {"status": "ok", "payload": {"pending": self.q.pending()}}
+            return {"ok": True, "time": int(result), "resolved": ready, "staff_load": int(self.staff.load), "ai_submitted": ai_submitted}
 
-            # ---- Phase 8 HARDING: Time with teeth ----
-            if cmd == "clock.step":
-                dt = args.get("dt_hours", 6)
-                try:
-                    dt = int(dt)
-                except Exception:
-                    return {"status": "error", "error": "dt_hours must be an int"}
-
-                if dt <= 0 or dt > 168:
-                    return {"status": "error", "error": "dt_hours must be 1..168"}
-
-                self.time.advance(dt)
-                resolved = self.q.resolve_up_to(self.time.now())
-
-                return {
-                    "status": "ok",
-                    "payload": {
-                        "dt_hours": dt,
-                        "sim_hours": self.time.now(),
-                        "events": resolved,
-                        "log": [
-                            f"Executed {ev.get('type')} #{ev.get('id')} ({ev.get('kind','')}) for {ev.get('unit_id','')}"
-                            for ev in resolved
-                        ],
-                    },
-                }
-
-            if cmd == "quit":
-                return {"status": "ok", "bye": True}
-
-            return {"status": "error", "error": f"Unknown cmd '{cmd}'"}
-
-        except Exception as e:
-            return {"status": "error", "error": repr(e)}
-
-    def _ensure_loaded(self) -> None:
-        if not self.loaded:
-            raise RuntimeError("EngineAPI is not initialized. Call load_scenario first.")
+        return {"ok": False, "error": f"unknown cmd: {cmd}"}
 
 
-def main() -> None:
-    shell = BridgeShell()
-    print("Bridge handshake test. Enter JSON commands, or 'quit'.")
-    print("Example:")
-    print('  {"cmd": "load_scenario", "args": {"id": "mini_gc_1942"}}')
-
-    for line in sys.stdin:
-        line = line.strip()
-        if not line:
-            continue
-        try:
-            packet = json.loads(line)
-        except json.JSONDecodeError as e:
-            print(json.dumps({"status": "error", "error": f"Bad JSON: {e}"}))
-            continue
-
-        resp = shell.handle(packet)
-        print(json.dumps(resp))
-
-        if resp.get("bye"):
-            break
-
+# ---------------------------------------------------------------------
+# Integration-test style handshake payloads (kept intact)
+# ---------------------------------------------------------------------
 
 if __name__ == "__main__":
-    main()
+    # Example manual test sequence
+    shell = BridgeShell("scenarios")
+
+    print(shell.handle("ping", {}))
+    print(shell.handle("list_scenarios", {}))
+    print(shell.handle("load_scenario", {"name": "mini_gc_1942.json"}))
+
+    print(
+        shell.handle(
+            "orders.submit",
+            {
+                "kind": "attack",
+                "unit_id": "US-1MAR",
+                "eta_hours": 12,
+                "intent": "Probe",
+            },
+        )
+    )
+
+    print(shell.handle("clock.step", {"dt_hours": 6}))
