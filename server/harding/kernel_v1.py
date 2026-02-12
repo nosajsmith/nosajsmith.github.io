@@ -7,6 +7,8 @@ from orders_v1 import make_order_event
 from scenario_store import list_scenarios, read_scenario
 from staff_model_v1 import StaffModelV1
 from ai.balck_v1 import BalckAIV1
+from politics.clock_v2 import PoliticalClockV2
+from harding.order_effects_v1 import apply_effect_to_unit
 
 
 class HardingKernelV1:
@@ -28,6 +30,7 @@ class HardingKernelV1:
         self.ai = BalckAIV1(side="AXIS")
         self.ai_last_submit_hour = -999
         self.ai_min_interval_hours = 6
+        self.politics = PoliticalClockV2(deadline_hours=72, player_side="ALLIED")
 
         # Phase 8.9: intelligence lag (temporal fog)
         self.report_delay_hours = 6
@@ -55,9 +58,12 @@ class HardingKernelV1:
             name = args["name"]
             self.scenario = read_scenario(name, self.scenario_dir)
             self._staff_reset()
+            self.politics = PoliticalClockV2(deadline_hours=72, player_side="ALLIED")
             self.ai_enabled = False
             self.sim_time = SimTime()
             self.event_queue = EventQueue()
+            self.politics.set_baseline(self.scenario)
+
             return {"ok": True, "scenario": self.scenario}
 
         if cmd == "ai.enable":
@@ -146,9 +152,21 @@ class HardingKernelV1:
                     ai_submitted.append(scheduled)
                     self.ai_last_submit_hour = now
             resolved = self.event_queue.resolve_up_to(now)
-
             # Phase 8.9: convert resolved events into delayed reports
             for ev in resolved:
+                # Phase 9.1: deterministic wear-and-tear on resolved orders
+                if isinstance(ev, dict) and isinstance(self.scenario, dict):
+                    uid = str(ev.get("unit_id", ""))
+                    kind = str(ev.get("kind", ""))
+                    if uid and kind:
+                        units = self.scenario.get("units", [])
+                        if isinstance(units, list):
+                            for u in units:
+                                if isinstance(u, dict) and str(u.get("id", "")) == uid:
+                                    eff = apply_effect_to_unit(u, kind)
+                                    ev["effect"] = eff
+                                    break
+
                 report = {
                     "t_resolved": now,
                     "type": "event_resolved",
@@ -175,6 +193,7 @@ class HardingKernelV1:
                 "reports": reports_ready,
                 "staff_load": int(getattr(self.staff, "load", 0)),
                 "ai_submitted": ai_submitted,
+                "campaign": self.politics.evaluate(now, self.scenario),
                 "pending_reports": len(self._pending_reports),
             }
 
