@@ -33,6 +33,7 @@ def main() -> int:
         if r.get("status") != "ok":
             return fail(f"ai.enable failed: {r}")
 
+        # Step 1: AI should submit at least one order
         r1 = await dispatch("clock.step", {"dt_hours": 6}, scen_dir)
         if r1.get("status") != "ok":
             return fail(f"clock.step(6) failed: {r1}")
@@ -41,21 +42,36 @@ def main() -> int:
         if not isinstance(ai_sub, list) or len(ai_sub) < 1:
             return fail(f"expected ai_submitted >=1, got: {ai_sub}")
 
+        # Step 2: resolves internally, but intel lag delays report visibility
         r2 = await dispatch("clock.step", {"dt_hours": 6}, scen_dir)
         if r2.get("status") != "ok":
-            return fail(f"clock.step(resolve) failed: {r2}")
+            return fail(f"clock.step(step2) failed: {r2}")
 
-        resolved = (r2.get("payload") or {}).get("resolved", [])
-        if not isinstance(resolved, list):
-            return fail(f"expected resolved list, got: {resolved}")
-        has_ai = any(isinstance(ev, dict) and ev.get("issuer") == "ai" for ev in resolved)
+        # Step 3: report should arrive (default delay = 6h)
+        r3 = await dispatch("clock.step", {"dt_hours": 6}, scen_dir)
+        if r3.get("status") != "ok":
+            return fail(f"clock.step(step3) failed: {r3}")
+
+        reports = (r3.get("payload") or {}).get("reports", [])
+        if not isinstance(reports, list) or len(reports) < 1:
+            return fail(f"expected >=1 report, got: {reports}")
+
+        has_ai = False
+        for rep in reports:
+            if isinstance(rep, dict):
+                ev = rep.get("event")
+                if isinstance(ev, dict) and ev.get("issuer") == "ai":
+                    has_ai = True
+                    break
+
         if not has_ai:
-            return fail(f"expected resolved AI event, got: {resolved}")
+            return fail(f"expected AI event in reports, got: {reports}")
 
         print("[p8.8 parity] PASS")
         return 0
 
     return asyncio.run(run())
+
 
 if __name__ == "__main__":
     raise SystemExit(main())
