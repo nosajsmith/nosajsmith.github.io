@@ -57,7 +57,7 @@ def evaluate_collapse(
     th = thresholds or {
         "min_strength_ratio": 0.70,
         "min_avg_supply": 30.0,
-        "min_avg_readiness": 25.0,
+        "min_avg_readiness": 35.0,
     }
 
     m = snapshot_side_metrics(scenario, side)

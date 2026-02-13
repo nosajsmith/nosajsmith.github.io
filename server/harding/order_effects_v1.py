@@ -32,7 +32,7 @@ def apply_effect_to_unit(unit: Dict[str, Any], kind: str) -> Dict[str, Any]:
     df, dr, dm, ds, dstr = 0, 0, 0, 0, 0
 
     if dk.startswith("attack"):
-        df, dr, dm, ds, dstr = +10, -8, -2, -4, -2
+        df, dr, dm, ds, dstr = +18, -15, -3, -10, -6
     elif dk == "rest":
         df, dr, dm, ds, dstr = -12, +8, +1, +0, +0
     elif dk in ("defend", "delay"):
