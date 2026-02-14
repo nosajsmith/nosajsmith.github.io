@@ -35,6 +35,8 @@ class HardingKernelV1:
         # Phase 8.9: intelligence lag (temporal fog)
         self.report_delay_hours = 6
         self._pending_reports = []  # list of {available_at:int, report:dict}
+        # Phase 9.3: objective control state
+        self.objective_state = {}
 
     def _staff_reset(self) -> None:
         if hasattr(self.staff, "reset") and callable(self.staff.reset):
@@ -57,6 +59,19 @@ class HardingKernelV1:
         if cmd == "load_scenario":
             name = args["name"]
             self.scenario = read_scenario(name, self.scenario_dir)
+
+            # Phase 9.3: initialize objective control state (default False)
+            self.objective_state = {}
+            objs = self.scenario.get("objectives", []) if isinstance(self.scenario, dict) else []
+            if isinstance(objs, list):
+                for o in objs:
+                    if isinstance(o, dict):
+                        side = str(o.get("side", "")).upper()
+                        loc = str(o.get("location_id", "")).upper()
+                        if side and loc:
+                            self.objective_state[f"{side}:{loc}"] = False
+            if isinstance(self.scenario, dict):
+                self.scenario["objective_state"] = self.objective_state
             self._staff_reset()
             self.politics = PoliticalClockV2(deadline_hours=72, player_side="ALLIED")
             self.ai_enabled = False
@@ -165,6 +180,25 @@ class HardingKernelV1:
                                 if isinstance(u, dict) and str(u.get("id", "")) == uid:
                                     eff = apply_effect_to_unit(u, kind)
                                     ev["effect"] = eff
+
+                                    # Phase 9.3: objective control updates (stub)
+                                    kind = str(ev.get("kind", ""))
+                                    uid = str(ev.get("unit_id", "")).upper()
+                                    if kind.startswith("attack"):
+                                        if uid.startswith("US-"):
+                                            if "ALLIED:LUNGA" in self.objective_state:
+                                                self.objective_state["ALLIED:LUNGA"] = True
+                                        elif uid.startswith("JP-"):
+                                            if "AXIS:TULAGI" in self.objective_state:
+                                                self.objective_state["AXIS:TULAGI"] = True
+                                    elif kind == "withdraw":
+                                        if uid.startswith("US-"):
+                                            if "ALLIED:LUNGA" in self.objective_state:
+                                                self.objective_state["ALLIED:LUNGA"] = False
+                                        elif uid.startswith("JP-"):
+                                            if "AXIS:TULAGI" in self.objective_state:
+                                                self.objective_state["AXIS:TULAGI"] = False
+
                                     break
 
                 report = {
@@ -193,7 +227,7 @@ class HardingKernelV1:
                 "reports": reports_ready,
                 "staff_load": int(getattr(self.staff, "load", 0)),
                 "ai_submitted": ai_submitted,
-                "campaign": self.politics.evaluate(now, self.scenario),
+                "campaign": self.politics.on_time_advance(dt_hours, now, self.scenario),
                 "pending_reports": len(self._pending_reports),
             }
 
