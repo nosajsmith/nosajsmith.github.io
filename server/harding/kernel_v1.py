@@ -181,16 +181,20 @@ class HardingKernelV1:
                                     eff = apply_effect_to_unit(u, kind)
                                     ev["effect"] = eff
 
-                                    # Phase 9.3: objective control updates (stub)
+                                    # Phase 9.4: objective contest updates (deterministic stub)
                                     kind = str(ev.get("kind", ""))
                                     uid = str(ev.get("unit_id", "")).upper()
                                     if kind.startswith("attack"):
                                         if uid.startswith("US-"):
                                             if "ALLIED:LUNGA" in self.objective_state:
                                                 self.objective_state["ALLIED:LUNGA"] = True
+                                            if "AXIS:TULAGI" in self.objective_state:
+                                                self.objective_state["AXIS:TULAGI"] = False
                                         elif uid.startswith("JP-"):
                                             if "AXIS:TULAGI" in self.objective_state:
                                                 self.objective_state["AXIS:TULAGI"] = True
+                                            if "ALLIED:LUNGA" in self.objective_state:
+                                                self.objective_state["ALLIED:LUNGA"] = False
                                     elif kind == "withdraw":
                                         if uid.startswith("US-"):
                                             if "ALLIED:LUNGA" in self.objective_state:
