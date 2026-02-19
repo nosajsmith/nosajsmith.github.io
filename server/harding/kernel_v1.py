@@ -101,6 +101,20 @@ class HardingKernelV1:
             self._pending_reports = remaining
             return {"ok": True, "time": now, "reports": ready}
 
+        if cmd == "campaign.status":
+            now = int(self.sim_time.now())
+            # campaign snapshot uses politics clock + scoring + pressure
+            camp = self.politics.snapshot(now) if hasattr(self.politics, "snapshot") else {}
+            return {
+                "ok": True,
+                "time": now,
+                "campaign": camp,
+                "objective_state": dict(getattr(self, "objective_state", {}) or {}),
+                "staff_load": int(getattr(self.staff, "load", 0)),
+                "pending_reports": len(getattr(self, "_pending_reports", []) or []),
+            }
+
+
         if cmd == "orders.submit":
             base_eta_hours = float(args["eta_hours"])
             effective_eta_hours = float(self.staff.estimate_latency(base_eta_hours))
