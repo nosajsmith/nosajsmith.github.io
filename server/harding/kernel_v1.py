@@ -245,7 +245,7 @@ class HardingKernelV1:
                 "reports": reports_ready,
                 "staff_load": int(getattr(self.staff, "load", 0)),
                 "ai_submitted": ai_submitted,
-                "campaign": self.politics.on_time_advance(dt_hours, now, self.scenario),
+                "campaign": self.politics.on_time_advance(dt_hours, now, self.scenario, self.objective_state),
                 "pending_reports": len(self._pending_reports),
             }
 
