@@ -103,13 +103,37 @@ class HardingKernelV1:
 
         if cmd == "campaign.status":
             now = int(self.sim_time.now())
-            # campaign snapshot uses politics clock + scoring + pressure
-            camp = self.politics.snapshot(now) if hasattr(self.politics, "snapshot") else {}
+
+            # campaign snapshot from politics
+            camp = {}
+            try:
+                camp = self.politics.snapshot(now, self.objective_state)  # clock_v2 signature
+            except Exception:
+                try:
+                    camp = self.politics.snapshot(now)  # fallback
+                except Exception:
+                    camp = {}
+
+            scoring = (camp.get("scoring") or {})
+            score_by_side = scoring.get("score_by_side", {})
+            win_score = scoring.get("win_score", None)
+
+            pressure = (camp.get("pressure") or {})
+            reasons = pressure.get("reasons", []) if isinstance(pressure, dict) else []
+
             return {
                 "ok": True,
-                "time": now,
-                "campaign": camp,
+                "time_now": now,
+                "campaign_status": camp.get("status", "unknown"),
+                "deadline_hours": camp.get("deadline_hours", None),
+                "time_remaining": camp.get("time_remaining", None),
+
+                "score_by_side": dict(score_by_side) if isinstance(score_by_side, dict) else {},
+                "win_score": win_score,
+
                 "objective_state": dict(getattr(self, "objective_state", {}) or {}),
+                "pressure_reasons": list(reasons) if isinstance(reasons, list) else [],
+
                 "staff_load": int(getattr(self.staff, "load", 0)),
                 "pending_reports": len(getattr(self, "_pending_reports", []) or []),
             }
