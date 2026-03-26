@@ -76,6 +76,7 @@ class RunResult:
     run_options: Dict[str, Any] = field(default_factory=dict)
     summary: Dict[str, Any] = field(default_factory=dict)
     metrics: Dict[str, Dict[str, Any]] = field(default_factory=dict)
+    ai_report: Dict[str, Any] = field(default_factory=dict)
     output_dir: str = ""
 
 
@@ -159,4 +160,3 @@ class ManifestRecord:
     command_line: str
     output_dir: str
     extra: Dict[str, Any] = field(default_factory=dict)
-

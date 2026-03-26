@@ -1,12 +1,20 @@
 name: korea_un_combined_arms
 description: Foundation doctrine profile for UN combined arms operations.
 axis:
-  aggression: 0.45
+  aggression: 0.42
   tempo_bias: balanced
+  reserve_commitment: 0.34
+  logistics_emphasis: 0.78
+  artillery_preparation: 0.81
+  infiltration_bias: 0.18
+  objective_discipline: 0.76
+  breakthrough_focus: 0.41
 run:
   max_steps: 8
   dt_hours: 6
 metadata:
+  doctrine_id: korea_un_combined_arms
   family: korea
   doctrine_kind: combined_arms
-
+  historical_force: un
+  posture_family: methodical

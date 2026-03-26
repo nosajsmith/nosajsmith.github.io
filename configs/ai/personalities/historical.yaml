@@ -1,8 +1,15 @@
 name: historical
 description: Baseline historical personality.
 axis:
-  caution_bias: 0.5
+  aggression: 0.48
+  caution_bias: 0.58
+  counterattack_bias: 0.44
+  reserve_preservation_bias: 0.62
+  adaptation_rate: 0.39
+  risk_tolerance: 0.41
 run: {}
 metadata:
+  personality_id: historical
   posture: historical
-
+  style: baseline_historical
+  decision_model: deliberate

@@ -75,6 +75,7 @@ def run_result_to_row(run_result: Any) -> Dict[str, Any]:
     }
     row.update(flatten_mapping(dict(getattr(run_result, "summary", {}) or {}), "summary"))
     row.update(flatten_mapping(dict(getattr(run_result, "metrics", {}) or {}), "metrics"))
+    row.update(flatten_mapping(dict(getattr(run_result, "ai_report", {}) or {}), "ai_report"))
     return row
 
 
@@ -97,4 +98,3 @@ def write_report_txt(path: str | Path, content: str) -> Path:
     output = Path(path)
     output.write_text(content.rstrip() + "\n", encoding="utf-8")
     return output
-

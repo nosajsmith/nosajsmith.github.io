@@ -1,8 +1,15 @@
 name: cautious
 description: Cautious personality bias.
 axis:
-  aggression: 0.3
+  aggression: 0.26
+  caution_bias: 0.87
+  counterattack_bias: 0.29
+  reserve_preservation_bias: 0.83
+  adaptation_rate: 0.33
+  risk_tolerance: 0.22
 run: {}
 metadata:
+  personality_id: cautious
   posture: cautious
-
+  style: force_preservation
+  decision_model: wait_and_counter

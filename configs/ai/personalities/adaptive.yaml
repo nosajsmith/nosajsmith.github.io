@@ -1,8 +1,15 @@
 name: adaptive
 description: Adaptive personality bias.
 axis:
-  aggression: 0.6
+  aggression: 0.57
+  caution_bias: 0.46
+  counterattack_bias: 0.63
+  reserve_preservation_bias: 0.51
+  adaptation_rate: 0.91
+  risk_tolerance: 0.56
 run: {}
 metadata:
+  personality_id: adaptive
   posture: adaptive
-
+  style: situational
+  decision_model: reweight_per_turn

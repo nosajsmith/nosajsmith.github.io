@@ -1,12 +1,20 @@
 name: korea_nkpa_shock
 description: Foundation doctrine profile for NKPA shock action.
 axis:
-  aggression: 0.8
+  aggression: 0.86
   tempo_bias: shock
+  reserve_commitment: 0.71
+  logistics_emphasis: 0.43
+  artillery_preparation: 0.57
+  infiltration_bias: 0.27
+  objective_discipline: 0.55
+  breakthrough_focus: 0.91
 run:
   max_steps: 8
   dt_hours: 6
 metadata:
+  doctrine_id: korea_nkpa_shock
   family: korea
   doctrine_kind: shock
-
+  historical_force: nkpa
+  posture_family: rapid_breakthrough

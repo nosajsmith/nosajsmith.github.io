@@ -1,59 +1,74 @@
-export function makeWsRpc(url, { proto = "1.0", timeoutMs = 5000 } = {}) {
+export function makeWsRpc(url, { proto = "1.0" } = {}) {
   let ws = null;
-  let openPromise = null;
-  const pending = new Map(); // id -> {resolve,reject,timer}
+  let nextId = 1;
+  const pending = new Map();
 
-  function connect() {
+  async function connect() {
     if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
-      return openPromise ?? Promise.resolve();
+      return;
     }
 
     ws = new WebSocket(url);
 
-    openPromise = new Promise((resolve, reject) => {
+    await new Promise((resolve, reject) => {
       ws.onopen = () => resolve();
       ws.onerror = (e) => reject(e);
     });
 
     ws.onmessage = (ev) => {
       let msg;
-      try { msg = JSON.parse(ev.data); } catch { return; }
-      const id = msg?.id;
+      try {
+        msg = JSON.parse(ev.data);
+      } catch (e) {
+        console.error("bad ws json", e);
+        return;
+      }
+
+      const id = msg.id ?? msg.req_id;
       if (!id) return;
+
       const p = pending.get(id);
       if (!p) return;
-      clearTimeout(p.timer);
+
       pending.delete(id);
-      p.resolve(msg);
+
+      const normalized = {
+        status: msg.ok ? "ok" : "error",
+        data: msg.data ?? msg.payload,
+        error: msg.error ?? null,
+        raw: msg,
+      };
+
+      if (msg.ok) {
+        p.resolve(normalized);
+      } else {
+        p.resolve(normalized);
+      }
     };
 
     ws.onclose = () => {
-      // fail any in-flight requests
       for (const [, p] of pending) {
-        clearTimeout(p.timer);
         p.reject(new Error("ws closed"));
       }
       pending.clear();
       ws = null;
-      openPromise = null;
     };
-
-    return openPromise;
   }
 
-  async function rpc(cmd, args = {}, id = crypto.randomUUID()) {
+  async function rpc(cmd, args = {}) {
     await connect();
 
-    const req = { id, proto, cmd, args };
-    const payload = JSON.stringify(req);
+    return await new Promise((resolve, reject) => {
+      const id = `ui-${nextId++}`;
+      pending.set(id, { resolve, reject });
 
-    return new Promise((resolve, reject) => {
-      const timer = setTimeout(() => {
-        pending.delete(id);
-        reject(new Error(`timeout waiting for ${cmd}`));
-      }, timeoutMs);
+      const payload = JSON.stringify({
+        id,
+        proto,
+        cmd,
+        payload: args,
+      });
 
-      pending.set(id, { resolve, reject, timer });
       ws.send(payload);
     });
   }
@@ -66,5 +81,5 @@ export function makeWsRpc(url, { proto = "1.0", timeoutMs = 5000 } = {}) {
     try { ws?.close(); } catch {}
   }
 
-  return { rpc, connect, close, isConnected };
+  return { connect, rpc, isConnected, close };
 }

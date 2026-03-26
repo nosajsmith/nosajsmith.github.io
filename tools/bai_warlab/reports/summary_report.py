@@ -27,6 +27,7 @@ def render_report(result: Any) -> str:
 
 def _render_run(result: Any) -> str:
     summary = result.summary or {}
+    ai_report = getattr(result, "ai_report", {}) or {}
     lines = [
         "BAI War Lab — Run Report",
         f"Scenario: {result.scenario}",
@@ -42,8 +43,28 @@ def _render_run(result: Any) -> str:
         f"Hours Elapsed: {summary.get('hours_elapsed', 0)}",
         "",
     ]
+    if summary.get("scenario_outcome"):
+        lines.extend(
+            [
+                f"Scenario Outcome: {summary.get('scenario_outcome')}",
+                f"Winning Side: {summary.get('winning_side') or 'draw'}",
+                "",
+            ]
+        )
     if result.metrics:
         lines.extend(_lines_for_metrics(result.metrics))
+    if ai_report.get("available"):
+        lines.extend(
+            [
+                "",
+                "[ai_report]",
+                f"  posture: {ai_report.get('posture')}",
+                f"  main_objective: {ai_report.get('main_objective')}",
+                f"  chosen_operation: {ai_report.get('chosen_operation')}",
+                f"  reserve_level: {ai_report.get('reserve_level')}",
+                f"  timing_breakdown: {ai_report.get('timing_breakdown')}",
+            ]
+        )
     if result.warnings:
         lines.extend(["", "[warnings]"])
         lines.extend(f"  - {warning}" for warning in result.warnings)
@@ -108,4 +129,3 @@ def _render_suite(result: Any) -> str:
         lines.extend(["", "[warnings]"])
         lines.extend(f"  - {warning}" for warning in result.warnings)
     return "\n".join(lines)
-

@@ -5,6 +5,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+from tools.bai_warlab import BAI_WARLAB_VERSION
 from tools.bai_warlab.bai_warlab import build_parser, main as bai_warlab_main
 
 
@@ -33,7 +34,7 @@ def test_bai_warlab_subcommands_parse_correctly():
         [
             "run",
             "--scenario",
-            "foundation_smoke.json",
+            "mini_gc_1942",
             "--doctrine",
             "korea_nkpa_shock",
             "--personality",
@@ -46,7 +47,7 @@ def test_bai_warlab_subcommands_parse_correctly():
         [
             "batch",
             "--scenario",
-            "foundation_smoke.json",
+            "mini_gc_1942",
             "--doctrine",
             "korea_nkpa_shock",
             "--personality",
@@ -59,7 +60,7 @@ def test_bai_warlab_subcommands_parse_correctly():
         [
             "compare",
             "--scenario",
-            "foundation_smoke.json",
+            "mini_gc_1942",
             "--left-doctrine",
             "korea_un_combined_arms",
             "--left-personality",
@@ -89,9 +90,9 @@ def test_bai_warlab_cli_smoke_outputs(tmp_path: Path):
             "configs/ai",
             "run",
             "--scenario",
-            "foundation_smoke.json",
+            "mini_gc_1942",
             "--scenario-dir",
-            "synthetic_scenarios",
+            "scenarios",
             "--doctrine",
             "korea_nkpa_shock",
             "--personality",
@@ -107,7 +108,16 @@ def test_bai_warlab_cli_smoke_outputs(tmp_path: Path):
         ]
     ) == 0
     run_summary = json.loads((run_dir / "summary.json").read_text(encoding="utf-8"))
-    assert run_summary["summary"]["execution_status"] == "not_executed"
+    run_manifest = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8"))
+    assert run_summary["summary"]["execution_status"] == "completed"
+    assert run_summary["summary"]["scenario_outcome"] in {"allied_victory", "axis_victory", "draw"}
+    assert run_manifest["bai_version"] == BAI_WARLAB_VERSION
+    assert "run --scenario mini_gc_1942" in run_manifest["command_line"]
+    assert run_manifest["extra"]["rerun"]["argv"][:3] == ["--config-root", "configs/ai", "run"]
+    assert run_manifest["extra"]["scenario_records"][0]["source_path"].endswith("mini_gc_1942.json")
+    assert len(run_manifest["extra"]["scenario_records"][0]["sha256"]) == 64
+    assert run_manifest["extra"]["profile_records"]["doctrine"]["source_path"].endswith("korea_nkpa_shock.yaml")
+    assert len(run_manifest["extra"]["profile_records"]["doctrine"]["sha256"]) == 64
     assert (run_dir / "results.csv").exists()
     assert (run_dir / "report.txt").exists()
     assert (run_dir / "manifest.json").exists()
@@ -118,9 +128,9 @@ def test_bai_warlab_cli_smoke_outputs(tmp_path: Path):
             "configs/ai",
             "batch",
             "--scenario",
-            "foundation_smoke.json",
+            "mini_gc_1942",
             "--scenario-dir",
-            "synthetic_scenarios",
+            "scenarios",
             "--doctrine",
             "korea_nkpa_shock",
             "--personality",
@@ -145,9 +155,9 @@ def test_bai_warlab_cli_smoke_outputs(tmp_path: Path):
             "configs/ai",
             "compare",
             "--scenario",
-            "foundation_smoke.json",
+            "mini_gc_1942",
             "--scenario-dir",
-            "synthetic_scenarios",
+            "scenarios",
             "--left-doctrine",
             "korea_un_combined_arms",
             "--left-personality",
@@ -186,4 +196,3 @@ def test_bai_warlab_cli_smoke_outputs(tmp_path: Path):
     assert suite_summary["suite_name"] == "korea_core_v1"
     assert len(suite_summary["runs"]) == 3
     assert (suite_dir / "results.csv").exists()
-

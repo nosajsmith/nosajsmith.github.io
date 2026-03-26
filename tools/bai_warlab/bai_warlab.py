@@ -4,7 +4,6 @@ from __future__ import annotations
 import argparse
 import shlex
 import sys
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -15,6 +14,7 @@ if __package__ in {None, ""}:
 
 from tools.bai_warlab import BAI_WARLAB_VERSION
 from tools.bai_warlab.config_loader import ConfigLoader
+from tools.bai_warlab.manifest import build_manifest_record, write_manifest
 from tools.bai_warlab.models import ManifestRecord, RunRequest, to_plain
 from tools.bai_warlab.report_io import default_output_dir, ensure_output_dir, run_result_to_row, write_json, write_report_txt, write_results_csv
 from tools.bai_warlab.reports.regression_report import render_regression_report
@@ -26,40 +26,14 @@ def _command_line(argv: List[str]) -> str:
     return " ".join(shlex.quote(part) for part in argv)
 
 
-def _manifest_for_result(
-    command: str,
-    args: argparse.Namespace,
-    output_dir: Path,
-    scenario: Any,
-    doctrine: Any,
-    personality: Any,
-    tuning: Any,
-    seed_policy: Dict[str, Any],
-    command_line: str,
-) -> ManifestRecord:
-    return ManifestRecord(
-        bai_version=BAI_WARLAB_VERSION,
-        command=command,
-        generated_at=datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        scenario=scenario,
-        doctrine=doctrine,
-        personality=personality,
-        tuning=tuning,
-        seed_policy=seed_policy,
-        command_line=command_line,
-        output_dir=str(output_dir),
-        extra={"config_root": str(Path(args.config_root).resolve())},
-    )
-
-
 def _write_bundle(*, output_dir: Path, summary_obj: Any, manifest: ManifestRecord, rows: List[Dict[str, Any]], text_report: str) -> None:
     write_json(output_dir / "summary.json", summary_obj)
     write_results_csv(output_dir / "results.csv", rows)
     write_report_txt(output_dir / "report.txt", text_report)
-    write_json(output_dir / "manifest.json", manifest)
+    write_manifest(output_dir / "manifest.json", manifest)
 
 
-def _run_command(args: argparse.Namespace, loader: ConfigLoader, command_line: str) -> int:
+def _run_command(args: argparse.Namespace, loader: ConfigLoader, command_line: str, command_argv: List[str]) -> int:
     result = execute_single_run(
         RunRequest(
             scenario=args.scenario,
@@ -76,23 +50,26 @@ def _run_command(args: argparse.Namespace, loader: ConfigLoader, command_line: s
     )
     output_dir = ensure_output_dir(default_output_dir("run", [args.scenario, args.doctrine, args.personality, args.tuning, f"seed-{args.seed:04d}"], args.output_dir))
     result.output_dir = str(output_dir)
-    manifest = _manifest_for_result(
-        "run",
-        args,
-        output_dir,
+    manifest = build_manifest_record(
+        command="run",
+        output_dir=output_dir,
         scenario=args.scenario,
         doctrine=args.doctrine,
         personality=args.personality,
         tuning=args.tuning,
         seed_policy={"kind": "explicit", "seeds": [int(args.seed)]},
         command_line=command_line,
+        command_argv=command_argv,
+        config_root=args.config_root,
+        loader=loader,
+        result=result,
     )
     _write_bundle(output_dir=output_dir, summary_obj=result, manifest=manifest, rows=[run_result_to_row(result)], text_report=render_report(result))
     print(output_dir)
     return 0 if result.ok else 1
 
 
-def _batch_command(args: argparse.Namespace, loader: ConfigLoader, command_line: str) -> int:
+def _batch_command(args: argparse.Namespace, loader: ConfigLoader, command_line: str, command_argv: List[str]) -> int:
     seeds = [int(part.strip()) for part in args.seeds.split(",") if part.strip()] if args.seeds else None
     seed_policy = resolve_seed_policy(count=args.count, seed_start=args.seed_start, seeds=seeds)
     result = execute_batch_run(
@@ -109,23 +86,26 @@ def _batch_command(args: argparse.Namespace, loader: ConfigLoader, command_line:
     )
     output_dir = ensure_output_dir(default_output_dir("batch", [args.scenario, args.doctrine, args.personality, args.tuning], args.output_dir))
     result.output_dir = str(output_dir)
-    manifest = _manifest_for_result(
-        "batch",
-        args,
-        output_dir,
+    manifest = build_manifest_record(
+        command="batch",
+        output_dir=output_dir,
         scenario=args.scenario,
         doctrine=args.doctrine,
         personality=args.personality,
         tuning=args.tuning,
         seed_policy=to_plain(seed_policy),
         command_line=command_line,
+        command_argv=command_argv,
+        config_root=args.config_root,
+        loader=loader,
+        result=result,
     )
     _write_bundle(output_dir=output_dir, summary_obj=result, manifest=manifest, rows=[run_result_to_row(run) for run in result.runs], text_report=render_report(result))
     print(output_dir)
     return 0 if result.ok else 1
 
 
-def _compare_command(args: argparse.Namespace, loader: ConfigLoader, command_line: str) -> int:
+def _compare_command(args: argparse.Namespace, loader: ConfigLoader, command_line: str, command_argv: List[str]) -> int:
     seeds = [int(part.strip()) for part in args.seeds.split(",") if part.strip()] if args.seeds else None
     seed_policy = resolve_seed_policy(count=args.count, seed_start=args.seed_start, seeds=seeds)
     result = execute_compare_run(
@@ -141,16 +121,19 @@ def _compare_command(args: argparse.Namespace, loader: ConfigLoader, command_lin
     )
     output_dir = ensure_output_dir(default_output_dir("compare", [args.scenario, args.left_doctrine, "vs", args.right_doctrine], args.output_dir))
     result.output_dir = str(output_dir)
-    manifest = _manifest_for_result(
-        "compare",
-        args,
-        output_dir,
+    manifest = build_manifest_record(
+        command="compare",
+        output_dir=output_dir,
         scenario=args.scenario,
         doctrine={"left": args.left_doctrine, "right": args.right_doctrine},
         personality={"left": args.left_personality, "right": args.right_personality},
         tuning={"left": args.left_tuning, "right": args.right_tuning},
         seed_policy=to_plain(seed_policy),
         command_line=command_line,
+        command_argv=command_argv,
+        config_root=args.config_root,
+        loader=loader,
+        result=result,
     )
     rows = [run_result_to_row(run) for run in result.left_runs + result.right_runs]
     _write_bundle(output_dir=output_dir, summary_obj=result, manifest=manifest, rows=rows, text_report=render_report(result))
@@ -158,20 +141,23 @@ def _compare_command(args: argparse.Namespace, loader: ConfigLoader, command_lin
     return 0 if result.ok else 1
 
 
-def _suite_command(args: argparse.Namespace, loader: ConfigLoader, command_line: str) -> int:
+def _suite_command(args: argparse.Namespace, loader: ConfigLoader, command_line: str, command_argv: List[str]) -> int:
     result = execute_suite_run(suite_name=args.suite_name, loader=loader)
     output_dir = ensure_output_dir(default_output_dir("suite", [args.suite_name], args.output_dir))
     result.output_dir = str(output_dir)
-    manifest = _manifest_for_result(
-        "suite",
-        args,
-        output_dir,
+    manifest = build_manifest_record(
+        command="suite",
+        output_dir=output_dir,
         scenario=[run.scenario for run in result.runs],
         doctrine=[run.doctrine for run in result.runs],
         personality=[run.personality for run in result.runs],
         tuning=[run.tuning for run in result.runs],
         seed_policy={"kind": "suite", "seeds": [run.seed for run in result.runs]},
         command_line=command_line,
+        command_argv=command_argv,
+        config_root=args.config_root,
+        loader=loader,
+        result=result,
     )
     _write_bundle(output_dir=output_dir, summary_obj=result, manifest=manifest, rows=[run_result_to_row(run) for run in result.runs], text_report=render_report(result))
     print(output_dir)
@@ -235,17 +221,16 @@ def main(argv: List[str] | None = None) -> int:
     command_line = _command_line(command_argv)
 
     if args.command == "run":
-        return _run_command(args, loader, command_line)
+        return _run_command(args, loader, command_line, command_argv)
     if args.command == "batch":
-        return _batch_command(args, loader, command_line)
+        return _batch_command(args, loader, command_line, command_argv)
     if args.command == "compare":
-        return _compare_command(args, loader, command_line)
+        return _compare_command(args, loader, command_line, command_argv)
     if args.command == "suite":
-        return _suite_command(args, loader, command_line)
+        return _suite_command(args, loader, command_line, command_argv)
     parser.error(f"Unsupported command: {args.command}")
     return 2
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
