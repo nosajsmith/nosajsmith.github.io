@@ -23,9 +23,9 @@ def test_bai_warlab_help_works():
     )
     assert result.returncode == 0
     assert "run" in result.stdout
-    assert "batch" in result.stdout
-    assert "compare" in result.stdout
-    assert "suite" in result.stdout
+    assert "batch" not in result.stdout
+    assert "compare" not in result.stdout
+    assert "suite" not in result.stdout
 
 
 def test_bai_warlab_subcommands_parse_correctly():
@@ -43,46 +43,10 @@ def test_bai_warlab_subcommands_parse_correctly():
             "default",
         ]
     ).command == "run"
-    assert parser.parse_args(
-        [
-            "batch",
-            "--scenario",
-            "mini_gc_1942",
-            "--doctrine",
-            "korea_nkpa_shock",
-            "--personality",
-            "aggressive",
-            "--tuning",
-            "default",
-        ]
-    ).command == "batch"
-    assert parser.parse_args(
-        [
-            "compare",
-            "--scenario",
-            "mini_gc_1942",
-            "--left-doctrine",
-            "korea_un_combined_arms",
-            "--left-personality",
-            "historical",
-            "--left-tuning",
-            "default",
-            "--right-doctrine",
-            "korea_nkpa_shock",
-            "--right-personality",
-            "aggressive",
-            "--right-tuning",
-            "offense_focus",
-        ]
-    ).command == "compare"
-    assert parser.parse_args(["suite", "korea_core_v1"]).command == "suite"
 
 
 def test_bai_warlab_cli_smoke_outputs(tmp_path: Path):
     run_dir = tmp_path / "run"
-    batch_dir = tmp_path / "batch"
-    compare_dir = tmp_path / "compare"
-    suite_dir = tmp_path / "suite"
 
     assert bai_warlab_main(
         [
@@ -121,78 +85,3 @@ def test_bai_warlab_cli_smoke_outputs(tmp_path: Path):
     assert (run_dir / "results.csv").exists()
     assert (run_dir / "report.txt").exists()
     assert (run_dir / "manifest.json").exists()
-
-    assert bai_warlab_main(
-        [
-            "--config-root",
-            "configs/ai",
-            "batch",
-            "--scenario",
-            "mini_gc_1942",
-            "--scenario-dir",
-            "scenarios",
-            "--doctrine",
-            "korea_nkpa_shock",
-            "--personality",
-            "adaptive",
-            "--tuning",
-            "offense_focus",
-            "--count",
-            "2",
-            "--seed-start",
-            "11",
-            "--output-dir",
-            str(batch_dir),
-        ]
-    ) == 0
-    batch_summary = json.loads((batch_dir / "summary.json").read_text(encoding="utf-8"))
-    assert batch_summary["aggregate"]["total_runs"] == 2
-    assert (batch_dir / "results.csv").exists()
-
-    assert bai_warlab_main(
-        [
-            "--config-root",
-            "configs/ai",
-            "compare",
-            "--scenario",
-            "mini_gc_1942",
-            "--scenario-dir",
-            "scenarios",
-            "--left-doctrine",
-            "korea_un_combined_arms",
-            "--left-personality",
-            "historical",
-            "--left-tuning",
-            "default",
-            "--right-doctrine",
-            "korea_nkpa_shock",
-            "--right-personality",
-            "aggressive",
-            "--right-tuning",
-            "offense_focus",
-            "--count",
-            "2",
-            "--seed-start",
-            "21",
-            "--output-dir",
-            str(compare_dir),
-        ]
-    ) == 0
-    compare_summary = json.loads((compare_dir / "summary.json").read_text(encoding="utf-8"))
-    assert compare_summary["comparison"]["paired_seed_count"] == 2
-    assert (compare_dir / "results.csv").exists()
-
-    assert bai_warlab_main(
-        [
-            "--config-root",
-            "configs/ai",
-            "suite",
-            "korea_core_v1",
-            "--output-dir",
-            str(suite_dir),
-        ]
-    ) == 0
-    suite_summary = json.loads((suite_dir / "summary.json").read_text(encoding="utf-8"))
-    assert suite_summary["suite_name"] == "korea_core_v1"
-    assert len(suite_summary["runs"]) == 3
-    assert (suite_dir / "results.csv").exists()
