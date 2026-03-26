@@ -1,0 +1,184 @@
+import { humanizeToken } from "../../lib/view_snapshot.js";
+
+function toNumber(value) {
+  return typeof value === "number" && Number.isFinite(value) ? value : null;
+}
+
+function average(values) {
+  const numbers = values.map(toNumber).filter((value) => value != null);
+  if (!numbers.length) {
+    return null;
+  }
+  return numbers.reduce((sum, value) => sum + value, 0) / numbers.length;
+}
+
+function unitKind(unit) {
+  return String(unit?.kind ?? "").trim().toLowerCase();
+}
+
+function unitName(unit) {
+  return String(unit?.name ?? unit?.id ?? "Formation").trim() || "Formation";
+}
+
+function weatherCondition(snapshot) {
+  return typeof snapshot?.weather?.condition === "string" ? snapshot.weather.condition.trim() : null;
+}
+
+function localHendersonAirfieldIds(snapshot) {
+  const localAreaIds = new Set(
+    (Array.isArray(snapshot?.local_pressure_areas) ? snapshot.local_pressure_areas : [])
+      .map((area) => String(area?.location_id ?? "").trim().toUpperCase())
+      .filter(Boolean),
+  );
+
+  return (Array.isArray(snapshot?.airfields) ? snapshot.airfields : [])
+    .map((field) => String(field?.id ?? "").trim().toUpperCase())
+    .filter((id) => localAreaIds.has(id));
+}
+
+function collectAirUnits(snapshot) {
+  const units = Array.isArray(snapshot?.units) ? snapshot.units : [];
+  return units.filter((unit) => {
+    const kind = unitKind(unit);
+    return kind.includes("air") || kind.includes("aviation");
+  });
+}
+
+function summarizeSortiePosture(units) {
+  const postures = units
+    .map((unit) => String(unit?.inspector?.operational_state?.posture ?? "").trim())
+    .filter(Boolean);
+  if (!postures.length) {
+    return "Sortie posture not exposed";
+  }
+  const unique = [...new Set(postures.map((posture) => posture.toUpperCase()))];
+  if (unique.length === 1) {
+    return humanizeToken(unique[0].toLowerCase());
+  }
+  return "Mixed posture";
+}
+
+export function summarizeLocalAirSupport(snapshot) {
+  const localAirfieldIds = localHendersonAirfieldIds(snapshot);
+  const fields = (Array.isArray(snapshot?.airfields) ? snapshot.airfields : []).filter((field) => localAirfieldIds.includes(String(field?.id ?? "").trim().toUpperCase()));
+  const theaterAirUnits = collectAirUnits(snapshot);
+  const localAirUnits = theaterAirUnits.filter((unit) => localAirfieldIds.includes(String(unit?.location_id ?? "").trim().toUpperCase()));
+  const avgReadiness = average(localAirUnits.map((unit) => unit?.readiness));
+  const weather = weatherCondition(snapshot);
+
+  let availability = "Not exposed";
+  if (!fields.length) {
+    availability = "Unavailable";
+  } else if (localAirUnits.length && avgReadiness != null) {
+    availability = avgReadiness >= 65 ? "Available" : avgReadiness >= 50 ? "Limited" : "Unavailable";
+  }
+
+  const readinessLimit = localAirUnits.filter((unit) => {
+    const readiness = toNumber(unit?.readiness);
+    return readiness != null && readiness < 60;
+  }).length;
+
+  let constraint = "Weather-linked local air-response limits are not exposed on the current shell path.";
+  if (readinessLimit) {
+    constraint = `${readinessLimit} locally based air formation${readinessLimit === 1 ? " falls" : "s fall"} below 60 readiness.`;
+  } else if (weather) {
+    constraint = `Weather ${weather} is the only currently exposed local air-response cue.`;
+  }
+
+  let supportingFormation = "No locally based air formation is exposed for the active scenario.";
+  if (localAirUnits.length) {
+    supportingFormation = localAirUnits.map((unit) => unitName(unit)).join(", ");
+  } else if (theaterAirUnits.length) {
+    supportingFormation = `${theaterAirUnits.length} theater air formation${theaterAirUnits.length === 1 ? "" : "s"} tracked; local assignment not exposed.`;
+  }
+
+  let availabilityNote = "Local air-support availability is not exposed beyond Henderson airfield context.";
+  if (!fields.length) {
+    availabilityNote = "No local airfield support context is exposed for the active perimeter picture.";
+  } else if (localAirUnits.length) {
+    availabilityNote = `${fields.map((field) => field.name).join(", ")} is the currently exposed local air-support airfield context.`;
+  }
+
+  return {
+    available: fields.length > 0,
+    availability,
+    note: availabilityNote,
+    sortiePosture: localAirUnits.length ? summarizeSortiePosture(localAirUnits) : "Sortie posture not exposed",
+    constraint,
+    supportingFormation,
+  };
+}
+
+export function summarizeAirOperations(snapshot) {
+  const airUnits = collectAirUnits(snapshot);
+  const airfields = Array.isArray(snapshot?.airfields) ? snapshot.airfields : [];
+  const avgReadiness = average(airUnits.map((unit) => unit?.readiness));
+  const avgSupplyDays = average(airUnits.map((unit) => unit?.inspector?.supply?.supply_days_current));
+  const lowReadiness = airUnits.filter((unit) => {
+    const readiness = toNumber(unit?.readiness);
+    return readiness != null && readiness < 60;
+  });
+  const locWarnings = airUnits.filter((unit) => {
+    const state = String(unit?.inspector?.operational_state?.loc?.state ?? "").trim().toLowerCase();
+    return state === "threatened" || state === "broken";
+  });
+  const condition = weatherCondition(snapshot);
+
+  const concerns = [];
+  if (condition) {
+    concerns.push(`Weather ${condition} is the only currently exposed air-operations environmental cue.`);
+  } else {
+    concerns.push("Authoritative weather-limited sortie effects are not exposed on the current shell path.");
+  }
+  if (lowReadiness.length) {
+    concerns.push(`${lowReadiness.length} air formations fall below 60 readiness.`);
+  }
+  if (locWarnings.length) {
+    concerns.push(`${locWarnings.length} air formations report threatened or broken LOC status.`);
+  }
+  if (!airUnits.length) {
+    concerns.push("No air formations are exposed in the active scenario snapshot.");
+  }
+
+  return {
+    overview: {
+      formationsTracked: airUnits.length,
+      airfieldsTracked: airfields.length,
+      readinessAverage: avgReadiness,
+      sustainmentAverageDays: avgSupplyDays,
+      statusLine: airUnits.length
+        ? "Air picture built from currently exposed air-capable unit rows."
+        : "The current shell path exposes airfield context, but no dedicated air formations.",
+    },
+    formations: airUnits.map((unit) => ({
+      id: unit.id,
+      name: unitName(unit),
+      readiness: unit?.readiness ?? null,
+      supply: unit?.inspector?.supply?.supply_days_current ?? null,
+      role: "Mission role not exposed",
+      sorties: "Sortie posture not exposed",
+      aircraft: "Aircraft counts not exposed",
+      base: "Airfield assignment not exposed",
+    })),
+    aircraft: {
+      status: "Aircraft type counts not exposed",
+      detail: "Aircraft by type, serviceability, and maintenance-capable inventory are not exposed on the current shell path.",
+    },
+    basing: {
+      airfields: airfields.map((field) => ({
+        id: field.id,
+        name: field.name,
+        location: field.x != null && field.y != null ? `${field.x}, ${field.y}` : "Coordinates unavailable",
+      })),
+      detail: airfields.length
+        ? `${airfields.length} authored airfield locations are available as basing context.`
+        : "No authored airfields are exposed for the active scenario.",
+    },
+    operations: {
+      sorties: "Sortie counts not exposed",
+      tempo: avgSupplyDays != null ? `${avgSupplyDays.toFixed(1)} days sustainment at current tempo.` : "Mission tempo not exposed on current shell path.",
+      support: "Aviation support and maintenance state not exposed",
+    },
+    concerns,
+  };
+}

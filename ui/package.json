@@ -3,13 +3,14 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "main": "main.cjs",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "electron": "electron .",
+    "electron": "electron ./electron/main.js",
+    "electron:dev": "MWE_ELECTRON_MODE=dev electron ./electron/main.js",
+    "electron:devtools": "MWE_ELECTRON_MODE=dev MWE_ELECTRON_DEVTOOLS=1 electron ./electron/main.js",
     "electron:build": "npm run build && npm run electron"
   },
   "dependencies": {
@@ -21,10 +22,10 @@
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
-    "electron": "^41.0.4",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
+    "electron": "^37.5.1",
     "globals": "^16.5.0",
     "vite": "^7.2.4"
   }

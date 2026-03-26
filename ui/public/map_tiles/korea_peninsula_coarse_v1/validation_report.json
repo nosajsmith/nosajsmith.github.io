@@ -1,0 +1,69 @@
+{
+  "schema": "mwe.korea_operational_validation_report.v1",
+  "generatedAt": "2026-03-25T02:28:44.118359+00:00",
+  "theaterId": "korea_peninsula_coarse_v1",
+  "status": "warning",
+  "summary": {
+    "pass": 4,
+    "warning": 1,
+    "fail": 0
+  },
+  "checks": [
+    {
+      "id": "source_coverage",
+      "label": "Source coverage",
+      "status": "pass",
+      "summary": "Pinned coarse physical and operational source stacks are present.",
+      "details": []
+    },
+    {
+      "id": "empty_outputs",
+      "label": "Output files",
+      "status": "pass",
+      "summary": "Korea operational overlay outputs are present.",
+      "details": []
+    },
+    {
+      "id": "overlay_content",
+      "label": "Operational overlay content",
+      "status": "warning",
+      "summary": "Operational transport/key-node content is partially missing.",
+      "details": [
+        "Operational crossing candidates are empty in the current coarse overlay stack."
+      ],
+      "metrics": {
+        "roadsOperational": 348,
+        "railOperational": 92,
+        "bridgesOperational": 0,
+        "settlementsOperational": 39,
+        "airfieldsOperational": 10
+      }
+    },
+    {
+      "id": "extent_alignment",
+      "label": "Extent alignment",
+      "status": "pass",
+      "summary": "Runtime bounds and enriched hex payload are populated.",
+      "details": []
+    },
+    {
+      "id": "runtime_basemap",
+      "label": "Runtime operational basemap load state",
+      "status": "pass",
+      "summary": "Runtime package contains terrain-bearing overlays and node previews.",
+      "details": [],
+      "metrics": {
+        "transportHexCount": 283,
+        "nodeHexCount": 42,
+        "previewRoadSegments": 716,
+        "previewRailSegments": 374,
+        "previewSettlements": 36,
+        "previewAirfields": 10
+      }
+    }
+  ],
+  "runtimeTiles": {
+    "manifestPath": "build/map_tiles/korea_peninsula_coarse_v1/manifest.json",
+    "qaBundlePath": "build/map_tiles/korea_peninsula_coarse_v1/qa_bundle.json"
+  }
+}

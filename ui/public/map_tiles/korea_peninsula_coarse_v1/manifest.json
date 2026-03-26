@@ -1,0 +1,1043 @@
+{
+  "schema": "mwe.runtime_basemap_manifest.v1",
+  "theaterId": "korea_peninsula_coarse_v1",
+  "builtAt": "2026-03-25T02:27:37.485116+00:00",
+  "coordinateSpace": {
+    "id": "runtime_hex_scene_v1",
+    "description": "Coarse peninsula runtime hex scene coordinates derived from the Korea physical hex bake.",
+    "xField": "q",
+    "yField": "r"
+  },
+  "bounds": {
+    "minX": -17,
+    "maxX": 27,
+    "minY": 0,
+    "maxY": 34
+  },
+  "hexCount": 980,
+  "sourceSummary": {
+    "source_ids": [
+      "korea_airfields_primary_stack",
+      "korea_dem_primary_stack",
+      "korea_hydro_primary_stack",
+      "korea_landcover_primary_stack",
+      "korea_places_primary_stack",
+      "korea_roads_rail_primary_stack"
+    ],
+    "files": {
+      "terrain_dem": {
+        "path": "data/processed/korea_peninsula_coarse_v1/terrain_dem.tif",
+        "checksum": "ab05308a04e61640c10e7aa6253b050879a09d1d3f511880a5dc97206189dfb6"
+      },
+      "hillshade": {
+        "path": "data/processed/korea_peninsula_coarse_v1/relief/hillshade.tif",
+        "checksum": "7ef7679108ec8083eb2889d2ad9019ab43c28303d48a4981e11af9933a0af4ae"
+      },
+      "color_relief": {
+        "path": "data/processed/korea_peninsula_coarse_v1/relief/color_relief.tif",
+        "checksum": "4efb850b6f693df08bac4c719861e14f20a7167431decfb65f7ae1b33edeb8b6"
+      },
+      "hydro_lines": {
+        "path": "data/processed/korea_peninsula_coarse_v1/hydro/hydro_lines_operational.geojson",
+        "checksum": "0e2538e498ea310e648d181159bc61b6f0a903e9ab1c222684d768e70d3b2b9d"
+      },
+      "hydro_polygons": {
+        "path": "data/processed/korea_peninsula_coarse_v1/hydro/hydro_polygons_operational.geojson",
+        "checksum": "b3049ad7a1062091e169bd352424d59721a26b8b6229942aef26d11b0c6a96e1"
+      },
+      "land_mask": {
+        "path": "data/processed/korea_peninsula_coarse_v1/landcover/land_mask.geojson",
+        "checksum": "318159987c6021e2fc48b4a2ae76506e0eb78e9b542c14f84a4df078740cc687"
+      },
+      "urban_areas": {
+        "path": "data/processed/korea_peninsula_coarse_v1/landcover/urban_areas.geojson",
+        "checksum": "dfa049e5617c3aa9a24ec5843a44d39b66c107d6bf1c39ad3ddc56d7ec7d5a56"
+      },
+      "roads_operational": {
+        "path": "data/processed/korea_peninsula_coarse_v1/transport/roads_operational.geojson",
+        "checksum": "3b0e206e7ac058a7fcd3637d0d5b603ddeb6f1cc790b9c7a96be5d209016ae24"
+      },
+      "rail_operational": {
+        "path": "data/processed/korea_peninsula_coarse_v1/transport/rail_operational.geojson",
+        "checksum": "14bc6be114d8e958ab3f94c1066540fafa61f9da3b49d247ff9b9d04df872997"
+      },
+      "bridges_operational": {
+        "path": "data/processed/korea_peninsula_coarse_v1/transport/bridges_operational.geojson",
+        "checksum": "b3049ad7a1062091e169bd352424d59721a26b8b6229942aef26d11b0c6a96e1"
+      },
+      "settlements_operational": {
+        "path": "data/processed/korea_peninsula_coarse_v1/places/settlements_operational.geojson",
+        "checksum": "25851ecfe9ce72433a57996fd9cf3fb16903752afd74f1bfe33475c031feec10"
+      },
+      "airfields_operational": {
+        "path": "data/processed/korea_peninsula_coarse_v1/places/airfields_operational.geojson",
+        "checksum": "d397549ede70244081f898fcc1757e516afe3a527f71f9f9ea0bb8e9b5d70237"
+      }
+    }
+  },
+  "sourceBakeJobId": "korea-operational-173748b675c3",
+  "prefetchTilePadding": 1,
+  "tiers": {
+    "far": {
+      "tileSpan": 18,
+      "contourIntervalM": 250,
+      "tileCount": 5,
+      "tiles": [
+        {
+          "tileId": "0_0",
+          "tx": 0,
+          "ty": 0,
+          "bounds": {
+            "minX": -17,
+            "maxX": 1,
+            "minY": 0,
+            "maxY": 18
+          },
+          "summary": {
+            "hexCount": 99,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 1,
+            "railSegmentCount": 0
+          },
+          "path": "far/0_0.json"
+        },
+        {
+          "tileId": "0_1",
+          "tx": 0,
+          "ty": 1,
+          "bounds": {
+            "minX": -17,
+            "maxX": 1,
+            "minY": 18,
+            "maxY": 36
+          },
+          "summary": {
+            "hexCount": 242,
+            "settlementCount": 5,
+            "airfieldCount": 3,
+            "roadSegmentCount": 276,
+            "railSegmentCount": 172
+          },
+          "path": "far/0_1.json"
+        },
+        {
+          "tileId": "1_0",
+          "tx": 1,
+          "ty": 0,
+          "bounds": {
+            "minX": 1,
+            "maxX": 19,
+            "minY": 0,
+            "maxY": 18
+          },
+          "summary": {
+            "hexCount": 324,
+            "settlementCount": 6,
+            "airfieldCount": 1,
+            "roadSegmentCount": 288,
+            "railSegmentCount": 136
+          },
+          "path": "far/1_0.json"
+        },
+        {
+          "tileId": "1_1",
+          "tx": 1,
+          "ty": 1,
+          "bounds": {
+            "minX": 1,
+            "maxX": 19,
+            "minY": 18,
+            "maxY": 36
+          },
+          "summary": {
+            "hexCount": 234,
+            "settlementCount": 0,
+            "airfieldCount": 1,
+            "roadSegmentCount": 151,
+            "railSegmentCount": 66
+          },
+          "path": "far/1_1.json"
+        },
+        {
+          "tileId": "2_0",
+          "tx": 2,
+          "ty": 0,
+          "bounds": {
+            "minX": 19,
+            "maxX": 37,
+            "minY": 0,
+            "maxY": 18
+          },
+          "summary": {
+            "hexCount": 81,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "far/2_0.json"
+        }
+      ],
+      "sourceSummary": {
+        "source_ids": [
+          "korea_airfields_primary_stack",
+          "korea_dem_primary_stack",
+          "korea_hydro_primary_stack",
+          "korea_landcover_primary_stack",
+          "korea_places_primary_stack",
+          "korea_roads_rail_primary_stack"
+        ],
+        "files": {
+          "terrain_dem": {
+            "path": "data/processed/korea_peninsula_coarse_v1/terrain_dem.tif",
+            "checksum": "ab05308a04e61640c10e7aa6253b050879a09d1d3f511880a5dc97206189dfb6"
+          },
+          "hillshade": {
+            "path": "data/processed/korea_peninsula_coarse_v1/relief/hillshade.tif",
+            "checksum": "7ef7679108ec8083eb2889d2ad9019ab43c28303d48a4981e11af9933a0af4ae"
+          },
+          "color_relief": {
+            "path": "data/processed/korea_peninsula_coarse_v1/relief/color_relief.tif",
+            "checksum": "4efb850b6f693df08bac4c719861e14f20a7167431decfb65f7ae1b33edeb8b6"
+          },
+          "hydro_lines": {
+            "path": "data/processed/korea_peninsula_coarse_v1/hydro/hydro_lines_operational.geojson",
+            "checksum": "0e2538e498ea310e648d181159bc61b6f0a903e9ab1c222684d768e70d3b2b9d"
+          },
+          "hydro_polygons": {
+            "path": "data/processed/korea_peninsula_coarse_v1/hydro/hydro_polygons_operational.geojson",
+            "checksum": "b3049ad7a1062091e169bd352424d59721a26b8b6229942aef26d11b0c6a96e1"
+          },
+          "land_mask": {
+            "path": "data/processed/korea_peninsula_coarse_v1/landcover/land_mask.geojson",
+            "checksum": "318159987c6021e2fc48b4a2ae76506e0eb78e9b542c14f84a4df078740cc687"
+          },
+          "urban_areas": {
+            "path": "data/processed/korea_peninsula_coarse_v1/landcover/urban_areas.geojson",
+            "checksum": "dfa049e5617c3aa9a24ec5843a44d39b66c107d6bf1c39ad3ddc56d7ec7d5a56"
+          },
+          "roads_operational": {
+            "path": "data/processed/korea_peninsula_coarse_v1/transport/roads_operational.geojson",
+            "checksum": "3b0e206e7ac058a7fcd3637d0d5b603ddeb6f1cc790b9c7a96be5d209016ae24"
+          },
+          "rail_operational": {
+            "path": "data/processed/korea_peninsula_coarse_v1/transport/rail_operational.geojson",
+            "checksum": "14bc6be114d8e958ab3f94c1066540fafa61f9da3b49d247ff9b9d04df872997"
+          },
+          "bridges_operational": {
+            "path": "data/processed/korea_peninsula_coarse_v1/transport/bridges_operational.geojson",
+            "checksum": "b3049ad7a1062091e169bd352424d59721a26b8b6229942aef26d11b0c6a96e1"
+          },
+          "settlements_operational": {
+            "path": "data/processed/korea_peninsula_coarse_v1/places/settlements_operational.geojson",
+            "checksum": "25851ecfe9ce72433a57996fd9cf3fb16903752afd74f1bfe33475c031feec10"
+          },
+          "airfields_operational": {
+            "path": "data/processed/korea_peninsula_coarse_v1/places/airfields_operational.geojson",
+            "checksum": "d397549ede70244081f898fcc1757e516afe3a527f71f9f9ea0bb8e9b5d70237"
+          }
+        }
+      }
+    },
+    "operational": {
+      "tileSpan": 12,
+      "contourIntervalM": 150,
+      "tileCount": 11,
+      "tiles": [
+        {
+          "tileId": "0_0",
+          "tx": 0,
+          "ty": 0,
+          "bounds": {
+            "minX": -17,
+            "maxX": -5,
+            "minY": 0,
+            "maxY": 12
+          },
+          "summary": {
+            "hexCount": 1,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/0_0.json"
+        },
+        {
+          "tileId": "0_1",
+          "tx": 0,
+          "ty": 1,
+          "bounds": {
+            "minX": -17,
+            "maxX": -5,
+            "minY": 12,
+            "maxY": 24
+          },
+          "summary": {
+            "hexCount": 48,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/0_1.json"
+        },
+        {
+          "tileId": "0_2",
+          "tx": 0,
+          "ty": 2,
+          "bounds": {
+            "minX": -17,
+            "maxX": -5,
+            "minY": 24,
+            "maxY": 36
+          },
+          "summary": {
+            "hexCount": 107,
+            "settlementCount": 8,
+            "airfieldCount": 2,
+            "roadSegmentCount": 120,
+            "railSegmentCount": 88
+          },
+          "path": "operational/0_2.json"
+        },
+        {
+          "tileId": "1_0",
+          "tx": 1,
+          "ty": 0,
+          "bounds": {
+            "minX": -5,
+            "maxX": 7,
+            "minY": 0,
+            "maxY": 12
+          },
+          "summary": {
+            "hexCount": 119,
+            "settlementCount": 2,
+            "airfieldCount": 1,
+            "roadSegmentCount": 50,
+            "railSegmentCount": 25
+          },
+          "path": "operational/1_0.json"
+        },
+        {
+          "tileId": "1_1",
+          "tx": 1,
+          "ty": 1,
+          "bounds": {
+            "minX": -5,
+            "maxX": 7,
+            "minY": 12,
+            "maxY": 24
+          },
+          "summary": {
+            "hexCount": 144,
+            "settlementCount": 11,
+            "airfieldCount": 3,
+            "roadSegmentCount": 214,
+            "railSegmentCount": 121
+          },
+          "path": "operational/1_1.json"
+        },
+        {
+          "tileId": "1_2",
+          "tx": 1,
+          "ty": 2,
+          "bounds": {
+            "minX": -5,
+            "maxX": 7,
+            "minY": 24,
+            "maxY": 36
+          },
+          "summary": {
+            "hexCount": 132,
+            "settlementCount": 6,
+            "airfieldCount": 1,
+            "roadSegmentCount": 148,
+            "railSegmentCount": 62
+          },
+          "path": "operational/1_2.json"
+        },
+        {
+          "tileId": "2_0",
+          "tx": 2,
+          "ty": 0,
+          "bounds": {
+            "minX": 7,
+            "maxX": 19,
+            "minY": 0,
+            "maxY": 12
+          },
+          "summary": {
+            "hexCount": 144,
+            "settlementCount": 4,
+            "airfieldCount": 1,
+            "roadSegmentCount": 72,
+            "railSegmentCount": 29
+          },
+          "path": "operational/2_0.json"
+        },
+        {
+          "tileId": "2_1",
+          "tx": 2,
+          "ty": 1,
+          "bounds": {
+            "minX": 7,
+            "maxX": 19,
+            "minY": 12,
+            "maxY": 24
+          },
+          "summary": {
+            "hexCount": 135,
+            "settlementCount": 5,
+            "airfieldCount": 2,
+            "roadSegmentCount": 112,
+            "railSegmentCount": 49
+          },
+          "path": "operational/2_1.json"
+        },
+        {
+          "tileId": "2_2",
+          "tx": 2,
+          "ty": 2,
+          "bounds": {
+            "minX": 7,
+            "maxX": 19,
+            "minY": 24,
+            "maxY": 36
+          },
+          "summary": {
+            "hexCount": 69,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/2_2.json"
+        },
+        {
+          "tileId": "3_0",
+          "tx": 3,
+          "ty": 0,
+          "bounds": {
+            "minX": 19,
+            "maxX": 31,
+            "minY": 0,
+            "maxY": 12
+          },
+          "summary": {
+            "hexCount": 72,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/3_0.json"
+        },
+        {
+          "tileId": "3_1",
+          "tx": 3,
+          "ty": 1,
+          "bounds": {
+            "minX": 19,
+            "maxX": 31,
+            "minY": 12,
+            "maxY": 24
+          },
+          "summary": {
+            "hexCount": 9,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/3_1.json"
+        }
+      ],
+      "sourceSummary": {
+        "source_ids": [
+          "korea_airfields_primary_stack",
+          "korea_dem_primary_stack",
+          "korea_hydro_primary_stack",
+          "korea_landcover_primary_stack",
+          "korea_places_primary_stack",
+          "korea_roads_rail_primary_stack"
+        ],
+        "files": {
+          "terrain_dem": {
+            "path": "data/processed/korea_peninsula_coarse_v1/terrain_dem.tif",
+            "checksum": "ab05308a04e61640c10e7aa6253b050879a09d1d3f511880a5dc97206189dfb6"
+          },
+          "hillshade": {
+            "path": "data/processed/korea_peninsula_coarse_v1/relief/hillshade.tif",
+            "checksum": "7ef7679108ec8083eb2889d2ad9019ab43c28303d48a4981e11af9933a0af4ae"
+          },
+          "color_relief": {
+            "path": "data/processed/korea_peninsula_coarse_v1/relief/color_relief.tif",
+            "checksum": "4efb850b6f693df08bac4c719861e14f20a7167431decfb65f7ae1b33edeb8b6"
+          },
+          "hydro_lines": {
+            "path": "data/processed/korea_peninsula_coarse_v1/hydro/hydro_lines_operational.geojson",
+            "checksum": "0e2538e498ea310e648d181159bc61b6f0a903e9ab1c222684d768e70d3b2b9d"
+          },
+          "hydro_polygons": {
+            "path": "data/processed/korea_peninsula_coarse_v1/hydro/hydro_polygons_operational.geojson",
+            "checksum": "b3049ad7a1062091e169bd352424d59721a26b8b6229942aef26d11b0c6a96e1"
+          },
+          "land_mask": {
+            "path": "data/processed/korea_peninsula_coarse_v1/landcover/land_mask.geojson",
+            "checksum": "318159987c6021e2fc48b4a2ae76506e0eb78e9b542c14f84a4df078740cc687"
+          },
+          "urban_areas": {
+            "path": "data/processed/korea_peninsula_coarse_v1/landcover/urban_areas.geojson",
+            "checksum": "dfa049e5617c3aa9a24ec5843a44d39b66c107d6bf1c39ad3ddc56d7ec7d5a56"
+          },
+          "roads_operational": {
+            "path": "data/processed/korea_peninsula_coarse_v1/transport/roads_operational.geojson",
+            "checksum": "3b0e206e7ac058a7fcd3637d0d5b603ddeb6f1cc790b9c7a96be5d209016ae24"
+          },
+          "rail_operational": {
+            "path": "data/processed/korea_peninsula_coarse_v1/transport/rail_operational.geojson",
+            "checksum": "14bc6be114d8e958ab3f94c1066540fafa61f9da3b49d247ff9b9d04df872997"
+          },
+          "bridges_operational": {
+            "path": "data/processed/korea_peninsula_coarse_v1/transport/bridges_operational.geojson",
+            "checksum": "b3049ad7a1062091e169bd352424d59721a26b8b6229942aef26d11b0c6a96e1"
+          },
+          "settlements_operational": {
+            "path": "data/processed/korea_peninsula_coarse_v1/places/settlements_operational.geojson",
+            "checksum": "25851ecfe9ce72433a57996fd9cf3fb16903752afd74f1bfe33475c031feec10"
+          },
+          "airfields_operational": {
+            "path": "data/processed/korea_peninsula_coarse_v1/places/airfields_operational.geojson",
+            "checksum": "d397549ede70244081f898fcc1757e516afe3a527f71f9f9ea0bb8e9b5d70237"
+          }
+        }
+      }
+    },
+    "close": {
+      "tileSpan": 8,
+      "contourIntervalM": 100,
+      "tileCount": 24,
+      "tiles": [
+        {
+          "tileId": "0_2",
+          "tx": 0,
+          "ty": 2,
+          "bounds": {
+            "minX": -17,
+            "maxX": -9,
+            "minY": 16,
+            "maxY": 24
+          },
+          "summary": {
+            "hexCount": 9,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/0_2.json"
+        },
+        {
+          "tileId": "0_3",
+          "tx": 0,
+          "ty": 3,
+          "bounds": {
+            "minX": -17,
+            "maxX": -9,
+            "minY": 24,
+            "maxY": 32
+          },
+          "summary": {
+            "hexCount": 40,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 12,
+            "railSegmentCount": 10
+          },
+          "path": "close/0_3.json"
+        },
+        {
+          "tileId": "0_4",
+          "tx": 0,
+          "ty": 4,
+          "bounds": {
+            "minX": -17,
+            "maxX": -9,
+            "minY": 32,
+            "maxY": 40
+          },
+          "summary": {
+            "hexCount": 23,
+            "settlementCount": 2,
+            "airfieldCount": 0,
+            "roadSegmentCount": 7,
+            "railSegmentCount": 7
+          },
+          "path": "close/0_4.json"
+        },
+        {
+          "tileId": "1_0",
+          "tx": 1,
+          "ty": 0,
+          "bounds": {
+            "minX": -9,
+            "maxX": -1,
+            "minY": 0,
+            "maxY": 8
+          },
+          "summary": {
+            "hexCount": 9,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/1_0.json"
+        },
+        {
+          "tileId": "1_1",
+          "tx": 1,
+          "ty": 1,
+          "bounds": {
+            "minX": -9,
+            "maxX": -1,
+            "minY": 8,
+            "maxY": 16
+          },
+          "summary": {
+            "hexCount": 40,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/1_1.json"
+        },
+        {
+          "tileId": "1_2",
+          "tx": 1,
+          "ty": 2,
+          "bounds": {
+            "minX": -9,
+            "maxX": -1,
+            "minY": 16,
+            "maxY": 24
+          },
+          "summary": {
+            "hexCount": 63,
+            "settlementCount": 0,
+            "airfieldCount": 1,
+            "roadSegmentCount": 5,
+            "railSegmentCount": 5
+          },
+          "path": "close/1_2.json"
+        },
+        {
+          "tileId": "1_3",
+          "tx": 1,
+          "ty": 3,
+          "bounds": {
+            "minX": -9,
+            "maxX": -1,
+            "minY": 24,
+            "maxY": 32
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 9,
+            "airfieldCount": 1,
+            "roadSegmentCount": 173,
+            "railSegmentCount": 116
+          },
+          "path": "close/1_3.json"
+        },
+        {
+          "tileId": "1_4",
+          "tx": 1,
+          "ty": 4,
+          "bounds": {
+            "minX": -9,
+            "maxX": -1,
+            "minY": 32,
+            "maxY": 40
+          },
+          "summary": {
+            "hexCount": 24,
+            "settlementCount": 1,
+            "airfieldCount": 1,
+            "roadSegmentCount": 23,
+            "railSegmentCount": 11
+          },
+          "path": "close/1_4.json"
+        },
+        {
+          "tileId": "2_0",
+          "tx": 2,
+          "ty": 0,
+          "bounds": {
+            "minX": -1,
+            "maxX": 7,
+            "minY": 0,
+            "maxY": 8
+          },
+          "summary": {
+            "hexCount": 63,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 10,
+            "railSegmentCount": 0
+          },
+          "path": "close/2_0.json"
+        },
+        {
+          "tileId": "2_1",
+          "tx": 2,
+          "ty": 1,
+          "bounds": {
+            "minX": -1,
+            "maxX": 7,
+            "minY": 8,
+            "maxY": 16
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 5,
+            "airfieldCount": 1,
+            "roadSegmentCount": 90,
+            "railSegmentCount": 49
+          },
+          "path": "close/2_1.json"
+        },
+        {
+          "tileId": "2_2",
+          "tx": 2,
+          "ty": 2,
+          "bounds": {
+            "minX": -1,
+            "maxX": 7,
+            "minY": 16,
+            "maxY": 24
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 8,
+            "airfieldCount": 2,
+            "roadSegmentCount": 159,
+            "railSegmentCount": 92
+          },
+          "path": "close/2_2.json"
+        },
+        {
+          "tileId": "2_3",
+          "tx": 2,
+          "ty": 3,
+          "bounds": {
+            "minX": -1,
+            "maxX": 7,
+            "minY": 24,
+            "maxY": 32
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 2,
+            "airfieldCount": 1,
+            "roadSegmentCount": 53,
+            "railSegmentCount": 6
+          },
+          "path": "close/2_3.json"
+        },
+        {
+          "tileId": "2_4",
+          "tx": 2,
+          "ty": 4,
+          "bounds": {
+            "minX": -1,
+            "maxX": 7,
+            "minY": 32,
+            "maxY": 40
+          },
+          "summary": {
+            "hexCount": 24,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/2_4.json"
+        },
+        {
+          "tileId": "3_0",
+          "tx": 3,
+          "ty": 0,
+          "bounds": {
+            "minX": 7,
+            "maxX": 15,
+            "minY": 0,
+            "maxY": 8
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 1,
+            "airfieldCount": 0,
+            "roadSegmentCount": 23,
+            "railSegmentCount": 0
+          },
+          "path": "close/3_0.json"
+        },
+        {
+          "tileId": "3_1",
+          "tx": 3,
+          "ty": 1,
+          "bounds": {
+            "minX": 7,
+            "maxX": 15,
+            "minY": 8,
+            "maxY": 16
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 7,
+            "airfieldCount": 3,
+            "roadSegmentCount": 116,
+            "railSegmentCount": 67
+          },
+          "path": "close/3_1.json"
+        },
+        {
+          "tileId": "3_2",
+          "tx": 3,
+          "ty": 2,
+          "bounds": {
+            "minX": 7,
+            "maxX": 15,
+            "minY": 16,
+            "maxY": 24
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 1,
+            "airfieldCount": 0,
+            "roadSegmentCount": 45,
+            "railSegmentCount": 11
+          },
+          "path": "close/3_2.json"
+        },
+        {
+          "tileId": "3_3",
+          "tx": 3,
+          "ty": 3,
+          "bounds": {
+            "minX": 7,
+            "maxX": 15,
+            "minY": 24,
+            "maxY": 32
+          },
+          "summary": {
+            "hexCount": 55,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/3_3.json"
+        },
+        {
+          "tileId": "3_4",
+          "tx": 3,
+          "ty": 4,
+          "bounds": {
+            "minX": 7,
+            "maxX": 15,
+            "minY": 32,
+            "maxY": 40
+          },
+          "summary": {
+            "hexCount": 13,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/3_4.json"
+        },
+        {
+          "tileId": "4_0",
+          "tx": 4,
+          "ty": 0,
+          "bounds": {
+            "minX": 15,
+            "maxX": 23,
+            "minY": 0,
+            "maxY": 8
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/4_0.json"
+        },
+        {
+          "tileId": "4_1",
+          "tx": 4,
+          "ty": 1,
+          "bounds": {
+            "minX": 15,
+            "maxX": 23,
+            "minY": 8,
+            "maxY": 16
+          },
+          "summary": {
+            "hexCount": 55,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/4_1.json"
+        },
+        {
+          "tileId": "4_2",
+          "tx": 4,
+          "ty": 2,
+          "bounds": {
+            "minX": 15,
+            "maxX": 23,
+            "minY": 16,
+            "maxY": 24
+          },
+          "summary": {
+            "hexCount": 24,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/4_2.json"
+        },
+        {
+          "tileId": "4_3",
+          "tx": 4,
+          "ty": 3,
+          "bounds": {
+            "minX": 15,
+            "maxX": 23,
+            "minY": 24,
+            "maxY": 32
+          },
+          "summary": {
+            "hexCount": 1,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/4_3.json"
+        },
+        {
+          "tileId": "5_0",
+          "tx": 5,
+          "ty": 0,
+          "bounds": {
+            "minX": 23,
+            "maxX": 31,
+            "minY": 0,
+            "maxY": 8
+          },
+          "summary": {
+            "hexCount": 24,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/5_0.json"
+        },
+        {
+          "tileId": "5_1",
+          "tx": 5,
+          "ty": 1,
+          "bounds": {
+            "minX": 23,
+            "maxX": 31,
+            "minY": 8,
+            "maxY": 16
+          },
+          "summary": {
+            "hexCount": 1,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/5_1.json"
+        }
+      ],
+      "sourceSummary": {
+        "source_ids": [
+          "korea_airfields_primary_stack",
+          "korea_dem_primary_stack",
+          "korea_hydro_primary_stack",
+          "korea_landcover_primary_stack",
+          "korea_places_primary_stack",
+          "korea_roads_rail_primary_stack"
+        ],
+        "files": {
+          "terrain_dem": {
+            "path": "data/processed/korea_peninsula_coarse_v1/terrain_dem.tif",
+            "checksum": "ab05308a04e61640c10e7aa6253b050879a09d1d3f511880a5dc97206189dfb6"
+          },
+          "hillshade": {
+            "path": "data/processed/korea_peninsula_coarse_v1/relief/hillshade.tif",
+            "checksum": "7ef7679108ec8083eb2889d2ad9019ab43c28303d48a4981e11af9933a0af4ae"
+          },
+          "color_relief": {
+            "path": "data/processed/korea_peninsula_coarse_v1/relief/color_relief.tif",
+            "checksum": "4efb850b6f693df08bac4c719861e14f20a7167431decfb65f7ae1b33edeb8b6"
+          },
+          "hydro_lines": {
+            "path": "data/processed/korea_peninsula_coarse_v1/hydro/hydro_lines_operational.geojson",
+            "checksum": "0e2538e498ea310e648d181159bc61b6f0a903e9ab1c222684d768e70d3b2b9d"
+          },
+          "hydro_polygons": {
+            "path": "data/processed/korea_peninsula_coarse_v1/hydro/hydro_polygons_operational.geojson",
+            "checksum": "b3049ad7a1062091e169bd352424d59721a26b8b6229942aef26d11b0c6a96e1"
+          },
+          "land_mask": {
+            "path": "data/processed/korea_peninsula_coarse_v1/landcover/land_mask.geojson",
+            "checksum": "318159987c6021e2fc48b4a2ae76506e0eb78e9b542c14f84a4df078740cc687"
+          },
+          "urban_areas": {
+            "path": "data/processed/korea_peninsula_coarse_v1/landcover/urban_areas.geojson",
+            "checksum": "dfa049e5617c3aa9a24ec5843a44d39b66c107d6bf1c39ad3ddc56d7ec7d5a56"
+          },
+          "roads_operational": {
+            "path": "data/processed/korea_peninsula_coarse_v1/transport/roads_operational.geojson",
+            "checksum": "3b0e206e7ac058a7fcd3637d0d5b603ddeb6f1cc790b9c7a96be5d209016ae24"
+          },
+          "rail_operational": {
+            "path": "data/processed/korea_peninsula_coarse_v1/transport/rail_operational.geojson",
+            "checksum": "14bc6be114d8e958ab3f94c1066540fafa61f9da3b49d247ff9b9d04df872997"
+          },
+          "bridges_operational": {
+            "path": "data/processed/korea_peninsula_coarse_v1/transport/bridges_operational.geojson",
+            "checksum": "b3049ad7a1062091e169bd352424d59721a26b8b6229942aef26d11b0c6a96e1"
+          },
+          "settlements_operational": {
+            "path": "data/processed/korea_peninsula_coarse_v1/places/settlements_operational.geojson",
+            "checksum": "25851ecfe9ce72433a57996fd9cf3fb16903752afd74f1bfe33475c031feec10"
+          },
+          "airfields_operational": {
+            "path": "data/processed/korea_peninsula_coarse_v1/places/airfields_operational.geojson",
+            "checksum": "d397549ede70244081f898fcc1757e516afe3a527f71f9f9ea0bb8e9b5d70237"
+          }
+        }
+      }
+    }
+  }
+}

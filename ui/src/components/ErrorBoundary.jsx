@@ -20,25 +20,29 @@ export default class ErrorBoundary extends React.Component {
     if (this.state.error) {
       return (
         <div style={{
-          padding: 16,
-          fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-          color: "#111",
-          background: "#fff",
-          height: "100vh",
-          overflow: "auto",
+          minHeight: "100vh",
+          display: "grid",
+          placeItems: "center",
+          padding: 24,
+          background: "#08101b",
+          color: "#e7ecf6",
+          fontFamily: "\"Segoe UI\", system-ui, sans-serif",
         }}>
-          <h2 style={{ marginTop: 0 }}>UI crashed</h2>
-          <pre style={{ whiteSpace: "pre-wrap" }}>
-            {String(this.state.error?.stack || this.state.error)}
-          </pre>
-          {this.state.info?.componentStack && (
-            <>
-              <h3>Component stack</h3>
-              <pre style={{ whiteSpace: "pre-wrap" }}>
-                {this.state.info.componentStack}
-              </pre>
-            </>
-          )}
+          <div style={{
+            width: "min(520px, 100%)",
+            border: "1px solid rgba(154,169,193,0.18)",
+            borderRadius: 18,
+            background: "linear-gradient(180deg, rgba(12,20,33,0.92), rgba(18,28,44,0.92))",
+            padding: 28,
+          }}>
+            <div style={{ color: "#9da9bf", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.14em", marginBottom: 6 }}>
+              Operational Shell
+            </div>
+            <h2 style={{ marginTop: 0, marginBottom: 8 }}>Shell unavailable</h2>
+            <p style={{ margin: 0, color: "#9da9bf", lineHeight: 1.5 }}>
+              The frontend encountered an unexpected error and could not finish rendering the command shell.
+            </p>
+          </div>
         </div>
       );
     }

@@ -1,0 +1,6698 @@
+{
+  "schema": "mwe.runtime_basemap_tile.v1",
+  "theaterId": "korea_peninsula_coarse_v1",
+  "zoomTier": "operational",
+  "tileId": "1_2",
+  "bounds": {
+    "minX": -5,
+    "maxX": 7,
+    "minY": 24,
+    "maxY": 36
+  },
+  "hexes": [
+    {
+      "hexId": "korea_peninsula_coarse_v1:-5:24",
+      "q": -5,
+      "r": 24,
+      "terrainClass": "plains",
+      "reliefBand": "coastal_low",
+      "reliefShade": 0.04,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.157,
+      "visibilitySeed": 0.495,
+      "supplySeed": 0.763,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-4:24",
+      "q": -4,
+      "r": 24,
+      "terrainClass": "plains",
+      "reliefBand": "coastal_low",
+      "reliefShade": 0.134,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.175,
+      "visibilitySeed": 0.529,
+      "supplySeed": 0.724,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-3:24",
+      "q": -3,
+      "r": 24,
+      "terrainClass": "urban",
+      "reliefBand": "coastal_low",
+      "reliefShade": 0.334,
+      "waterDominant": false,
+      "coastline": true,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "primary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.635,
+      "visibilitySeed": 0.764,
+      "supplySeed": 0.559,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-2:24",
+      "q": -2,
+      "r": 24,
+      "terrainClass": "urban",
+      "reliefBand": "lowland",
+      "reliefShade": 0.39,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "primary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.651,
+      "visibilitySeed": 0.788,
+      "supplySeed": 0.534,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-1:24",
+      "q": -1,
+      "r": 24,
+      "terrainClass": "urban",
+      "reliefBand": "rolling",
+      "reliefShade": 0.927,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "primary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.785,
+      "visibilitySeed": 0.94,
+      "supplySeed": 0.35,
+      "contourBand": 1
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:0:24",
+      "q": 0,
+      "r": 24,
+      "terrainClass": "urban",
+      "reliefBand": "upland",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.918,
+      "visibilitySeed": 0.997,
+      "supplySeed": 0.29,
+      "contourBand": 2
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:1:24",
+      "q": 1,
+      "r": 24,
+      "terrainClass": "urban",
+      "reliefBand": "rolling",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "primary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": "city",
+      "settlementImportance": 5,
+      "settlementName": "Chuncheon",
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.864,
+      "visibilitySeed": 0.982,
+      "supplySeed": 0.311,
+      "contourBand": 1
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:2:24",
+      "q": 2,
+      "r": 24,
+      "terrainClass": "rough",
+      "reliefBand": "upland",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "primary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.413,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.063,
+      "contourBand": 2
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:3:24",
+      "q": 3,
+      "r": 24,
+      "terrainClass": "rough",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.459,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.048,
+      "contourBand": 4
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:4:24",
+      "q": 4,
+      "r": 24,
+      "terrainClass": "rough",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.599,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.0,
+      "contourBand": 5
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:5:24",
+      "q": 5,
+      "r": 24,
+      "terrainClass": "urban",
+      "reliefBand": "rolling",
+      "reliefShade": 0.788,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.745,
+      "visibilitySeed": 0.922,
+      "supplySeed": 0.373,
+      "contourBand": 1
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:6:24",
+      "q": 6,
+      "r": 24,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-5:25",
+      "q": -5,
+      "r": 25,
+      "terrainClass": "plains",
+      "reliefBand": "lowland",
+      "reliefShade": 0.496,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.244,
+      "visibilitySeed": 0.682,
+      "supplySeed": 0.571,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-4:25",
+      "q": -4,
+      "r": 25,
+      "terrainClass": "plains",
+      "reliefBand": "lowland",
+      "reliefShade": 0.515,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "primary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.248,
+      "visibilitySeed": 0.678,
+      "supplySeed": 0.562,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-3:25",
+      "q": -3,
+      "r": 25,
+      "terrainClass": "hills",
+      "reliefBand": "rolling",
+      "reliefShade": 0.99,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "primary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": "city",
+      "settlementImportance": 5,
+      "settlementName": "Kaesong",
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.745,
+      "visibilitySeed": 0.884,
+      "supplySeed": 0.259,
+      "contourBand": 1
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-2:25",
+      "q": -2,
+      "r": 25,
+      "terrainClass": "plains",
+      "reliefBand": "lowland",
+      "reliefShade": 0.488,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.245,
+      "visibilitySeed": 0.678,
+      "supplySeed": 0.572,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-1:25",
+      "q": -1,
+      "r": 25,
+      "terrainClass": "urban",
+      "reliefBand": "rolling",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.836,
+      "visibilitySeed": 0.967,
+      "supplySeed": 0.326,
+      "contourBand": 1
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:0:25",
+      "q": 0,
+      "r": 25,
+      "terrainClass": "urban",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.015,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.247,
+      "contourBand": 3
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:1:25",
+      "q": 1,
+      "r": 25,
+      "terrainClass": "rough",
+      "reliefBand": "upland",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.459,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.051,
+      "contourBand": 2
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:2:25",
+      "q": 2,
+      "r": 25,
+      "terrainClass": "rough",
+      "reliefBand": "upland",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.445,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.054,
+      "contourBand": 2
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:3:25",
+      "q": 3,
+      "r": 25,
+      "terrainClass": "rough",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.592,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.009,
+      "contourBand": 4
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:4:25",
+      "q": 4,
+      "r": 25,
+      "terrainClass": "urban",
+      "reliefBand": "rolling",
+      "reliefShade": 0.687,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": "operational_airfield",
+      "airfieldImportance": 3,
+      "airfieldName": "Yangyang Int'l",
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.721,
+      "visibilitySeed": 0.898,
+      "supplySeed": 0.414,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:5:25",
+      "q": 5,
+      "r": 25,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:6:25",
+      "q": 6,
+      "r": 25,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-5:26",
+      "q": -5,
+      "r": 26,
+      "terrainClass": "hills",
+      "reliefBand": "rolling",
+      "reliefShade": 0.763,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.688,
+      "visibilitySeed": 0.863,
+      "supplySeed": 0.3,
+      "contourBand": 1
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-4:26",
+      "q": -4,
+      "r": 26,
+      "terrainClass": "hills",
+      "reliefBand": "lowland",
+      "reliefShade": 0.593,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "primary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": "town",
+      "settlementImportance": 4,
+      "settlementName": "Pyongsan",
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.65,
+      "visibilitySeed": 0.812,
+      "supplySeed": 0.367,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-3:26",
+      "q": -3,
+      "r": 26,
+      "terrainClass": "hills",
+      "reliefBand": "rolling",
+      "reliefShade": 0.762,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.69,
+      "visibilitySeed": 0.862,
+      "supplySeed": 0.298,
+      "contourBand": 1
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-2:26",
+      "q": -2,
+      "r": 26,
+      "terrainClass": "hills",
+      "reliefBand": "rolling",
+      "reliefShade": 0.794,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.696,
+      "visibilitySeed": 0.876,
+      "supplySeed": 0.287,
+      "contourBand": 1
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-1:26",
+      "q": -1,
+      "r": 26,
+      "terrainClass": "hills",
+      "reliefBand": "upland",
+      "reliefShade": 0.84,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.699,
+      "visibilitySeed": 0.885,
+      "supplySeed": 0.286,
+      "contourBand": 1
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:0:26",
+      "q": 0,
+      "r": 26,
+      "terrainClass": "rough",
+      "reliefBand": "upland",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.411,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.066,
+      "contourBand": 3
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:1:26",
+      "q": 1,
+      "r": 26,
+      "terrainClass": "rough",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.533,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.021,
+      "contourBand": 3
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:2:26",
+      "q": 2,
+      "r": 26,
+      "terrainClass": "rough",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.503,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.038,
+      "contourBand": 4
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:3:26",
+      "q": 3,
+      "r": 26,
+      "terrainClass": "urban",
+      "reliefBand": "rolling",
+      "reliefShade": 0.913,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": "town",
+      "settlementImportance": 4,
+      "settlementName": "Sokcho",
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.775,
+      "visibilitySeed": 0.944,
+      "supplySeed": 0.359,
+      "contourBand": 1
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:4:26",
+      "q": 4,
+      "r": 26,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:5:26",
+      "q": 5,
+      "r": 26,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:6:26",
+      "q": 6,
+      "r": 26,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-5:27",
+      "q": -5,
+      "r": 27,
+      "terrainClass": "hills",
+      "reliefBand": "rolling",
+      "reliefShade": 0.91,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "primary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.727,
+      "visibilitySeed": 0.897,
+      "supplySeed": 0.265,
+      "contourBand": 1
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-4:27",
+      "q": -4,
+      "r": 27,
+      "terrainClass": "hills",
+      "reliefBand": "rolling",
+      "reliefShade": 0.783,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.695,
+      "visibilitySeed": 0.871,
+      "supplySeed": 0.29,
+      "contourBand": 1
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-3:27",
+      "q": -3,
+      "r": 27,
+      "terrainClass": "hills",
+      "reliefBand": "upland",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.808,
+      "visibilitySeed": 0.925,
+      "supplySeed": 0.228,
+      "contourBand": 1
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-2:27",
+      "q": -2,
+      "r": 27,
+      "terrainClass": "hills",
+      "reliefBand": "upland",
+      "reliefShade": 0.992,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.74,
+      "visibilitySeed": 0.902,
+      "supplySeed": 0.261,
+      "contourBand": 2
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-1:27",
+      "q": -1,
+      "r": 27,
+      "terrainClass": "hills",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.82,
+      "visibilitySeed": 0.93,
+      "supplySeed": 0.22,
+      "contourBand": 3
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:0:27",
+      "q": 0,
+      "r": 27,
+      "terrainClass": "rough",
+      "reliefBand": "upland",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.382,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.076,
+      "contourBand": 3
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:1:27",
+      "q": 1,
+      "r": 27,
+      "terrainClass": "rough",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.474,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.046,
+      "contourBand": 5
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:2:27",
+      "q": 2,
+      "r": 27,
+      "terrainClass": "hills",
+      "reliefBand": "rolling",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.787,
+      "visibilitySeed": 0.913,
+      "supplySeed": 0.244,
+      "contourBand": 1
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:3:27",
+      "q": 3,
+      "r": 27,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:4:27",
+      "q": 4,
+      "r": 27,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:5:27",
+      "q": 5,
+      "r": 27,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:6:27",
+      "q": 6,
+      "r": 27,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-5:28",
+      "q": -5,
+      "r": 28,
+      "terrainClass": "hills",
+      "reliefBand": "rolling",
+      "reliefShade": 0.892,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "primary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.72,
+      "visibilitySeed": 0.895,
+      "supplySeed": 0.271,
+      "contourBand": 1
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-4:28",
+      "q": -4,
+      "r": 28,
+      "terrainClass": "hills",
+      "reliefBand": "upland",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "primary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.782,
+      "visibilitySeed": 0.916,
+      "supplySeed": 0.241,
+      "contourBand": 2
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-3:28",
+      "q": -3,
+      "r": 28,
+      "terrainClass": "rough",
+      "reliefBand": "upland",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "primary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.454,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.048,
+      "contourBand": 2
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-2:28",
+      "q": -2,
+      "r": 28,
+      "terrainClass": "rough",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.407,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.073,
+      "contourBand": 4
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-1:28",
+      "q": -1,
+      "r": 28,
+      "terrainClass": "rough",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.345,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.091,
+      "contourBand": 3
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:0:28",
+      "q": 0,
+      "r": 28,
+      "terrainClass": "rough",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.471,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.05,
+      "contourBand": 4
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:1:28",
+      "q": 1,
+      "r": 28,
+      "terrainClass": "hills",
+      "reliefBand": "upland",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.81,
+      "visibilitySeed": 0.92,
+      "supplySeed": 0.235,
+      "contourBand": 2
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:2:28",
+      "q": 2,
+      "r": 28,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:3:28",
+      "q": 3,
+      "r": 28,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:4:28",
+      "q": 4,
+      "r": 28,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:5:28",
+      "q": 5,
+      "r": 28,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:6:28",
+      "q": 6,
+      "r": 28,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-5:29",
+      "q": -5,
+      "r": 29,
+      "terrainClass": "rough",
+      "reliefBand": "upland",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "primary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.569,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.006,
+      "contourBand": 2
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-4:29",
+      "q": -4,
+      "r": 29,
+      "terrainClass": "rough",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "primary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.564,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.004,
+      "contourBand": 3
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-3:29",
+      "q": -3,
+      "r": 29,
+      "terrainClass": "rough",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "primary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.538,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.024,
+      "contourBand": 4
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-2:29",
+      "q": -2,
+      "r": 29,
+      "terrainClass": "rough",
+      "reliefBand": "upland",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.381,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.086,
+      "contourBand": 2
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-1:29",
+      "q": -1,
+      "r": 29,
+      "terrainClass": "rough",
+      "reliefBand": "upland",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.394,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.077,
+      "contourBand": 2
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:0:29",
+      "q": 0,
+      "r": 29,
+      "terrainClass": "plains",
+      "reliefBand": "lowland",
+      "reliefShade": 0.405,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.225,
+      "visibilitySeed": 0.637,
+      "supplySeed": 0.611,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:1:29",
+      "q": 1,
+      "r": 29,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:2:29",
+      "q": 2,
+      "r": 29,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:3:29",
+      "q": 3,
+      "r": 29,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:4:29",
+      "q": 4,
+      "r": 29,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:5:29",
+      "q": 5,
+      "r": 29,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:6:29",
+      "q": 6,
+      "r": 29,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-5:30",
+      "q": -5,
+      "r": 30,
+      "terrainClass": "rough",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.581,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.006,
+      "contourBand": 3
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-4:30",
+      "q": -4,
+      "r": 30,
+      "terrainClass": "rough",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "primary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.553,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.014,
+      "contourBand": 3
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-3:30",
+      "q": -3,
+      "r": 30,
+      "terrainClass": "rough",
+      "reliefBand": "upland",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "primary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": "city",
+      "settlementImportance": 5,
+      "settlementName": "Wonsan",
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.385,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.081,
+      "contourBand": 2
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-2:30",
+      "q": -2,
+      "r": 30,
+      "terrainClass": "hills",
+      "reliefBand": "rolling",
+      "reliefShade": 0.872,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.709,
+      "visibilitySeed": 0.86,
+      "supplySeed": 0.284,
+      "contourBand": 1
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-1:30",
+      "q": -1,
+      "r": 30,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.02,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.154,
+      "visibilitySeed": 0.487,
+      "supplySeed": 0.772,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:0:30",
+      "q": 0,
+      "r": 30,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:1:30",
+      "q": 1,
+      "r": 30,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:2:30",
+      "q": 2,
+      "r": 30,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:3:30",
+      "q": 3,
+      "r": 30,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:4:30",
+      "q": 4,
+      "r": 30,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:5:30",
+      "q": 5,
+      "r": 30,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:6:30",
+      "q": 6,
+      "r": 30,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-5:31",
+      "q": -5,
+      "r": 31,
+      "terrainClass": "rough",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.471,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.047,
+      "contourBand": 3
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-4:31",
+      "q": -4,
+      "r": 31,
+      "terrainClass": "rough",
+      "reliefBand": "upland",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": "town",
+      "settlementImportance": 4,
+      "settlementName": "Munchon",
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.459,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.05,
+      "contourBand": 2
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-3:31",
+      "q": -3,
+      "r": 31,
+      "terrainClass": "plains",
+      "reliefBand": "coastal_low",
+      "reliefShade": 0.296,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.205,
+      "visibilitySeed": 0.587,
+      "supplySeed": 0.656,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-2:31",
+      "q": -2,
+      "r": 31,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.004,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.151,
+      "visibilitySeed": 0.481,
+      "supplySeed": 0.778,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-1:31",
+      "q": -1,
+      "r": 31,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:0:31",
+      "q": 0,
+      "r": 31,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:1:31",
+      "q": 1,
+      "r": 31,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:2:31",
+      "q": 2,
+      "r": 31,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:3:31",
+      "q": 3,
+      "r": 31,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:4:31",
+      "q": 4,
+      "r": 31,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:5:31",
+      "q": 5,
+      "r": 31,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:6:31",
+      "q": 6,
+      "r": 31,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-5:32",
+      "q": -5,
+      "r": 32,
+      "terrainClass": "rough",
+      "reliefBand": "upland",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.611,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.0,
+      "contourBand": 2
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-4:32",
+      "q": -4,
+      "r": 32,
+      "terrainClass": "plains",
+      "reliefBand": "lowland",
+      "reliefShade": 0.461,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.237,
+      "visibilitySeed": 0.655,
+      "supplySeed": 0.586,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-3:32",
+      "q": -3,
+      "r": 32,
+      "terrainClass": "plains",
+      "reliefBand": "coastal_low",
+      "reliefShade": 0.102,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.169,
+      "visibilitySeed": 0.518,
+      "supplySeed": 0.737,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-2:32",
+      "q": -2,
+      "r": 32,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-1:32",
+      "q": -1,
+      "r": 32,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:0:32",
+      "q": 0,
+      "r": 32,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:1:32",
+      "q": 1,
+      "r": 32,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:2:32",
+      "q": 2,
+      "r": 32,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:3:32",
+      "q": 3,
+      "r": 32,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:4:32",
+      "q": 4,
+      "r": 32,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:5:32",
+      "q": 5,
+      "r": 32,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:6:32",
+      "q": 6,
+      "r": 32,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-5:33",
+      "q": -5,
+      "r": 33,
+      "terrainClass": "rough",
+      "reliefBand": "upland",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 2.445,
+      "visibilitySeed": 1.0,
+      "supplySeed": 0.059,
+      "contourBand": 2
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-4:33",
+      "q": -4,
+      "r": 33,
+      "terrainClass": "plains",
+      "reliefBand": "coastal_low",
+      "reliefShade": 0.239,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": "rail_line",
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.194,
+      "visibilitySeed": 0.569,
+      "supplySeed": 0.68,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-3:33",
+      "q": -3,
+      "r": 33,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-2:33",
+      "q": -2,
+      "r": 33,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-1:33",
+      "q": -1,
+      "r": 33,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:0:33",
+      "q": 0,
+      "r": 33,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:1:33",
+      "q": 1,
+      "r": 33,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:2:33",
+      "q": 2,
+      "r": 33,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:3:33",
+      "q": 3,
+      "r": 33,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:4:33",
+      "q": 4,
+      "r": 33,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:5:33",
+      "q": 5,
+      "r": 33,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:6:33",
+      "q": 6,
+      "r": 33,
+      "terrainClass": "plains",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.15,
+      "visibilitySeed": 0.48,
+      "supplySeed": 0.78,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-5:34",
+      "q": -5,
+      "r": 34,
+      "terrainClass": "water",
+      "reliefBand": "lowland",
+      "reliefShade": 0.386,
+      "waterDominant": true,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 999.0,
+      "visibilitySeed": 0.778,
+      "supplySeed": 0.0,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-4:34",
+      "q": -4,
+      "r": 34,
+      "terrainClass": "water",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": true,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 999.0,
+      "visibilitySeed": 0.62,
+      "supplySeed": 0.0,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-3:34",
+      "q": -3,
+      "r": 34,
+      "terrainClass": "water",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": true,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 999.0,
+      "visibilitySeed": 0.62,
+      "supplySeed": 0.0,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-2:34",
+      "q": -2,
+      "r": 34,
+      "terrainClass": "water",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": true,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 999.0,
+      "visibilitySeed": 0.62,
+      "supplySeed": 0.0,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:-1:34",
+      "q": -1,
+      "r": 34,
+      "terrainClass": "water",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": true,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 999.0,
+      "visibilitySeed": 0.62,
+      "supplySeed": 0.0,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:0:34",
+      "q": 0,
+      "r": 34,
+      "terrainClass": "water",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": true,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 999.0,
+      "visibilitySeed": 0.62,
+      "supplySeed": 0.0,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:1:34",
+      "q": 1,
+      "r": 34,
+      "terrainClass": "water",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": true,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 999.0,
+      "visibilitySeed": 0.62,
+      "supplySeed": 0.0,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:2:34",
+      "q": 2,
+      "r": 34,
+      "terrainClass": "water",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": true,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 999.0,
+      "visibilitySeed": 0.62,
+      "supplySeed": 0.0,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:3:34",
+      "q": 3,
+      "r": 34,
+      "terrainClass": "water",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": true,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 999.0,
+      "visibilitySeed": 0.62,
+      "supplySeed": 0.0,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:4:34",
+      "q": 4,
+      "r": 34,
+      "terrainClass": "water",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": true,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 999.0,
+      "visibilitySeed": 0.62,
+      "supplySeed": 0.0,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:5:34",
+      "q": 5,
+      "r": 34,
+      "terrainClass": "water",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": true,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 999.0,
+      "visibilitySeed": 0.62,
+      "supplySeed": 0.0,
+      "contourBand": 0
+    },
+    {
+      "hexId": "korea_peninsula_coarse_v1:6:34",
+      "q": 6,
+      "r": 34,
+      "terrainClass": "water",
+      "reliefBand": "sea_level",
+      "reliefShade": 0.0,
+      "waterDominant": true,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 999.0,
+      "visibilitySeed": 0.62,
+      "supplySeed": 0.0,
+      "contourBand": 0
+    }
+  ],
+  "settlements": [
+    {
+      "id": "settlement:korea_peninsula_coarse_v1:1:24",
+      "q": 1,
+      "r": 24,
+      "tier": "city",
+      "importance": 5,
+      "name": "Chuncheon"
+    },
+    {
+      "id": "settlement:korea_peninsula_coarse_v1:-3:25",
+      "q": -3,
+      "r": 25,
+      "tier": "city",
+      "importance": 5,
+      "name": "Kaesong"
+    },
+    {
+      "id": "settlement:korea_peninsula_coarse_v1:-4:26",
+      "q": -4,
+      "r": 26,
+      "tier": "town",
+      "importance": 4,
+      "name": "Pyongsan"
+    },
+    {
+      "id": "settlement:korea_peninsula_coarse_v1:3:26",
+      "q": 3,
+      "r": 26,
+      "tier": "town",
+      "importance": 4,
+      "name": "Sokcho"
+    },
+    {
+      "id": "settlement:korea_peninsula_coarse_v1:-3:30",
+      "q": -3,
+      "r": 30,
+      "tier": "city",
+      "importance": 5,
+      "name": "Wonsan"
+    },
+    {
+      "id": "settlement:korea_peninsula_coarse_v1:-4:31",
+      "q": -4,
+      "r": 31,
+      "tier": "town",
+      "importance": 4,
+      "name": "Munchon"
+    }
+  ],
+  "airfields": [
+    {
+      "id": "airfield:korea_peninsula_coarse_v1:4:25",
+      "q": 4,
+      "r": 25,
+      "tier": "operational_airfield",
+      "importance": 3,
+      "name": "Yangyang Int'l"
+    }
+  ],
+  "roadSegments": [
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:24:korea_peninsula_coarse_v1:-5:24",
+      "class": "secondary_road",
+      "from": {
+        "x": -5,
+        "y": 24
+      },
+      "to": {
+        "x": -4,
+        "y": 24
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-3:24:korea_peninsula_coarse_v1:-4:24",
+      "class": "primary_road",
+      "from": {
+        "x": -4,
+        "y": 24
+      },
+      "to": {
+        "x": -3,
+        "y": 24
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-2:24:korea_peninsula_coarse_v1:-3:24",
+      "class": "primary_road",
+      "from": {
+        "x": -3,
+        "y": 24
+      },
+      "to": {
+        "x": -2,
+        "y": 24
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:24:korea_peninsula_coarse_v1:-2:24",
+      "class": "primary_road",
+      "from": {
+        "x": -2,
+        "y": 24
+      },
+      "to": {
+        "x": -1,
+        "y": 24
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:24:korea_peninsula_coarse_v1:0:24",
+      "class": "primary_road",
+      "from": {
+        "x": -1,
+        "y": 24
+      },
+      "to": {
+        "x": 0,
+        "y": 24
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:0:24:korea_peninsula_coarse_v1:1:24",
+      "class": "primary_road",
+      "from": {
+        "x": 0,
+        "y": 24
+      },
+      "to": {
+        "x": 1,
+        "y": 24
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:1:24:korea_peninsula_coarse_v1:2:24",
+      "class": "primary_road",
+      "from": {
+        "x": 1,
+        "y": 24
+      },
+      "to": {
+        "x": 2,
+        "y": 24
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:2:24:korea_peninsula_coarse_v1:3:24",
+      "class": "primary_road",
+      "from": {
+        "x": 2,
+        "y": 24
+      },
+      "to": {
+        "x": 3,
+        "y": 24
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:25:korea_peninsula_coarse_v1:-5:25",
+      "class": "primary_road",
+      "from": {
+        "x": -5,
+        "y": 25
+      },
+      "to": {
+        "x": -4,
+        "y": 25
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:24:korea_peninsula_coarse_v1:-5:25",
+      "class": "secondary_road",
+      "from": {
+        "x": -5,
+        "y": 25
+      },
+      "to": {
+        "x": -4,
+        "y": 24
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-5:24:korea_peninsula_coarse_v1:-5:25",
+      "class": "secondary_road",
+      "from": {
+        "x": -5,
+        "y": 25
+      },
+      "to": {
+        "x": -5,
+        "y": 24
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-3:25:korea_peninsula_coarse_v1:-4:25",
+      "class": "primary_road",
+      "from": {
+        "x": -4,
+        "y": 25
+      },
+      "to": {
+        "x": -3,
+        "y": 25
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-3:24:korea_peninsula_coarse_v1:-4:25",
+      "class": "primary_road",
+      "from": {
+        "x": -4,
+        "y": 25
+      },
+      "to": {
+        "x": -3,
+        "y": 24
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:24:korea_peninsula_coarse_v1:-4:25",
+      "class": "primary_road",
+      "from": {
+        "x": -4,
+        "y": 25
+      },
+      "to": {
+        "x": -4,
+        "y": 24
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-2:25:korea_peninsula_coarse_v1:-3:25",
+      "class": "primary_road",
+      "from": {
+        "x": -3,
+        "y": 25
+      },
+      "to": {
+        "x": -2,
+        "y": 25
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-2:24:korea_peninsula_coarse_v1:-3:25",
+      "class": "primary_road",
+      "from": {
+        "x": -3,
+        "y": 25
+      },
+      "to": {
+        "x": -2,
+        "y": 24
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-3:24:korea_peninsula_coarse_v1:-3:25",
+      "class": "primary_road",
+      "from": {
+        "x": -3,
+        "y": 25
+      },
+      "to": {
+        "x": -3,
+        "y": 24
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:25:korea_peninsula_coarse_v1:-2:25",
+      "class": "secondary_road",
+      "from": {
+        "x": -2,
+        "y": 25
+      },
+      "to": {
+        "x": -1,
+        "y": 25
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:24:korea_peninsula_coarse_v1:-2:25",
+      "class": "primary_road",
+      "from": {
+        "x": -2,
+        "y": 25
+      },
+      "to": {
+        "x": -1,
+        "y": 24
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-2:24:korea_peninsula_coarse_v1:-2:25",
+      "class": "primary_road",
+      "from": {
+        "x": -2,
+        "y": 25
+      },
+      "to": {
+        "x": -2,
+        "y": 24
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:25:korea_peninsula_coarse_v1:0:24",
+      "class": "secondary_road",
+      "from": {
+        "x": -1,
+        "y": 25
+      },
+      "to": {
+        "x": 0,
+        "y": 24
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:24:korea_peninsula_coarse_v1:-1:25",
+      "class": "primary_road",
+      "from": {
+        "x": -1,
+        "y": 25
+      },
+      "to": {
+        "x": -1,
+        "y": 24
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:1:25:korea_peninsula_coarse_v1:2:25",
+      "class": "secondary_road",
+      "from": {
+        "x": 1,
+        "y": 25
+      },
+      "to": {
+        "x": 2,
+        "y": 25
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:1:25:korea_peninsula_coarse_v1:2:24",
+      "class": "primary_road",
+      "from": {
+        "x": 1,
+        "y": 25
+      },
+      "to": {
+        "x": 2,
+        "y": 24
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:1:24:korea_peninsula_coarse_v1:1:25",
+      "class": "primary_road",
+      "from": {
+        "x": 1,
+        "y": 25
+      },
+      "to": {
+        "x": 1,
+        "y": 24
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:2:25:korea_peninsula_coarse_v1:3:25",
+      "class": "secondary_road",
+      "from": {
+        "x": 2,
+        "y": 25
+      },
+      "to": {
+        "x": 3,
+        "y": 25
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:2:25:korea_peninsula_coarse_v1:3:24",
+      "class": "secondary_road",
+      "from": {
+        "x": 2,
+        "y": 25
+      },
+      "to": {
+        "x": 3,
+        "y": 24
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:2:24:korea_peninsula_coarse_v1:2:25",
+      "class": "primary_road",
+      "from": {
+        "x": 2,
+        "y": 25
+      },
+      "to": {
+        "x": 2,
+        "y": 24
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:3:25:korea_peninsula_coarse_v1:4:25",
+      "class": "secondary_road",
+      "from": {
+        "x": 3,
+        "y": 25
+      },
+      "to": {
+        "x": 4,
+        "y": 25
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:3:24:korea_peninsula_coarse_v1:3:25",
+      "class": "secondary_road",
+      "from": {
+        "x": 3,
+        "y": 25
+      },
+      "to": {
+        "x": 3,
+        "y": 24
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:4:25:korea_peninsula_coarse_v1:5:24",
+      "class": "secondary_road",
+      "from": {
+        "x": 4,
+        "y": 25
+      },
+      "to": {
+        "x": 5,
+        "y": 24
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:26:korea_peninsula_coarse_v1:-5:26",
+      "class": "primary_road",
+      "from": {
+        "x": -5,
+        "y": 26
+      },
+      "to": {
+        "x": -4,
+        "y": 26
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:25:korea_peninsula_coarse_v1:-5:26",
+      "class": "primary_road",
+      "from": {
+        "x": -5,
+        "y": 26
+      },
+      "to": {
+        "x": -4,
+        "y": 25
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-5:25:korea_peninsula_coarse_v1:-5:26",
+      "class": "secondary_road",
+      "from": {
+        "x": -5,
+        "y": 26
+      },
+      "to": {
+        "x": -5,
+        "y": 25
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-3:26:korea_peninsula_coarse_v1:-4:26",
+      "class": "primary_road",
+      "from": {
+        "x": -4,
+        "y": 26
+      },
+      "to": {
+        "x": -3,
+        "y": 26
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-3:25:korea_peninsula_coarse_v1:-4:26",
+      "class": "primary_road",
+      "from": {
+        "x": -4,
+        "y": 26
+      },
+      "to": {
+        "x": -3,
+        "y": 25
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:25:korea_peninsula_coarse_v1:-4:26",
+      "class": "primary_road",
+      "from": {
+        "x": -4,
+        "y": 26
+      },
+      "to": {
+        "x": -4,
+        "y": 25
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-2:26:korea_peninsula_coarse_v1:-3:26",
+      "class": "secondary_road",
+      "from": {
+        "x": -3,
+        "y": 26
+      },
+      "to": {
+        "x": -2,
+        "y": 26
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-2:25:korea_peninsula_coarse_v1:-3:26",
+      "class": "secondary_road",
+      "from": {
+        "x": -3,
+        "y": 26
+      },
+      "to": {
+        "x": -2,
+        "y": 25
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-3:25:korea_peninsula_coarse_v1:-3:26",
+      "class": "primary_road",
+      "from": {
+        "x": -3,
+        "y": 26
+      },
+      "to": {
+        "x": -3,
+        "y": 25
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:26:korea_peninsula_coarse_v1:-2:26",
+      "class": "secondary_road",
+      "from": {
+        "x": -2,
+        "y": 26
+      },
+      "to": {
+        "x": -1,
+        "y": 26
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:25:korea_peninsula_coarse_v1:-2:26",
+      "class": "secondary_road",
+      "from": {
+        "x": -2,
+        "y": 26
+      },
+      "to": {
+        "x": -1,
+        "y": 25
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-2:25:korea_peninsula_coarse_v1:-2:26",
+      "class": "secondary_road",
+      "from": {
+        "x": -2,
+        "y": 26
+      },
+      "to": {
+        "x": -2,
+        "y": 25
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:26:korea_peninsula_coarse_v1:0:26",
+      "class": "secondary_road",
+      "from": {
+        "x": -1,
+        "y": 26
+      },
+      "to": {
+        "x": 0,
+        "y": 26
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:25:korea_peninsula_coarse_v1:-1:26",
+      "class": "secondary_road",
+      "from": {
+        "x": -1,
+        "y": 26
+      },
+      "to": {
+        "x": -1,
+        "y": 25
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:0:26:korea_peninsula_coarse_v1:1:26",
+      "class": "secondary_road",
+      "from": {
+        "x": 0,
+        "y": 26
+      },
+      "to": {
+        "x": 1,
+        "y": 26
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:0:26:korea_peninsula_coarse_v1:1:25",
+      "class": "secondary_road",
+      "from": {
+        "x": 0,
+        "y": 26
+      },
+      "to": {
+        "x": 1,
+        "y": 25
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:1:26:korea_peninsula_coarse_v1:2:26",
+      "class": "secondary_road",
+      "from": {
+        "x": 1,
+        "y": 26
+      },
+      "to": {
+        "x": 2,
+        "y": 26
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:1:26:korea_peninsula_coarse_v1:2:25",
+      "class": "secondary_road",
+      "from": {
+        "x": 1,
+        "y": 26
+      },
+      "to": {
+        "x": 2,
+        "y": 25
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:1:25:korea_peninsula_coarse_v1:1:26",
+      "class": "secondary_road",
+      "from": {
+        "x": 1,
+        "y": 26
+      },
+      "to": {
+        "x": 1,
+        "y": 25
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:2:26:korea_peninsula_coarse_v1:3:26",
+      "class": "secondary_road",
+      "from": {
+        "x": 2,
+        "y": 26
+      },
+      "to": {
+        "x": 3,
+        "y": 26
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:2:26:korea_peninsula_coarse_v1:3:25",
+      "class": "secondary_road",
+      "from": {
+        "x": 2,
+        "y": 26
+      },
+      "to": {
+        "x": 3,
+        "y": 25
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:2:25:korea_peninsula_coarse_v1:2:26",
+      "class": "secondary_road",
+      "from": {
+        "x": 2,
+        "y": 26
+      },
+      "to": {
+        "x": 2,
+        "y": 25
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:3:26:korea_peninsula_coarse_v1:4:25",
+      "class": "secondary_road",
+      "from": {
+        "x": 3,
+        "y": 26
+      },
+      "to": {
+        "x": 4,
+        "y": 25
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:3:25:korea_peninsula_coarse_v1:3:26",
+      "class": "secondary_road",
+      "from": {
+        "x": 3,
+        "y": 26
+      },
+      "to": {
+        "x": 3,
+        "y": 25
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:27:korea_peninsula_coarse_v1:-5:27",
+      "class": "primary_road",
+      "from": {
+        "x": -5,
+        "y": 27
+      },
+      "to": {
+        "x": -4,
+        "y": 27
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:26:korea_peninsula_coarse_v1:-5:27",
+      "class": "primary_road",
+      "from": {
+        "x": -5,
+        "y": 27
+      },
+      "to": {
+        "x": -4,
+        "y": 26
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-5:26:korea_peninsula_coarse_v1:-5:27",
+      "class": "primary_road",
+      "from": {
+        "x": -5,
+        "y": 27
+      },
+      "to": {
+        "x": -5,
+        "y": 26
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-3:27:korea_peninsula_coarse_v1:-4:27",
+      "class": "secondary_road",
+      "from": {
+        "x": -4,
+        "y": 27
+      },
+      "to": {
+        "x": -3,
+        "y": 27
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-3:26:korea_peninsula_coarse_v1:-4:27",
+      "class": "secondary_road",
+      "from": {
+        "x": -4,
+        "y": 27
+      },
+      "to": {
+        "x": -3,
+        "y": 26
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:26:korea_peninsula_coarse_v1:-4:27",
+      "class": "primary_road",
+      "from": {
+        "x": -4,
+        "y": 27
+      },
+      "to": {
+        "x": -4,
+        "y": 26
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-2:27:korea_peninsula_coarse_v1:-3:27",
+      "class": "secondary_road",
+      "from": {
+        "x": -3,
+        "y": 27
+      },
+      "to": {
+        "x": -2,
+        "y": 27
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-2:26:korea_peninsula_coarse_v1:-3:27",
+      "class": "secondary_road",
+      "from": {
+        "x": -3,
+        "y": 27
+      },
+      "to": {
+        "x": -2,
+        "y": 26
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-3:26:korea_peninsula_coarse_v1:-3:27",
+      "class": "secondary_road",
+      "from": {
+        "x": -3,
+        "y": 27
+      },
+      "to": {
+        "x": -3,
+        "y": 26
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:27:korea_peninsula_coarse_v1:-2:27",
+      "class": "secondary_road",
+      "from": {
+        "x": -2,
+        "y": 27
+      },
+      "to": {
+        "x": -1,
+        "y": 27
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:26:korea_peninsula_coarse_v1:-2:27",
+      "class": "secondary_road",
+      "from": {
+        "x": -2,
+        "y": 27
+      },
+      "to": {
+        "x": -1,
+        "y": 26
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-2:26:korea_peninsula_coarse_v1:-2:27",
+      "class": "secondary_road",
+      "from": {
+        "x": -2,
+        "y": 27
+      },
+      "to": {
+        "x": -2,
+        "y": 26
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:27:korea_peninsula_coarse_v1:0:27",
+      "class": "secondary_road",
+      "from": {
+        "x": -1,
+        "y": 27
+      },
+      "to": {
+        "x": 0,
+        "y": 27
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:27:korea_peninsula_coarse_v1:0:26",
+      "class": "secondary_road",
+      "from": {
+        "x": -1,
+        "y": 27
+      },
+      "to": {
+        "x": 0,
+        "y": 26
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:26:korea_peninsula_coarse_v1:-1:27",
+      "class": "secondary_road",
+      "from": {
+        "x": -1,
+        "y": 27
+      },
+      "to": {
+        "x": -1,
+        "y": 26
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:0:27:korea_peninsula_coarse_v1:1:27",
+      "class": "secondary_road",
+      "from": {
+        "x": 0,
+        "y": 27
+      },
+      "to": {
+        "x": 1,
+        "y": 27
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:0:27:korea_peninsula_coarse_v1:1:26",
+      "class": "secondary_road",
+      "from": {
+        "x": 0,
+        "y": 27
+      },
+      "to": {
+        "x": 1,
+        "y": 26
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:0:26:korea_peninsula_coarse_v1:0:27",
+      "class": "secondary_road",
+      "from": {
+        "x": 0,
+        "y": 27
+      },
+      "to": {
+        "x": 0,
+        "y": 26
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:1:27:korea_peninsula_coarse_v1:2:27",
+      "class": "secondary_road",
+      "from": {
+        "x": 1,
+        "y": 27
+      },
+      "to": {
+        "x": 2,
+        "y": 27
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:1:27:korea_peninsula_coarse_v1:2:26",
+      "class": "secondary_road",
+      "from": {
+        "x": 1,
+        "y": 27
+      },
+      "to": {
+        "x": 2,
+        "y": 26
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:1:26:korea_peninsula_coarse_v1:1:27",
+      "class": "secondary_road",
+      "from": {
+        "x": 1,
+        "y": 27
+      },
+      "to": {
+        "x": 1,
+        "y": 26
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:2:27:korea_peninsula_coarse_v1:3:26",
+      "class": "secondary_road",
+      "from": {
+        "x": 2,
+        "y": 27
+      },
+      "to": {
+        "x": 3,
+        "y": 26
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:2:26:korea_peninsula_coarse_v1:2:27",
+      "class": "secondary_road",
+      "from": {
+        "x": 2,
+        "y": 27
+      },
+      "to": {
+        "x": 2,
+        "y": 26
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:28:korea_peninsula_coarse_v1:-5:28",
+      "class": "primary_road",
+      "from": {
+        "x": -5,
+        "y": 28
+      },
+      "to": {
+        "x": -4,
+        "y": 28
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:27:korea_peninsula_coarse_v1:-5:28",
+      "class": "primary_road",
+      "from": {
+        "x": -5,
+        "y": 28
+      },
+      "to": {
+        "x": -4,
+        "y": 27
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-5:27:korea_peninsula_coarse_v1:-5:28",
+      "class": "primary_road",
+      "from": {
+        "x": -5,
+        "y": 28
+      },
+      "to": {
+        "x": -5,
+        "y": 27
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-3:28:korea_peninsula_coarse_v1:-4:28",
+      "class": "primary_road",
+      "from": {
+        "x": -4,
+        "y": 28
+      },
+      "to": {
+        "x": -3,
+        "y": 28
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-3:27:korea_peninsula_coarse_v1:-4:28",
+      "class": "primary_road",
+      "from": {
+        "x": -4,
+        "y": 28
+      },
+      "to": {
+        "x": -3,
+        "y": 27
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:27:korea_peninsula_coarse_v1:-4:28",
+      "class": "primary_road",
+      "from": {
+        "x": -4,
+        "y": 28
+      },
+      "to": {
+        "x": -4,
+        "y": 27
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-2:28:korea_peninsula_coarse_v1:-3:28",
+      "class": "primary_road",
+      "from": {
+        "x": -3,
+        "y": 28
+      },
+      "to": {
+        "x": -2,
+        "y": 28
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-2:27:korea_peninsula_coarse_v1:-3:28",
+      "class": "primary_road",
+      "from": {
+        "x": -3,
+        "y": 28
+      },
+      "to": {
+        "x": -2,
+        "y": 27
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-3:27:korea_peninsula_coarse_v1:-3:28",
+      "class": "primary_road",
+      "from": {
+        "x": -3,
+        "y": 28
+      },
+      "to": {
+        "x": -3,
+        "y": 27
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:28:korea_peninsula_coarse_v1:-2:28",
+      "class": "secondary_road",
+      "from": {
+        "x": -2,
+        "y": 28
+      },
+      "to": {
+        "x": -1,
+        "y": 28
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:27:korea_peninsula_coarse_v1:-2:28",
+      "class": "secondary_road",
+      "from": {
+        "x": -2,
+        "y": 28
+      },
+      "to": {
+        "x": -1,
+        "y": 27
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-2:27:korea_peninsula_coarse_v1:-2:28",
+      "class": "secondary_road",
+      "from": {
+        "x": -2,
+        "y": 28
+      },
+      "to": {
+        "x": -2,
+        "y": 27
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:28:korea_peninsula_coarse_v1:0:28",
+      "class": "secondary_road",
+      "from": {
+        "x": -1,
+        "y": 28
+      },
+      "to": {
+        "x": 0,
+        "y": 28
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:28:korea_peninsula_coarse_v1:0:27",
+      "class": "secondary_road",
+      "from": {
+        "x": -1,
+        "y": 28
+      },
+      "to": {
+        "x": 0,
+        "y": 27
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:27:korea_peninsula_coarse_v1:-1:28",
+      "class": "secondary_road",
+      "from": {
+        "x": -1,
+        "y": 28
+      },
+      "to": {
+        "x": -1,
+        "y": 27
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:0:28:korea_peninsula_coarse_v1:1:28",
+      "class": "secondary_road",
+      "from": {
+        "x": 0,
+        "y": 28
+      },
+      "to": {
+        "x": 1,
+        "y": 28
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:0:28:korea_peninsula_coarse_v1:1:27",
+      "class": "secondary_road",
+      "from": {
+        "x": 0,
+        "y": 28
+      },
+      "to": {
+        "x": 1,
+        "y": 27
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:0:27:korea_peninsula_coarse_v1:0:28",
+      "class": "secondary_road",
+      "from": {
+        "x": 0,
+        "y": 28
+      },
+      "to": {
+        "x": 0,
+        "y": 27
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:1:28:korea_peninsula_coarse_v1:2:27",
+      "class": "secondary_road",
+      "from": {
+        "x": 1,
+        "y": 28
+      },
+      "to": {
+        "x": 2,
+        "y": 27
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:1:27:korea_peninsula_coarse_v1:1:28",
+      "class": "secondary_road",
+      "from": {
+        "x": 1,
+        "y": 28
+      },
+      "to": {
+        "x": 1,
+        "y": 27
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:29:korea_peninsula_coarse_v1:-5:29",
+      "class": "primary_road",
+      "from": {
+        "x": -5,
+        "y": 29
+      },
+      "to": {
+        "x": -4,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:28:korea_peninsula_coarse_v1:-5:29",
+      "class": "primary_road",
+      "from": {
+        "x": -5,
+        "y": 29
+      },
+      "to": {
+        "x": -4,
+        "y": 28
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-5:28:korea_peninsula_coarse_v1:-5:29",
+      "class": "primary_road",
+      "from": {
+        "x": -5,
+        "y": 29
+      },
+      "to": {
+        "x": -5,
+        "y": 28
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-3:29:korea_peninsula_coarse_v1:-4:29",
+      "class": "primary_road",
+      "from": {
+        "x": -4,
+        "y": 29
+      },
+      "to": {
+        "x": -3,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-3:28:korea_peninsula_coarse_v1:-4:29",
+      "class": "primary_road",
+      "from": {
+        "x": -4,
+        "y": 29
+      },
+      "to": {
+        "x": -3,
+        "y": 28
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:28:korea_peninsula_coarse_v1:-4:29",
+      "class": "primary_road",
+      "from": {
+        "x": -4,
+        "y": 29
+      },
+      "to": {
+        "x": -4,
+        "y": 28
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-2:29:korea_peninsula_coarse_v1:-3:29",
+      "class": "primary_road",
+      "from": {
+        "x": -3,
+        "y": 29
+      },
+      "to": {
+        "x": -2,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-2:28:korea_peninsula_coarse_v1:-3:29",
+      "class": "primary_road",
+      "from": {
+        "x": -3,
+        "y": 29
+      },
+      "to": {
+        "x": -2,
+        "y": 28
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-3:28:korea_peninsula_coarse_v1:-3:29",
+      "class": "primary_road",
+      "from": {
+        "x": -3,
+        "y": 29
+      },
+      "to": {
+        "x": -3,
+        "y": 28
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:29:korea_peninsula_coarse_v1:-2:29",
+      "class": "secondary_road",
+      "from": {
+        "x": -2,
+        "y": 29
+      },
+      "to": {
+        "x": -1,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:28:korea_peninsula_coarse_v1:-2:29",
+      "class": "secondary_road",
+      "from": {
+        "x": -2,
+        "y": 29
+      },
+      "to": {
+        "x": -1,
+        "y": 28
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-2:28:korea_peninsula_coarse_v1:-2:29",
+      "class": "secondary_road",
+      "from": {
+        "x": -2,
+        "y": 29
+      },
+      "to": {
+        "x": -2,
+        "y": 28
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:29:korea_peninsula_coarse_v1:0:29",
+      "class": "secondary_road",
+      "from": {
+        "x": -1,
+        "y": 29
+      },
+      "to": {
+        "x": 0,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:29:korea_peninsula_coarse_v1:0:28",
+      "class": "secondary_road",
+      "from": {
+        "x": -1,
+        "y": 29
+      },
+      "to": {
+        "x": 0,
+        "y": 28
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:28:korea_peninsula_coarse_v1:-1:29",
+      "class": "secondary_road",
+      "from": {
+        "x": -1,
+        "y": 29
+      },
+      "to": {
+        "x": -1,
+        "y": 28
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:0:29:korea_peninsula_coarse_v1:1:28",
+      "class": "secondary_road",
+      "from": {
+        "x": 0,
+        "y": 29
+      },
+      "to": {
+        "x": 1,
+        "y": 28
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:0:28:korea_peninsula_coarse_v1:0:29",
+      "class": "secondary_road",
+      "from": {
+        "x": 0,
+        "y": 29
+      },
+      "to": {
+        "x": 0,
+        "y": 28
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:30:korea_peninsula_coarse_v1:-5:30",
+      "class": "primary_road",
+      "from": {
+        "x": -5,
+        "y": 30
+      },
+      "to": {
+        "x": -4,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:29:korea_peninsula_coarse_v1:-5:30",
+      "class": "primary_road",
+      "from": {
+        "x": -5,
+        "y": 30
+      },
+      "to": {
+        "x": -4,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-5:29:korea_peninsula_coarse_v1:-5:30",
+      "class": "primary_road",
+      "from": {
+        "x": -5,
+        "y": 30
+      },
+      "to": {
+        "x": -5,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-3:30:korea_peninsula_coarse_v1:-4:30",
+      "class": "primary_road",
+      "from": {
+        "x": -4,
+        "y": 30
+      },
+      "to": {
+        "x": -3,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-3:29:korea_peninsula_coarse_v1:-4:30",
+      "class": "primary_road",
+      "from": {
+        "x": -4,
+        "y": 30
+      },
+      "to": {
+        "x": -3,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:29:korea_peninsula_coarse_v1:-4:30",
+      "class": "primary_road",
+      "from": {
+        "x": -4,
+        "y": 30
+      },
+      "to": {
+        "x": -4,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-2:30:korea_peninsula_coarse_v1:-3:30",
+      "class": "primary_road",
+      "from": {
+        "x": -3,
+        "y": 30
+      },
+      "to": {
+        "x": -2,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-2:29:korea_peninsula_coarse_v1:-3:30",
+      "class": "primary_road",
+      "from": {
+        "x": -3,
+        "y": 30
+      },
+      "to": {
+        "x": -2,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-3:29:korea_peninsula_coarse_v1:-3:30",
+      "class": "primary_road",
+      "from": {
+        "x": -3,
+        "y": 30
+      },
+      "to": {
+        "x": -3,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:30:korea_peninsula_coarse_v1:-2:30",
+      "class": "secondary_road",
+      "from": {
+        "x": -2,
+        "y": 30
+      },
+      "to": {
+        "x": -1,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:29:korea_peninsula_coarse_v1:-2:30",
+      "class": "secondary_road",
+      "from": {
+        "x": -2,
+        "y": 30
+      },
+      "to": {
+        "x": -1,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-2:29:korea_peninsula_coarse_v1:-2:30",
+      "class": "secondary_road",
+      "from": {
+        "x": -2,
+        "y": 30
+      },
+      "to": {
+        "x": -2,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:30:korea_peninsula_coarse_v1:0:29",
+      "class": "secondary_road",
+      "from": {
+        "x": -1,
+        "y": 30
+      },
+      "to": {
+        "x": 0,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-1:29:korea_peninsula_coarse_v1:-1:30",
+      "class": "secondary_road",
+      "from": {
+        "x": -1,
+        "y": 30
+      },
+      "to": {
+        "x": -1,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:31:korea_peninsula_coarse_v1:-5:31",
+      "class": "secondary_road",
+      "from": {
+        "x": -5,
+        "y": 31
+      },
+      "to": {
+        "x": -4,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:30:korea_peninsula_coarse_v1:-5:31",
+      "class": "primary_road",
+      "from": {
+        "x": -5,
+        "y": 31
+      },
+      "to": {
+        "x": -4,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-5:30:korea_peninsula_coarse_v1:-5:31",
+      "class": "secondary_road",
+      "from": {
+        "x": -5,
+        "y": 31
+      },
+      "to": {
+        "x": -5,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-3:31:korea_peninsula_coarse_v1:-4:31",
+      "class": "secondary_road",
+      "from": {
+        "x": -4,
+        "y": 31
+      },
+      "to": {
+        "x": -3,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-3:30:korea_peninsula_coarse_v1:-4:31",
+      "class": "primary_road",
+      "from": {
+        "x": -4,
+        "y": 31
+      },
+      "to": {
+        "x": -3,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:30:korea_peninsula_coarse_v1:-4:31",
+      "class": "primary_road",
+      "from": {
+        "x": -4,
+        "y": 31
+      },
+      "to": {
+        "x": -4,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-2:30:korea_peninsula_coarse_v1:-3:31",
+      "class": "secondary_road",
+      "from": {
+        "x": -3,
+        "y": 31
+      },
+      "to": {
+        "x": -2,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-3:30:korea_peninsula_coarse_v1:-3:31",
+      "class": "primary_road",
+      "from": {
+        "x": -3,
+        "y": 31
+      },
+      "to": {
+        "x": -3,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:32:korea_peninsula_coarse_v1:-5:32",
+      "class": "secondary_road",
+      "from": {
+        "x": -5,
+        "y": 32
+      },
+      "to": {
+        "x": -4,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:31:korea_peninsula_coarse_v1:-5:32",
+      "class": "secondary_road",
+      "from": {
+        "x": -5,
+        "y": 32
+      },
+      "to": {
+        "x": -4,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-5:31:korea_peninsula_coarse_v1:-5:32",
+      "class": "secondary_road",
+      "from": {
+        "x": -5,
+        "y": 32
+      },
+      "to": {
+        "x": -5,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-3:31:korea_peninsula_coarse_v1:-4:32",
+      "class": "secondary_road",
+      "from": {
+        "x": -4,
+        "y": 32
+      },
+      "to": {
+        "x": -3,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:31:korea_peninsula_coarse_v1:-4:32",
+      "class": "secondary_road",
+      "from": {
+        "x": -4,
+        "y": 32
+      },
+      "to": {
+        "x": -4,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:33:korea_peninsula_coarse_v1:-5:33",
+      "class": "secondary_road",
+      "from": {
+        "x": -5,
+        "y": 33
+      },
+      "to": {
+        "x": -4,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:32:korea_peninsula_coarse_v1:-5:33",
+      "class": "secondary_road",
+      "from": {
+        "x": -5,
+        "y": 33
+      },
+      "to": {
+        "x": -4,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-5:32:korea_peninsula_coarse_v1:-5:33",
+      "class": "secondary_road",
+      "from": {
+        "x": -5,
+        "y": 33
+      },
+      "to": {
+        "x": -5,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:32:korea_peninsula_coarse_v1:-4:33",
+      "class": "secondary_road",
+      "from": {
+        "x": -4,
+        "y": 33
+      },
+      "to": {
+        "x": -4,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-4:33:korea_peninsula_coarse_v1:-5:34",
+      "class": "secondary_road",
+      "from": {
+        "x": -5,
+        "y": 34
+      },
+      "to": {
+        "x": -4,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:korea_peninsula_coarse_v1:-5:33:korea_peninsula_coarse_v1:-5:34",
+      "class": "secondary_road",
+      "from": {
+        "x": -5,
+        "y": 34
+      },
+      "to": {
+        "x": -5,
+        "y": 33
+      }
+    }
+  ],
+  "railSegments": [
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-4:24:korea_peninsula_coarse_v1:-5:24",
+      "class": "rail_line",
+      "from": {
+        "x": -5,
+        "y": 24
+      },
+      "to": {
+        "x": -4,
+        "y": 24
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-3:24:korea_peninsula_coarse_v1:-4:24",
+      "class": "rail_line",
+      "from": {
+        "x": -4,
+        "y": 24
+      },
+      "to": {
+        "x": -3,
+        "y": 24
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-2:24:korea_peninsula_coarse_v1:-3:24",
+      "class": "rail_line",
+      "from": {
+        "x": -3,
+        "y": 24
+      },
+      "to": {
+        "x": -2,
+        "y": 24
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-1:24:korea_peninsula_coarse_v1:-2:24",
+      "class": "rail_line",
+      "from": {
+        "x": -2,
+        "y": 24
+      },
+      "to": {
+        "x": -1,
+        "y": 24
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-1:24:korea_peninsula_coarse_v1:0:24",
+      "class": "rail_line",
+      "from": {
+        "x": -1,
+        "y": 24
+      },
+      "to": {
+        "x": 0,
+        "y": 24
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:0:24:korea_peninsula_coarse_v1:1:24",
+      "class": "rail_line",
+      "from": {
+        "x": 0,
+        "y": 24
+      },
+      "to": {
+        "x": 1,
+        "y": 24
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-4:25:korea_peninsula_coarse_v1:-5:25",
+      "class": "rail_line",
+      "from": {
+        "x": -5,
+        "y": 25
+      },
+      "to": {
+        "x": -4,
+        "y": 25
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-4:24:korea_peninsula_coarse_v1:-5:25",
+      "class": "rail_line",
+      "from": {
+        "x": -5,
+        "y": 25
+      },
+      "to": {
+        "x": -4,
+        "y": 24
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-5:24:korea_peninsula_coarse_v1:-5:25",
+      "class": "rail_line",
+      "from": {
+        "x": -5,
+        "y": 25
+      },
+      "to": {
+        "x": -5,
+        "y": 24
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-3:25:korea_peninsula_coarse_v1:-4:25",
+      "class": "rail_line",
+      "from": {
+        "x": -4,
+        "y": 25
+      },
+      "to": {
+        "x": -3,
+        "y": 25
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-3:24:korea_peninsula_coarse_v1:-4:25",
+      "class": "rail_line",
+      "from": {
+        "x": -4,
+        "y": 25
+      },
+      "to": {
+        "x": -3,
+        "y": 24
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-4:24:korea_peninsula_coarse_v1:-4:25",
+      "class": "rail_line",
+      "from": {
+        "x": -4,
+        "y": 25
+      },
+      "to": {
+        "x": -4,
+        "y": 24
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-2:24:korea_peninsula_coarse_v1:-3:25",
+      "class": "rail_line",
+      "from": {
+        "x": -3,
+        "y": 25
+      },
+      "to": {
+        "x": -2,
+        "y": 24
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-3:24:korea_peninsula_coarse_v1:-3:25",
+      "class": "rail_line",
+      "from": {
+        "x": -3,
+        "y": 25
+      },
+      "to": {
+        "x": -3,
+        "y": 24
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-1:25:korea_peninsula_coarse_v1:0:24",
+      "class": "rail_line",
+      "from": {
+        "x": -1,
+        "y": 25
+      },
+      "to": {
+        "x": 0,
+        "y": 24
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-1:24:korea_peninsula_coarse_v1:-1:25",
+      "class": "rail_line",
+      "from": {
+        "x": -1,
+        "y": 25
+      },
+      "to": {
+        "x": -1,
+        "y": 24
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-4:26:korea_peninsula_coarse_v1:-5:26",
+      "class": "rail_line",
+      "from": {
+        "x": -5,
+        "y": 26
+      },
+      "to": {
+        "x": -4,
+        "y": 26
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-4:25:korea_peninsula_coarse_v1:-5:26",
+      "class": "rail_line",
+      "from": {
+        "x": -5,
+        "y": 26
+      },
+      "to": {
+        "x": -4,
+        "y": 25
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-5:25:korea_peninsula_coarse_v1:-5:26",
+      "class": "rail_line",
+      "from": {
+        "x": -5,
+        "y": 26
+      },
+      "to": {
+        "x": -5,
+        "y": 25
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-3:25:korea_peninsula_coarse_v1:-4:26",
+      "class": "rail_line",
+      "from": {
+        "x": -4,
+        "y": 26
+      },
+      "to": {
+        "x": -3,
+        "y": 25
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-4:25:korea_peninsula_coarse_v1:-4:26",
+      "class": "rail_line",
+      "from": {
+        "x": -4,
+        "y": 26
+      },
+      "to": {
+        "x": -4,
+        "y": 25
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-1:26:korea_peninsula_coarse_v1:-2:26",
+      "class": "rail_line",
+      "from": {
+        "x": -2,
+        "y": 26
+      },
+      "to": {
+        "x": -1,
+        "y": 26
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-1:25:korea_peninsula_coarse_v1:-2:26",
+      "class": "rail_line",
+      "from": {
+        "x": -2,
+        "y": 26
+      },
+      "to": {
+        "x": -1,
+        "y": 25
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-1:25:korea_peninsula_coarse_v1:-1:26",
+      "class": "rail_line",
+      "from": {
+        "x": -1,
+        "y": 26
+      },
+      "to": {
+        "x": -1,
+        "y": 25
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-4:27:korea_peninsula_coarse_v1:-5:27",
+      "class": "rail_line",
+      "from": {
+        "x": -5,
+        "y": 27
+      },
+      "to": {
+        "x": -4,
+        "y": 27
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-4:26:korea_peninsula_coarse_v1:-5:27",
+      "class": "rail_line",
+      "from": {
+        "x": -5,
+        "y": 27
+      },
+      "to": {
+        "x": -4,
+        "y": 26
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-5:26:korea_peninsula_coarse_v1:-5:27",
+      "class": "rail_line",
+      "from": {
+        "x": -5,
+        "y": 27
+      },
+      "to": {
+        "x": -5,
+        "y": 26
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-3:27:korea_peninsula_coarse_v1:-4:27",
+      "class": "rail_line",
+      "from": {
+        "x": -4,
+        "y": 27
+      },
+      "to": {
+        "x": -3,
+        "y": 27
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-4:26:korea_peninsula_coarse_v1:-4:27",
+      "class": "rail_line",
+      "from": {
+        "x": -4,
+        "y": 27
+      },
+      "to": {
+        "x": -4,
+        "y": 26
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-2:27:korea_peninsula_coarse_v1:-3:27",
+      "class": "rail_line",
+      "from": {
+        "x": -3,
+        "y": 27
+      },
+      "to": {
+        "x": -2,
+        "y": 27
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-2:26:korea_peninsula_coarse_v1:-3:27",
+      "class": "rail_line",
+      "from": {
+        "x": -3,
+        "y": 27
+      },
+      "to": {
+        "x": -2,
+        "y": 26
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-1:27:korea_peninsula_coarse_v1:-2:27",
+      "class": "rail_line",
+      "from": {
+        "x": -2,
+        "y": 27
+      },
+      "to": {
+        "x": -1,
+        "y": 27
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-1:26:korea_peninsula_coarse_v1:-2:27",
+      "class": "rail_line",
+      "from": {
+        "x": -2,
+        "y": 27
+      },
+      "to": {
+        "x": -1,
+        "y": 26
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-2:26:korea_peninsula_coarse_v1:-2:27",
+      "class": "rail_line",
+      "from": {
+        "x": -2,
+        "y": 27
+      },
+      "to": {
+        "x": -2,
+        "y": 26
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-1:26:korea_peninsula_coarse_v1:-1:27",
+      "class": "rail_line",
+      "from": {
+        "x": -1,
+        "y": 27
+      },
+      "to": {
+        "x": -1,
+        "y": 26
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-4:28:korea_peninsula_coarse_v1:-5:28",
+      "class": "rail_line",
+      "from": {
+        "x": -5,
+        "y": 28
+      },
+      "to": {
+        "x": -4,
+        "y": 28
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-4:27:korea_peninsula_coarse_v1:-5:28",
+      "class": "rail_line",
+      "from": {
+        "x": -5,
+        "y": 28
+      },
+      "to": {
+        "x": -4,
+        "y": 27
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-5:27:korea_peninsula_coarse_v1:-5:28",
+      "class": "rail_line",
+      "from": {
+        "x": -5,
+        "y": 28
+      },
+      "to": {
+        "x": -5,
+        "y": 27
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-3:28:korea_peninsula_coarse_v1:-4:28",
+      "class": "rail_line",
+      "from": {
+        "x": -4,
+        "y": 28
+      },
+      "to": {
+        "x": -3,
+        "y": 28
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-3:27:korea_peninsula_coarse_v1:-4:28",
+      "class": "rail_line",
+      "from": {
+        "x": -4,
+        "y": 28
+      },
+      "to": {
+        "x": -3,
+        "y": 27
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-4:27:korea_peninsula_coarse_v1:-4:28",
+      "class": "rail_line",
+      "from": {
+        "x": -4,
+        "y": 28
+      },
+      "to": {
+        "x": -4,
+        "y": 27
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-2:28:korea_peninsula_coarse_v1:-3:28",
+      "class": "rail_line",
+      "from": {
+        "x": -3,
+        "y": 28
+      },
+      "to": {
+        "x": -2,
+        "y": 28
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-2:27:korea_peninsula_coarse_v1:-3:28",
+      "class": "rail_line",
+      "from": {
+        "x": -3,
+        "y": 28
+      },
+      "to": {
+        "x": -2,
+        "y": 27
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-3:27:korea_peninsula_coarse_v1:-3:28",
+      "class": "rail_line",
+      "from": {
+        "x": -3,
+        "y": 28
+      },
+      "to": {
+        "x": -3,
+        "y": 27
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-1:27:korea_peninsula_coarse_v1:-2:28",
+      "class": "rail_line",
+      "from": {
+        "x": -2,
+        "y": 28
+      },
+      "to": {
+        "x": -1,
+        "y": 27
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-2:27:korea_peninsula_coarse_v1:-2:28",
+      "class": "rail_line",
+      "from": {
+        "x": -2,
+        "y": 28
+      },
+      "to": {
+        "x": -2,
+        "y": 27
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-2:28:korea_peninsula_coarse_v1:-2:29",
+      "class": "rail_line",
+      "from": {
+        "x": -2,
+        "y": 29
+      },
+      "to": {
+        "x": -2,
+        "y": 28
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-2:30:korea_peninsula_coarse_v1:-3:30",
+      "class": "rail_line",
+      "from": {
+        "x": -3,
+        "y": 30
+      },
+      "to": {
+        "x": -2,
+        "y": 30
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-2:29:korea_peninsula_coarse_v1:-3:30",
+      "class": "rail_line",
+      "from": {
+        "x": -3,
+        "y": 30
+      },
+      "to": {
+        "x": -2,
+        "y": 29
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-2:29:korea_peninsula_coarse_v1:-2:30",
+      "class": "rail_line",
+      "from": {
+        "x": -2,
+        "y": 30
+      },
+      "to": {
+        "x": -2,
+        "y": 29
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-4:31:korea_peninsula_coarse_v1:-5:31",
+      "class": "rail_line",
+      "from": {
+        "x": -5,
+        "y": 31
+      },
+      "to": {
+        "x": -4,
+        "y": 31
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-5:30:korea_peninsula_coarse_v1:-5:31",
+      "class": "rail_line",
+      "from": {
+        "x": -5,
+        "y": 31
+      },
+      "to": {
+        "x": -5,
+        "y": 30
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-3:31:korea_peninsula_coarse_v1:-4:31",
+      "class": "rail_line",
+      "from": {
+        "x": -4,
+        "y": 31
+      },
+      "to": {
+        "x": -3,
+        "y": 31
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-3:30:korea_peninsula_coarse_v1:-4:31",
+      "class": "rail_line",
+      "from": {
+        "x": -4,
+        "y": 31
+      },
+      "to": {
+        "x": -3,
+        "y": 30
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-2:30:korea_peninsula_coarse_v1:-3:31",
+      "class": "rail_line",
+      "from": {
+        "x": -3,
+        "y": 31
+      },
+      "to": {
+        "x": -2,
+        "y": 30
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-3:30:korea_peninsula_coarse_v1:-3:31",
+      "class": "rail_line",
+      "from": {
+        "x": -3,
+        "y": 31
+      },
+      "to": {
+        "x": -3,
+        "y": 30
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-4:32:korea_peninsula_coarse_v1:-5:32",
+      "class": "rail_line",
+      "from": {
+        "x": -5,
+        "y": 32
+      },
+      "to": {
+        "x": -4,
+        "y": 32
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-4:31:korea_peninsula_coarse_v1:-5:32",
+      "class": "rail_line",
+      "from": {
+        "x": -5,
+        "y": 32
+      },
+      "to": {
+        "x": -4,
+        "y": 31
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-5:31:korea_peninsula_coarse_v1:-5:32",
+      "class": "rail_line",
+      "from": {
+        "x": -5,
+        "y": 32
+      },
+      "to": {
+        "x": -5,
+        "y": 31
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-3:31:korea_peninsula_coarse_v1:-4:32",
+      "class": "rail_line",
+      "from": {
+        "x": -4,
+        "y": 32
+      },
+      "to": {
+        "x": -3,
+        "y": 31
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-4:31:korea_peninsula_coarse_v1:-4:32",
+      "class": "rail_line",
+      "from": {
+        "x": -4,
+        "y": 32
+      },
+      "to": {
+        "x": -4,
+        "y": 31
+      }
+    },
+    {
+      "id": "rail:korea_peninsula_coarse_v1:-4:32:korea_peninsula_coarse_v1:-4:33",
+      "class": "rail_line",
+      "from": {
+        "x": -4,
+        "y": 33
+      },
+      "to": {
+        "x": -4,
+        "y": 32
+      }
+    }
+  ],
+  "generatedAt": "2026-03-25T02:27:37.485116+00:00",
+  "summary": {
+    "hexCount": 132,
+    "settlementCount": 6,
+    "airfieldCount": 1,
+    "roadSegmentCount": 148,
+    "railSegmentCount": 62
+  }
+}

@@ -1,0 +1,196 @@
+{
+  "schema": "mwe.map_validation_report.v1",
+  "theaterId": "guadalcanal_1942",
+  "generatedAt": "2026-03-24T01:54:16.551034+00:00",
+  "status": "warning",
+  "summary": {
+    "pass": 6,
+    "warning": 1,
+    "fail": 0
+  },
+  "checks": [
+    {
+      "id": "crs_alignment",
+      "label": "CRS and alignment",
+      "status": "pass",
+      "summary": "Canonical DEM, relief, and land-cover rasters align to one preprocess grid.",
+      "metrics": {
+        "expected_epsg": 32757,
+        "dem_shape": [
+          3698,
+          3671
+        ],
+        "dem_scale": {
+          "x": 30.0,
+          "y": 30.0
+        },
+        "dem_origin": {
+          "x": 560280.0,
+          "y": 9010650.0
+        }
+      },
+      "details": []
+    },
+    {
+      "id": "source_coverage",
+      "label": "Source coverage and manifest pinning",
+      "status": "pass",
+      "summary": "All baked source ids are pinned and all tracked processed inputs are present.",
+      "metrics": {
+        "source_id_count": 8,
+        "tracked_file_count": 12,
+        "manifest_entry_count": 11
+      },
+      "details": []
+    },
+    {
+      "id": "hydro_continuity",
+      "label": "Hydro continuity",
+      "status": "pass",
+      "summary": "Operational hydro lines are continuous and all crossing candidates match hydro geometry.",
+      "metrics": {
+        "hydro_line_count": 474,
+        "crossing_candidate_count": 100,
+        "isolated_short_segments": 0,
+        "unmatched_crossings": 0
+      },
+      "details": []
+    },
+    {
+      "id": "transport_continuity",
+      "label": "Transport continuity",
+      "status": "pass",
+      "summary": "Operational roads, rail, and bridges form a coherent transport layer.",
+      "metrics": {
+        "road_segment_count": 1604,
+        "rail_segment_count": 0,
+        "bridge_count": 50,
+        "isolated_road_fragments": 0,
+        "isolated_rail_fragments": 0,
+        "bridges_without_roads": 0
+      },
+      "details": []
+    },
+    {
+      "id": "place_name_uniqueness",
+      "label": "Place-name uniqueness",
+      "status": "warning",
+      "summary": "Ambiguous place names were found across settlements, airfields, or admin labels.",
+      "metrics": {
+        "tracked_place_records": 83,
+        "ambiguous_names": 1
+      },
+      "details": [
+        "kuma: Kuma"
+      ]
+    },
+    {
+      "id": "tile_coverage",
+      "label": "Runtime tile coverage",
+      "status": "pass",
+      "summary": "Runtime tiles cover every zoom-relevant hex exactly once in each tier.",
+      "metrics": {
+        "manifest_path": "build/map_tiles/guadalcanal_1942/manifest.json",
+        "public_manifest_path": "ui/public/map_tiles/guadalcanal_1942/manifest.json",
+        "tiers": {
+          "far": {
+            "tile_count": 21,
+            "expected_hexes": 2664,
+            "covered_hexes": 2664,
+            "uncovered_hexes": 0,
+            "duplicate_hexes": 0,
+            "missing_tile_files": 0,
+            "unexpected_hexes": 0
+          },
+          "operational": {
+            "tile_count": 50,
+            "expected_hexes": 2664,
+            "covered_hexes": 2664,
+            "uncovered_hexes": 0,
+            "duplicate_hexes": 0,
+            "missing_tile_files": 0,
+            "unexpected_hexes": 0
+          },
+          "close": {
+            "tile_count": 78,
+            "expected_hexes": 2664,
+            "covered_hexes": 2664,
+            "uncovered_hexes": 0,
+            "duplicate_hexes": 0,
+            "missing_tile_files": 0,
+            "unexpected_hexes": 0
+          }
+        }
+      },
+      "details": []
+    },
+    {
+      "id": "hex_bake_completeness",
+      "label": "Hex bake completeness",
+      "status": "pass",
+      "summary": "Every baked hex record exposes the expected gameplay and provenance fields.",
+      "metrics": {
+        "hex_count": 2664,
+        "missing_field_records": 0,
+        "neighbor_length_issues": 0,
+        "terrain_mix_issues": 0,
+        "missing_provenance_records": 0
+      },
+      "details": []
+    }
+  ],
+  "runtimeTiles": {
+    "manifestPath": "build/map_tiles/guadalcanal_1942/manifest.json",
+    "publicManifestPath": "ui/public/map_tiles/guadalcanal_1942/manifest.json",
+    "qaBundlePath": "build/map_tiles/guadalcanal_1942/qa_bundle.json",
+    "publicQaBundlePath": "ui/public/map_tiles/guadalcanal_1942/qa_bundle.json"
+  },
+  "datasets": {
+    "hexes": {
+      "path": "data/processed/hex/terrain_hexes.json",
+      "count": 2664,
+      "schema": "mwe.terrain_hex.v1"
+    },
+    "relief": {
+      "path": "reports/map/relief_build_report.json",
+      "stats": {
+        "min": 0.0,
+        "max": 77.47449493408203,
+        "mean": 8.272019386291504,
+        "std": 12.781018257141113,
+        "finite_pixels": 13575358
+      }
+    },
+    "hydro": {
+      "linesPath": "data/processed/hydro/hydro_lines_operational.geojson",
+      "polygonsPath": "data/processed/hydro/hydro_polygons_operational.geojson",
+      "crossingsPath": "data/processed/hydro/crossing_candidates.geojson",
+      "lineCount": 474,
+      "polygonCount": 46,
+      "crossingCount": 100
+    },
+    "transport": {
+      "roadsPath": "data/processed/transport/roads_operational.geojson",
+      "railPath": "data/processed/transport/rail_operational.geojson",
+      "bridgesPath": "data/processed/transport/bridges.geojson",
+      "roadCount": 1604,
+      "railCount": 0,
+      "bridgeCount": 50
+    },
+    "places": {
+      "settlementsPath": "data/processed/places/settlements_operational.geojson",
+      "airfieldsPath": "data/processed/places/airfields_operational.geojson",
+      "adminNamesPath": "data/processed/places/admin_names_operational.geojson",
+      "settlementCount": 69,
+      "airfieldCount": 1,
+      "adminNameCount": 13
+    },
+    "historicalOverrides": {
+      "available": false,
+      "fileCount": 0,
+      "files": [],
+      "aliasFiles": [],
+      "note": "Structured historical override layers are not yet packaged for this theater."
+    }
+  }
+}

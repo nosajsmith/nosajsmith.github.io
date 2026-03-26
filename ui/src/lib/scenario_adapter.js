@@ -70,3 +70,17 @@ export function adaptScenario(rawScenario, opts = {}) {
     raw: rawScenario,
   };
 }
+
+export function adaptMapState(rawMapState, opts = {}) {
+  const mapMeta = rawMapState?.map?.meta ?? {};
+  return adaptScenario(
+    {
+      units: rawMapState?.units ?? [],
+      meta: {
+        ...mapMeta,
+        ...(opts || {}),
+      },
+    },
+    opts,
+  );
+}

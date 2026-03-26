@@ -1,75 +1,60 @@
-export function makeWsRpc(url, { proto = "1.0" } = {}) {
+export function makeWsRpc(url, { proto = "1.0", timeoutMs = 5000 } = {}) {
   let ws = null;
-  let nextId = 1;
-  const pending = new Map();
+  let openPromise = null;
+  const pending = new Map(); // req_id -> {resolve,reject,timer}
 
-  async function connect() {
+  function connect() {
     if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
-      return;
+      return openPromise ?? Promise.resolve();
     }
 
     ws = new WebSocket(url);
 
-    await new Promise((resolve, reject) => {
+    openPromise = new Promise((resolve, reject) => {
       ws.onopen = () => resolve();
       ws.onerror = (e) => reject(e);
     });
 
     ws.onmessage = (ev) => {
       let msg;
-      try {
-        msg = JSON.parse(ev.data);
-      } catch (e) {
-        console.error("bad ws json", e);
-        return;
-      }
-
-      const id = msg.id ?? msg.req_id;
+      try { msg = JSON.parse(ev.data); } catch { return; }
+      const id = msg?.req_id;
       if (!id) return;
-
       const p = pending.get(id);
       if (!p) return;
-
+      clearTimeout(p.timer);
       pending.delete(id);
-
-      const normalized = {
-        status: msg.ok ? "ok" : "error",
-        data: msg.data ?? msg.payload,
-        error: msg.error ?? null,
-        raw: msg,
-      };
-
-      if (msg.ok) {
-        p.resolve(normalized);
-      } else {
-        p.resolve(normalized);
-      }
+      p.resolve(msg);
     };
 
     ws.onclose = () => {
+      // fail any in-flight requests
       for (const [, p] of pending) {
+        clearTimeout(p.timer);
         p.reject(new Error("ws closed"));
       }
       pending.clear();
       ws = null;
+      openPromise = null;
     };
+
+    return openPromise;
   }
 
-  async function rpc(cmd, args = {}) {
+  async function rpc(cmd, payload = {}, id = crypto.randomUUID()) {
     await connect();
 
-    return await new Promise((resolve, reject) => {
-      const id = `ui-${nextId++}`;
-      pending.set(id, { resolve, reject });
+    const req = { req_id: id, v: proto, cmd, payload };
+    const body = JSON.stringify(req);
 
-      const payload = JSON.stringify({
-        id,
-        proto,
-        cmd,
-        payload: args,
-      });
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(() => {
+        pending.delete(id);
+        reject(new Error(`timeout waiting for ${cmd}`));
+      }, timeoutMs);
 
-      ws.send(payload);
+      pending.set(id, { resolve, reject, timer });
+      ws.send(body);
     });
   }
 
@@ -81,5 +66,5 @@ export function makeWsRpc(url, { proto = "1.0" } = {}) {
     try { ws?.close(); } catch {}
   }
 
-  return { connect, rpc, isConnected, close };
+  return { rpc, connect, close, isConnected };
 }

@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" fill="none">
+  <defs>
+    <linearGradient id="seaBand" x1="500" y1="0" x2="500" y2="180" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#516166" stop-opacity="0.78"/>
+      <stop offset="1" stop-color="#6d7662" stop-opacity="0.26"/>
+    </linearGradient>
+    <linearGradient id="coastalPlain" x1="500" y1="132" x2="500" y2="348" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8c8669" stop-opacity="0.52"/>
+      <stop offset="1" stop-color="#6c7059" stop-opacity="0.28"/>
+    </linearGradient>
+    <linearGradient id="southernRidges" x1="500" y1="292" x2="500" y2="620" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#64644f" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#4f523f" stop-opacity="0.46"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1000" height="620" fill="#5a614c" fill-opacity="0.16"/>
+
+  <path
+    d="M0 0H1000V128L940 142L862 156L780 164L694 158L610 150L534 148L442 156L362 170L272 178L176 186L86 182L0 174V0Z"
+    fill="url(#seaBand)"
+  />
+  <path
+    d="M0 154L98 160L196 162L286 154L372 150L450 162L524 178L598 182L674 174L752 160L836 164L920 178L1000 190V262L924 262L854 258L780 252L702 246L622 236L540 228L466 230L388 238L306 248L220 258L124 266L42 264L0 258V154Z"
+    fill="url(#coastalPlain)"
+  />
+  <path
+    d="M0 248L84 250L170 246L244 242L308 248L374 266L448 288L526 296L612 296L704 286L808 276L912 278L1000 288V620H0V248Z"
+    fill="url(#southernRidges)"
+  />
+
+  <path
+    d="M156 164C176 194 188 222 198 250C214 294 228 326 252 362"
+    stroke="#738189"
+    stroke-opacity="0.46"
+    stroke-width="8"
+    stroke-linecap="round"
+  />
+  <path
+    d="M474 150C462 180 450 210 438 240C430 258 424 278 420 300"
+    stroke="#738189"
+    stroke-opacity="0.34"
+    stroke-width="5"
+    stroke-linecap="round"
+  />
+  <path
+    d="M688 154C676 182 666 214 658 246C650 278 646 314 654 348"
+    stroke="#738189"
+    stroke-opacity="0.44"
+    stroke-width="7"
+    stroke-linecap="round"
+  />
+  <path
+    d="M730 174C734 204 742 232 752 258C760 278 766 298 768 324"
+    stroke="#738189"
+    stroke-opacity="0.28"
+    stroke-width="3.5"
+    stroke-linecap="round"
+  />
+
+  <path
+    d="M158 250C232 238 314 230 396 228C484 226 566 228 642 236C724 244 802 250 888 248"
+    stroke="#9f8e66"
+    stroke-opacity="0.28"
+    stroke-width="3.2"
+    stroke-dasharray="7 10"
+    stroke-linecap="round"
+  />
+  <path
+    d="M420 270C446 250 468 226 492 202C506 188 522 178 548 168"
+    stroke="#a49369"
+    stroke-opacity="0.34"
+    stroke-width="2.6"
+    stroke-dasharray="6 8"
+    stroke-linecap="round"
+  />
+
+  <path
+    d="M464 198L548 180"
+    stroke="#d1c5a5"
+    stroke-opacity="0.22"
+    stroke-width="10"
+    stroke-linecap="square"
+  />
+  <path
+    d="M488 166L524 226"
+    stroke="#d1c5a5"
+    stroke-opacity="0.16"
+    stroke-width="7"
+    stroke-linecap="square"
+  />
+
+  <path
+    d="M522 374C560 350 592 344 626 350C654 356 678 370 704 392"
+    stroke="#847c62"
+    stroke-opacity="0.28"
+    stroke-width="20"
+    stroke-linecap="round"
+  />
+  <path
+    d="M508 404C548 384 590 380 634 390C666 398 694 412 720 432"
+    stroke="#9f9777"
+    stroke-opacity="0.16"
+    stroke-width="12"
+    stroke-linecap="round"
+  />
+
+  <path
+    d="M206 328C260 304 322 294 392 300"
+    stroke="#d6ccb2"
+    stroke-opacity="0.12"
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+  <path
+    d="M300 356C376 330 454 328 540 342"
+    stroke="#d6ccb2"
+    stroke-opacity="0.1"
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+  <path
+    d="M392 392C478 368 562 370 650 392"
+    stroke="#d6ccb2"
+    stroke-opacity="0.1"
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+  <path
+    d="M462 436C534 416 610 420 684 442"
+    stroke="#d6ccb2"
+    stroke-opacity="0.1"
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+
+  <g fill="#d8cfb6" fill-opacity="0.2" font-family="Segoe UI, Source Sans 3, sans-serif">
+    <text x="500" y="150" font-size="18" font-weight="700" letter-spacing="4" text-anchor="middle">HENDERSON FIELD</text>
+    <text x="422" y="252" font-size="12" font-weight="700" letter-spacing="3" text-anchor="middle">LUNGA POINT</text>
+    <text x="684" y="258" font-size="11" font-weight="600" letter-spacing="2.4" text-anchor="middle">ALLIGATOR CREEK</text>
+    <text x="758" y="326" font-size="11" font-weight="600" letter-spacing="2.2" text-anchor="middle">ILU CROSSING</text>
+    <text x="252" y="330" font-size="11" font-weight="600" letter-spacing="2.2" text-anchor="middle">MATANIKAU FORKS</text>
+    <text x="602" y="432" font-size="12" font-weight="700" letter-spacing="2.8" text-anchor="middle">BLOODY RIDGE</text>
+    <text x="176" y="252" font-size="10" font-weight="600" letter-spacing="2.1" text-anchor="middle">POINT CRUZ</text>
+    <text x="338" y="174" font-size="10" font-weight="600" letter-spacing="2.1" text-anchor="middle">KUKUM</text>
+    <text x="826" y="250" font-size="10" font-weight="600" letter-spacing="2.1" text-anchor="middle">TAIVU POINT</text>
+  </g>
+</svg>

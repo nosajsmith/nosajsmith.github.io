@@ -1,0 +1,7059 @@
+{
+  "schema": "mwe.runtime_basemap_tile.v1",
+  "theaterId": "guadalcanal_1942",
+  "zoomTier": "far",
+  "tileId": "1_2",
+  "bounds": {
+    "minX": 8,
+    "maxX": 20,
+    "minY": 24,
+    "maxY": 36
+  },
+  "hexes": [
+    {
+      "hexId": "guadalcanal_1942:8:24",
+      "q": 8,
+      "r": 24,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.923,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.559,
+      "supplySeed": 0.0,
+      "contourBand": 4
+    },
+    {
+      "hexId": "guadalcanal_1942:9:24",
+      "q": 9,
+      "r": 24,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.638,
+      "supplySeed": 0.0,
+      "contourBand": 5
+    },
+    {
+      "hexId": "guadalcanal_1942:10:24",
+      "q": 10,
+      "r": 24,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.623,
+      "supplySeed": 0.0,
+      "contourBand": 5
+    },
+    {
+      "hexId": "guadalcanal_1942:11:24",
+      "q": 11,
+      "r": 24,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.859,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.58,
+      "supplySeed": 0.0,
+      "contourBand": 6
+    },
+    {
+      "hexId": "guadalcanal_1942:12:24",
+      "q": 12,
+      "r": 24,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.934,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.603,
+      "supplySeed": 0.0,
+      "contourBand": 5
+    },
+    {
+      "hexId": "guadalcanal_1942:13:24",
+      "q": 13,
+      "r": 24,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 13.92,
+      "visibilitySeed": 0.648,
+      "supplySeed": 0.0,
+      "contourBand": 5
+    },
+    {
+      "hexId": "guadalcanal_1942:14:24",
+      "q": 14,
+      "r": 24,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 13.92,
+      "visibilitySeed": 0.659,
+      "supplySeed": 0.0,
+      "contourBand": 5
+    },
+    {
+      "hexId": "guadalcanal_1942:15:24",
+      "q": 15,
+      "r": 24,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 13.92,
+      "visibilitySeed": 0.663,
+      "supplySeed": 0.0,
+      "contourBand": 5
+    },
+    {
+      "hexId": "guadalcanal_1942:16:24",
+      "q": 16,
+      "r": 24,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 13.92,
+      "visibilitySeed": 0.593,
+      "supplySeed": 0.0,
+      "contourBand": 3
+    },
+    {
+      "hexId": "guadalcanal_1942:17:24",
+      "q": 17,
+      "r": 24,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.911,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.505,
+      "supplySeed": 0.0,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:18:24",
+      "q": 18,
+      "r": 24,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.986,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.535,
+      "supplySeed": 0.0,
+      "contourBand": 3
+    },
+    {
+      "hexId": "guadalcanal_1942:19:24",
+      "q": 19,
+      "r": 24,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "minor",
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.526,
+      "supplySeed": 0.0,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:8:25",
+      "q": 8,
+      "r": 25,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.865,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.582,
+      "supplySeed": 0.0,
+      "contourBand": 5
+    },
+    {
+      "hexId": "guadalcanal_1942:9:25",
+      "q": 9,
+      "r": 25,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.927,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.601,
+      "supplySeed": 0.0,
+      "contourBand": 6
+    },
+    {
+      "hexId": "guadalcanal_1942:10:25",
+      "q": 10,
+      "r": 25,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.635,
+      "supplySeed": 0.0,
+      "contourBand": 5
+    },
+    {
+      "hexId": "guadalcanal_1942:11:25",
+      "q": 11,
+      "r": 25,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.621,
+      "supplySeed": 0.0,
+      "contourBand": 4
+    },
+    {
+      "hexId": "guadalcanal_1942:12:25",
+      "q": 12,
+      "r": 25,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 13.92,
+      "visibilitySeed": 0.612,
+      "supplySeed": 0.0,
+      "contourBand": 4
+    },
+    {
+      "hexId": "guadalcanal_1942:13:25",
+      "q": 13,
+      "r": 25,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 13.92,
+      "visibilitySeed": 0.566,
+      "supplySeed": 0.0,
+      "contourBand": 3
+    },
+    {
+      "hexId": "guadalcanal_1942:14:25",
+      "q": 14,
+      "r": 25,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 13.92,
+      "visibilitySeed": 0.609,
+      "supplySeed": 0.0,
+      "contourBand": 4
+    },
+    {
+      "hexId": "guadalcanal_1942:15:25",
+      "q": 15,
+      "r": 25,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.911,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.52,
+      "supplySeed": 0.0,
+      "contourBand": 3
+    },
+    {
+      "hexId": "guadalcanal_1942:16:25",
+      "q": 16,
+      "r": 25,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.879,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.481,
+      "supplySeed": 0.0,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:17:25",
+      "q": 17,
+      "r": 25,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.931,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.486,
+      "supplySeed": 0.0,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:18:25",
+      "q": 18,
+      "r": 25,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "minor",
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 13.92,
+      "visibilitySeed": 0.53,
+      "supplySeed": 0.0,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:19:25",
+      "q": 19,
+      "r": 25,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.986,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "minor",
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.544,
+      "supplySeed": 0.0,
+      "contourBand": 3
+    },
+    {
+      "hexId": "guadalcanal_1942:8:26",
+      "q": 8,
+      "r": 26,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.843,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.575,
+      "supplySeed": 0.0,
+      "contourBand": 5
+    },
+    {
+      "hexId": "guadalcanal_1942:9:26",
+      "q": 9,
+      "r": 26,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.608,
+      "supplySeed": 0.0,
+      "contourBand": 4
+    },
+    {
+      "hexId": "guadalcanal_1942:10:26",
+      "q": 10,
+      "r": 26,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 13.92,
+      "visibilitySeed": 0.603,
+      "supplySeed": 0.0,
+      "contourBand": 4
+    },
+    {
+      "hexId": "guadalcanal_1942:11:26",
+      "q": 11,
+      "r": 26,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.937,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.516,
+      "supplySeed": 0.0,
+      "contourBand": 3
+    },
+    {
+      "hexId": "guadalcanal_1942:12:26",
+      "q": 12,
+      "r": 26,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.986,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "minor",
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.507,
+      "supplySeed": 0.0,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:13:26",
+      "q": 13,
+      "r": 26,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 1.0,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.546,
+      "supplySeed": 0.0,
+      "contourBand": 3
+    },
+    {
+      "hexId": "guadalcanal_1942:14:26",
+      "q": 14,
+      "r": 26,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.843,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.489,
+      "supplySeed": 0.0,
+      "contourBand": 3
+    },
+    {
+      "hexId": "guadalcanal_1942:15:26",
+      "q": 15,
+      "r": 26,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.845,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.476,
+      "supplySeed": 0.0,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:16:26",
+      "q": 16,
+      "r": 26,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.858,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "minor",
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.466,
+      "supplySeed": 0.0,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:17:26",
+      "q": 17,
+      "r": 26,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.811,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.432,
+      "supplySeed": 0.0,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:18:26",
+      "q": 18,
+      "r": 26,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.9,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.473,
+      "supplySeed": 0.0,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:19:26",
+      "q": 19,
+      "r": 26,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.793,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "minor",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.522,
+      "supplySeed": 0.02,
+      "contourBand": 3
+    },
+    {
+      "hexId": "guadalcanal_1942:8:27",
+      "q": 8,
+      "r": 27,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.746,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.485,
+      "supplySeed": 0.0,
+      "contourBand": 3
+    },
+    {
+      "hexId": "guadalcanal_1942:9:27",
+      "q": 9,
+      "r": 27,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.936,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.516,
+      "supplySeed": 0.0,
+      "contourBand": 3
+    },
+    {
+      "hexId": "guadalcanal_1942:10:27",
+      "q": 10,
+      "r": 27,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.933,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.54,
+      "supplySeed": 0.0,
+      "contourBand": 3
+    },
+    {
+      "hexId": "guadalcanal_1942:11:27",
+      "q": 11,
+      "r": 27,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.907,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "minor",
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.477,
+      "supplySeed": 0.0,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:12:27",
+      "q": 12,
+      "r": 27,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.899,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.522,
+      "supplySeed": 0.0,
+      "contourBand": 3
+    },
+    {
+      "hexId": "guadalcanal_1942:13:27",
+      "q": 13,
+      "r": 27,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.729,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.47,
+      "supplySeed": 0.0,
+      "contourBand": 3
+    },
+    {
+      "hexId": "guadalcanal_1942:14:27",
+      "q": 14,
+      "r": 27,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.77,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.491,
+      "supplySeed": 0.0,
+      "contourBand": 3
+    },
+    {
+      "hexId": "guadalcanal_1942:15:27",
+      "q": 15,
+      "r": 27,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.674,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 7.83,
+      "visibilitySeed": 0.466,
+      "supplySeed": 0.0,
+      "contourBand": 3
+    },
+    {
+      "hexId": "guadalcanal_1942:16:27",
+      "q": 16,
+      "r": 27,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.789,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.519,
+      "supplySeed": 0.0,
+      "contourBand": 4
+    },
+    {
+      "hexId": "guadalcanal_1942:17:27",
+      "q": 17,
+      "r": 27,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.879,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.49,
+      "supplySeed": 0.0,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:18:27",
+      "q": 18,
+      "r": 27,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.959,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.503,
+      "supplySeed": 0.0,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:19:27",
+      "q": 19,
+      "r": 27,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.734,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "minor",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.484,
+      "supplySeed": 0.02,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:8:28",
+      "q": 8,
+      "r": 28,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.849,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "minor",
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.452,
+      "supplySeed": 0.0,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:9:28",
+      "q": 9,
+      "r": 28,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.87,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.478,
+      "supplySeed": 0.0,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:10:28",
+      "q": 10,
+      "r": 28,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.806,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "minor",
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.445,
+      "supplySeed": 0.0,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:11:28",
+      "q": 11,
+      "r": 28,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.686,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "minor",
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.413,
+      "supplySeed": 0.0,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:12:28",
+      "q": 12,
+      "r": 28,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.66,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.441,
+      "supplySeed": 0.0,
+      "contourBand": 3
+    },
+    {
+      "hexId": "guadalcanal_1942:13:28",
+      "q": 13,
+      "r": 28,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.679,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.439,
+      "supplySeed": 0.0,
+      "contourBand": 3
+    },
+    {
+      "hexId": "guadalcanal_1942:14:28",
+      "q": 14,
+      "r": 28,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.702,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.489,
+      "supplySeed": 0.0,
+      "contourBand": 4
+    },
+    {
+      "hexId": "guadalcanal_1942:15:28",
+      "q": 15,
+      "r": 28,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.685,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 7.83,
+      "visibilitySeed": 0.514,
+      "supplySeed": 0.0,
+      "contourBand": 4
+    },
+    {
+      "hexId": "guadalcanal_1942:16:28",
+      "q": 16,
+      "r": 28,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.65,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 7.83,
+      "visibilitySeed": 0.463,
+      "supplySeed": 0.0,
+      "contourBand": 3
+    },
+    {
+      "hexId": "guadalcanal_1942:17:28",
+      "q": 17,
+      "r": 28,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.774,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.45,
+      "supplySeed": 0.0,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:18:28",
+      "q": 18,
+      "r": 28,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.761,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.457,
+      "supplySeed": 0.02,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:19:28",
+      "q": 19,
+      "r": 28,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.664,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.424,
+      "supplySeed": 0.02,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:8:29",
+      "q": 8,
+      "r": 29,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.804,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "minor",
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.436,
+      "supplySeed": 0.0,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:9:29",
+      "q": 9,
+      "r": 29,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.735,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "minor",
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.38,
+      "supplySeed": 0.0,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:10:29",
+      "q": 10,
+      "r": 29,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.699,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "minor",
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.399,
+      "supplySeed": 0.0,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:11:29",
+      "q": 11,
+      "r": 29,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.69,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.449,
+      "supplySeed": 0.0,
+      "contourBand": 3
+    },
+    {
+      "hexId": "guadalcanal_1942:12:29",
+      "q": 12,
+      "r": 29,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.614,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 7.83,
+      "visibilitySeed": 0.418,
+      "supplySeed": 0.0,
+      "contourBand": 3
+    },
+    {
+      "hexId": "guadalcanal_1942:13:29",
+      "q": 13,
+      "r": 29,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.686,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.482,
+      "supplySeed": 0.02,
+      "contourBand": 3
+    },
+    {
+      "hexId": "guadalcanal_1942:14:29",
+      "q": 14,
+      "r": 29,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.68,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 6.655,
+      "visibilitySeed": 0.526,
+      "supplySeed": 0.02,
+      "contourBand": 4
+    },
+    {
+      "hexId": "guadalcanal_1942:15:29",
+      "q": 15,
+      "r": 29,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.653,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 6.655,
+      "visibilitySeed": 0.503,
+      "supplySeed": 0.02,
+      "contourBand": 3
+    },
+    {
+      "hexId": "guadalcanal_1942:16:29",
+      "q": 16,
+      "r": 29,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.644,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.433,
+      "supplySeed": 0.02,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:17:29",
+      "q": 17,
+      "r": 29,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.736,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.399,
+      "supplySeed": 0.0,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:18:29",
+      "q": 18,
+      "r": 29,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.752,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.432,
+      "supplySeed": 0.02,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:19:29",
+      "q": 19,
+      "r": 29,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.731,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.369,
+      "supplySeed": 0.0,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:8:30",
+      "q": 8,
+      "r": 30,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.811,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.439,
+      "supplySeed": 0.02,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:9:30",
+      "q": 9,
+      "r": 30,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.653,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "minor",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.416,
+      "supplySeed": 0.02,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:10:30",
+      "q": 10,
+      "r": 30,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.818,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 10.15,
+      "visibilitySeed": 0.469,
+      "supplySeed": 0.0,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:11:30",
+      "q": 11,
+      "r": 30,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.772,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.522,
+      "supplySeed": 0.02,
+      "contourBand": 3
+    },
+    {
+      "hexId": "guadalcanal_1942:12:30",
+      "q": 12,
+      "r": 30,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.658,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.462,
+      "supplySeed": 0.02,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:13:30",
+      "q": 13,
+      "r": 30,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.669,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.466,
+      "supplySeed": 0.02,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:14:30",
+      "q": 14,
+      "r": 30,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.608,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 6.655,
+      "visibilitySeed": 0.443,
+      "supplySeed": 0.02,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:15:30",
+      "q": 15,
+      "r": 30,
+      "terrainClass": "dense_forest",
+      "reliefBand": "ridge",
+      "reliefShade": 0.676,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.466,
+      "supplySeed": 0.02,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:16:30",
+      "q": 16,
+      "r": 30,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.608,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "minor",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.4,
+      "supplySeed": 0.02,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:17:30",
+      "q": 17,
+      "r": 30,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.589,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "minor",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 7.14,
+      "visibilitySeed": 0.375,
+      "supplySeed": 0.022,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:18:30",
+      "q": 18,
+      "r": 30,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.572,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 7.14,
+      "visibilitySeed": 0.363,
+      "supplySeed": 0.027,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:19:30",
+      "q": 19,
+      "r": 30,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.564,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 7.14,
+      "visibilitySeed": 0.344,
+      "supplySeed": 0.028,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:8:31",
+      "q": 8,
+      "r": 31,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.675,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.387,
+      "supplySeed": 0.02,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:9:31",
+      "q": 9,
+      "r": 31,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.68,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.39,
+      "supplySeed": 0.02,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:10:31",
+      "q": 10,
+      "r": 31,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.68,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.394,
+      "supplySeed": 0.02,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:11:31",
+      "q": 11,
+      "r": 31,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.795,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.478,
+      "supplySeed": 0.02,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:12:31",
+      "q": 12,
+      "r": 31,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.627,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.416,
+      "supplySeed": 0.02,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:13:31",
+      "q": 13,
+      "r": 31,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.529,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 5.508,
+      "visibilitySeed": 0.395,
+      "supplySeed": 0.022,
+      "contourBand": 2
+    },
+    {
+      "hexId": "guadalcanal_1942:14:31",
+      "q": 14,
+      "r": 31,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.592,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 7.14,
+      "visibilitySeed": 0.387,
+      "supplySeed": 0.029,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:15:31",
+      "q": 15,
+      "r": 31,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.595,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 7.14,
+      "visibilitySeed": 0.377,
+      "supplySeed": 0.023,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:16:31",
+      "q": 16,
+      "r": 31,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.526,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "minor",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 5.508,
+      "visibilitySeed": 0.337,
+      "supplySeed": 0.056,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:17:31",
+      "q": 17,
+      "r": 31,
+      "terrainClass": "forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.433,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 4.131,
+      "visibilitySeed": 0.403,
+      "supplySeed": 0.234,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:18:31",
+      "q": 18,
+      "r": 31,
+      "terrainClass": "forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.524,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "minor",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 5.355,
+      "visibilitySeed": 0.42,
+      "supplySeed": 0.212,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:19:31",
+      "q": 19,
+      "r": 31,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.442,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": "hamlet",
+      "settlementImportance": 2,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 5.233,
+      "visibilitySeed": 0.352,
+      "supplySeed": 0.157,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:8:32",
+      "q": 8,
+      "r": 32,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.699,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.389,
+      "supplySeed": 0.02,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:9:32",
+      "q": 9,
+      "r": 32,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.564,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 7.14,
+      "visibilitySeed": 0.345,
+      "supplySeed": 0.047,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:10:32",
+      "q": 10,
+      "r": 32,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.586,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 7.14,
+      "visibilitySeed": 0.346,
+      "supplySeed": 0.033,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:11:32",
+      "q": 11,
+      "r": 32,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.677,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.425,
+      "supplySeed": 0.02,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:12:32",
+      "q": 12,
+      "r": 32,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.646,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.394,
+      "supplySeed": 0.02,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:13:32",
+      "q": 13,
+      "r": 32,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.609,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 7.14,
+      "visibilitySeed": 0.367,
+      "supplySeed": 0.028,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:14:32",
+      "q": 14,
+      "r": 32,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.603,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.36,
+      "supplySeed": 0.02,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:15:32",
+      "q": 15,
+      "r": 32,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.561,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 7.14,
+      "visibilitySeed": 0.337,
+      "supplySeed": 0.048,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:16:32",
+      "q": 16,
+      "r": 32,
+      "terrainClass": "dense_forest",
+      "reliefBand": "lowland",
+      "reliefShade": 0.482,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "minor",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 5.508,
+      "visibilitySeed": 0.303,
+      "supplySeed": 0.081,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:17:32",
+      "q": 17,
+      "r": 32,
+      "terrainClass": "dense_forest",
+      "reliefBand": "lowland",
+      "reliefShade": 0.514,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "minor",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 7.14,
+      "visibilitySeed": 0.312,
+      "supplySeed": 0.073,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:18:32",
+      "q": 18,
+      "r": 32,
+      "terrainClass": "dense_forest",
+      "reliefBand": "lowland",
+      "reliefShade": 0.515,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 7.14,
+      "visibilitySeed": 0.32,
+      "supplySeed": 0.075,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:19:32",
+      "q": 19,
+      "r": 32,
+      "terrainClass": "dense_forest",
+      "reliefBand": "lowland",
+      "reliefShade": 0.381,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 5.508,
+      "visibilitySeed": 0.278,
+      "supplySeed": 0.103,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:8:33",
+      "q": 8,
+      "r": 33,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.653,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.406,
+      "supplySeed": 0.02,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:9:33",
+      "q": 9,
+      "r": 33,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.624,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 7.14,
+      "visibilitySeed": 0.385,
+      "supplySeed": 0.03,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:10:33",
+      "q": 10,
+      "r": 33,
+      "terrainClass": "dense_forest",
+      "reliefBand": "lowland",
+      "reliefShade": 0.459,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 5.508,
+      "visibilitySeed": 0.298,
+      "supplySeed": 0.065,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:11:33",
+      "q": 11,
+      "r": 33,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.789,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.419,
+      "supplySeed": 0.02,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:12:33",
+      "q": 12,
+      "r": 33,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.68,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.627,
+      "visibilitySeed": 0.376,
+      "supplySeed": 0.02,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:13:33",
+      "q": 13,
+      "r": 33,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.482,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 5.508,
+      "visibilitySeed": 0.325,
+      "supplySeed": 0.081,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:14:33",
+      "q": 14,
+      "r": 33,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.514,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 8.4,
+      "visibilitySeed": 0.283,
+      "supplySeed": 0.0,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:15:33",
+      "q": 15,
+      "r": 33,
+      "terrainClass": "dense_forest",
+      "reliefBand": "lowland",
+      "reliefShade": 0.522,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 7.14,
+      "visibilitySeed": 0.317,
+      "supplySeed": 0.076,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:16:33",
+      "q": 16,
+      "r": 33,
+      "terrainClass": "forest",
+      "reliefBand": "lowland",
+      "reliefShade": 0.37,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "minor",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 4.131,
+      "visibilitySeed": 0.351,
+      "supplySeed": 0.265,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:17:33",
+      "q": 17,
+      "r": 33,
+      "terrainClass": "forest",
+      "reliefBand": "lowland",
+      "reliefShade": 0.405,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "minor",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 4.131,
+      "visibilitySeed": 0.364,
+      "supplySeed": 0.257,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:18:33",
+      "q": 18,
+      "r": 33,
+      "terrainClass": "dense_forest",
+      "reliefBand": "lowland",
+      "reliefShade": 0.382,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 5.508,
+      "visibilitySeed": 0.273,
+      "supplySeed": 0.117,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:19:33",
+      "q": 19,
+      "r": 33,
+      "terrainClass": "dense_forest",
+      "reliefBand": "lowland",
+      "reliefShade": 0.269,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 4.488,
+      "visibilitySeed": 0.233,
+      "supplySeed": 0.22,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:8:34",
+      "q": 8,
+      "r": 34,
+      "terrainClass": "dense_forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.526,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 5.508,
+      "visibilitySeed": 0.358,
+      "supplySeed": 0.07,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:9:34",
+      "q": 9,
+      "r": 34,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.55,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 7.14,
+      "visibilitySeed": 0.363,
+      "supplySeed": 0.061,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:10:34",
+      "q": 10,
+      "r": 34,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.598,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 7.14,
+      "visibilitySeed": 0.375,
+      "supplySeed": 0.034,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:11:34",
+      "q": 11,
+      "r": 34,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.504,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 5.508,
+      "visibilitySeed": 0.345,
+      "supplySeed": 0.076,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:12:34",
+      "q": 12,
+      "r": 34,
+      "terrainClass": "dense_forest",
+      "reliefBand": "lowland",
+      "reliefShade": 0.456,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 5.508,
+      "visibilitySeed": 0.292,
+      "supplySeed": 0.079,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:13:34",
+      "q": 13,
+      "r": 34,
+      "terrainClass": "dense_forest",
+      "reliefBand": "lowland",
+      "reliefShade": 0.533,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 7.14,
+      "visibilitySeed": 0.32,
+      "supplySeed": 0.065,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:14:34",
+      "q": 14,
+      "r": 34,
+      "terrainClass": "dense_forest",
+      "reliefBand": "lowland",
+      "reliefShade": 0.458,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 5.508,
+      "visibilitySeed": 0.292,
+      "supplySeed": 0.093,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:15:34",
+      "q": 15,
+      "r": 34,
+      "terrainClass": "forest",
+      "reliefBand": "lowland",
+      "reliefShade": 0.34,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 4.86,
+      "visibilitySeed": 0.302,
+      "supplySeed": 0.175,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:16:34",
+      "q": 16,
+      "r": 34,
+      "terrainClass": "grass_open",
+      "reliefBand": "coastal_low",
+      "reliefShade": 0.223,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "minor",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.795,
+      "visibilitySeed": 0.422,
+      "supplySeed": 0.568,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:17:34",
+      "q": 17,
+      "r": 34,
+      "terrainClass": "forest",
+      "reliefBand": "coastal_low",
+      "reliefShade": 0.3,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 4.131,
+      "visibilitySeed": 0.328,
+      "supplySeed": 0.336,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:18:34",
+      "q": 18,
+      "r": 34,
+      "terrainClass": "grass_open",
+      "reliefBand": "coastal_low",
+      "reliefShade": 0.263,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.795,
+      "visibilitySeed": 0.437,
+      "supplySeed": 0.525,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:19:34",
+      "q": 19,
+      "r": 34,
+      "terrainClass": "grass_open",
+      "reliefBand": "coastal_low",
+      "reliefShade": 0.201,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.795,
+      "visibilitySeed": 0.417,
+      "supplySeed": 0.589,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:8:35",
+      "q": 8,
+      "r": 35,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.56,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 7.14,
+      "visibilitySeed": 0.351,
+      "supplySeed": 0.065,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:9:35",
+      "q": 9,
+      "r": 35,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.508,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 5.508,
+      "visibilitySeed": 0.342,
+      "supplySeed": 0.076,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:10:35",
+      "q": 10,
+      "r": 35,
+      "terrainClass": "forest",
+      "reliefBand": "upland",
+      "reliefShade": 0.401,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 4.131,
+      "visibilitySeed": 0.416,
+      "supplySeed": 0.255,
+      "contourBand": 1
+    },
+    {
+      "hexId": "guadalcanal_1942:11:35",
+      "q": 11,
+      "r": 35,
+      "terrainClass": "dense_forest",
+      "reliefBand": "rolling",
+      "reliefShade": 0.438,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 5.508,
+      "visibilitySeed": 0.301,
+      "supplySeed": 0.102,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:12:35",
+      "q": 12,
+      "r": 35,
+      "terrainClass": "dense_forest",
+      "reliefBand": "lowland",
+      "reliefShade": 0.371,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": null,
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 6.48,
+      "visibilitySeed": 0.223,
+      "supplySeed": 0.0,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:13:35",
+      "q": 13,
+      "r": 35,
+      "terrainClass": "forest",
+      "reliefBand": "lowland",
+      "reliefShade": 0.313,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 4.131,
+      "visibilitySeed": 0.334,
+      "supplySeed": 0.324,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:14:35",
+      "q": 14,
+      "r": 35,
+      "terrainClass": "forest",
+      "reliefBand": "coastal_low",
+      "reliefShade": 0.368,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 4.131,
+      "visibilitySeed": 0.35,
+      "supplySeed": 0.267,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:15:35",
+      "q": 15,
+      "r": 35,
+      "terrainClass": "grass_open",
+      "reliefBand": "coastal_low",
+      "reliefShade": 0.209,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.795,
+      "visibilitySeed": 0.418,
+      "supplySeed": 0.582,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:16:35",
+      "q": 16,
+      "r": 35,
+      "terrainClass": "grass_open",
+      "reliefBand": "coastal_low",
+      "reliefShade": 0.147,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "minor",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.795,
+      "visibilitySeed": 0.398,
+      "supplySeed": 0.648,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:17:35",
+      "q": 17,
+      "r": 35,
+      "terrainClass": "grass_open",
+      "reliefBand": "coastal_low",
+      "reliefShade": 0.212,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.795,
+      "visibilitySeed": 0.418,
+      "supplySeed": 0.579,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:18:35",
+      "q": 18,
+      "r": 35,
+      "terrainClass": "grass_open",
+      "reliefBand": "coastal_low",
+      "reliefShade": 0.148,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": null,
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.632,
+      "visibilitySeed": 0.398,
+      "supplySeed": 0.647,
+      "contourBand": 0
+    },
+    {
+      "hexId": "guadalcanal_1942:19:35",
+      "q": 19,
+      "r": 35,
+      "terrainClass": "grass_open",
+      "reliefBand": "coastal_low",
+      "reliefShade": 0.132,
+      "waterDominant": false,
+      "coastline": false,
+      "riverClass": "major",
+      "crossingKinds": [],
+      "roadClass": "secondary_road",
+      "railClass": null,
+      "hasBridge": false,
+      "bridgeCount": 0,
+      "settlementTier": null,
+      "settlementImportance": 0,
+      "settlementName": null,
+      "airfieldClass": null,
+      "airfieldImportance": 0,
+      "airfieldName": null,
+      "zoomRelevance": {
+        "far": true,
+        "operational": true,
+        "close": true
+      },
+      "movementCostSeed": 1.632,
+      "visibilitySeed": 0.394,
+      "supplySeed": 0.664,
+      "contourBand": 0
+    }
+  ],
+  "settlements": [],
+  "airfields": [],
+  "roadSegments": [
+    {
+      "id": "road:guadalcanal_1942:19:27:guadalcanal_1942:20:27",
+      "class": "secondary_road",
+      "from": {
+        "x": 19,
+        "y": 27
+      },
+      "to": {
+        "x": 20,
+        "y": 27
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:19:26:guadalcanal_1942:19:27",
+      "class": "secondary_road",
+      "from": {
+        "x": 19,
+        "y": 27
+      },
+      "to": {
+        "x": 19,
+        "y": 26
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:18:28:guadalcanal_1942:19:28",
+      "class": "secondary_road",
+      "from": {
+        "x": 18,
+        "y": 28
+      },
+      "to": {
+        "x": 19,
+        "y": 28
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:18:28:guadalcanal_1942:19:27",
+      "class": "secondary_road",
+      "from": {
+        "x": 18,
+        "y": 28
+      },
+      "to": {
+        "x": 19,
+        "y": 27
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:19:28:guadalcanal_1942:20:28",
+      "class": "secondary_road",
+      "from": {
+        "x": 19,
+        "y": 28
+      },
+      "to": {
+        "x": 20,
+        "y": 28
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:19:28:guadalcanal_1942:20:27",
+      "class": "secondary_road",
+      "from": {
+        "x": 19,
+        "y": 28
+      },
+      "to": {
+        "x": 20,
+        "y": 27
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:19:27:guadalcanal_1942:19:28",
+      "class": "secondary_road",
+      "from": {
+        "x": 19,
+        "y": 28
+      },
+      "to": {
+        "x": 19,
+        "y": 27
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:13:29:guadalcanal_1942:14:29",
+      "class": "secondary_road",
+      "from": {
+        "x": 13,
+        "y": 29
+      },
+      "to": {
+        "x": 14,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:14:29:guadalcanal_1942:15:29",
+      "class": "secondary_road",
+      "from": {
+        "x": 14,
+        "y": 29
+      },
+      "to": {
+        "x": 15,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:15:29:guadalcanal_1942:16:29",
+      "class": "secondary_road",
+      "from": {
+        "x": 15,
+        "y": 29
+      },
+      "to": {
+        "x": 16,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:18:29:guadalcanal_1942:19:28",
+      "class": "secondary_road",
+      "from": {
+        "x": 18,
+        "y": 29
+      },
+      "to": {
+        "x": 19,
+        "y": 28
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:18:28:guadalcanal_1942:18:29",
+      "class": "secondary_road",
+      "from": {
+        "x": 18,
+        "y": 29
+      },
+      "to": {
+        "x": 18,
+        "y": 28
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:8:30:guadalcanal_1942:9:30",
+      "class": "secondary_road",
+      "from": {
+        "x": 8,
+        "y": 30
+      },
+      "to": {
+        "x": 9,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:11:30:guadalcanal_1942:12:30",
+      "class": "secondary_road",
+      "from": {
+        "x": 11,
+        "y": 30
+      },
+      "to": {
+        "x": 12,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:12:30:guadalcanal_1942:13:30",
+      "class": "secondary_road",
+      "from": {
+        "x": 12,
+        "y": 30
+      },
+      "to": {
+        "x": 13,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:12:30:guadalcanal_1942:13:29",
+      "class": "secondary_road",
+      "from": {
+        "x": 12,
+        "y": 30
+      },
+      "to": {
+        "x": 13,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:13:30:guadalcanal_1942:14:30",
+      "class": "secondary_road",
+      "from": {
+        "x": 13,
+        "y": 30
+      },
+      "to": {
+        "x": 14,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:13:30:guadalcanal_1942:14:29",
+      "class": "secondary_road",
+      "from": {
+        "x": 13,
+        "y": 30
+      },
+      "to": {
+        "x": 14,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:13:29:guadalcanal_1942:13:30",
+      "class": "secondary_road",
+      "from": {
+        "x": 13,
+        "y": 30
+      },
+      "to": {
+        "x": 13,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:14:30:guadalcanal_1942:15:30",
+      "class": "secondary_road",
+      "from": {
+        "x": 14,
+        "y": 30
+      },
+      "to": {
+        "x": 15,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:14:30:guadalcanal_1942:15:29",
+      "class": "secondary_road",
+      "from": {
+        "x": 14,
+        "y": 30
+      },
+      "to": {
+        "x": 15,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:14:29:guadalcanal_1942:14:30",
+      "class": "secondary_road",
+      "from": {
+        "x": 14,
+        "y": 30
+      },
+      "to": {
+        "x": 14,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:15:30:guadalcanal_1942:16:30",
+      "class": "secondary_road",
+      "from": {
+        "x": 15,
+        "y": 30
+      },
+      "to": {
+        "x": 16,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:15:30:guadalcanal_1942:16:29",
+      "class": "secondary_road",
+      "from": {
+        "x": 15,
+        "y": 30
+      },
+      "to": {
+        "x": 16,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:15:29:guadalcanal_1942:15:30",
+      "class": "secondary_road",
+      "from": {
+        "x": 15,
+        "y": 30
+      },
+      "to": {
+        "x": 15,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:16:30:guadalcanal_1942:17:30",
+      "class": "secondary_road",
+      "from": {
+        "x": 16,
+        "y": 30
+      },
+      "to": {
+        "x": 17,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:16:29:guadalcanal_1942:16:30",
+      "class": "secondary_road",
+      "from": {
+        "x": 16,
+        "y": 30
+      },
+      "to": {
+        "x": 16,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:17:30:guadalcanal_1942:18:30",
+      "class": "secondary_road",
+      "from": {
+        "x": 17,
+        "y": 30
+      },
+      "to": {
+        "x": 18,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:17:30:guadalcanal_1942:18:29",
+      "class": "secondary_road",
+      "from": {
+        "x": 17,
+        "y": 30
+      },
+      "to": {
+        "x": 18,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:18:30:guadalcanal_1942:19:30",
+      "class": "secondary_road",
+      "from": {
+        "x": 18,
+        "y": 30
+      },
+      "to": {
+        "x": 19,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:18:29:guadalcanal_1942:18:30",
+      "class": "secondary_road",
+      "from": {
+        "x": 18,
+        "y": 30
+      },
+      "to": {
+        "x": 18,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:19:30:guadalcanal_1942:20:29",
+      "class": "secondary_road",
+      "from": {
+        "x": 19,
+        "y": 30
+      },
+      "to": {
+        "x": 20,
+        "y": 29
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:8:31:guadalcanal_1942:9:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 8,
+        "y": 31
+      },
+      "to": {
+        "x": 9,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:8:31:guadalcanal_1942:9:30",
+      "class": "secondary_road",
+      "from": {
+        "x": 8,
+        "y": 31
+      },
+      "to": {
+        "x": 9,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:8:30:guadalcanal_1942:8:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 8,
+        "y": 31
+      },
+      "to": {
+        "x": 8,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:31:guadalcanal_1942:9:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 9,
+        "y": 31
+      },
+      "to": {
+        "x": 10,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:9:30:guadalcanal_1942:9:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 9,
+        "y": 31
+      },
+      "to": {
+        "x": 9,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:31:guadalcanal_1942:11:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 10,
+        "y": 31
+      },
+      "to": {
+        "x": 11,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:31:guadalcanal_1942:11:30",
+      "class": "secondary_road",
+      "from": {
+        "x": 10,
+        "y": 31
+      },
+      "to": {
+        "x": 11,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:11:31:guadalcanal_1942:12:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 11,
+        "y": 31
+      },
+      "to": {
+        "x": 12,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:11:31:guadalcanal_1942:12:30",
+      "class": "secondary_road",
+      "from": {
+        "x": 11,
+        "y": 31
+      },
+      "to": {
+        "x": 12,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:11:30:guadalcanal_1942:11:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 11,
+        "y": 31
+      },
+      "to": {
+        "x": 11,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:12:31:guadalcanal_1942:13:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 12,
+        "y": 31
+      },
+      "to": {
+        "x": 13,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:12:31:guadalcanal_1942:13:30",
+      "class": "secondary_road",
+      "from": {
+        "x": 12,
+        "y": 31
+      },
+      "to": {
+        "x": 13,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:12:30:guadalcanal_1942:12:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 12,
+        "y": 31
+      },
+      "to": {
+        "x": 12,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:13:31:guadalcanal_1942:14:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 13,
+        "y": 31
+      },
+      "to": {
+        "x": 14,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:13:31:guadalcanal_1942:14:30",
+      "class": "secondary_road",
+      "from": {
+        "x": 13,
+        "y": 31
+      },
+      "to": {
+        "x": 14,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:13:30:guadalcanal_1942:13:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 13,
+        "y": 31
+      },
+      "to": {
+        "x": 13,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:14:31:guadalcanal_1942:15:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 14,
+        "y": 31
+      },
+      "to": {
+        "x": 15,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:14:31:guadalcanal_1942:15:30",
+      "class": "secondary_road",
+      "from": {
+        "x": 14,
+        "y": 31
+      },
+      "to": {
+        "x": 15,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:14:30:guadalcanal_1942:14:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 14,
+        "y": 31
+      },
+      "to": {
+        "x": 14,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:15:31:guadalcanal_1942:16:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 15,
+        "y": 31
+      },
+      "to": {
+        "x": 16,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:15:31:guadalcanal_1942:16:30",
+      "class": "secondary_road",
+      "from": {
+        "x": 15,
+        "y": 31
+      },
+      "to": {
+        "x": 16,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:15:30:guadalcanal_1942:15:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 15,
+        "y": 31
+      },
+      "to": {
+        "x": 15,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:16:31:guadalcanal_1942:17:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 16,
+        "y": 31
+      },
+      "to": {
+        "x": 17,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:16:31:guadalcanal_1942:17:30",
+      "class": "secondary_road",
+      "from": {
+        "x": 16,
+        "y": 31
+      },
+      "to": {
+        "x": 17,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:16:30:guadalcanal_1942:16:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 16,
+        "y": 31
+      },
+      "to": {
+        "x": 16,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:17:31:guadalcanal_1942:18:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 17,
+        "y": 31
+      },
+      "to": {
+        "x": 18,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:17:31:guadalcanal_1942:18:30",
+      "class": "secondary_road",
+      "from": {
+        "x": 17,
+        "y": 31
+      },
+      "to": {
+        "x": 18,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:17:30:guadalcanal_1942:17:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 17,
+        "y": 31
+      },
+      "to": {
+        "x": 17,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:18:31:guadalcanal_1942:19:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 18,
+        "y": 31
+      },
+      "to": {
+        "x": 19,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:18:31:guadalcanal_1942:19:30",
+      "class": "secondary_road",
+      "from": {
+        "x": 18,
+        "y": 31
+      },
+      "to": {
+        "x": 19,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:18:30:guadalcanal_1942:18:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 18,
+        "y": 31
+      },
+      "to": {
+        "x": 18,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:19:31:guadalcanal_1942:20:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 19,
+        "y": 31
+      },
+      "to": {
+        "x": 20,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:19:30:guadalcanal_1942:19:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 19,
+        "y": 31
+      },
+      "to": {
+        "x": 19,
+        "y": 30
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:8:32:guadalcanal_1942:9:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 8,
+        "y": 32
+      },
+      "to": {
+        "x": 9,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:8:32:guadalcanal_1942:9:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 8,
+        "y": 32
+      },
+      "to": {
+        "x": 9,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:8:31:guadalcanal_1942:8:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 8,
+        "y": 32
+      },
+      "to": {
+        "x": 8,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:32:guadalcanal_1942:9:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 9,
+        "y": 32
+      },
+      "to": {
+        "x": 10,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:31:guadalcanal_1942:9:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 9,
+        "y": 32
+      },
+      "to": {
+        "x": 10,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:9:31:guadalcanal_1942:9:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 9,
+        "y": 32
+      },
+      "to": {
+        "x": 9,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:32:guadalcanal_1942:11:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 10,
+        "y": 32
+      },
+      "to": {
+        "x": 11,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:32:guadalcanal_1942:11:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 10,
+        "y": 32
+      },
+      "to": {
+        "x": 11,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:31:guadalcanal_1942:10:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 10,
+        "y": 32
+      },
+      "to": {
+        "x": 10,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:11:32:guadalcanal_1942:12:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 11,
+        "y": 32
+      },
+      "to": {
+        "x": 12,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:11:32:guadalcanal_1942:12:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 11,
+        "y": 32
+      },
+      "to": {
+        "x": 12,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:11:31:guadalcanal_1942:11:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 11,
+        "y": 32
+      },
+      "to": {
+        "x": 11,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:12:32:guadalcanal_1942:13:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 12,
+        "y": 32
+      },
+      "to": {
+        "x": 13,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:12:32:guadalcanal_1942:13:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 12,
+        "y": 32
+      },
+      "to": {
+        "x": 13,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:12:31:guadalcanal_1942:12:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 12,
+        "y": 32
+      },
+      "to": {
+        "x": 12,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:13:32:guadalcanal_1942:14:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 13,
+        "y": 32
+      },
+      "to": {
+        "x": 14,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:13:32:guadalcanal_1942:14:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 13,
+        "y": 32
+      },
+      "to": {
+        "x": 14,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:13:31:guadalcanal_1942:13:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 13,
+        "y": 32
+      },
+      "to": {
+        "x": 13,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:14:32:guadalcanal_1942:15:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 14,
+        "y": 32
+      },
+      "to": {
+        "x": 15,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:14:32:guadalcanal_1942:15:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 14,
+        "y": 32
+      },
+      "to": {
+        "x": 15,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:14:31:guadalcanal_1942:14:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 14,
+        "y": 32
+      },
+      "to": {
+        "x": 14,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:15:32:guadalcanal_1942:16:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 15,
+        "y": 32
+      },
+      "to": {
+        "x": 16,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:15:32:guadalcanal_1942:16:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 15,
+        "y": 32
+      },
+      "to": {
+        "x": 16,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:15:31:guadalcanal_1942:15:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 15,
+        "y": 32
+      },
+      "to": {
+        "x": 15,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:16:32:guadalcanal_1942:17:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 16,
+        "y": 32
+      },
+      "to": {
+        "x": 17,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:16:32:guadalcanal_1942:17:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 16,
+        "y": 32
+      },
+      "to": {
+        "x": 17,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:16:31:guadalcanal_1942:16:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 16,
+        "y": 32
+      },
+      "to": {
+        "x": 16,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:17:32:guadalcanal_1942:18:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 17,
+        "y": 32
+      },
+      "to": {
+        "x": 18,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:17:32:guadalcanal_1942:18:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 17,
+        "y": 32
+      },
+      "to": {
+        "x": 18,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:17:31:guadalcanal_1942:17:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 17,
+        "y": 32
+      },
+      "to": {
+        "x": 17,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:18:32:guadalcanal_1942:19:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 18,
+        "y": 32
+      },
+      "to": {
+        "x": 19,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:18:32:guadalcanal_1942:19:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 18,
+        "y": 32
+      },
+      "to": {
+        "x": 19,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:18:31:guadalcanal_1942:18:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 18,
+        "y": 32
+      },
+      "to": {
+        "x": 18,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:19:32:guadalcanal_1942:20:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 19,
+        "y": 32
+      },
+      "to": {
+        "x": 20,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:19:32:guadalcanal_1942:20:31",
+      "class": "secondary_road",
+      "from": {
+        "x": 19,
+        "y": 32
+      },
+      "to": {
+        "x": 20,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:19:31:guadalcanal_1942:19:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 19,
+        "y": 32
+      },
+      "to": {
+        "x": 19,
+        "y": 31
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:8:33:guadalcanal_1942:9:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 8,
+        "y": 33
+      },
+      "to": {
+        "x": 9,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:8:33:guadalcanal_1942:9:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 8,
+        "y": 33
+      },
+      "to": {
+        "x": 9,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:8:32:guadalcanal_1942:8:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 8,
+        "y": 33
+      },
+      "to": {
+        "x": 8,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:33:guadalcanal_1942:9:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 9,
+        "y": 33
+      },
+      "to": {
+        "x": 10,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:32:guadalcanal_1942:9:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 9,
+        "y": 33
+      },
+      "to": {
+        "x": 10,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:9:32:guadalcanal_1942:9:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 9,
+        "y": 33
+      },
+      "to": {
+        "x": 9,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:33:guadalcanal_1942:11:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 10,
+        "y": 33
+      },
+      "to": {
+        "x": 11,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:33:guadalcanal_1942:11:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 10,
+        "y": 33
+      },
+      "to": {
+        "x": 11,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:32:guadalcanal_1942:10:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 10,
+        "y": 33
+      },
+      "to": {
+        "x": 10,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:11:33:guadalcanal_1942:12:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 11,
+        "y": 33
+      },
+      "to": {
+        "x": 12,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:11:33:guadalcanal_1942:12:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 11,
+        "y": 33
+      },
+      "to": {
+        "x": 12,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:11:32:guadalcanal_1942:11:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 11,
+        "y": 33
+      },
+      "to": {
+        "x": 11,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:12:33:guadalcanal_1942:13:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 12,
+        "y": 33
+      },
+      "to": {
+        "x": 13,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:12:33:guadalcanal_1942:13:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 12,
+        "y": 33
+      },
+      "to": {
+        "x": 13,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:12:32:guadalcanal_1942:12:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 12,
+        "y": 33
+      },
+      "to": {
+        "x": 12,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:13:33:guadalcanal_1942:14:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 13,
+        "y": 33
+      },
+      "to": {
+        "x": 14,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:13:32:guadalcanal_1942:13:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 13,
+        "y": 33
+      },
+      "to": {
+        "x": 13,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:15:33:guadalcanal_1942:16:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 15,
+        "y": 33
+      },
+      "to": {
+        "x": 16,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:15:33:guadalcanal_1942:16:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 15,
+        "y": 33
+      },
+      "to": {
+        "x": 16,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:15:32:guadalcanal_1942:15:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 15,
+        "y": 33
+      },
+      "to": {
+        "x": 15,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:16:33:guadalcanal_1942:17:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 16,
+        "y": 33
+      },
+      "to": {
+        "x": 17,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:16:33:guadalcanal_1942:17:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 16,
+        "y": 33
+      },
+      "to": {
+        "x": 17,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:16:32:guadalcanal_1942:16:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 16,
+        "y": 33
+      },
+      "to": {
+        "x": 16,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:17:33:guadalcanal_1942:18:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 17,
+        "y": 33
+      },
+      "to": {
+        "x": 18,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:17:33:guadalcanal_1942:18:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 17,
+        "y": 33
+      },
+      "to": {
+        "x": 18,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:17:32:guadalcanal_1942:17:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 17,
+        "y": 33
+      },
+      "to": {
+        "x": 17,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:18:33:guadalcanal_1942:19:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 18,
+        "y": 33
+      },
+      "to": {
+        "x": 19,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:18:33:guadalcanal_1942:19:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 18,
+        "y": 33
+      },
+      "to": {
+        "x": 19,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:18:32:guadalcanal_1942:18:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 18,
+        "y": 33
+      },
+      "to": {
+        "x": 18,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:19:33:guadalcanal_1942:20:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 19,
+        "y": 33
+      },
+      "to": {
+        "x": 20,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:19:33:guadalcanal_1942:20:32",
+      "class": "secondary_road",
+      "from": {
+        "x": 19,
+        "y": 33
+      },
+      "to": {
+        "x": 20,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:19:32:guadalcanal_1942:19:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 19,
+        "y": 33
+      },
+      "to": {
+        "x": 19,
+        "y": 32
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:8:34:guadalcanal_1942:9:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 8,
+        "y": 34
+      },
+      "to": {
+        "x": 9,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:8:34:guadalcanal_1942:9:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 8,
+        "y": 34
+      },
+      "to": {
+        "x": 9,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:8:33:guadalcanal_1942:8:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 8,
+        "y": 34
+      },
+      "to": {
+        "x": 8,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:34:guadalcanal_1942:9:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 9,
+        "y": 34
+      },
+      "to": {
+        "x": 10,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:33:guadalcanal_1942:9:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 9,
+        "y": 34
+      },
+      "to": {
+        "x": 10,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:9:33:guadalcanal_1942:9:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 9,
+        "y": 34
+      },
+      "to": {
+        "x": 9,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:34:guadalcanal_1942:11:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 10,
+        "y": 34
+      },
+      "to": {
+        "x": 11,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:34:guadalcanal_1942:11:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 10,
+        "y": 34
+      },
+      "to": {
+        "x": 11,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:33:guadalcanal_1942:10:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 10,
+        "y": 34
+      },
+      "to": {
+        "x": 10,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:11:34:guadalcanal_1942:12:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 11,
+        "y": 34
+      },
+      "to": {
+        "x": 12,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:11:34:guadalcanal_1942:12:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 11,
+        "y": 34
+      },
+      "to": {
+        "x": 12,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:11:33:guadalcanal_1942:11:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 11,
+        "y": 34
+      },
+      "to": {
+        "x": 11,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:12:34:guadalcanal_1942:13:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 12,
+        "y": 34
+      },
+      "to": {
+        "x": 13,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:12:34:guadalcanal_1942:13:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 12,
+        "y": 34
+      },
+      "to": {
+        "x": 13,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:12:33:guadalcanal_1942:12:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 12,
+        "y": 34
+      },
+      "to": {
+        "x": 12,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:13:34:guadalcanal_1942:14:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 13,
+        "y": 34
+      },
+      "to": {
+        "x": 14,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:13:33:guadalcanal_1942:13:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 13,
+        "y": 34
+      },
+      "to": {
+        "x": 13,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:14:34:guadalcanal_1942:15:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 14,
+        "y": 34
+      },
+      "to": {
+        "x": 15,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:16:34:guadalcanal_1942:17:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 16,
+        "y": 34
+      },
+      "to": {
+        "x": 17,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:16:34:guadalcanal_1942:17:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 16,
+        "y": 34
+      },
+      "to": {
+        "x": 17,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:16:33:guadalcanal_1942:16:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 16,
+        "y": 34
+      },
+      "to": {
+        "x": 16,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:17:34:guadalcanal_1942:18:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 17,
+        "y": 34
+      },
+      "to": {
+        "x": 18,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:17:34:guadalcanal_1942:18:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 17,
+        "y": 34
+      },
+      "to": {
+        "x": 18,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:17:33:guadalcanal_1942:17:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 17,
+        "y": 34
+      },
+      "to": {
+        "x": 17,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:18:34:guadalcanal_1942:19:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 18,
+        "y": 34
+      },
+      "to": {
+        "x": 19,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:18:34:guadalcanal_1942:19:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 18,
+        "y": 34
+      },
+      "to": {
+        "x": 19,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:18:33:guadalcanal_1942:18:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 18,
+        "y": 34
+      },
+      "to": {
+        "x": 18,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:19:34:guadalcanal_1942:20:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 19,
+        "y": 34
+      },
+      "to": {
+        "x": 20,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:19:34:guadalcanal_1942:20:33",
+      "class": "secondary_road",
+      "from": {
+        "x": 19,
+        "y": 34
+      },
+      "to": {
+        "x": 20,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:19:33:guadalcanal_1942:19:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 19,
+        "y": 34
+      },
+      "to": {
+        "x": 19,
+        "y": 33
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:8:35:guadalcanal_1942:9:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 8,
+        "y": 35
+      },
+      "to": {
+        "x": 9,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:8:35:guadalcanal_1942:9:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 8,
+        "y": 35
+      },
+      "to": {
+        "x": 9,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:8:34:guadalcanal_1942:8:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 8,
+        "y": 35
+      },
+      "to": {
+        "x": 8,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:35:guadalcanal_1942:9:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 9,
+        "y": 35
+      },
+      "to": {
+        "x": 10,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:34:guadalcanal_1942:9:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 9,
+        "y": 35
+      },
+      "to": {
+        "x": 10,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:9:34:guadalcanal_1942:9:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 9,
+        "y": 35
+      },
+      "to": {
+        "x": 9,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:35:guadalcanal_1942:11:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 10,
+        "y": 35
+      },
+      "to": {
+        "x": 11,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:35:guadalcanal_1942:11:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 10,
+        "y": 35
+      },
+      "to": {
+        "x": 11,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:34:guadalcanal_1942:10:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 10,
+        "y": 35
+      },
+      "to": {
+        "x": 10,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:11:35:guadalcanal_1942:12:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 11,
+        "y": 35
+      },
+      "to": {
+        "x": 12,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:11:34:guadalcanal_1942:11:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 11,
+        "y": 35
+      },
+      "to": {
+        "x": 11,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:13:35:guadalcanal_1942:14:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 13,
+        "y": 35
+      },
+      "to": {
+        "x": 14,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:13:35:guadalcanal_1942:14:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 13,
+        "y": 35
+      },
+      "to": {
+        "x": 14,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:13:34:guadalcanal_1942:13:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 13,
+        "y": 35
+      },
+      "to": {
+        "x": 13,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:14:35:guadalcanal_1942:15:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 14,
+        "y": 35
+      },
+      "to": {
+        "x": 15,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:14:34:guadalcanal_1942:14:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 14,
+        "y": 35
+      },
+      "to": {
+        "x": 14,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:15:35:guadalcanal_1942:16:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 15,
+        "y": 35
+      },
+      "to": {
+        "x": 16,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:15:35:guadalcanal_1942:16:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 15,
+        "y": 35
+      },
+      "to": {
+        "x": 16,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:16:35:guadalcanal_1942:17:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 16,
+        "y": 35
+      },
+      "to": {
+        "x": 17,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:16:35:guadalcanal_1942:17:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 16,
+        "y": 35
+      },
+      "to": {
+        "x": 17,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:16:34:guadalcanal_1942:16:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 16,
+        "y": 35
+      },
+      "to": {
+        "x": 16,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:17:35:guadalcanal_1942:18:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 17,
+        "y": 35
+      },
+      "to": {
+        "x": 18,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:17:35:guadalcanal_1942:18:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 17,
+        "y": 35
+      },
+      "to": {
+        "x": 18,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:17:34:guadalcanal_1942:17:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 17,
+        "y": 35
+      },
+      "to": {
+        "x": 17,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:18:35:guadalcanal_1942:19:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 18,
+        "y": 35
+      },
+      "to": {
+        "x": 19,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:18:35:guadalcanal_1942:19:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 18,
+        "y": 35
+      },
+      "to": {
+        "x": 19,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:18:34:guadalcanal_1942:18:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 18,
+        "y": 35
+      },
+      "to": {
+        "x": 18,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:19:35:guadalcanal_1942:20:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 19,
+        "y": 35
+      },
+      "to": {
+        "x": 20,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:19:35:guadalcanal_1942:20:34",
+      "class": "secondary_road",
+      "from": {
+        "x": 19,
+        "y": 35
+      },
+      "to": {
+        "x": 20,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:19:34:guadalcanal_1942:19:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 19,
+        "y": 35
+      },
+      "to": {
+        "x": 19,
+        "y": 34
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:8:36:guadalcanal_1942:9:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 8,
+        "y": 36
+      },
+      "to": {
+        "x": 9,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:8:35:guadalcanal_1942:8:36",
+      "class": "secondary_road",
+      "from": {
+        "x": 8,
+        "y": 36
+      },
+      "to": {
+        "x": 8,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:35:guadalcanal_1942:9:36",
+      "class": "secondary_road",
+      "from": {
+        "x": 9,
+        "y": 36
+      },
+      "to": {
+        "x": 10,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:9:35:guadalcanal_1942:9:36",
+      "class": "secondary_road",
+      "from": {
+        "x": 9,
+        "y": 36
+      },
+      "to": {
+        "x": 9,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:36:guadalcanal_1942:11:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 10,
+        "y": 36
+      },
+      "to": {
+        "x": 11,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:10:35:guadalcanal_1942:10:36",
+      "class": "secondary_road",
+      "from": {
+        "x": 10,
+        "y": 36
+      },
+      "to": {
+        "x": 10,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:11:35:guadalcanal_1942:11:36",
+      "class": "secondary_road",
+      "from": {
+        "x": 11,
+        "y": 36
+      },
+      "to": {
+        "x": 11,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:13:36:guadalcanal_1942:14:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 13,
+        "y": 36
+      },
+      "to": {
+        "x": 14,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:13:35:guadalcanal_1942:13:36",
+      "class": "secondary_road",
+      "from": {
+        "x": 13,
+        "y": 36
+      },
+      "to": {
+        "x": 13,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:14:36:guadalcanal_1942:15:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 14,
+        "y": 36
+      },
+      "to": {
+        "x": 15,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:14:35:guadalcanal_1942:14:36",
+      "class": "secondary_road",
+      "from": {
+        "x": 14,
+        "y": 36
+      },
+      "to": {
+        "x": 14,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:15:36:guadalcanal_1942:16:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 15,
+        "y": 36
+      },
+      "to": {
+        "x": 16,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:15:35:guadalcanal_1942:15:36",
+      "class": "secondary_road",
+      "from": {
+        "x": 15,
+        "y": 36
+      },
+      "to": {
+        "x": 15,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:16:36:guadalcanal_1942:17:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 16,
+        "y": 36
+      },
+      "to": {
+        "x": 17,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:16:35:guadalcanal_1942:16:36",
+      "class": "secondary_road",
+      "from": {
+        "x": 16,
+        "y": 36
+      },
+      "to": {
+        "x": 16,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:17:36:guadalcanal_1942:18:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 17,
+        "y": 36
+      },
+      "to": {
+        "x": 18,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:17:35:guadalcanal_1942:17:36",
+      "class": "secondary_road",
+      "from": {
+        "x": 17,
+        "y": 36
+      },
+      "to": {
+        "x": 17,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:18:36:guadalcanal_1942:19:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 18,
+        "y": 36
+      },
+      "to": {
+        "x": 19,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:18:35:guadalcanal_1942:18:36",
+      "class": "secondary_road",
+      "from": {
+        "x": 18,
+        "y": 36
+      },
+      "to": {
+        "x": 18,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:19:36:guadalcanal_1942:20:35",
+      "class": "secondary_road",
+      "from": {
+        "x": 19,
+        "y": 36
+      },
+      "to": {
+        "x": 20,
+        "y": 35
+      }
+    },
+    {
+      "id": "road:guadalcanal_1942:19:35:guadalcanal_1942:19:36",
+      "class": "secondary_road",
+      "from": {
+        "x": 19,
+        "y": 36
+      },
+      "to": {
+        "x": 19,
+        "y": 35
+      }
+    }
+  ],
+  "railSegments": [],
+  "generatedAt": "2026-03-24T01:39:54.923551+00:00",
+  "summary": {
+    "hexCount": 144,
+    "settlementCount": 0,
+    "airfieldCount": 0,
+    "roadSegmentCount": 214,
+    "railSegmentCount": 0
+  }
+}

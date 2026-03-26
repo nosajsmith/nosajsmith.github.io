@@ -1,0 +1,3122 @@
+{
+  "schema": "mwe.runtime_basemap_manifest.v1",
+  "theaterId": "guadalcanal_1942",
+  "builtAt": "2026-03-24T01:39:54.923551+00:00",
+  "coordinateSpace": {
+    "id": "runtime_hex_scene_v1",
+    "description": "Authored scenario x/y hex scene coordinates derived from the canonical terrain hex bake.",
+    "xField": "q",
+    "yField": "r"
+  },
+  "bounds": {
+    "minX": -4,
+    "maxX": 31,
+    "minY": 0,
+    "maxY": 74
+  },
+  "hexCount": 2664,
+  "sourceSummary": {
+    "source_ids": [
+      "dem_copernicus_dsm_cog_10_s10_00_e159_00_dem",
+      "dem_copernicus_dsm_cog_10_s10_00_e160_00_dem",
+      "dem_copernicus_dsm_cog_10_s09_00_e159_00_dem",
+      "dem_copernicus_dsm_cog_10_s09_00_e160_00_dem",
+      "hydro_osm_overpass_snapshot",
+      "hydro_osm_crossings_snapshot",
+      "landcover_osm_snapshot",
+      "infrastructure_osm_snapshot"
+    ],
+    "files": {
+      "terrain_dem": {
+        "path": "data/processed/terrain_dem.tif",
+        "checksum": "330a3394140999d89c2f06cbe90e7368dfbda7b7fab6f4cd48efbbf2123c4dae"
+      },
+      "relief_slope": {
+        "path": "data/processed/relief/slope.tif",
+        "checksum": "a2b84aa4702ba8a9f6906432a3edc3a4013271db2df200ef1faa526938591d73"
+      },
+      "relief_ruggedness": {
+        "path": "data/processed/relief/ruggedness.tif",
+        "checksum": "50b787b531f47e43b2cd221f981dfa7e189196d55534cef8373b2db79a07b3f2"
+      },
+      "landcover_hex_stats": {
+        "path": "data/processed/landcover/hex_landcover_stats.json",
+        "checksum": "cabd3076d11949489916a4e3aa4a5f5a80eb8357bac56589fec59af36634b276"
+      },
+      "hydro_lines": {
+        "path": "data/processed/hydro/hydro_lines.geojson",
+        "checksum": "112bd812e6768e42990e570b7197e1293ce2f4a6183c76dcff4dcfeb27c5f31d"
+      },
+      "hydro_polygons": {
+        "path": "data/processed/hydro/hydro_polygons.geojson",
+        "checksum": "8685240316d05b703244e160cfb775dd689f3675596f0be9c9aaae2c2927a91c"
+      },
+      "crossing_candidates": {
+        "path": "data/processed/hydro/crossing_candidates.geojson",
+        "checksum": "060fe7c580cac3871b94a8a40679e6cf85418491693c9e22269340d64f2c2429"
+      },
+      "roads": {
+        "path": "data/processed/transport/roads.geojson",
+        "checksum": "56467b0386bf42c882f2a52e678d8dfdaf874e79327d31a9c439b798da13f467"
+      },
+      "rail": {
+        "path": "data/processed/transport/rail.geojson",
+        "checksum": "ed778c73ea51338d6576fb5992b189f2b94d9f3d5e199f46c1af520d6b0b3e6c"
+      },
+      "bridges": {
+        "path": "data/processed/transport/bridges.geojson",
+        "checksum": "f88037cb06725adf5cbcf228e697f486a86311a151e40fc8707960ebd51e4a79"
+      },
+      "settlements": {
+        "path": "data/processed/places/settlements.geojson",
+        "checksum": "890a7f9d27a824ac88f119ca48133e452da167b1e00863c5e8f871ce5b7f9243"
+      },
+      "airfields": {
+        "path": "data/processed/places/airfields.geojson",
+        "checksum": "16a45d995f42c8aeb13bd81424918f20db0744232fd4c715a22099d298f8fbf3"
+      }
+    }
+  },
+  "sourceBakeJobId": "terrain-hex-bake-f110bf3c1b99",
+  "prefetchTilePadding": 1,
+  "tiers": {
+    "far": {
+      "tileSpan": 12,
+      "contourIntervalM": 200,
+      "tileCount": 21,
+      "tiles": [
+        {
+          "tileId": "0_0",
+          "tx": 0,
+          "ty": 0,
+          "bounds": {
+            "minX": -4,
+            "maxX": 8,
+            "minY": 0,
+            "maxY": 12
+          },
+          "summary": {
+            "hexCount": 128,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "far/0_0.json"
+        },
+        {
+          "tileId": "0_1",
+          "tx": 0,
+          "ty": 1,
+          "bounds": {
+            "minX": -4,
+            "maxX": 8,
+            "minY": 12,
+            "maxY": 24
+          },
+          "summary": {
+            "hexCount": 144,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 28,
+            "railSegmentCount": 0
+          },
+          "path": "far/0_1.json"
+        },
+        {
+          "tileId": "0_2",
+          "tx": 0,
+          "ty": 2,
+          "bounds": {
+            "minX": -4,
+            "maxX": 8,
+            "minY": 24,
+            "maxY": 36
+          },
+          "summary": {
+            "hexCount": 144,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 59,
+            "railSegmentCount": 0
+          },
+          "path": "far/0_2.json"
+        },
+        {
+          "tileId": "0_3",
+          "tx": 0,
+          "ty": 3,
+          "bounds": {
+            "minX": -4,
+            "maxX": 8,
+            "minY": 36,
+            "maxY": 48
+          },
+          "summary": {
+            "hexCount": 144,
+            "settlementCount": 1,
+            "airfieldCount": 0,
+            "roadSegmentCount": 153,
+            "railSegmentCount": 0
+          },
+          "path": "far/0_3.json"
+        },
+        {
+          "tileId": "0_4",
+          "tx": 0,
+          "ty": 4,
+          "bounds": {
+            "minX": -4,
+            "maxX": 8,
+            "minY": 48,
+            "maxY": 60
+          },
+          "summary": {
+            "hexCount": 144,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "far/0_4.json"
+        },
+        {
+          "tileId": "0_5",
+          "tx": 0,
+          "ty": 5,
+          "bounds": {
+            "minX": -4,
+            "maxX": 8,
+            "minY": 60,
+            "maxY": 72
+          },
+          "summary": {
+            "hexCount": 144,
+            "settlementCount": 1,
+            "airfieldCount": 0,
+            "roadSegmentCount": 48,
+            "railSegmentCount": 0
+          },
+          "path": "far/0_5.json"
+        },
+        {
+          "tileId": "0_6",
+          "tx": 0,
+          "ty": 6,
+          "bounds": {
+            "minX": -4,
+            "maxX": 8,
+            "minY": 72,
+            "maxY": 84
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "far/0_6.json"
+        },
+        {
+          "tileId": "1_0",
+          "tx": 1,
+          "ty": 0,
+          "bounds": {
+            "minX": 8,
+            "maxX": 20,
+            "minY": 0,
+            "maxY": 12
+          },
+          "summary": {
+            "hexCount": 144,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "far/1_0.json"
+        },
+        {
+          "tileId": "1_1",
+          "tx": 1,
+          "ty": 1,
+          "bounds": {
+            "minX": 8,
+            "maxX": 20,
+            "minY": 12,
+            "maxY": 24
+          },
+          "summary": {
+            "hexCount": 144,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 19,
+            "railSegmentCount": 0
+          },
+          "path": "far/1_1.json"
+        },
+        {
+          "tileId": "1_2",
+          "tx": 1,
+          "ty": 2,
+          "bounds": {
+            "minX": 8,
+            "maxX": 20,
+            "minY": 24,
+            "maxY": 36
+          },
+          "summary": {
+            "hexCount": 144,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 214,
+            "railSegmentCount": 0
+          },
+          "path": "far/1_2.json"
+        },
+        {
+          "tileId": "1_3",
+          "tx": 1,
+          "ty": 3,
+          "bounds": {
+            "minX": 8,
+            "maxX": 20,
+            "minY": 36,
+            "maxY": 48
+          },
+          "summary": {
+            "hexCount": 144,
+            "settlementCount": 0,
+            "airfieldCount": 1,
+            "roadSegmentCount": 110,
+            "railSegmentCount": 0
+          },
+          "path": "far/1_3.json"
+        },
+        {
+          "tileId": "1_4",
+          "tx": 1,
+          "ty": 4,
+          "bounds": {
+            "minX": 8,
+            "maxX": 20,
+            "minY": 48,
+            "maxY": 60
+          },
+          "summary": {
+            "hexCount": 144,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 14,
+            "railSegmentCount": 0
+          },
+          "path": "far/1_4.json"
+        },
+        {
+          "tileId": "1_5",
+          "tx": 1,
+          "ty": 5,
+          "bounds": {
+            "minX": 8,
+            "maxX": 20,
+            "minY": 60,
+            "maxY": 72
+          },
+          "summary": {
+            "hexCount": 144,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 55,
+            "railSegmentCount": 0
+          },
+          "path": "far/1_5.json"
+        },
+        {
+          "tileId": "1_6",
+          "tx": 1,
+          "ty": 6,
+          "bounds": {
+            "minX": 8,
+            "maxX": 20,
+            "minY": 72,
+            "maxY": 84
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "far/1_6.json"
+        },
+        {
+          "tileId": "2_0",
+          "tx": 2,
+          "ty": 0,
+          "bounds": {
+            "minX": 20,
+            "maxX": 32,
+            "minY": 0,
+            "maxY": 12
+          },
+          "summary": {
+            "hexCount": 144,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 1,
+            "railSegmentCount": 0
+          },
+          "path": "far/2_0.json"
+        },
+        {
+          "tileId": "2_1",
+          "tx": 2,
+          "ty": 1,
+          "bounds": {
+            "minX": 20,
+            "maxX": 32,
+            "minY": 12,
+            "maxY": 24
+          },
+          "summary": {
+            "hexCount": 144,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "far/2_1.json"
+        },
+        {
+          "tileId": "2_2",
+          "tx": 2,
+          "ty": 2,
+          "bounds": {
+            "minX": 20,
+            "maxX": 32,
+            "minY": 24,
+            "maxY": 36
+          },
+          "summary": {
+            "hexCount": 144,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 251,
+            "railSegmentCount": 0
+          },
+          "path": "far/2_2.json"
+        },
+        {
+          "tileId": "2_3",
+          "tx": 2,
+          "ty": 3,
+          "bounds": {
+            "minX": 20,
+            "maxX": 32,
+            "minY": 36,
+            "maxY": 48
+          },
+          "summary": {
+            "hexCount": 144,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 101,
+            "railSegmentCount": 0
+          },
+          "path": "far/2_3.json"
+        },
+        {
+          "tileId": "2_4",
+          "tx": 2,
+          "ty": 4,
+          "bounds": {
+            "minX": 20,
+            "maxX": 32,
+            "minY": 48,
+            "maxY": 60
+          },
+          "summary": {
+            "hexCount": 144,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "far/2_4.json"
+        },
+        {
+          "tileId": "2_5",
+          "tx": 2,
+          "ty": 5,
+          "bounds": {
+            "minX": 20,
+            "maxX": 32,
+            "minY": 60,
+            "maxY": 72
+          },
+          "summary": {
+            "hexCount": 135,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "far/2_5.json"
+        },
+        {
+          "tileId": "2_6",
+          "tx": 2,
+          "ty": 6,
+          "bounds": {
+            "minX": 20,
+            "maxX": 32,
+            "minY": 72,
+            "maxY": 84
+          },
+          "summary": {
+            "hexCount": 25,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "far/2_6.json"
+        }
+      ],
+      "sourceSummary": {
+        "source_ids": [
+          "dem_copernicus_dsm_cog_10_s10_00_e159_00_dem",
+          "dem_copernicus_dsm_cog_10_s10_00_e160_00_dem",
+          "dem_copernicus_dsm_cog_10_s09_00_e159_00_dem",
+          "dem_copernicus_dsm_cog_10_s09_00_e160_00_dem",
+          "hydro_osm_overpass_snapshot",
+          "hydro_osm_crossings_snapshot",
+          "landcover_osm_snapshot",
+          "infrastructure_osm_snapshot"
+        ],
+        "files": {
+          "terrain_dem": {
+            "path": "data/processed/terrain_dem.tif",
+            "checksum": "330a3394140999d89c2f06cbe90e7368dfbda7b7fab6f4cd48efbbf2123c4dae"
+          },
+          "relief_slope": {
+            "path": "data/processed/relief/slope.tif",
+            "checksum": "a2b84aa4702ba8a9f6906432a3edc3a4013271db2df200ef1faa526938591d73"
+          },
+          "relief_ruggedness": {
+            "path": "data/processed/relief/ruggedness.tif",
+            "checksum": "50b787b531f47e43b2cd221f981dfa7e189196d55534cef8373b2db79a07b3f2"
+          },
+          "landcover_hex_stats": {
+            "path": "data/processed/landcover/hex_landcover_stats.json",
+            "checksum": "cabd3076d11949489916a4e3aa4a5f5a80eb8357bac56589fec59af36634b276"
+          },
+          "hydro_lines": {
+            "path": "data/processed/hydro/hydro_lines.geojson",
+            "checksum": "112bd812e6768e42990e570b7197e1293ce2f4a6183c76dcff4dcfeb27c5f31d"
+          },
+          "hydro_polygons": {
+            "path": "data/processed/hydro/hydro_polygons.geojson",
+            "checksum": "8685240316d05b703244e160cfb775dd689f3675596f0be9c9aaae2c2927a91c"
+          },
+          "crossing_candidates": {
+            "path": "data/processed/hydro/crossing_candidates.geojson",
+            "checksum": "060fe7c580cac3871b94a8a40679e6cf85418491693c9e22269340d64f2c2429"
+          },
+          "roads": {
+            "path": "data/processed/transport/roads.geojson",
+            "checksum": "56467b0386bf42c882f2a52e678d8dfdaf874e79327d31a9c439b798da13f467"
+          },
+          "rail": {
+            "path": "data/processed/transport/rail.geojson",
+            "checksum": "ed778c73ea51338d6576fb5992b189f2b94d9f3d5e199f46c1af520d6b0b3e6c"
+          },
+          "bridges": {
+            "path": "data/processed/transport/bridges.geojson",
+            "checksum": "f88037cb06725adf5cbcf228e697f486a86311a151e40fc8707960ebd51e4a79"
+          },
+          "settlements": {
+            "path": "data/processed/places/settlements.geojson",
+            "checksum": "890a7f9d27a824ac88f119ca48133e452da167b1e00863c5e8f871ce5b7f9243"
+          },
+          "airfields": {
+            "path": "data/processed/places/airfields.geojson",
+            "checksum": "16a45d995f42c8aeb13bd81424918f20db0744232fd4c715a22099d298f8fbf3"
+          }
+        }
+      }
+    },
+    "operational": {
+      "tileSpan": 8,
+      "contourIntervalM": 100,
+      "tileCount": 50,
+      "tiles": [
+        {
+          "tileId": "0_0",
+          "tx": 0,
+          "ty": 0,
+          "bounds": {
+            "minX": -4,
+            "maxX": 4,
+            "minY": 0,
+            "maxY": 8
+          },
+          "summary": {
+            "hexCount": 48,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/0_0.json"
+        },
+        {
+          "tileId": "0_1",
+          "tx": 0,
+          "ty": 1,
+          "bounds": {
+            "minX": -4,
+            "maxX": 4,
+            "minY": 8,
+            "maxY": 16
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/0_1.json"
+        },
+        {
+          "tileId": "0_2",
+          "tx": 0,
+          "ty": 2,
+          "bounds": {
+            "minX": -4,
+            "maxX": 4,
+            "minY": 16,
+            "maxY": 24
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 1,
+            "airfieldCount": 0,
+            "roadSegmentCount": 27,
+            "railSegmentCount": 0
+          },
+          "path": "operational/0_2.json"
+        },
+        {
+          "tileId": "0_3",
+          "tx": 0,
+          "ty": 3,
+          "bounds": {
+            "minX": -4,
+            "maxX": 4,
+            "minY": 24,
+            "maxY": 32
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 26,
+            "railSegmentCount": 0
+          },
+          "path": "operational/0_3.json"
+        },
+        {
+          "tileId": "0_4",
+          "tx": 0,
+          "ty": 4,
+          "bounds": {
+            "minX": -4,
+            "maxX": 4,
+            "minY": 32,
+            "maxY": 40
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 1,
+            "airfieldCount": 0,
+            "roadSegmentCount": 81,
+            "railSegmentCount": 0
+          },
+          "path": "operational/0_4.json"
+        },
+        {
+          "tileId": "0_5",
+          "tx": 0,
+          "ty": 5,
+          "bounds": {
+            "minX": -4,
+            "maxX": 4,
+            "minY": 40,
+            "maxY": 48
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 1,
+            "airfieldCount": 0,
+            "roadSegmentCount": 46,
+            "railSegmentCount": 0
+          },
+          "path": "operational/0_5.json"
+        },
+        {
+          "tileId": "0_6",
+          "tx": 0,
+          "ty": 6,
+          "bounds": {
+            "minX": -4,
+            "maxX": 4,
+            "minY": 48,
+            "maxY": 56
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/0_6.json"
+        },
+        {
+          "tileId": "0_7",
+          "tx": 0,
+          "ty": 7,
+          "bounds": {
+            "minX": -4,
+            "maxX": 4,
+            "minY": 56,
+            "maxY": 64
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/0_7.json"
+        },
+        {
+          "tileId": "0_8",
+          "tx": 0,
+          "ty": 8,
+          "bounds": {
+            "minX": -4,
+            "maxX": 4,
+            "minY": 64,
+            "maxY": 72
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 11,
+            "railSegmentCount": 0
+          },
+          "path": "operational/0_8.json"
+        },
+        {
+          "tileId": "0_9",
+          "tx": 0,
+          "ty": 9,
+          "bounds": {
+            "minX": -4,
+            "maxX": 4,
+            "minY": 72,
+            "maxY": 80
+          },
+          "summary": {
+            "hexCount": 24,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/0_9.json"
+        },
+        {
+          "tileId": "1_0",
+          "tx": 1,
+          "ty": 0,
+          "bounds": {
+            "minX": 4,
+            "maxX": 12,
+            "minY": 0,
+            "maxY": 8
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/1_0.json"
+        },
+        {
+          "tileId": "1_1",
+          "tx": 1,
+          "ty": 1,
+          "bounds": {
+            "minX": 4,
+            "maxX": 12,
+            "minY": 8,
+            "maxY": 16
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 1,
+            "airfieldCount": 0,
+            "roadSegmentCount": 12,
+            "railSegmentCount": 0
+          },
+          "path": "operational/1_1.json"
+        },
+        {
+          "tileId": "1_2",
+          "tx": 1,
+          "ty": 2,
+          "bounds": {
+            "minX": 4,
+            "maxX": 12,
+            "minY": 16,
+            "maxY": 24
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 1,
+            "airfieldCount": 0,
+            "roadSegmentCount": 2,
+            "railSegmentCount": 0
+          },
+          "path": "operational/1_2.json"
+        },
+        {
+          "tileId": "1_3",
+          "tx": 1,
+          "ty": 3,
+          "bounds": {
+            "minX": 4,
+            "maxX": 12,
+            "minY": 24,
+            "maxY": 32
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 25,
+            "railSegmentCount": 0
+          },
+          "path": "operational/1_3.json"
+        },
+        {
+          "tileId": "1_4",
+          "tx": 1,
+          "ty": 4,
+          "bounds": {
+            "minX": 4,
+            "maxX": 12,
+            "minY": 32,
+            "maxY": 40
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 10,
+            "airfieldCount": 0,
+            "roadSegmentCount": 139,
+            "railSegmentCount": 0
+          },
+          "path": "operational/1_4.json"
+        },
+        {
+          "tileId": "1_5",
+          "tx": 1,
+          "ty": 5,
+          "bounds": {
+            "minX": 4,
+            "maxX": 12,
+            "minY": 40,
+            "maxY": 48
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 1,
+            "railSegmentCount": 0
+          },
+          "path": "operational/1_5.json"
+        },
+        {
+          "tileId": "1_6",
+          "tx": 1,
+          "ty": 6,
+          "bounds": {
+            "minX": 4,
+            "maxX": 12,
+            "minY": 48,
+            "maxY": 56
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/1_6.json"
+        },
+        {
+          "tileId": "1_7",
+          "tx": 1,
+          "ty": 7,
+          "bounds": {
+            "minX": 4,
+            "maxX": 12,
+            "minY": 56,
+            "maxY": 64
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 1,
+            "airfieldCount": 0,
+            "roadSegmentCount": 3,
+            "railSegmentCount": 0
+          },
+          "path": "operational/1_7.json"
+        },
+        {
+          "tileId": "1_8",
+          "tx": 1,
+          "ty": 8,
+          "bounds": {
+            "minX": 4,
+            "maxX": 12,
+            "minY": 64,
+            "maxY": 72
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 55,
+            "railSegmentCount": 0
+          },
+          "path": "operational/1_8.json"
+        },
+        {
+          "tileId": "1_9",
+          "tx": 1,
+          "ty": 9,
+          "bounds": {
+            "minX": 4,
+            "maxX": 12,
+            "minY": 72,
+            "maxY": 80
+          },
+          "summary": {
+            "hexCount": 24,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/1_9.json"
+        },
+        {
+          "tileId": "2_0",
+          "tx": 2,
+          "ty": 0,
+          "bounds": {
+            "minX": 12,
+            "maxX": 20,
+            "minY": 0,
+            "maxY": 8
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/2_0.json"
+        },
+        {
+          "tileId": "2_1",
+          "tx": 2,
+          "ty": 1,
+          "bounds": {
+            "minX": 12,
+            "maxX": 20,
+            "minY": 8,
+            "maxY": 16
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 6,
+            "railSegmentCount": 0
+          },
+          "path": "operational/2_1.json"
+        },
+        {
+          "tileId": "2_2",
+          "tx": 2,
+          "ty": 2,
+          "bounds": {
+            "minX": 12,
+            "maxX": 20,
+            "minY": 16,
+            "maxY": 24
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/2_2.json"
+        },
+        {
+          "tileId": "2_3",
+          "tx": 2,
+          "ty": 3,
+          "bounds": {
+            "minX": 12,
+            "maxX": 20,
+            "minY": 24,
+            "maxY": 32
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 69,
+            "railSegmentCount": 0
+          },
+          "path": "operational/2_3.json"
+        },
+        {
+          "tileId": "2_4",
+          "tx": 2,
+          "ty": 4,
+          "bounds": {
+            "minX": 12,
+            "maxX": 20,
+            "minY": 32,
+            "maxY": 40
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 0,
+            "airfieldCount": 1,
+            "roadSegmentCount": 149,
+            "railSegmentCount": 0
+          },
+          "path": "operational/2_4.json"
+        },
+        {
+          "tileId": "2_5",
+          "tx": 2,
+          "ty": 5,
+          "bounds": {
+            "minX": 12,
+            "maxX": 20,
+            "minY": 40,
+            "maxY": 48
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 1,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/2_5.json"
+        },
+        {
+          "tileId": "2_6",
+          "tx": 2,
+          "ty": 6,
+          "bounds": {
+            "minX": 12,
+            "maxX": 20,
+            "minY": 48,
+            "maxY": 56
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/2_6.json"
+        },
+        {
+          "tileId": "2_7",
+          "tx": 2,
+          "ty": 7,
+          "bounds": {
+            "minX": 12,
+            "maxX": 20,
+            "minY": 56,
+            "maxY": 64
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 31,
+            "railSegmentCount": 0
+          },
+          "path": "operational/2_7.json"
+        },
+        {
+          "tileId": "2_8",
+          "tx": 2,
+          "ty": 8,
+          "bounds": {
+            "minX": 12,
+            "maxX": 20,
+            "minY": 64,
+            "maxY": 72
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 2,
+            "airfieldCount": 0,
+            "roadSegmentCount": 17,
+            "railSegmentCount": 0
+          },
+          "path": "operational/2_8.json"
+        },
+        {
+          "tileId": "2_9",
+          "tx": 2,
+          "ty": 9,
+          "bounds": {
+            "minX": 12,
+            "maxX": 20,
+            "minY": 72,
+            "maxY": 80
+          },
+          "summary": {
+            "hexCount": 24,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/2_9.json"
+        },
+        {
+          "tileId": "3_0",
+          "tx": 3,
+          "ty": 0,
+          "bounds": {
+            "minX": 20,
+            "maxX": 28,
+            "minY": 0,
+            "maxY": 8
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/3_0.json"
+        },
+        {
+          "tileId": "3_1",
+          "tx": 3,
+          "ty": 1,
+          "bounds": {
+            "minX": 20,
+            "maxX": 28,
+            "minY": 8,
+            "maxY": 16
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 1,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/3_1.json"
+        },
+        {
+          "tileId": "3_2",
+          "tx": 3,
+          "ty": 2,
+          "bounds": {
+            "minX": 20,
+            "maxX": 28,
+            "minY": 16,
+            "maxY": 24
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 1,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/3_2.json"
+        },
+        {
+          "tileId": "3_3",
+          "tx": 3,
+          "ty": 3,
+          "bounds": {
+            "minX": 20,
+            "maxX": 28,
+            "minY": 24,
+            "maxY": 32
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 82,
+            "railSegmentCount": 0
+          },
+          "path": "operational/3_3.json"
+        },
+        {
+          "tileId": "3_4",
+          "tx": 3,
+          "ty": 4,
+          "bounds": {
+            "minX": 20,
+            "maxX": 28,
+            "minY": 32,
+            "maxY": 40
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 1,
+            "airfieldCount": 0,
+            "roadSegmentCount": 176,
+            "railSegmentCount": 0
+          },
+          "path": "operational/3_4.json"
+        },
+        {
+          "tileId": "3_5",
+          "tx": 3,
+          "ty": 5,
+          "bounds": {
+            "minX": 20,
+            "maxX": 28,
+            "minY": 40,
+            "maxY": 48
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/3_5.json"
+        },
+        {
+          "tileId": "3_6",
+          "tx": 3,
+          "ty": 6,
+          "bounds": {
+            "minX": 20,
+            "maxX": 28,
+            "minY": 48,
+            "maxY": 56
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/3_6.json"
+        },
+        {
+          "tileId": "3_7",
+          "tx": 3,
+          "ty": 7,
+          "bounds": {
+            "minX": 20,
+            "maxX": 28,
+            "minY": 56,
+            "maxY": 64
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/3_7.json"
+        },
+        {
+          "tileId": "3_8",
+          "tx": 3,
+          "ty": 8,
+          "bounds": {
+            "minX": 20,
+            "maxX": 28,
+            "minY": 64,
+            "maxY": 72
+          },
+          "summary": {
+            "hexCount": 64,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/3_8.json"
+        },
+        {
+          "tileId": "3_9",
+          "tx": 3,
+          "ty": 9,
+          "bounds": {
+            "minX": 20,
+            "maxX": 28,
+            "minY": 72,
+            "maxY": 80
+          },
+          "summary": {
+            "hexCount": 24,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/3_9.json"
+        },
+        {
+          "tileId": "4_0",
+          "tx": 4,
+          "ty": 0,
+          "bounds": {
+            "minX": 28,
+            "maxX": 36,
+            "minY": 0,
+            "maxY": 8
+          },
+          "summary": {
+            "hexCount": 32,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/4_0.json"
+        },
+        {
+          "tileId": "4_1",
+          "tx": 4,
+          "ty": 1,
+          "bounds": {
+            "minX": 28,
+            "maxX": 36,
+            "minY": 8,
+            "maxY": 16
+          },
+          "summary": {
+            "hexCount": 32,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 1,
+            "railSegmentCount": 0
+          },
+          "path": "operational/4_1.json"
+        },
+        {
+          "tileId": "4_2",
+          "tx": 4,
+          "ty": 2,
+          "bounds": {
+            "minX": 28,
+            "maxX": 36,
+            "minY": 16,
+            "maxY": 24
+          },
+          "summary": {
+            "hexCount": 32,
+            "settlementCount": 1,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/4_2.json"
+        },
+        {
+          "tileId": "4_3",
+          "tx": 4,
+          "ty": 3,
+          "bounds": {
+            "minX": 28,
+            "maxX": 36,
+            "minY": 24,
+            "maxY": 32
+          },
+          "summary": {
+            "hexCount": 32,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 40,
+            "railSegmentCount": 0
+          },
+          "path": "operational/4_3.json"
+        },
+        {
+          "tileId": "4_4",
+          "tx": 4,
+          "ty": 4,
+          "bounds": {
+            "minX": 28,
+            "maxX": 36,
+            "minY": 32,
+            "maxY": 40
+          },
+          "summary": {
+            "hexCount": 32,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 54,
+            "railSegmentCount": 0
+          },
+          "path": "operational/4_4.json"
+        },
+        {
+          "tileId": "4_5",
+          "tx": 4,
+          "ty": 5,
+          "bounds": {
+            "minX": 28,
+            "maxX": 36,
+            "minY": 40,
+            "maxY": 48
+          },
+          "summary": {
+            "hexCount": 32,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/4_5.json"
+        },
+        {
+          "tileId": "4_6",
+          "tx": 4,
+          "ty": 6,
+          "bounds": {
+            "minX": 28,
+            "maxX": 36,
+            "minY": 48,
+            "maxY": 56
+          },
+          "summary": {
+            "hexCount": 32,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/4_6.json"
+        },
+        {
+          "tileId": "4_7",
+          "tx": 4,
+          "ty": 7,
+          "bounds": {
+            "minX": 28,
+            "maxX": 36,
+            "minY": 56,
+            "maxY": 64
+          },
+          "summary": {
+            "hexCount": 32,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/4_7.json"
+        },
+        {
+          "tileId": "4_8",
+          "tx": 4,
+          "ty": 8,
+          "bounds": {
+            "minX": 28,
+            "maxX": 36,
+            "minY": 64,
+            "maxY": 72
+          },
+          "summary": {
+            "hexCount": 23,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/4_8.json"
+        },
+        {
+          "tileId": "4_9",
+          "tx": 4,
+          "ty": 9,
+          "bounds": {
+            "minX": 28,
+            "maxX": 36,
+            "minY": 72,
+            "maxY": 80
+          },
+          "summary": {
+            "hexCount": 1,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "operational/4_9.json"
+        }
+      ],
+      "sourceSummary": {
+        "source_ids": [
+          "dem_copernicus_dsm_cog_10_s10_00_e159_00_dem",
+          "dem_copernicus_dsm_cog_10_s10_00_e160_00_dem",
+          "dem_copernicus_dsm_cog_10_s09_00_e159_00_dem",
+          "dem_copernicus_dsm_cog_10_s09_00_e160_00_dem",
+          "hydro_osm_overpass_snapshot",
+          "hydro_osm_crossings_snapshot",
+          "landcover_osm_snapshot",
+          "infrastructure_osm_snapshot"
+        ],
+        "files": {
+          "terrain_dem": {
+            "path": "data/processed/terrain_dem.tif",
+            "checksum": "330a3394140999d89c2f06cbe90e7368dfbda7b7fab6f4cd48efbbf2123c4dae"
+          },
+          "relief_slope": {
+            "path": "data/processed/relief/slope.tif",
+            "checksum": "a2b84aa4702ba8a9f6906432a3edc3a4013271db2df200ef1faa526938591d73"
+          },
+          "relief_ruggedness": {
+            "path": "data/processed/relief/ruggedness.tif",
+            "checksum": "50b787b531f47e43b2cd221f981dfa7e189196d55534cef8373b2db79a07b3f2"
+          },
+          "landcover_hex_stats": {
+            "path": "data/processed/landcover/hex_landcover_stats.json",
+            "checksum": "cabd3076d11949489916a4e3aa4a5f5a80eb8357bac56589fec59af36634b276"
+          },
+          "hydro_lines": {
+            "path": "data/processed/hydro/hydro_lines.geojson",
+            "checksum": "112bd812e6768e42990e570b7197e1293ce2f4a6183c76dcff4dcfeb27c5f31d"
+          },
+          "hydro_polygons": {
+            "path": "data/processed/hydro/hydro_polygons.geojson",
+            "checksum": "8685240316d05b703244e160cfb775dd689f3675596f0be9c9aaae2c2927a91c"
+          },
+          "crossing_candidates": {
+            "path": "data/processed/hydro/crossing_candidates.geojson",
+            "checksum": "060fe7c580cac3871b94a8a40679e6cf85418491693c9e22269340d64f2c2429"
+          },
+          "roads": {
+            "path": "data/processed/transport/roads.geojson",
+            "checksum": "56467b0386bf42c882f2a52e678d8dfdaf874e79327d31a9c439b798da13f467"
+          },
+          "rail": {
+            "path": "data/processed/transport/rail.geojson",
+            "checksum": "ed778c73ea51338d6576fb5992b189f2b94d9f3d5e199f46c1af520d6b0b3e6c"
+          },
+          "bridges": {
+            "path": "data/processed/transport/bridges.geojson",
+            "checksum": "f88037cb06725adf5cbcf228e697f486a86311a151e40fc8707960ebd51e4a79"
+          },
+          "settlements": {
+            "path": "data/processed/places/settlements.geojson",
+            "checksum": "890a7f9d27a824ac88f119ca48133e452da167b1e00863c5e8f871ce5b7f9243"
+          },
+          "airfields": {
+            "path": "data/processed/places/airfields.geojson",
+            "checksum": "16a45d995f42c8aeb13bd81424918f20db0744232fd4c715a22099d298f8fbf3"
+          }
+        }
+      }
+    },
+    "close": {
+      "tileSpan": 6,
+      "contourIntervalM": 50,
+      "tileCount": 78,
+      "tiles": [
+        {
+          "tileId": "0_0",
+          "tx": 0,
+          "ty": 0,
+          "bounds": {
+            "minX": -4,
+            "maxX": 2,
+            "minY": 0,
+            "maxY": 6
+          },
+          "summary": {
+            "hexCount": 21,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/0_0.json"
+        },
+        {
+          "tileId": "0_1",
+          "tx": 0,
+          "ty": 1,
+          "bounds": {
+            "minX": -4,
+            "maxX": 2,
+            "minY": 6,
+            "maxY": 12
+          },
+          "summary": {
+            "hexCount": 35,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/0_1.json"
+        },
+        {
+          "tileId": "0_2",
+          "tx": 0,
+          "ty": 2,
+          "bounds": {
+            "minX": -4,
+            "maxX": 2,
+            "minY": 12,
+            "maxY": 18
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/0_2.json"
+        },
+        {
+          "tileId": "0_3",
+          "tx": 0,
+          "ty": 3,
+          "bounds": {
+            "minX": -4,
+            "maxX": 2,
+            "minY": 18,
+            "maxY": 24
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 1,
+            "airfieldCount": 0,
+            "roadSegmentCount": 19,
+            "railSegmentCount": 0
+          },
+          "path": "close/0_3.json"
+        },
+        {
+          "tileId": "0_4",
+          "tx": 0,
+          "ty": 4,
+          "bounds": {
+            "minX": -4,
+            "maxX": 2,
+            "minY": 24,
+            "maxY": 30
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 22,
+            "railSegmentCount": 0
+          },
+          "path": "close/0_4.json"
+        },
+        {
+          "tileId": "0_5",
+          "tx": 0,
+          "ty": 5,
+          "bounds": {
+            "minX": -4,
+            "maxX": 2,
+            "minY": 30,
+            "maxY": 36
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 7,
+            "railSegmentCount": 0
+          },
+          "path": "close/0_5.json"
+        },
+        {
+          "tileId": "0_6",
+          "tx": 0,
+          "ty": 6,
+          "bounds": {
+            "minX": -4,
+            "maxX": 2,
+            "minY": 36,
+            "maxY": 42
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 1,
+            "airfieldCount": 0,
+            "roadSegmentCount": 83,
+            "railSegmentCount": 0
+          },
+          "path": "close/0_6.json"
+        },
+        {
+          "tileId": "0_7",
+          "tx": 0,
+          "ty": 7,
+          "bounds": {
+            "minX": -4,
+            "maxX": 2,
+            "minY": 42,
+            "maxY": 48
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 3,
+            "airfieldCount": 0,
+            "roadSegmentCount": 19,
+            "railSegmentCount": 0
+          },
+          "path": "close/0_7.json"
+        },
+        {
+          "tileId": "0_8",
+          "tx": 0,
+          "ty": 8,
+          "bounds": {
+            "minX": -4,
+            "maxX": 2,
+            "minY": 48,
+            "maxY": 54
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/0_8.json"
+        },
+        {
+          "tileId": "0_9",
+          "tx": 0,
+          "ty": 9,
+          "bounds": {
+            "minX": -4,
+            "maxX": 2,
+            "minY": 54,
+            "maxY": 60
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/0_9.json"
+        },
+        {
+          "tileId": "0_10",
+          "tx": 0,
+          "ty": 10,
+          "bounds": {
+            "minX": -4,
+            "maxX": 2,
+            "minY": 60,
+            "maxY": 66
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/0_10.json"
+        },
+        {
+          "tileId": "0_11",
+          "tx": 0,
+          "ty": 11,
+          "bounds": {
+            "minX": -4,
+            "maxX": 2,
+            "minY": 66,
+            "maxY": 72
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/0_11.json"
+        },
+        {
+          "tileId": "0_12",
+          "tx": 0,
+          "ty": 12,
+          "bounds": {
+            "minX": -4,
+            "maxX": 2,
+            "minY": 72,
+            "maxY": 78
+          },
+          "summary": {
+            "hexCount": 18,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/0_12.json"
+        },
+        {
+          "tileId": "1_0",
+          "tx": 1,
+          "ty": 0,
+          "bounds": {
+            "minX": 2,
+            "maxX": 8,
+            "minY": 0,
+            "maxY": 6
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/1_0.json"
+        },
+        {
+          "tileId": "1_1",
+          "tx": 1,
+          "ty": 1,
+          "bounds": {
+            "minX": 2,
+            "maxX": 8,
+            "minY": 6,
+            "maxY": 12
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/1_1.json"
+        },
+        {
+          "tileId": "1_2",
+          "tx": 1,
+          "ty": 2,
+          "bounds": {
+            "minX": 2,
+            "maxX": 8,
+            "minY": 12,
+            "maxY": 18
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/1_2.json"
+        },
+        {
+          "tileId": "1_3",
+          "tx": 1,
+          "ty": 3,
+          "bounds": {
+            "minX": 2,
+            "maxX": 8,
+            "minY": 18,
+            "maxY": 24
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 9,
+            "railSegmentCount": 0
+          },
+          "path": "close/1_3.json"
+        },
+        {
+          "tileId": "1_4",
+          "tx": 1,
+          "ty": 4,
+          "bounds": {
+            "minX": 2,
+            "maxX": 8,
+            "minY": 24,
+            "maxY": 30
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 1,
+            "railSegmentCount": 0
+          },
+          "path": "close/1_4.json"
+        },
+        {
+          "tileId": "1_5",
+          "tx": 1,
+          "ty": 5,
+          "bounds": {
+            "minX": 2,
+            "maxX": 8,
+            "minY": 30,
+            "maxY": 36
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 29,
+            "railSegmentCount": 0
+          },
+          "path": "close/1_5.json"
+        },
+        {
+          "tileId": "1_6",
+          "tx": 1,
+          "ty": 6,
+          "bounds": {
+            "minX": 2,
+            "maxX": 8,
+            "minY": 36,
+            "maxY": 42
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 6,
+            "airfieldCount": 0,
+            "roadSegmentCount": 51,
+            "railSegmentCount": 0
+          },
+          "path": "close/1_6.json"
+        },
+        {
+          "tileId": "1_7",
+          "tx": 1,
+          "ty": 7,
+          "bounds": {
+            "minX": 2,
+            "maxX": 8,
+            "minY": 42,
+            "maxY": 48
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/1_7.json"
+        },
+        {
+          "tileId": "1_8",
+          "tx": 1,
+          "ty": 8,
+          "bounds": {
+            "minX": 2,
+            "maxX": 8,
+            "minY": 48,
+            "maxY": 54
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 1,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/1_8.json"
+        },
+        {
+          "tileId": "1_9",
+          "tx": 1,
+          "ty": 9,
+          "bounds": {
+            "minX": 2,
+            "maxX": 8,
+            "minY": 54,
+            "maxY": 60
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/1_9.json"
+        },
+        {
+          "tileId": "1_10",
+          "tx": 1,
+          "ty": 10,
+          "bounds": {
+            "minX": 2,
+            "maxX": 8,
+            "minY": 60,
+            "maxY": 66
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 2,
+            "airfieldCount": 0,
+            "roadSegmentCount": 11,
+            "railSegmentCount": 0
+          },
+          "path": "close/1_10.json"
+        },
+        {
+          "tileId": "1_11",
+          "tx": 1,
+          "ty": 11,
+          "bounds": {
+            "minX": 2,
+            "maxX": 8,
+            "minY": 66,
+            "maxY": 72
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 37,
+            "railSegmentCount": 0
+          },
+          "path": "close/1_11.json"
+        },
+        {
+          "tileId": "1_12",
+          "tx": 1,
+          "ty": 12,
+          "bounds": {
+            "minX": 2,
+            "maxX": 8,
+            "minY": 72,
+            "maxY": 78
+          },
+          "summary": {
+            "hexCount": 18,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/1_12.json"
+        },
+        {
+          "tileId": "2_0",
+          "tx": 2,
+          "ty": 0,
+          "bounds": {
+            "minX": 8,
+            "maxX": 14,
+            "minY": 0,
+            "maxY": 6
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/2_0.json"
+        },
+        {
+          "tileId": "2_1",
+          "tx": 2,
+          "ty": 1,
+          "bounds": {
+            "minX": 8,
+            "maxX": 14,
+            "minY": 6,
+            "maxY": 12
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 1,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/2_1.json"
+        },
+        {
+          "tileId": "2_2",
+          "tx": 2,
+          "ty": 2,
+          "bounds": {
+            "minX": 8,
+            "maxX": 14,
+            "minY": 12,
+            "maxY": 18
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 1,
+            "airfieldCount": 0,
+            "roadSegmentCount": 18,
+            "railSegmentCount": 0
+          },
+          "path": "close/2_2.json"
+        },
+        {
+          "tileId": "2_3",
+          "tx": 2,
+          "ty": 3,
+          "bounds": {
+            "minX": 8,
+            "maxX": 14,
+            "minY": 18,
+            "maxY": 24
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/2_3.json"
+        },
+        {
+          "tileId": "2_4",
+          "tx": 2,
+          "ty": 4,
+          "bounds": {
+            "minX": 8,
+            "maxX": 14,
+            "minY": 24,
+            "maxY": 30
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 4,
+            "railSegmentCount": 0
+          },
+          "path": "close/2_4.json"
+        },
+        {
+          "tileId": "2_5",
+          "tx": 2,
+          "ty": 5,
+          "bounds": {
+            "minX": 8,
+            "maxX": 14,
+            "minY": 30,
+            "maxY": 36
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 95,
+            "railSegmentCount": 0
+          },
+          "path": "close/2_5.json"
+        },
+        {
+          "tileId": "2_6",
+          "tx": 2,
+          "ty": 6,
+          "bounds": {
+            "minX": 8,
+            "maxX": 14,
+            "minY": 36,
+            "maxY": 42
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 5,
+            "airfieldCount": 1,
+            "roadSegmentCount": 58,
+            "railSegmentCount": 0
+          },
+          "path": "close/2_6.json"
+        },
+        {
+          "tileId": "2_7",
+          "tx": 2,
+          "ty": 7,
+          "bounds": {
+            "minX": 8,
+            "maxX": 14,
+            "minY": 42,
+            "maxY": 48
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/2_7.json"
+        },
+        {
+          "tileId": "2_8",
+          "tx": 2,
+          "ty": 8,
+          "bounds": {
+            "minX": 8,
+            "maxX": 14,
+            "minY": 48,
+            "maxY": 54
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/2_8.json"
+        },
+        {
+          "tileId": "2_9",
+          "tx": 2,
+          "ty": 9,
+          "bounds": {
+            "minX": 8,
+            "maxX": 14,
+            "minY": 54,
+            "maxY": 60
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 1,
+            "railSegmentCount": 0
+          },
+          "path": "close/2_9.json"
+        },
+        {
+          "tileId": "2_10",
+          "tx": 2,
+          "ty": 10,
+          "bounds": {
+            "minX": 8,
+            "maxX": 14,
+            "minY": 60,
+            "maxY": 66
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 27,
+            "railSegmentCount": 0
+          },
+          "path": "close/2_10.json"
+        },
+        {
+          "tileId": "2_11",
+          "tx": 2,
+          "ty": 11,
+          "bounds": {
+            "minX": 8,
+            "maxX": 14,
+            "minY": 66,
+            "maxY": 72
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 20,
+            "railSegmentCount": 0
+          },
+          "path": "close/2_11.json"
+        },
+        {
+          "tileId": "2_12",
+          "tx": 2,
+          "ty": 12,
+          "bounds": {
+            "minX": 8,
+            "maxX": 14,
+            "minY": 72,
+            "maxY": 78
+          },
+          "summary": {
+            "hexCount": 18,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/2_12.json"
+        },
+        {
+          "tileId": "3_0",
+          "tx": 3,
+          "ty": 0,
+          "bounds": {
+            "minX": 14,
+            "maxX": 20,
+            "minY": 0,
+            "maxY": 6
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/3_0.json"
+        },
+        {
+          "tileId": "3_1",
+          "tx": 3,
+          "ty": 1,
+          "bounds": {
+            "minX": 14,
+            "maxX": 20,
+            "minY": 6,
+            "maxY": 12
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/3_1.json"
+        },
+        {
+          "tileId": "3_2",
+          "tx": 3,
+          "ty": 2,
+          "bounds": {
+            "minX": 14,
+            "maxX": 20,
+            "minY": 12,
+            "maxY": 18
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 1,
+            "railSegmentCount": 0
+          },
+          "path": "close/3_2.json"
+        },
+        {
+          "tileId": "3_3",
+          "tx": 3,
+          "ty": 3,
+          "bounds": {
+            "minX": 14,
+            "maxX": 20,
+            "minY": 18,
+            "maxY": 24
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/3_3.json"
+        },
+        {
+          "tileId": "3_4",
+          "tx": 3,
+          "ty": 4,
+          "bounds": {
+            "minX": 14,
+            "maxX": 20,
+            "minY": 24,
+            "maxY": 30
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 19,
+            "railSegmentCount": 0
+          },
+          "path": "close/3_4.json"
+        },
+        {
+          "tileId": "3_5",
+          "tx": 3,
+          "ty": 5,
+          "bounds": {
+            "minX": 14,
+            "maxX": 20,
+            "minY": 30,
+            "maxY": 36
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 1,
+            "airfieldCount": 0,
+            "roadSegmentCount": 96,
+            "railSegmentCount": 0
+          },
+          "path": "close/3_5.json"
+        },
+        {
+          "tileId": "3_6",
+          "tx": 3,
+          "ty": 6,
+          "bounds": {
+            "minX": 14,
+            "maxX": 20,
+            "minY": 36,
+            "maxY": 42
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 2,
+            "airfieldCount": 0,
+            "roadSegmentCount": 52,
+            "railSegmentCount": 0
+          },
+          "path": "close/3_6.json"
+        },
+        {
+          "tileId": "3_7",
+          "tx": 3,
+          "ty": 7,
+          "bounds": {
+            "minX": 14,
+            "maxX": 20,
+            "minY": 42,
+            "maxY": 48
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/3_7.json"
+        },
+        {
+          "tileId": "3_8",
+          "tx": 3,
+          "ty": 8,
+          "bounds": {
+            "minX": 14,
+            "maxX": 20,
+            "minY": 48,
+            "maxY": 54
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/3_8.json"
+        },
+        {
+          "tileId": "3_9",
+          "tx": 3,
+          "ty": 9,
+          "bounds": {
+            "minX": 14,
+            "maxX": 20,
+            "minY": 54,
+            "maxY": 60
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 13,
+            "railSegmentCount": 0
+          },
+          "path": "close/3_9.json"
+        },
+        {
+          "tileId": "3_10",
+          "tx": 3,
+          "ty": 10,
+          "bounds": {
+            "minX": 14,
+            "maxX": 20,
+            "minY": 60,
+            "maxY": 66
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 3,
+            "airfieldCount": 0,
+            "roadSegmentCount": 8,
+            "railSegmentCount": 0
+          },
+          "path": "close/3_10.json"
+        },
+        {
+          "tileId": "3_11",
+          "tx": 3,
+          "ty": 11,
+          "bounds": {
+            "minX": 14,
+            "maxX": 20,
+            "minY": 66,
+            "maxY": 72
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/3_11.json"
+        },
+        {
+          "tileId": "3_12",
+          "tx": 3,
+          "ty": 12,
+          "bounds": {
+            "minX": 14,
+            "maxX": 20,
+            "minY": 72,
+            "maxY": 78
+          },
+          "summary": {
+            "hexCount": 18,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/3_12.json"
+        },
+        {
+          "tileId": "4_0",
+          "tx": 4,
+          "ty": 0,
+          "bounds": {
+            "minX": 20,
+            "maxX": 26,
+            "minY": 0,
+            "maxY": 6
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/4_0.json"
+        },
+        {
+          "tileId": "4_1",
+          "tx": 4,
+          "ty": 1,
+          "bounds": {
+            "minX": 20,
+            "maxX": 26,
+            "minY": 6,
+            "maxY": 12
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/4_1.json"
+        },
+        {
+          "tileId": "4_2",
+          "tx": 4,
+          "ty": 2,
+          "bounds": {
+            "minX": 20,
+            "maxX": 26,
+            "minY": 12,
+            "maxY": 18
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/4_2.json"
+        },
+        {
+          "tileId": "4_3",
+          "tx": 4,
+          "ty": 3,
+          "bounds": {
+            "minX": 20,
+            "maxX": 26,
+            "minY": 18,
+            "maxY": 24
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 2,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/4_3.json"
+        },
+        {
+          "tileId": "4_4",
+          "tx": 4,
+          "ty": 4,
+          "bounds": {
+            "minX": 20,
+            "maxX": 26,
+            "minY": 24,
+            "maxY": 30
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 32,
+            "railSegmentCount": 0
+          },
+          "path": "close/4_4.json"
+        },
+        {
+          "tileId": "4_5",
+          "tx": 4,
+          "ty": 5,
+          "bounds": {
+            "minX": 20,
+            "maxX": 26,
+            "minY": 30,
+            "maxY": 36
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 102,
+            "railSegmentCount": 0
+          },
+          "path": "close/4_5.json"
+        },
+        {
+          "tileId": "4_6",
+          "tx": 4,
+          "ty": 6,
+          "bounds": {
+            "minX": 20,
+            "maxX": 26,
+            "minY": 36,
+            "maxY": 42
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 1,
+            "airfieldCount": 0,
+            "roadSegmentCount": 60,
+            "railSegmentCount": 0
+          },
+          "path": "close/4_6.json"
+        },
+        {
+          "tileId": "4_7",
+          "tx": 4,
+          "ty": 7,
+          "bounds": {
+            "minX": 20,
+            "maxX": 26,
+            "minY": 42,
+            "maxY": 48
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/4_7.json"
+        },
+        {
+          "tileId": "4_8",
+          "tx": 4,
+          "ty": 8,
+          "bounds": {
+            "minX": 20,
+            "maxX": 26,
+            "minY": 48,
+            "maxY": 54
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/4_8.json"
+        },
+        {
+          "tileId": "4_9",
+          "tx": 4,
+          "ty": 9,
+          "bounds": {
+            "minX": 20,
+            "maxX": 26,
+            "minY": 54,
+            "maxY": 60
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/4_9.json"
+        },
+        {
+          "tileId": "4_10",
+          "tx": 4,
+          "ty": 10,
+          "bounds": {
+            "minX": 20,
+            "maxX": 26,
+            "minY": 60,
+            "maxY": 66
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/4_10.json"
+        },
+        {
+          "tileId": "4_11",
+          "tx": 4,
+          "ty": 11,
+          "bounds": {
+            "minX": 20,
+            "maxX": 26,
+            "minY": 66,
+            "maxY": 72
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/4_11.json"
+        },
+        {
+          "tileId": "4_12",
+          "tx": 4,
+          "ty": 12,
+          "bounds": {
+            "minX": 20,
+            "maxX": 26,
+            "minY": 72,
+            "maxY": 78
+          },
+          "summary": {
+            "hexCount": 18,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/4_12.json"
+        },
+        {
+          "tileId": "5_0",
+          "tx": 5,
+          "ty": 0,
+          "bounds": {
+            "minX": 26,
+            "maxX": 32,
+            "minY": 0,
+            "maxY": 6
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/5_0.json"
+        },
+        {
+          "tileId": "5_1",
+          "tx": 5,
+          "ty": 1,
+          "bounds": {
+            "minX": 26,
+            "maxX": 32,
+            "minY": 6,
+            "maxY": 12
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 1,
+            "railSegmentCount": 0
+          },
+          "path": "close/5_1.json"
+        },
+        {
+          "tileId": "5_2",
+          "tx": 5,
+          "ty": 2,
+          "bounds": {
+            "minX": 26,
+            "maxX": 32,
+            "minY": 12,
+            "maxY": 18
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 2,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/5_2.json"
+        },
+        {
+          "tileId": "5_3",
+          "tx": 5,
+          "ty": 3,
+          "bounds": {
+            "minX": 26,
+            "maxX": 32,
+            "minY": 18,
+            "maxY": 24
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 3,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/5_3.json"
+        },
+        {
+          "tileId": "5_4",
+          "tx": 5,
+          "ty": 4,
+          "bounds": {
+            "minX": 26,
+            "maxX": 32,
+            "minY": 24,
+            "maxY": 30
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 1,
+            "airfieldCount": 0,
+            "roadSegmentCount": 35,
+            "railSegmentCount": 0
+          },
+          "path": "close/5_4.json"
+        },
+        {
+          "tileId": "5_5",
+          "tx": 5,
+          "ty": 5,
+          "bounds": {
+            "minX": 26,
+            "maxX": 32,
+            "minY": 30,
+            "maxY": 36
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 82,
+            "railSegmentCount": 0
+          },
+          "path": "close/5_5.json"
+        },
+        {
+          "tileId": "5_6",
+          "tx": 5,
+          "ty": 6,
+          "bounds": {
+            "minX": 26,
+            "maxX": 32,
+            "minY": 36,
+            "maxY": 42
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 41,
+            "railSegmentCount": 0
+          },
+          "path": "close/5_6.json"
+        },
+        {
+          "tileId": "5_7",
+          "tx": 5,
+          "ty": 7,
+          "bounds": {
+            "minX": 26,
+            "maxX": 32,
+            "minY": 42,
+            "maxY": 48
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/5_7.json"
+        },
+        {
+          "tileId": "5_8",
+          "tx": 5,
+          "ty": 8,
+          "bounds": {
+            "minX": 26,
+            "maxX": 32,
+            "minY": 48,
+            "maxY": 54
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/5_8.json"
+        },
+        {
+          "tileId": "5_9",
+          "tx": 5,
+          "ty": 9,
+          "bounds": {
+            "minX": 26,
+            "maxX": 32,
+            "minY": 54,
+            "maxY": 60
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/5_9.json"
+        },
+        {
+          "tileId": "5_10",
+          "tx": 5,
+          "ty": 10,
+          "bounds": {
+            "minX": 26,
+            "maxX": 32,
+            "minY": 60,
+            "maxY": 66
+          },
+          "summary": {
+            "hexCount": 36,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/5_10.json"
+        },
+        {
+          "tileId": "5_11",
+          "tx": 5,
+          "ty": 11,
+          "bounds": {
+            "minX": 26,
+            "maxX": 32,
+            "minY": 66,
+            "maxY": 72
+          },
+          "summary": {
+            "hexCount": 27,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/5_11.json"
+        },
+        {
+          "tileId": "5_12",
+          "tx": 5,
+          "ty": 12,
+          "bounds": {
+            "minX": 26,
+            "maxX": 32,
+            "minY": 72,
+            "maxY": 78
+          },
+          "summary": {
+            "hexCount": 7,
+            "settlementCount": 0,
+            "airfieldCount": 0,
+            "roadSegmentCount": 0,
+            "railSegmentCount": 0
+          },
+          "path": "close/5_12.json"
+        }
+      ],
+      "sourceSummary": {
+        "source_ids": [
+          "dem_copernicus_dsm_cog_10_s10_00_e159_00_dem",
+          "dem_copernicus_dsm_cog_10_s10_00_e160_00_dem",
+          "dem_copernicus_dsm_cog_10_s09_00_e159_00_dem",
+          "dem_copernicus_dsm_cog_10_s09_00_e160_00_dem",
+          "hydro_osm_overpass_snapshot",
+          "hydro_osm_crossings_snapshot",
+          "landcover_osm_snapshot",
+          "infrastructure_osm_snapshot"
+        ],
+        "files": {
+          "terrain_dem": {
+            "path": "data/processed/terrain_dem.tif",
+            "checksum": "330a3394140999d89c2f06cbe90e7368dfbda7b7fab6f4cd48efbbf2123c4dae"
+          },
+          "relief_slope": {
+            "path": "data/processed/relief/slope.tif",
+            "checksum": "a2b84aa4702ba8a9f6906432a3edc3a4013271db2df200ef1faa526938591d73"
+          },
+          "relief_ruggedness": {
+            "path": "data/processed/relief/ruggedness.tif",
+            "checksum": "50b787b531f47e43b2cd221f981dfa7e189196d55534cef8373b2db79a07b3f2"
+          },
+          "landcover_hex_stats": {
+            "path": "data/processed/landcover/hex_landcover_stats.json",
+            "checksum": "cabd3076d11949489916a4e3aa4a5f5a80eb8357bac56589fec59af36634b276"
+          },
+          "hydro_lines": {
+            "path": "data/processed/hydro/hydro_lines.geojson",
+            "checksum": "112bd812e6768e42990e570b7197e1293ce2f4a6183c76dcff4dcfeb27c5f31d"
+          },
+          "hydro_polygons": {
+            "path": "data/processed/hydro/hydro_polygons.geojson",
+            "checksum": "8685240316d05b703244e160cfb775dd689f3675596f0be9c9aaae2c2927a91c"
+          },
+          "crossing_candidates": {
+            "path": "data/processed/hydro/crossing_candidates.geojson",
+            "checksum": "060fe7c580cac3871b94a8a40679e6cf85418491693c9e22269340d64f2c2429"
+          },
+          "roads": {
+            "path": "data/processed/transport/roads.geojson",
+            "checksum": "56467b0386bf42c882f2a52e678d8dfdaf874e79327d31a9c439b798da13f467"
+          },
+          "rail": {
+            "path": "data/processed/transport/rail.geojson",
+            "checksum": "ed778c73ea51338d6576fb5992b189f2b94d9f3d5e199f46c1af520d6b0b3e6c"
+          },
+          "bridges": {
+            "path": "data/processed/transport/bridges.geojson",
+            "checksum": "f88037cb06725adf5cbcf228e697f486a86311a151e40fc8707960ebd51e4a79"
+          },
+          "settlements": {
+            "path": "data/processed/places/settlements.geojson",
+            "checksum": "890a7f9d27a824ac88f119ca48133e452da167b1e00863c5e8f871ce5b7f9243"
+          },
+          "airfields": {
+            "path": "data/processed/places/airfields.geojson",
+            "checksum": "16a45d995f42c8aeb13bd81424918f20db0744232fd4c715a22099d298f8fbf3"
+          }
+        }
+      }
+    }
+  }
+}
