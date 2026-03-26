@@ -1,0 +1,12 @@
+name: korea_un_combined_arms
+description: Foundation doctrine profile for UN combined arms operations.
+axis:
+  aggression: 0.45
+  tempo_bias: balanced
+run:
+  max_steps: 8
+  dt_hours: 6
+metadata:
+  family: korea
+  doctrine_kind: combined_arms
+

@@ -1,0 +1,8 @@
+name: adaptive
+description: Adaptive personality bias.
+axis:
+  aggression: 0.6
+run: {}
+metadata:
+  posture: adaptive
+

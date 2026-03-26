@@ -1,0 +1,9 @@
+name: default
+description: Default tuning profile.
+axis:
+  reserve_bias: 0.5
+run:
+  dt_hours: 6
+metadata:
+  tuning_kind: default
+

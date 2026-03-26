@@ -1,0 +1,12 @@
+name: korea_nkpa_shock
+description: Foundation doctrine profile for NKPA shock action.
+axis:
+  aggression: 0.8
+  tempo_bias: shock
+run:
+  max_steps: 8
+  dt_hours: 6
+metadata:
+  family: korea
+  doctrine_kind: shock
+

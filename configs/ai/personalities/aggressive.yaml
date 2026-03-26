@@ -1,0 +1,8 @@
+name: aggressive
+description: Aggressive personality bias.
+axis:
+  aggression: 0.9
+run: {}
+metadata:
+  posture: aggressive
+

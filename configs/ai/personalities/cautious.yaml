@@ -1,0 +1,8 @@
+name: cautious
+description: Cautious personality bias.
+axis:
+  aggression: 0.3
+run: {}
+metadata:
+  posture: cautious
+

@@ -1,0 +1,9 @@
+name: offense_focus
+description: Offense focused tuning profile.
+axis:
+  reserve_bias: 0.3
+run:
+  dt_hours: 6
+metadata:
+  tuning_kind: offense
+

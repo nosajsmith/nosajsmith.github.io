@@ -1,0 +1,12 @@
+name: korea_chinese_mass_infiltration
+description: Foundation doctrine profile for mass infiltration style operations.
+axis:
+  aggression: 0.7
+  tempo_bias: infiltration
+run:
+  max_steps: 8
+  dt_hours: 6
+metadata:
+  family: korea
+  doctrine_kind: infiltration
+

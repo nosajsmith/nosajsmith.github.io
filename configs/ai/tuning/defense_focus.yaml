@@ -1,0 +1,9 @@
+name: defense_focus
+description: Defense focused tuning profile.
+axis:
+  reserve_bias: 0.7
+run:
+  dt_hours: 6
+metadata:
+  tuning_kind: defense
+

@@ -1,0 +1,8 @@
+name: historical
+description: Baseline historical personality.
+axis:
+  caution_bias: 0.5
+run: {}
+metadata:
+  posture: historical
+
