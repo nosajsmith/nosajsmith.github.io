@@ -44,6 +44,40 @@ def _objective_hold_metrics(objectives: List[Dict[str, Any]], snapshots: List[Di
     }
 
 
+def _line_collapse_metrics(objectives: List[Dict[str, Any]], snapshots: List[Dict[str, Any]]) -> Dict[str, Any]:
+    objective_sets = {
+        "ALLIED": [objective for objective in objectives if objective.get("side") == "ALLIED"],
+        "AXIS": [objective for objective in objectives if objective.get("side") == "AXIS"],
+    }
+    collapse_turns = {"ALLIED": 0, "AXIS": 0}
+    collapse_ratio_sum = {"ALLIED": 0.0, "AXIS": 0.0}
+
+    if not snapshots:
+        return {
+            "line_collapse_turns_allied": 0,
+            "line_collapse_turns_axis": 0,
+            "line_collapse_rate_allied": 0.0,
+            "line_collapse_rate_axis": 0.0,
+        }
+
+    for snapshot in snapshots:
+        controls = dict(snapshot.get("objective_control") or {})
+        for side, own_objectives in objective_sets.items():
+            if not own_objectives:
+                continue
+            lost_count = sum(1 for objective in own_objectives if controls.get(objective["id"]) != side)
+            if lost_count > 0:
+                collapse_turns[side] += 1
+            collapse_ratio_sum[side] += lost_count / len(own_objectives)
+
+    return {
+        "line_collapse_turns_allied": collapse_turns["ALLIED"],
+        "line_collapse_turns_axis": collapse_turns["AXIS"],
+        "line_collapse_rate_allied": round(collapse_ratio_sum["ALLIED"] / len(snapshots), 3),
+        "line_collapse_rate_axis": round(collapse_ratio_sum["AXIS"] / len(snapshots), 3),
+    }
+
+
 def _reserve_preservation(context: Dict[str, Any]) -> Dict[str, Any]:
     ai_report = dict(context.get("ai_report") or {})
     reserve_level = ai_report.get("reserve_level")
@@ -109,6 +143,7 @@ def compute_behavior_metrics(context: Dict[str, Any]) -> Dict[str, Any]:
         "failed_attack_count": failed_attack_count,
     }
     metrics.update(_objective_hold_metrics(objectives, snapshots))
+    metrics.update(_line_collapse_metrics(objectives, snapshots))
     metrics.update(_reserve_preservation(context))
     return metrics
 

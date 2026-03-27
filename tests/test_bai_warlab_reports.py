@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 from tools.bai_warlab.models import ManifestRecord, RunResult, to_plain
-from tools.bai_warlab.report_io import run_result_to_row, write_json, write_report_txt, write_results_csv
+from tools.bai_warlab.report_io import RESULTS_CSV_COLUMNS, run_result_to_row, write_json, write_report_txt, write_results_csv
 from tools.bai_warlab.reports.summary_report import render_report
 
 
@@ -27,6 +27,43 @@ def test_bai_warlab_models_serialize_cleanly():
     payload = to_plain(result)
     assert payload["scenario"] == "foundation_smoke.json"
     assert payload["summary"]["execution_status"] == "not_executed"
+
+
+def test_bai_warlab_results_csv_row_uses_stable_columns_and_blank_optional_metrics():
+    result = RunResult(
+        ok=False,
+        command="run",
+        scenario="foundation_smoke.json",
+        scenario_dir="synthetic_scenarios",
+        doctrine="korea_nkpa_shock",
+        personality="aggressive",
+        tuning="default",
+        seed=7,
+        max_steps=2,
+        dt_hours=0,
+        error="synthetic failure",
+        summary={
+            "execution_status": "failed",
+            "terminal_status": "runtime_error",
+            "scenario_outcome": "error",
+            "ai_side": "ALLIED",
+        },
+        metrics={"outcome": {"available": False}},
+    )
+
+    row = run_result_to_row(result)
+
+    assert row["scenario"] == "foundation_smoke.json"
+    assert row["result"] == "error"
+    assert row["vp_margin"] is None
+    assert row["casualty_ratio"] is None
+    assert row["objective_hold_duration"] is None
+    assert row["line_collapse_rate"] is None
+    assert row["low_supply_turns"] is None
+    assert row["failure_flag"] is True
+    assert row["failure_message"] == "synthetic failure"
+    for column in RESULTS_CSV_COLUMNS:
+        assert column in row
 
 
 def test_bai_warlab_report_writers_emit_stable_artifacts(tmp_path: Path):
@@ -77,6 +114,8 @@ def test_bai_warlab_report_writers_emit_stable_artifacts(tmp_path: Path):
 
     assert summary_payload["summary"]["execution_status"] == "not_executed"
     assert manifest_payload["seed_policy"]["seeds"] == [7]
-    assert csv_rows[0]["summary_execution_status"] == "not_executed"
+    assert csv_rows[0]["execution_status"] == "not_executed"
+    assert csv_rows[0]["failure_flag"] == "False"
+    assert csv_rows[0]["vp_margin"] == ""
     assert "Execution Status: not_executed" in report_text
     assert "foundation build" in report_text

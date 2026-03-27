@@ -23,9 +23,9 @@ def test_bai_warlab_help_works():
     )
     assert result.returncode == 0
     assert "run" in result.stdout
-    assert "batch" not in result.stdout
-    assert "compare" not in result.stdout
-    assert "suite" not in result.stdout
+    assert "batch" in result.stdout
+    assert "compare" in result.stdout
+    assert "suite" in result.stdout
 
 
 def test_bai_warlab_subcommands_parse_correctly():
@@ -43,6 +43,46 @@ def test_bai_warlab_subcommands_parse_correctly():
             "default",
         ]
     ).command == "run"
+    assert parser.parse_args(
+        [
+            "batch",
+            "--scenario",
+            "mini_gc_1942",
+            "--doctrine",
+            "korea_nkpa_shock",
+            "--personality",
+            "aggressive",
+            "--tuning",
+            "default",
+            "--runs",
+            "3",
+        ]
+    ).command == "batch"
+    assert parser.parse_args(
+        [
+            "compare",
+            "--scenario",
+            "mini_gc_1942",
+            "--personality",
+            "aggressive",
+            "--tuning",
+            "default",
+            "--left-doctrine",
+            "korea_nkpa_shock",
+            "--right-doctrine",
+            "korea_un_combined_arms",
+            "--runs",
+            "3",
+        ]
+    ).command == "compare"
+    assert parser.parse_args(
+        [
+            "suite",
+            "core_regression",
+            "--runs",
+            "1",
+        ]
+    ).command == "suite"
 
 
 def test_bai_warlab_cli_smoke_outputs(tmp_path: Path):

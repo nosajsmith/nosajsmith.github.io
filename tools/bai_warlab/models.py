@@ -85,9 +85,18 @@ class AggregateSummary:
     total_runs: int
     ok_runs: int
     failed_runs: int
+    failure_count: int = 0
     partial_failures: bool = False
     status_counts: Dict[str, int] = field(default_factory=dict)
     mean_summary: Dict[str, Any] = field(default_factory=dict)
+    min_summary: Dict[str, Any] = field(default_factory=dict)
+    max_summary: Dict[str, Any] = field(default_factory=dict)
+    mean_metrics: Dict[str, Any] = field(default_factory=dict)
+    min_metrics: Dict[str, Any] = field(default_factory=dict)
+    max_metrics: Dict[str, Any] = field(default_factory=dict)
+    averages: Dict[str, Any] = field(default_factory=dict)
+    mins: Dict[str, Any] = field(default_factory=dict)
+    maxes: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -131,9 +140,13 @@ class SuiteCase:
     personality: str
     tuning: str
     seed: int
+    runs: int = 1
     max_steps: int = 0
     dt_hours: int = 0
+    evaluation_goal: str = ""
     notes: str = ""
+    metric_focus: List[str] = field(default_factory=list)
+    metric_thresholds: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -142,7 +155,9 @@ class SuiteResult:
     command: str
     suite_name: str
     runs: List[RunResult] = field(default_factory=list)
+    jobs: List[Dict[str, Any]] = field(default_factory=list)
     aggregate: AggregateSummary | None = None
+    suite_summary: Dict[str, Any] = field(default_factory=dict)
     warnings: List[str] = field(default_factory=list)
     output_dir: str = ""
 

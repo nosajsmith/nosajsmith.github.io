@@ -1,3 +1,97 @@
+from .bai_models import OperationCandidate, StrategicDirective, TacticalIntent, UnitOrderWrapper, to_bai_payload
+from .bai_controller import BAIController, BAIControllerConfig, BAIControllerResult
+from .bai_defense import (
+    DefenseAssessment,
+    assess_defensive_situation,
+    hold_decision_type,
+    hold_priority_bonus,
+    preferred_defensive_fallback,
+    should_allow_defensive_attack,
+    should_shorten_line,
+)
+from .bai_doctrine import build_doctrine_profile
+from .bai_eval import (
+    EvaluationScore,
+    ScoreComponent,
+    build_evaluation,
+    doctrinal_bias_component,
+    enemy_threat,
+    enemy_threat_component,
+    force_ratio,
+    force_ratio_component,
+    location_strength,
+    objective_value_component,
+    reserve_requirement,
+    reserve_requirement_component,
+    supply_feasibility,
+    supply_feasibility_component,
+    terrain_value_component,
+    terrain_value_for_location,
+)
+from .bai_operational import OperationalPlan, plan_operational_layer
+from .bai_personality import apply_personality_overlay, build_runtime_behavior_profile
+from .bai_nav_air import NavAirDecision, NavAirSupportPlan, plan_nav_air_support
+from .bai_reserves import ReservePlan, plan_reserves
 from .bai_report import BAIReport, attach_bai_report, build_bai_report
+from .bai_strategic import STRATEGIC_POSTURES, StrategicMemory, plan_strategic_directive
+from .bai_tactical import GroundTacticalPlan, TacticalDecision, plan_ground_tactical, plan_tactical_layer
+from .bai_validator import LEGAL_ORDER_TYPES, LEGAL_POSTURES, OrderValidationContext, OrderValidationResult, validate_orders
 
-__all__ = ["BAIReport", "attach_bai_report", "build_bai_report"]
+__all__ = [
+    "BAIReport",
+    "BAIController",
+    "BAIControllerConfig",
+    "BAIControllerResult",
+    "DefenseAssessment",
+    "EvaluationScore",
+    "GroundTacticalPlan",
+    "LEGAL_ORDER_TYPES",
+    "LEGAL_POSTURES",
+    "NavAirDecision",
+    "NavAirSupportPlan",
+    "OperationCandidate",
+    "OrderValidationContext",
+    "OrderValidationResult",
+    "OperationalPlan",
+    "ReservePlan",
+    "ScoreComponent",
+    "STRATEGIC_POSTURES",
+    "StrategicDirective",
+    "StrategicMemory",
+    "TacticalIntent",
+    "TacticalDecision",
+    "UnitOrderWrapper",
+    "apply_personality_overlay",
+    "attach_bai_report",
+    "build_evaluation",
+    "build_doctrine_profile",
+    "build_bai_report",
+    "build_runtime_behavior_profile",
+    "assess_defensive_situation",
+    "doctrinal_bias_component",
+    "enemy_threat",
+    "enemy_threat_component",
+    "force_ratio",
+    "force_ratio_component",
+    "hold_decision_type",
+    "hold_priority_bonus",
+    "location_strength",
+    "objective_value_component",
+    "plan_ground_tactical",
+    "plan_nav_air_support",
+    "preferred_defensive_fallback",
+    "plan_reserves",
+    "plan_strategic_directive",
+    "plan_operational_layer",
+    "plan_tactical_layer",
+    "reserve_requirement",
+    "reserve_requirement_component",
+    "should_allow_defensive_attack",
+    "should_shorten_line",
+    "supply_feasibility",
+    "supply_feasibility_component",
+    "terrain_value_component",
+    "terrain_value_for_location",
+    "to_bai_payload",
+    "validate_orders",
+]

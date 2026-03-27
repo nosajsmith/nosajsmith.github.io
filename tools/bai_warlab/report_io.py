@@ -10,6 +10,34 @@ from . import ARTIFACT_ROOT
 from .models import to_plain
 
 
+RESULTS_CSV_COLUMNS = [
+    "command",
+    "scenario",
+    "scenario_dir",
+    "doctrine",
+    "personality",
+    "tuning",
+    "seed",
+    "variant_label",
+    "ai_side",
+    "result",
+    "scenario_outcome",
+    "winning_side",
+    "vp_margin",
+    "casualty_ratio",
+    "objective_hold_duration",
+    "line_collapse_rate",
+    "low_supply_turns",
+    "failure_flag",
+    "failure_message",
+    "ok",
+    "terminal_status",
+    "execution_status",
+    "steps_completed",
+    "hours_elapsed",
+]
+
+
 def slugify(value: str) -> str:
     out = "".join(ch.lower() if ch.isalnum() else "-" for ch in str(value or ""))
     while "--" in out:
@@ -60,10 +88,52 @@ def flatten_mapping(mapping: Dict[str, Any], prefix: str = "") -> Dict[str, Any]
     return row
 
 
+def _metric_block(run_result: Any, name: str) -> Dict[str, Any]:
+    return dict((getattr(run_result, "metrics", {}) or {}).get(name, {}) or {})
+
+
+def _summary_block(run_result: Any) -> Dict[str, Any]:
+    return dict(getattr(run_result, "summary", {}) or {})
+
+
+def _perspective_side(run_result: Any) -> str:
+    summary = _summary_block(run_result)
+    raw = str(summary.get("ai_side") or "").strip().upper()
+    return raw if raw in {"ALLIED", "AXIS"} else "ALLIED"
+
+
+def _perspective_metric(block: Dict[str, Any], prefix: str, side: str) -> Any:
+    key = f"{prefix}_{side.lower()}"
+    return block.get(key)
+
+
+def _result_value(run_result: Any, side: str) -> Any:
+    summary = _summary_block(run_result)
+    outcome = _metric_block(run_result, "outcome")
+    return (
+        outcome.get(f"win_loss_draw_{side.lower()}")
+        or summary.get("result")
+        or outcome.get("scenario_outcome")
+        or summary.get("scenario_outcome")
+        or ""
+    )
+
+
+def _failure_message(run_result: Any) -> str:
+    if getattr(run_result, "ok", False):
+        return ""
+    summary = _summary_block(run_result)
+    return str(getattr(run_result, "error", "") or summary.get("terminal_status") or "run_failed")
+
+
 def run_result_to_row(run_result: Any) -> Dict[str, Any]:
+    side = _perspective_side(run_result)
+    summary = _summary_block(run_result)
+    outcome = _metric_block(run_result, "outcome")
+    behavior = _metric_block(run_result, "behavior")
+    logistics = _metric_block(run_result, "logistics")
     row = {
         "command": getattr(run_result, "command", "run"),
-        "ok": bool(getattr(run_result, "ok", False)),
         "scenario": getattr(run_result, "scenario", ""),
         "scenario_dir": getattr(run_result, "scenario_dir", ""),
         "doctrine": getattr(run_result, "doctrine", ""),
@@ -71,9 +141,24 @@ def run_result_to_row(run_result: Any) -> Dict[str, Any]:
         "tuning": getattr(run_result, "tuning", ""),
         "seed": getattr(run_result, "seed", ""),
         "variant_label": getattr(run_result, "variant_label", ""),
-        "error": getattr(run_result, "error", "") or "",
+        "ai_side": side,
+        "result": _result_value(run_result, side),
+        "scenario_outcome": summary.get("scenario_outcome") or outcome.get("scenario_outcome") or "",
+        "winning_side": summary.get("winning_side") or outcome.get("winning_side") or "",
+        "vp_margin": _perspective_metric(outcome, "vp_margin", side),
+        "casualty_ratio": _perspective_metric(behavior, "casualty_ratio", side),
+        "objective_hold_duration": _perspective_metric(behavior, "objective_hold_turns", side),
+        "line_collapse_rate": _perspective_metric(behavior, "line_collapse_rate", side),
+        "low_supply_turns": _perspective_metric(logistics, "low_supply_turns", side),
+        "failure_flag": not bool(getattr(run_result, "ok", False)),
+        "failure_message": _failure_message(run_result),
+        "ok": bool(getattr(run_result, "ok", False)),
+        "terminal_status": summary.get("terminal_status", ""),
+        "execution_status": summary.get("execution_status", ""),
+        "steps_completed": summary.get("steps_completed"),
+        "hours_elapsed": summary.get("hours_elapsed"),
     }
-    row.update(flatten_mapping(dict(getattr(run_result, "summary", {}) or {}), "summary"))
+    row.update(flatten_mapping(summary, "summary"))
     row.update(flatten_mapping(dict(getattr(run_result, "metrics", {}) or {}), "metrics"))
     row.update(flatten_mapping(dict(getattr(run_result, "ai_report", {}) or {}), "ai_report"))
     return row
@@ -81,7 +166,7 @@ def run_result_to_row(run_result: Any) -> Dict[str, Any]:
 
 def write_results_csv(path: str | Path, rows: List[Dict[str, Any]]) -> Path:
     output = Path(path)
-    fieldnames: List[str] = []
+    fieldnames: List[str] = list(RESULTS_CSV_COLUMNS)
     for row in rows:
         for key in row.keys():
             if key not in fieldnames:
@@ -90,8 +175,22 @@ def write_results_csv(path: str | Path, rows: List[Dict[str, Any]]) -> Path:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
         for row in rows:
-            writer.writerow({key: _scalar_csv_value(value) for key, value in row.items()})
+            writer.writerow({key: _scalar_csv_value(row.get(key)) for key in fieldnames})
     return output
+
+
+__all__ = [
+    "RESULTS_CSV_COLUMNS",
+    "default_output_dir",
+    "ensure_output_dir",
+    "flatten_mapping",
+    "run_result_to_row",
+    "slugify",
+    "stable_hash",
+    "write_json",
+    "write_report_txt",
+    "write_results_csv",
+]
 
 
 def write_report_txt(path: str | Path, content: str) -> Path:

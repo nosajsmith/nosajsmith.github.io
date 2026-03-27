@@ -1,0 +1,88 @@
+name: core_regression
+description: >
+  Core Korea regression suite for near-term BAI work. It balances defense, offensive
+  tempo, bad-attack avoidance, and reserve discipline so improvements in one posture
+  do not silently break another.
+evaluation_notes:
+  - Defense jobs should favor hold duration and reserve preservation over reckless counterattacks.
+  - Offensive jobs should gain VP and objective timing without buying tempo through casualty waste.
+  - Avoidance and reserve jobs include several forward-looking metrics that become more valuable as metrics v2 lands.
+defaults:
+  scenario_dir: server/scenarios
+  runs: 2
+jobs:
+  - id: korea_defense_benchmark
+    scenario: gc_1942_historical
+    doctrine: korea_un_combined_arms
+    personality: cautious
+    tuning: defense_focus
+    seed: 101
+    evaluation_goal: Korea defense benchmark
+    metric_focus:
+      - objective_hold_duration
+      - line_collapse_rate
+      - reserve_preservation
+    metric_thresholds:
+      objective_hold_duration: 1.0
+      line_collapse_rate: 0.05
+      reserve_preservation: 0.05
+    notes: >
+      Defensive anchor job. Hold key ground, delay collapse, and keep reserves intact long
+      enough to stabilize the front.
+
+  - id: korea_offensive_tempo_benchmark
+    scenario: mini_gc_1942
+    doctrine: korea_nkpa_shock
+    personality: aggressive
+    tuning: offense_focus
+    seed: 201
+    evaluation_goal: Korea offensive tempo benchmark
+    metric_focus:
+      - objective_capture_timing
+      - successful_attacks
+      - vp_margin
+    metric_thresholds:
+      objective_capture_timing: 1.0
+      successful_attacks: 1.0
+      vp_margin: 1.0
+    notes: >
+      Tempo probe. Push the main effort hard enough to seize objectives early while still
+      converting pressure into a real VP edge.
+
+  - id: bad_attack_avoidance_benchmark
+    scenario: mini_gc_1942
+    doctrine: korea_chinese_mass_infiltration
+    personality: adaptive
+    tuning: default
+    seed: 301
+    evaluation_goal: Bad-attack avoidance benchmark
+    metric_focus:
+      - failed_attack_count
+      - low_odds_attacks
+      - casualty_inefficiency
+    metric_thresholds:
+      failed_attack_count: 1.0
+      low_odds_attacks: 1.0
+      casualty_inefficiency: 0.05
+    notes: >
+      Discipline check. The AI should avoid low-odds throws that create losses without
+      opening the line or improving the operational position.
+
+  - id: reserve_discipline_benchmark
+    scenario: gc_1942_historical
+    doctrine: korea_un_combined_arms
+    personality: historical
+    tuning: default
+    seed: 401
+    evaluation_goal: Reserve discipline benchmark
+    metric_focus:
+      - reserve_preservation
+      - late_turn_reserve_commitment
+      - low_supply_turns
+    metric_thresholds:
+      reserve_preservation: 0.05
+      late_turn_reserve_commitment: 0.05
+      low_supply_turns: 0.5
+    notes: >
+      Reserve-control job. Keep a meaningful reserve into the late game and only commit it
+      when the line or a decisive local opportunity justifies the spend.

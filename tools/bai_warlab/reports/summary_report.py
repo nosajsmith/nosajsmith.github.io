@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Any, Dict, List
 
+from .comparison_report import render_comparison_report
+
 
 def _lines_for_metrics(metrics: Dict[str, Dict[str, Any]]) -> List[str]:
     lines: List[str] = []
@@ -10,6 +12,10 @@ def _lines_for_metrics(metrics: Dict[str, Dict[str, Any]]) -> List[str]:
         for key, value in payload.items():
             lines.append(f"  {key}: {value}")
     return lines
+
+
+def _joined(items: List[str]) -> str:
+    return ", ".join(items) if items else "none"
 
 
 def render_report(result: Any) -> str:
@@ -84,12 +90,50 @@ def _render_batch(result: Any) -> str:
         "",
     ]
     if result.aggregate is not None:
-        lines.append(f"Runs: {result.aggregate.total_runs} | OK: {result.aggregate.ok_runs} | Failed: {result.aggregate.failed_runs}")
+        lines.extend(
+            [
+                "[aggregate_summary]",
+                f"Runs: {result.aggregate.total_runs}",
+                f"OK Runs: {result.aggregate.ok_runs}",
+                f"Failed Runs: {result.aggregate.failed_runs}",
+                f"Failure Count: {result.aggregate.failure_count}",
+            ]
+        )
         if result.aggregate.partial_failures:
             lines.append("Partial failures: yes")
         lines.append("Status counts:")
         for key, value in result.aggregate.status_counts.items():
             lines.append(f"  {key}: {value}")
+        if result.aggregate.averages:
+            lines.extend(["", "[aggregate_averages]"])
+            for section, payload in result.aggregate.averages.items():
+                lines.append(f"  {section}:")
+                for key, value in payload.items():
+                    lines.append(f"    {key}: {value}")
+        if result.aggregate.mins:
+            lines.extend(["", "[aggregate_mins]"])
+            for section, payload in result.aggregate.mins.items():
+                lines.append(f"  {section}:")
+                for key, value in payload.items():
+                    lines.append(f"    {key}: {value}")
+        if result.aggregate.maxes:
+            lines.extend(["", "[aggregate_maxes]"])
+            for section, payload in result.aggregate.maxes.items():
+                lines.append(f"  {section}:")
+                for key, value in payload.items():
+                    lines.append(f"    {key}: {value}")
+        if result.aggregate.mean_summary:
+            lines.extend(["", "[summary_averages]"])
+            lines.extend(f"  {key}: {value}" for key, value in result.aggregate.mean_summary.items())
+        if result.aggregate.min_summary:
+            lines.extend(["", "[summary_mins]"])
+            lines.extend(f"  {key}: {value}" for key, value in result.aggregate.min_summary.items())
+        if result.aggregate.max_summary:
+            lines.extend(["", "[summary_maxes]"])
+            lines.extend(f"  {key}: {value}" for key, value in result.aggregate.max_summary.items())
+        if result.aggregate.mean_metrics:
+            lines.extend(["", "[metric_averages]"])
+            lines.extend(f"  {key}: {value}" for key, value in result.aggregate.mean_metrics.items())
     if result.warnings:
         lines.extend(["", "[warnings]"])
         lines.extend(f"  - {warning}" for warning in result.warnings)
@@ -97,34 +141,76 @@ def _render_batch(result: Any) -> str:
 
 
 def _render_compare(result: Any) -> str:
-    lines = [
-        "BAI War Lab — Compare Report",
-        f"Scenario: {result.scenario}",
-        f"Left: {result.left_label}",
-        f"Right: {result.right_label}",
-        f"Seeds: {', '.join(str(seed) for seed in result.seed_policy.seeds)}",
-        "",
-        "[comparison]",
-    ]
-    for key, value in result.comparison.items():
-        lines.append(f"  {key}: {value}")
-    if result.warnings:
-        lines.extend(["", "[warnings]"])
-        lines.extend(f"  - {warning}" for warning in result.warnings)
-    return "\n".join(lines)
+    return render_comparison_report(result)
 
 
 def _render_suite(result: Any) -> str:
+    suite_summary = dict(getattr(result, "suite_summary", {}) or {})
+    jobs = list(getattr(result, "jobs", []) or [])
     lines = [
         "BAI War Lab — Suite Report",
         f"Suite: {result.suite_name}",
-        f"Cases: {len(result.runs)}",
+        f"Jobs: {suite_summary.get('job_count', len(jobs))}",
+        f"Flattened runs: {len(result.runs)}",
         "",
     ]
+    if suite_summary:
+        lines.extend(
+            [
+                "[suite_summary]",
+                f"Description: {suite_summary.get('description') or '-'}",
+                f"Scheduled runs: {suite_summary.get('scheduled_runs', 0)}",
+                f"Completed runs: {suite_summary.get('completed_runs', 0)}",
+                f"Failed runs: {suite_summary.get('failed_runs', 0)}",
+                f"OK jobs: {suite_summary.get('ok_jobs', 0)}",
+                f"Failed jobs: {suite_summary.get('failed_jobs', 0)}",
+                f"Partial failures: {'yes' if suite_summary.get('partial_failures') else 'no'}",
+            ]
+        )
+        evaluation_notes = list(suite_summary.get("evaluation_notes", []) or [])
+        if evaluation_notes:
+            lines.extend(["", "[evaluation_notes]"])
+            lines.extend(f"  - {note}" for note in evaluation_notes)
     if result.aggregate is not None:
-        lines.append(f"Runs: {result.aggregate.total_runs} | OK: {result.aggregate.ok_runs} | Failed: {result.aggregate.failed_runs}")
-        if result.aggregate.partial_failures:
-            lines.append("Partial failures: yes")
+        lines.extend(
+            [
+                "",
+                "[aggregate_summary]",
+                f"Runs: {result.aggregate.total_runs}",
+                f"OK: {result.aggregate.ok_runs}",
+                f"Failed: {result.aggregate.failed_runs}",
+                f"Failure Count: {result.aggregate.failure_count}",
+            ]
+        )
+        if result.aggregate.mean_summary:
+            lines.extend(["", "[summary_averages]"])
+            lines.extend(f"  {key}: {value}" for key, value in result.aggregate.mean_summary.items())
+        if result.aggregate.mean_metrics:
+            lines.extend(["", "[metric_averages]"])
+            lines.extend(f"  {key}: {value}" for key, value in result.aggregate.mean_metrics.items())
+    if jobs:
+        lines.extend(["", "[suite_jobs]"])
+        for job in jobs:
+            aggregate = dict(job.get("aggregate", {}) or {})
+            seed_policy = dict(job.get("seed_policy", {}) or {})
+            lines.append(
+                "  "
+                f"{job.get('id')}: scenario={job.get('scenario')} "
+                f"goal={job.get('evaluation_goal') or '-'} "
+                f"runs={seed_policy.get('count', 0)} "
+                f"ok={aggregate.get('ok_runs', 0)} "
+                f"failed={aggregate.get('failed_runs', 0)}"
+            )
+            metric_focus = list(job.get("metric_focus", []) or [])
+            metric_thresholds = dict(job.get("metric_thresholds", {}) or {})
+            if metric_focus:
+                lines.append(f"    metric_focus: {', '.join(metric_focus)}")
+            if metric_thresholds:
+                lines.append(f"    thresholds: {metric_thresholds}")
+            if job.get("notes"):
+                lines.append(f"    notes: {job.get('notes')}")
+            if aggregate.get("mean_metrics"):
+                lines.append(f"    mean_metrics: {aggregate.get('mean_metrics')}")
     if result.warnings:
         lines.extend(["", "[warnings]"])
         lines.extend(f"  - {warning}" for warning in result.warnings)

@@ -32,6 +32,7 @@ def test_bai_warlab_metrics_modules_handle_sparse_context():
     assert behavior["failed_attack_count"] == 0
     assert behavior["reserve_preservation_available"] is False
     assert behavior["objective_hold_turns_allied"] == 0
+    assert behavior["line_collapse_rate_allied"] == 0.0
     assert logistics["available"] is False
     assert logistics["low_supply_turns_allied"] == 0
 
@@ -59,6 +60,7 @@ def test_bai_warlab_single_run_emits_v1_metrics():
     assert "vp_margin_allied" in result.metrics["outcome"]
     assert "casualty_ratio_allied" in result.metrics["behavior"]
     assert "objective_hold_turns_allied" in result.metrics["behavior"]
+    assert "line_collapse_rate_allied" in result.metrics["behavior"]
     assert "low_supply_turns_allied" in result.metrics["logistics"]
     assert _scalar_metric_count(
         {

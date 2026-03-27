@@ -6,9 +6,9 @@ import json
 import os
 from typing import Any, Dict, List, Tuple
 
-from engine.core.map_model import GameMap, MapTile, Terrain
-from engine.core.time_system import GameTime
-from engine.core.unit_model import UnitState, UnitRepository, Side, UnitType, Posture
+from .core.map_model import GameMap, MapTile, Terrain
+from .core.time_system import GameTime
+from .core.unit_model import UnitState, UnitRepository, Side, UnitType, Posture
 
 
 def _rules_dir() -> str:
@@ -171,6 +171,7 @@ def _build_meta(data: Dict[str, Any], scenario_id: str) -> Dict[str, Any]:
         "supply_sources": data.get("supply_sources", []),
         "objectives": data.get("objectives", []),
         "reinforcements": data.get("reinforcements", []),
+        "ai": data.get("ai", {}),
     }
 
 
