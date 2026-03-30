@@ -1,0 +1,262 @@
+{
+  "initial_game": {
+    "time": {
+      "day": 1,
+      "phase": "day",
+      "weather": "Clear"
+    },
+    "scenario": "Inchon Demo Vertical Slice",
+    "vp": {
+      "ALLIED": 0,
+      "AXIS": 0
+    },
+    "ai": {
+      "requested": true,
+      "enabled": true,
+      "controller_available": true,
+      "side": "AXIS",
+      "engine_received_settings": false,
+      "profile_selection": {},
+      "last_orders": 0,
+      "budget_exceeded": false
+    }
+  },
+  "final_game": {
+    "time": {
+      "day": 2,
+      "phase": "day",
+      "weather": "Clear"
+    },
+    "scenario": "Inchon Demo Vertical Slice",
+    "vp": {
+      "ALLIED": 60,
+      "AXIS": 0
+    },
+    "ai": {
+      "requested": true,
+      "enabled": true,
+      "controller_available": true,
+      "side": "AXIS",
+      "engine_received_settings": false,
+      "profile_selection": {},
+      "last_orders": 3,
+      "budget_exceeded": false
+    }
+  },
+  "initial_units": [
+    {
+      "id": "NKPA-KIMPO",
+      "location_id": "KIMPO_AIRFIELD",
+      "strength": 74,
+      "supply": 66,
+      "readiness": 52
+    },
+    {
+      "id": "NKPA-RES",
+      "location_id": "SUWON",
+      "strength": 82,
+      "supply": 68,
+      "readiness": 56
+    },
+    {
+      "id": "NKPA-SEOUL",
+      "location_id": "SEOUL",
+      "strength": 88,
+      "supply": 70,
+      "readiness": 58
+    },
+    {
+      "id": "ROK-MAR",
+      "location_id": "INCHON_PORT",
+      "strength": 78,
+      "supply": 80,
+      "readiness": 66
+    },
+    {
+      "id": "US-1MAR",
+      "location_id": "INCHON_PORT",
+      "strength": 96,
+      "supply": 84,
+      "readiness": 72
+    },
+    {
+      "id": "US-7INF",
+      "location_id": "INCHON_PORT",
+      "strength": 92,
+      "supply": 82,
+      "readiness": 68
+    }
+  ],
+  "final_units": [
+    {
+      "id": "NKPA-KIMPO",
+      "location_id": "SEOUL",
+      "strength": 74,
+      "supply": 67,
+      "readiness": 54
+    },
+    {
+      "id": "NKPA-RES",
+      "location_id": "SEOUL",
+      "strength": 82,
+      "supply": 69,
+      "readiness": 58
+    },
+    {
+      "id": "NKPA-SEOUL",
+      "location_id": "SEOUL",
+      "strength": 88,
+      "supply": 71,
+      "readiness": 60
+    },
+    {
+      "id": "ROK-MAR",
+      "location_id": "INCHON_PORT",
+      "strength": 78,
+      "supply": 82,
+      "readiness": 68
+    },
+    {
+      "id": "US-1MAR",
+      "location_id": "INCHON_PORT",
+      "strength": 96,
+      "supply": 85,
+      "readiness": 74
+    },
+    {
+      "id": "US-7INF",
+      "location_id": "INCHON_PORT",
+      "strength": 92,
+      "supply": 84,
+      "readiness": 70
+    }
+  ],
+  "logs": [
+    {
+      "src": "ENGINE",
+      "turn": 1,
+      "phase": "ai",
+      "message": "BAI enabled for side AXIS."
+    },
+    {
+      "src": "ENGINE",
+      "turn": 1,
+      "phase": "load",
+      "message": "Loaded scenario inchon_mvp"
+    },
+    {
+      "src": "ENGINE",
+      "turn": 1,
+      "phase": "start",
+      "message": "Game started for scenario inchon_mvp"
+    },
+    {
+      "src": "BAI",
+      "turn": 1,
+      "phase": "orders",
+      "message": "Order: NKPA-RES SUWON->SEOUL, posture=MOVE"
+    },
+    {
+      "src": "BAI",
+      "turn": 1,
+      "phase": "orders",
+      "message": "Order: NKPA-KIMPO KIMPO_AIRFIELD->SEOUL, posture=MOVE"
+    },
+    {
+      "src": "BAI",
+      "turn": 1,
+      "phase": "orders",
+      "message": "Order: NKPA-SEOUL SEOUL->SEOUL, posture=DEFEND"
+    },
+    {
+      "src": "BAI",
+      "turn": 1,
+      "phase": "turn",
+      "message": "BAI planned 3 legal order(s) for AXIS; budget_exceeded=False"
+    },
+    {
+      "src": "G8",
+      "turn": 1,
+      "phase": "objectives",
+      "message": "Day 1: ALLIED secured INCHON_PORT (+60 VP)."
+    },
+    {
+      "src": "G4",
+      "turn": 1,
+      "phase": "logistics",
+      "message": "US-1MAR consumed 3, supply 84->81"
+    },
+    {
+      "src": "G4",
+      "turn": 1,
+      "phase": "logistics",
+      "message": "US-7INF consumed 2, supply 82->80"
+    },
+    {
+      "src": "G4",
+      "turn": 1,
+      "phase": "logistics",
+      "message": "ROK-MAR consumed 2, supply 80->78"
+    },
+    {
+      "src": "G4",
+      "turn": 1,
+      "phase": "logistics",
+      "message": "NKPA-KIMPO consumed 2, supply 66->64"
+    },
+    {
+      "src": "G4",
+      "turn": 1,
+      "phase": "logistics",
+      "message": "NKPA-SEOUL consumed 2, supply 70->68"
+    },
+    {
+      "src": "G4",
+      "turn": 1,
+      "phase": "logistics",
+      "message": "NKPA-RES consumed 2, supply 68->66"
+    },
+    {
+      "src": "G4",
+      "turn": 1,
+      "phase": "logistics",
+      "message": "US-1MAR resupplied +4 at INCHON_PORT (Clear) 81->85"
+    },
+    {
+      "src": "G4",
+      "turn": 1,
+      "phase": "logistics",
+      "message": "US-7INF resupplied +4 at INCHON_PORT (Clear) 80->84"
+    },
+    {
+      "src": "G4",
+      "turn": 1,
+      "phase": "logistics",
+      "message": "ROK-MAR resupplied +4 at INCHON_PORT (Clear) 78->82"
+    },
+    {
+      "src": "G4",
+      "turn": 1,
+      "phase": "logistics",
+      "message": "NKPA-KIMPO resupplied +3 at SEOUL (Clear) 64->67"
+    },
+    {
+      "src": "G4",
+      "turn": 1,
+      "phase": "logistics",
+      "message": "NKPA-SEOUL resupplied +3 at SEOUL (Clear) 68->71"
+    },
+    {
+      "src": "G4",
+      "turn": 1,
+      "phase": "logistics",
+      "message": "NKPA-RES resupplied +3 at SEOUL (Clear) 66->69"
+    },
+    {
+      "src": "ENGINE",
+      "turn": 2,
+      "phase": "turn",
+      "message": "Processed Day 1; now Day 2"
+    }
+  ]
+}

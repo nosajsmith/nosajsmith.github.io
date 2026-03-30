@@ -1,0 +1,113 @@
+{
+  "version": 1,
+  "actions": [
+    {
+      "id": "refresh-scenarios",
+      "label": "Refresh Scenarios",
+      "category": "Launcher",
+      "inputs": ["bridge_uri"],
+      "preconditions": ["bridge_uri configured"],
+      "runner": "app.refresh_scenarios",
+      "expected_status": "pass",
+      "expected_log_fragments": ["refreshed", "selected scenario"],
+      "artifact_types": [],
+      "automation_level": "semi-automated"
+    },
+    {
+      "id": "orl-connectivity",
+      "label": "ORL / Connectivity",
+      "category": "ORL",
+      "inputs": ["bridge_uri"],
+      "preconditions": ["bridge reachable"],
+      "runner": "registry.run_orl_connectivity",
+      "expected_status": "pass",
+      "expected_log_fragments": ["Ping OK", "Scenario roster received"],
+      "artifact_types": [],
+      "automation_level": "automated"
+    },
+    {
+      "id": "orl-scenario-integrity",
+      "label": "ORL / Scenario Integrity",
+      "category": "ORL",
+      "inputs": ["bridge_uri", "scenario_name"],
+      "preconditions": ["scenario available"],
+      "runner": "registry.run_orl_scenario_integrity",
+      "expected_status": "pass",
+      "expected_log_fragments": ["Loaded scenario successfully", "Validated units"],
+      "artifact_types": [],
+      "automation_level": "automated"
+    },
+    {
+      "id": "orl-smoke-suite",
+      "label": "ORL / Smoke Suite",
+      "category": "ORL",
+      "inputs": ["bridge_uri", "scenario_name"],
+      "preconditions": ["bridge reachable"],
+      "runner": "runner_utils.run_suite",
+      "expected_status": "pass",
+      "expected_log_fragments": ["ORL / Connectivity", "ORL / Scenario Integrity"],
+      "artifact_types": [],
+      "automation_level": "automated"
+    },
+    {
+      "id": "orl-ui-build-check",
+      "label": "ORL / UI Build Check",
+      "category": "ORL",
+      "inputs": [],
+      "preconditions": ["ui package.json present"],
+      "runner": "registry.run_orl_ui_build_check",
+      "expected_status": "pass",
+      "expected_log_fragments": ["package.json found", "UI build completed"],
+      "artifact_types": ["build"],
+      "automation_level": "automated"
+    },
+    {
+      "id": "run-bridge",
+      "label": "Run Bridge",
+      "category": "Process Control",
+      "inputs": ["bridge_uri"],
+      "preconditions": ["bridge not already managed"],
+      "runner": "process_control.launch_bridge",
+      "expected_status": "pass",
+      "expected_log_fragments": ["bridge already running", "launched bridge process"],
+      "artifact_types": [],
+      "automation_level": "semi-automated"
+    },
+    {
+      "id": "run-mwe",
+      "label": "Run MWE",
+      "category": "Process Control",
+      "inputs": ["bridge_uri"],
+      "preconditions": ["ui package.json present"],
+      "runner": "process_control.launch_mwe",
+      "expected_status": "pass",
+      "expected_log_fragments": ["launched MWE UI process", "bridge already running"],
+      "artifact_types": [],
+      "automation_level": "semi-automated"
+    },
+    {
+      "id": "export-report",
+      "label": "Export Report",
+      "category": "Launcher",
+      "inputs": ["last_result"],
+      "preconditions": ["completed run available"],
+      "runner": "app.export_report",
+      "expected_status": "pass",
+      "expected_log_fragments": ["Report exported"],
+      "artifact_types": ["json", "text"],
+      "automation_level": "semi-automated"
+    },
+    {
+      "id": "stop-managed-processes",
+      "label": "Stop Managed Processes",
+      "category": "Process Control",
+      "inputs": [],
+      "preconditions": [],
+      "runner": "process_control.stop_managed_processes",
+      "expected_status": "pass",
+      "expected_log_fragments": ["stopped managed process", "no managed processes to stop"],
+      "artifact_types": [],
+      "automation_level": "semi-automated"
+    }
+  ]
+}

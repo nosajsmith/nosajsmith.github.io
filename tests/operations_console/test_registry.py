@@ -246,6 +246,26 @@ def test_run_orl_ui_build_check_reports_failure(monkeypatch: pytest.MonkeyPatch,
     assert result.errors == ["Build command exited with code 2."]
 
 
+def test_run_orl_ui_build_check_handles_unreadable_package_json(monkeypatch: pytest.MonkeyPatch, tmp_path) -> None:
+    ui_dir = tmp_path / "ui"
+    ui_dir.mkdir()
+    (ui_dir / "package.json").write_text("{not valid json", encoding="utf-8")
+
+    monkeypatch.setattr("tools.operations_console.registry.resolve_ui_directory", lambda: ui_dir)
+
+    result = run_orl_ui_build_check(
+        ConsoleRunContext(
+            action_name="ORL / UI Build Check",
+            category="ORL",
+        )
+    )
+
+    assert result.status == "error"
+    assert result.summary == "UI build check hit an unexpected error."
+    assert result.executed_command == ["npm", "run", "build"]
+    assert result.errors
+
+
 def test_adapter_backed_orl_actions_surface_adapter_metadata(monkeypatch: pytest.MonkeyPatch) -> None:
     class FakeAdapter:
         def __init__(self, repo_root=None):

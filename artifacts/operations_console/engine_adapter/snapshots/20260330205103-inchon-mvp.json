@@ -1,0 +1,212 @@
+{
+  "scenario_id": "inchon_mvp",
+  "time": {
+    "day": 1,
+    "phase": "day"
+  },
+  "units": [
+    {
+      "id": "NKPA-KIMPO",
+      "location_id": "KIMPO_AIRFIELD",
+      "strength": 74,
+      "fatigue": 14,
+      "morale": 58,
+      "supply": 66,
+      "readiness": 52,
+      "hq_unit_id": null
+    },
+    {
+      "id": "NKPA-RES",
+      "location_id": "SUWON",
+      "strength": 82,
+      "fatigue": 8,
+      "morale": 62,
+      "supply": 68,
+      "readiness": 56,
+      "hq_unit_id": null
+    },
+    {
+      "id": "NKPA-SEOUL",
+      "location_id": "SEOUL",
+      "strength": 88,
+      "fatigue": 12,
+      "morale": 64,
+      "supply": 70,
+      "readiness": 58,
+      "hq_unit_id": null
+    },
+    {
+      "id": "ROK-MAR",
+      "location_id": "INCHON_PORT",
+      "strength": 78,
+      "fatigue": 6,
+      "morale": 70,
+      "supply": 80,
+      "readiness": 66,
+      "hq_unit_id": null
+    },
+    {
+      "id": "US-1MAR",
+      "location_id": "INCHON_PORT",
+      "strength": 96,
+      "fatigue": 8,
+      "morale": 78,
+      "supply": 84,
+      "readiness": 72,
+      "hq_unit_id": null
+    },
+    {
+      "id": "US-7INF",
+      "location_id": "INCHON_PORT",
+      "strength": 92,
+      "fatigue": 10,
+      "morale": 74,
+      "supply": 82,
+      "readiness": 68,
+      "hq_unit_id": null
+    }
+  ],
+  "meta": {
+    "id": "inchon_mvp",
+    "name": "Inchon Demo Vertical Slice",
+    "description": "Curated Inchon-to-Seoul publisher vertical slice for Theater of Operations: Korea.",
+    "start_day": 1,
+    "weather": "Clear",
+    "supply_sources": [
+      {
+        "location_id": "INCHON_PORT",
+        "side": "ALLIED",
+        "daily_supply": 14,
+        "description": "UN landing supply throughput through Inchon Harbor."
+      },
+      {
+        "location_id": "SEOUL",
+        "side": "AXIS",
+        "daily_supply": 9,
+        "description": "NKPA interior supply distribution through Seoul."
+      },
+      {
+        "location_id": "SUWON",
+        "side": "AXIS",
+        "daily_supply": 6,
+        "description": "Rear-area reserve supply node."
+      }
+    ],
+    "objectives": [
+      {
+        "id": "obj_inchon_harbor",
+        "location_id": "INCHON_PORT",
+        "name": "Inchon Harbor",
+        "side": "ALLIED",
+        "value": 60,
+        "description": "Secure the landing port and keep supply flowing ashore.",
+        "objective_type": "supply",
+        "visibility": "always",
+        "importance_tier": 3,
+        "map_label": "INCHON",
+        "label_priority": 5,
+        "label_offset_x": 14,
+        "label_offset_y": -14,
+        "label_anchor": "start",
+        "controlled": true,
+        "state": "held_allied",
+        "x": 18.2,
+        "y": 58.1
+      },
+      {
+        "id": "obj_kimpo",
+        "location_id": "KIMPO_AIRFIELD",
+        "name": "Kimpo Airfield",
+        "side": "ALLIED",
+        "value": 80,
+        "description": "Capture Kimpo to support the drive on Seoul.",
+        "objective_type": "supply",
+        "visibility": "always",
+        "importance_tier": 4,
+        "map_label": "KIMPO",
+        "label_priority": 4,
+        "label_offset_x": 12,
+        "label_offset_y": -14,
+        "label_anchor": "start",
+        "controlled": false,
+        "state": "unheld",
+        "x": 31,
+        "y": 46
+      },
+      {
+        "id": "obj_yongdungpo_crossings",
+        "location_id": "YONGDUNGPO",
+        "name": "Yongdungpo Crossings",
+        "side": "ALLIED",
+        "value": 70,
+        "description": "Force the Han crossings west of Seoul before the NKPA ring consolidates.",
+        "objective_type": "primary",
+        "visibility": "always",
+        "importance_tier": 4,
+        "map_label": "YONGDUNGPO CROSSINGS",
+        "label_priority": 4,
+        "label_offset_x": 0,
+        "label_offset_y": -18,
+        "label_anchor": "middle",
+        "controlled": false,
+        "state": "unheld",
+        "x": 39.4,
+        "y": 40.6
+      },
+      {
+        "id": "obj_seoul",
+        "location_id": "SEOUL",
+        "name": "Seoul",
+        "side": "ALLIED",
+        "value": 120,
+        "description": "Seize Seoul and break NKPA control of the axis.",
+        "objective_type": "strategic",
+        "visibility": "always",
+        "importance_tier": 5,
+        "map_label": "SEOUL",
+        "label_priority": 5,
+        "label_offset_x": -14,
+        "label_offset_y": -18,
+        "label_anchor": "end",
+        "controlled": false,
+        "state": "unheld",
+        "x": 46,
+        "y": 36
+      },
+      {
+        "id": "obj_seoul_ring",
+        "location_id": "SEOUL",
+        "name": "Seoul Defensive Ring",
+        "side": "AXIS",
+        "value": 90,
+        "description": "Hold Seoul long enough to organize a counterstroke.",
+        "objective_type": "primary",
+        "visibility": "close",
+        "importance_tier": 4,
+        "controlled": true,
+        "state": "held_axis",
+        "x": 47.2,
+        "y": 34.4
+      }
+    ],
+    "reinforcements": [
+      {
+        "id": "ROK-17REG",
+        "name": "ROK 17th Regiment",
+        "side": "ALLIED",
+        "unit_type": "INFANTRY",
+        "strength": 74,
+        "fatigue": 0,
+        "morale": 68,
+        "supply": 88,
+        "readiness": 62,
+        "arrival_day": 2,
+        "entry_location_id": "INCHON_PORT"
+      }
+    ],
+    "ai": {
+      "enabled": true,
+      "side": "AXIS"
+    }
+  }
+}

@@ -372,6 +372,10 @@ def run_orl_scenario_integrity(context: ConsoleRunContext):
     )
 
 
+def list_live_scenarios(uri: str = DEFAULT_BRIDGE_URI) -> List[str]:
+    return asyncio.run(_run_connectivity_check(uri or DEFAULT_BRIDGE_URI))
+
+
 def build_default_registry() -> ActionRegistry:
     registry = ActionRegistry()
     registry.register(
@@ -488,6 +492,7 @@ def run_orl_ui_build_check(context: ConsoleRunContext):
     ui_dir = resolve_ui_directory()
     package_json_path = ui_dir / "package.json"
     build_artifact_path = ui_dir / "dist" / "index.html"
+    command = ["npm", "run", "build"]
 
     context.log(f"Inspecting UI directory: {ui_dir}")
     if not ui_dir.exists() or not ui_dir.is_dir():
@@ -530,7 +535,6 @@ def run_orl_ui_build_check(context: ConsoleRunContext):
         )
 
     context.log("build script found")
-    command = ["npm", "run", "build"]
     context.log(f"Running build command: {' '.join(command)}")
     try:
         completed = subprocess.run(
