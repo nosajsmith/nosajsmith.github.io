@@ -217,8 +217,8 @@ test("theater dashboard summary stays truthful and uses visible snapshot data on
     },
   ];
   const summary = summarizeTheaterDashboard(snapshot, null, operations);
-  const communications = summarizeCommunications(snapshot.reports);
-  const intelligenceBranch = summarizeIntelligenceBranch(snapshot);
+  const communications = summarizeCommunications(snapshot, operations);
+  const intelligenceBranch = summarizeIntelligenceBranch(snapshot, operations);
   const reinforcementsBoard = summarizeReinforcementsBoard(snapshot);
 
   assert.equal(summary.land.totalUnits, 3);
@@ -231,10 +231,10 @@ test("theater dashboard summary stays truthful and uses visible snapshot data on
   assert.equal(summary.campaignPicture.keyObjective, "Henderson Field (Held Allied)");
   assert.equal(summary.campaignPicture.scoreSummary, "Allied 40 • Axis 18");
   assert.equal(summary.campaignPicture.pressureSummary, "Bloody Ridge Contact");
-  assert.equal(summary.intelligence.latestTitle, "Bloody Ridge Contact");
+  assert.equal(summary.intelligence.latestTitle, "AI Command Update");
   assert.equal(summary.staff.ai, "Enabled");
   assert.equal(summary.timeline[0].timeLabel, "Recorded at T+12h");
-  assert.deepEqual(summary.localBattle, summarizeHendersonPressureBoard(snapshot));
+  assert.deepEqual(summary.localBattle, summarizeHendersonPressureBoard(snapshot, operations));
   assert.equal(summary.landForces.available, true);
   assert.deepEqual(summary.landForces.metrics, [
     { label: "Visible Formations", value: "2" },
@@ -267,7 +267,7 @@ test("theater dashboard summary stays truthful and uses visible snapshot data on
   assert.match(summary.turnBrief.note, /Turn 4 brief built only from exposed pressure, support, reporting, force-change, and readiness concerns/i);
   assert.match(summary.turnBrief.lines[0], /Bloody Ridge Under Pressure/i);
   assert(summary.turnBrief.actionItems.some((item) => /Sustainment strained across local formations/i.test(item)));
-  assert(summary.turnBrief.actionItems.some((item) => /bloody ridge contact remains unresolved on the current shell path/i.test(item)));
+  assert(summary.turnBrief.actionItems.some((item) => /bloody ridge remains unresolved on the current shell path/i.test(item)));
   assert(summary.turnBrief.actionItems.some((item) => /Arrival • 2nd Marine Regiment Day 2 • due in 1 day/i.test(item)));
   assert(summary.turnBrief.actionItems.some((item) => /Limited visibility is the current exposed weather limitation/i.test(item)));
   assert.equal(summary.communicationsIntel.latestDispatch.id, communications.latest.id);
@@ -357,7 +357,7 @@ test("theater dashboard comparison mode uses the immediately previous snapshot o
   assert.equal(summary.comparison.localBattle.tone, "changed");
   assert.match(summary.comparison.localBattle.summary, /Active pressure now centered on Bloody Ridge \(Under Pressure\)/i);
   assert.equal(summary.comparison.communicationsIntel.tone, "changed");
-  assert.match(summary.comparison.communicationsIntel.summary, /New latest dispatch: Bloody Ridge Contact/i);
+  assert.match(summary.comparison.communicationsIntel.summary, /New latest dispatch: AI Command Update/i);
   assert.equal(summary.comparison.forceQuality.rows.u1.tone, "down");
   assert.match(summary.comparison.forceQuality.rows.u1.summary, /Readiness -4/i);
   assert.equal(summary.comparison.forceQuality.rows.u2.tone, "up");

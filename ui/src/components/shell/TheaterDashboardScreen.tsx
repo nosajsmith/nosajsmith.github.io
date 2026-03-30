@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { ViewSnapshot } from "../../types/viewSnapshot";
+import { inferScenarioPresentation } from "../../lib/view_snapshot.js";
 import { buildMapScene } from "./map_scene.js";
 import type { TrackedDemoOperation } from "./operations_planner_types";
 import { summarizeTheaterDashboard } from "./theater_dashboard_summary.js";
@@ -45,6 +46,7 @@ export default function TheaterDashboardScreen({
   onReturnToTheatre,
 }: TheaterDashboardScreenProps) {
   const [comparisonMode, setComparisonMode] = useState(false);
+  const presentation = inferScenarioPresentation(snapshot);
   const summary = summarizeTheaterDashboard(snapshot, previousSnapshot, operations);
   const scene = buildMapScene(snapshot, { width: 520, height: 300, inset: 32 });
   const turnBrief = summary.turnBrief;
@@ -70,10 +72,10 @@ export default function TheaterDashboardScreen({
     <section className="shell-theaterdash" aria-label="Theater Command Dashboard">
       <header className="shell-theaterdash__hero shell-card">
         <div>
-          <div className="shell-eyebrow">Theater Command Dashboard</div>
-          <h2 className="shell-panel__title">Staff Briefing Board</h2>
+          <div className="shell-eyebrow">{presentation.theaterLabel}</div>
+          <h2 className="shell-panel__title">{presentation.scenarioLabel} Briefing Board</h2>
           <p className="shell-card__body">
-            Compact theater overview for command staff. Unavailable branches remain explicitly marked until the current shell path exposes deeper read-model detail.
+            Compact {presentation.frontLabel.toLowerCase()} overview for command staff on the current {presentation.scenarioLabel.toLowerCase()} shell path. Unavailable branches remain explicitly marked until deeper scenario detail is exposed.
           </p>
         </div>
         <div className="shell-theaterdash__hero-side">
@@ -165,7 +167,7 @@ export default function TheaterDashboardScreen({
         </section>
 
         <section className="shell-theaterdash__panel shell-card shell-theaterdash__panel--theatre">
-          <PanelHeading title="Theatre / Local Battle" actionLabel="Open Theatre" onAction={onReturnToTheatre} />
+          <PanelHeading title={presentation.localBattleTitle} actionLabel="Open Theatre" onAction={onReturnToTheatre} />
           {showComparison ? (
             <div className={"shell-theaterdash__delta shell-theaterdash__delta--" + comparison.localBattle.tone}>
               {comparison.localBattle.summary}
@@ -173,7 +175,7 @@ export default function TheaterDashboardScreen({
           ) : null}
           <div className="shell-theaterdash__theatre-grid">
             <div className="shell-theaterdash__map">
-              <svg viewBox={`0 0 ${scene.width} ${scene.height}`} role="img" aria-label="Theater context map">
+              <svg viewBox={`0 0 ${scene.width} ${scene.height}`} role="img" aria-label={`${presentation.frontLabel} context map`}>
                 <rect x="0" y="0" width={scene.width} height={scene.height} className="shell-theaterdash__map-field" />
                 {scene.objectives.map((objective) => (
                   <g key={objective.id} transform={`translate(${objective.displayAnchor.x}, ${objective.displayAnchor.y})`}>
@@ -242,7 +244,7 @@ export default function TheaterDashboardScreen({
 
       <div className="shell-theaterdash__tier shell-theaterdash__tier--secondary">
         <section className="shell-theaterdash__panel shell-card shell-theaterdash__panel--operations">
-          <PanelHeading title="Operations" actionLabel="Open Theatre" onAction={onReturnToTheatre} />
+          <PanelHeading title={presentation.operationsTitle} actionLabel="Open Theatre" onAction={onReturnToTheatre} />
           {operationsSummary.available ? (
             <>
               <div className="shell-theaterdash__signal">

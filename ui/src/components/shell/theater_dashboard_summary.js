@@ -893,7 +893,7 @@ function summarizeDashboardComparison(snapshot, previousSnapshot, currentSummary
     };
   }
 
-  const previousCommunications = summarizeCommunications(previousSnapshot?.reports);
+  const previousCommunications = summarizeCommunications(previousSnapshot);
   const previousIntelligence = summarizeIntelligenceBranch(previousSnapshot);
   const previousLocalBattle = summarizeHendersonPressureBoard(previousSnapshot);
   const previousCommunicationsIntel = summarizeCommunicationsIntel(previousCommunications, previousIntelligence, previousLocalBattle);
@@ -1247,9 +1247,9 @@ export function summarizeTheaterDashboard(snapshot, previousSnapshot = null, ope
   const campaign = summarizeCampaign(snapshot);
   const objectives = summarizeObjectives(snapshot?.objectives);
   const score = summarizeScore(snapshot?.campaign?.score_by_side);
-  const communications = summarizeCommunications(snapshot?.reports);
-  const intelligenceBranch = summarizeIntelligenceBranch(snapshot);
-  const localBattle = summarizeHendersonPressureBoard(snapshot);
+  const communications = summarizeCommunications(snapshot, operations);
+  const intelligenceBranch = summarizeIntelligenceBranch(snapshot, operations);
+  const localBattle = summarizeHendersonPressureBoard(snapshot, operations);
   const units = Array.isArray(snapshot?.units) ? snapshot.units : [];
   const alliedUnits = units.filter((unit) => String(unit?.side ?? "").toUpperCase() === "ALLIED");
   const axisUnits = units.filter((unit) => String(unit?.side ?? "").toUpperCase() === "AXIS");

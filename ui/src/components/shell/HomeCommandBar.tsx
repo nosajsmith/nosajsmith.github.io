@@ -13,12 +13,25 @@ type HomeCommandBarProps = {
 export default function HomeCommandBar({ snapshot, operations, activeBranch, onSelectBranch }: HomeCommandBarProps) {
   const summary = summarizeHomeCommandBar(snapshot, operations);
   const land = summarizeLandOperations(snapshot, operations);
-  const landStateLabel = land.available
-    ? `${land.overview.metrics[0]?.value ?? "0"} formations tracked`
-    : "Land picture incomplete";
-  const landSupportLine = land.locAlerts.rows[0]
-    ? `Current hotspot ${land.locAlerts.rows[0].name}. ${land.locAlerts.rows[0].status}.`
-    : land.oob.headline;
+  const landAlert = land.locAlerts.rows[0] ?? null;
+  const landOperation = land.operations.rows[0] ?? null;
+  const landFormation = land.readinessPosture.rows[0] ?? null;
+  const landStateLabel = landAlert
+    ? `${landAlert.name} ${landAlert.status}`
+    : landOperation
+      ? landOperation.status
+      : landFormation
+        ? `${landFormation.name} • ${landFormation.posture}`
+        : land.available
+          ? `${land.overview.metrics[0]?.value ?? "0"} formations tracked`
+          : "Land picture incomplete";
+  const landSupportLine = landAlert
+    ? `${landAlert.detail}.`
+    : landOperation
+      ? `${landOperation.name} • ${landOperation.objective}. ${landOperation.note}`
+      : landFormation
+        ? `${landFormation.condition}. ${landFormation.sustainment}.`
+        : land.oob.headline;
 
   return (
     <section className="shell-commandbar" aria-label="Home screen command bar">
@@ -52,7 +65,7 @@ export default function HomeCommandBar({ snapshot, operations, activeBranch, onS
         onClick={() => onSelectBranch("Intelligence")}
       >
         <div className="shell-commandbar__head">
-          <div className="shell-commandbar__title">Intelligence</div>
+          <div className="shell-commandbar__title">Intelligence / Comms</div>
         </div>
         <div className="shell-commandbar__state">{summary.intelligence.label}</div>
         <div className="shell-commandbar__support shell-commandbar__body">{summary.intelligence.detail}</div>

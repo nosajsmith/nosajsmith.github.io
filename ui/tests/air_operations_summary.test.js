@@ -38,7 +38,7 @@ test("air operations summary stays explicit when air detail is absent", () => {
   assert.match(summary.overview.statusLine, /no dedicated air formations/i);
 });
 
-test("local air support summary stays truthful when only Henderson airfield and weather are exposed", () => {
+test("local air support summary stays truthful when only local airfield and weather are exposed", () => {
   const summary = summarizeLocalAirSupport({
     weather: { condition: "Humid Overcast" },
     local_pressure_areas: [{ id: "henderson-field", location_id: "HENDERSON_FIELD" }],
@@ -49,7 +49,7 @@ test("local air support summary stays truthful when only Henderson airfield and 
   assert.equal(summary.available, true);
   assert.equal(summary.availability, "Not exposed");
   assert.equal(summary.sortiePosture, "Sortie posture not exposed");
-  assert.match(summary.note, /Henderson airfield context/i);
+  assert.match(summary.note, /present on the current operational axis/i);
   assert.match(summary.constraint, /Weather Humid Overcast/i);
   assert.match(summary.supportingFormation, /No locally based air formation/i);
 });

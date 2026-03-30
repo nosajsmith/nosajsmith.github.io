@@ -87,7 +87,13 @@ class AggregateSummary:
     failed_runs: int
     failure_count: int = 0
     partial_failures: bool = False
+    success_rate: float = 0.0
     status_counts: Dict[str, int] = field(default_factory=dict)
+    result_counts: Dict[str, int] = field(default_factory=dict)
+    scenario_outcome_counts: Dict[str, int] = field(default_factory=dict)
+    winning_side_counts: Dict[str, int] = field(default_factory=dict)
+    core_metrics: Dict[str, Dict[str, Any]] = field(default_factory=dict)
+    victory_proxy: Dict[str, Any] = field(default_factory=dict)
     mean_summary: Dict[str, Any] = field(default_factory=dict)
     min_summary: Dict[str, Any] = field(default_factory=dict)
     max_summary: Dict[str, Any] = field(default_factory=dict)

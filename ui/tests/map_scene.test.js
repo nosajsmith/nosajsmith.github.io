@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import {
+  buildInitialMapCamera,
   buildMapScene,
   buildOperationalOverlayState,
   clampMapCamera,
@@ -162,21 +163,139 @@ test("map scene derives scalable settlement metadata for objective localities", 
   assert.equal(scene.objectives.find((objective) => objective.id === "o1")?.settlement?.tier, "capital");
   assert.equal(scene.objectives.find((objective) => objective.id === "o1")?.settlement?.controlState, "friendly");
   assert.equal(scene.objectives.find((objective) => objective.id === "o1")?.objectiveOverlay?.category, "strategic");
+  assert.match(scene.objectives.find((objective) => objective.id === "o1")?.stateLabel ?? "", /100 VP/i);
   assert.equal(scene.objectives.find((objective) => objective.id === "o2")?.settlement?.tier, "major_city");
   assert.equal(scene.objectives.find((objective) => objective.id === "o2")?.settlement?.controlState, "enemy");
   assert.equal(scene.objectives.find((objective) => objective.id === "o2")?.objectiveOverlay?.category, "primary");
   assert.equal(scene.objectives.find((objective) => objective.id === "o3")?.settlement?.tier, "town");
   assert.equal(scene.objectives.find((objective) => objective.id === "o3")?.settlement?.controlState, "contested");
   assert.equal(scene.objectives.find((objective) => objective.id === "o3")?.objectiveOverlay?.contested, true);
+  assert.match(scene.objectives.find((objective) => objective.id === "o3")?.stateLabel ?? "", /contested/i);
+});
+
+test("map scene derives an Inchon-to-Seoul operational axis when Korea slice anchors exist but authored lines do not", () => {
+  const snapshot = {
+    scenario: { id: "inchon_mvp", name: "Operation Chromite" },
+    units: [],
+    objectives: [{ id: "o1", name: "Seoul", value: 100, state: "unheld", side: "ALLIED", x: 8, y: 4 }],
+    airfields: [{ id: "af1", name: "Kimpo", x: 6, y: 5 }],
+    ports: [{ id: "pt1", name: "Inchon", x: 3, y: 6 }],
+    named_features: [],
+  };
+
+  const scene = buildMapScene(snapshot, { width: 1000, height: 620, inset: 60 });
+  const axis = scene.namedFeatures.find((feature) => feature.id === "derived:korea:seoul_axis");
+
+  assert.ok(axis);
+  assert.equal(axis.geometryType, "line");
+  assert.equal(axis.label, "Seoul Axis");
+  assert.equal(axis.important, true);
+  assert.equal(axis.visibility, "always");
+});
+
+test("map scene computes a tighter initial camera fit for the Inchon Seoul axis instead of centering a loose theater extent", () => {
+  const snapshot = {
+    scenario: { id: "inchon_mvp", name: "Inchon Demo Vertical Slice" },
+    map_presentation: {
+      hex_scale_km: 5,
+      playable_scale_locked: true,
+      world_bounds: { min_x: 14.2, max_x: 51.2, min_y: 31, max_y: 60.8 },
+      focus_points: [
+        { id: "focus_inchon_harbor", label: "Inchon Harbor", x: 18.2, y: 58.1 },
+        { id: "focus_yongdungpo_crossings", label: "Yongdungpo Crossings", x: 39.4, y: 40.6 },
+        { id: "focus_seoul", label: "Seoul", x: 46, y: 36 },
+        { id: "focus_kpa_reserve", label: "NKPA Reserve Belt", x: 49.1, y: 32.6 },
+      ],
+    },
+    units: [
+      { id: "rear-1", name: "NKPA Counterattack Reserve", side: "AXIS", kind: "land", x: 49.1, y: 32.6 },
+    ],
+    objectives: [
+      { id: "o1", name: "Inchon Harbor", value: 70, state: "held_allied", side: "ALLIED", x: 18.2, y: 58.1 },
+      { id: "o1b", name: "Kimpo Airfield", value: 80, state: "unheld", side: "ALLIED", x: 31, y: 46 },
+      { id: "o1c", name: "Yongdungpo Crossings", value: 70, state: "unheld", side: "ALLIED", x: 39.4, y: 40.6 },
+      { id: "o2", name: "Seoul", value: 100, state: "unheld", side: "ALLIED", x: 46, y: 36 },
+      { id: "o3", name: "Seoul Defensive Ring", value: 90, state: "held_axis", side: "AXIS", x: 47.2, y: 34.4 },
+    ],
+    airfields: [{ id: "af1", name: "Kimpo Airfield", x: 31, y: 46 }],
+    ports: [{ id: "pt1", name: "Inchon Harbor", x: 18.2, y: 58.1 }],
+    local_pressure_areas: [
+      { id: "lp1", label: "Kimpo Corridor", x: 31, y: 46 },
+      { id: "lp2", label: "Yongdungpo Crossings", x: 39.4, y: 40.6 },
+      { id: "lp3", label: "Seoul Defensive Ring", x: 47.2, y: 34.4 },
+    ],
+    named_features: [
+      {
+        id: "inchon_beachhead_feature",
+        label: "Inchon Beachhead",
+        kind: "sector",
+        geometry_type: "zone",
+        points: [{ x: 15.8, y: 60.4 }, { x: 22.4, y: 59.4 }, { x: 24.3, y: 55.1 }, { x: 21, y: 52.4 }, { x: 15.9, y: 53.7 }, { x: 14.4, y: 57.6 }],
+        label_priority: 5,
+      },
+      {
+        id: "seoul_axis",
+        label: "Seoul Axis",
+        kind: "phase_line",
+        geometry_type: "line",
+        points: [{ x: 18.2, y: 58.2 }, { x: 25.1, y: 52.1 }, { x: 31, y: 46 }, { x: 39.4, y: 40.6 }, { x: 46, y: 36 }],
+        label_priority: 5,
+      },
+      {
+        id: "han_river",
+        label: "Han River",
+        kind: "waterway",
+        geometry_type: "line",
+        points: [{ x: 27.4, y: 47.8 }, { x: 33.2, y: 44.7 }, { x: 39, y: 41.6 }, { x: 45.4, y: 38.3 }, { x: 50.8, y: 36.8 }],
+        label_priority: 4,
+      },
+      {
+        id: "seoul_defensive_belt_feature",
+        label: "Seoul Defensive Belt",
+        kind: "sector",
+        geometry_type: "zone",
+        points: [{ x: 42.6, y: 38.8 }, { x: 47.8, y: 39.1 }, { x: 49.8, y: 35.4 }, { x: 47.8, y: 32.5 }, { x: 43.2, y: 32.8 }, { x: 41.1, y: 35.9 }],
+        label_priority: 4,
+      },
+    ],
+  };
+
+  const scene = buildMapScene(snapshot, { width: 1000, height: 620, inset: 60 });
+  const camera = buildInitialMapCamera(snapshot, scene);
+  const inchon = projectMapCameraPoint(projectScenePoint({ x: 18, y: 58 }, scene), camera);
+  const seoul = projectMapCameraPoint(projectScenePoint({ x: 46, y: 36 }, scene), camera);
+  const midpoint = {
+    x: (inchon.x + seoul.x) / 2,
+    y: (inchon.y + seoul.y) / 2,
+  };
+
+  assert.equal(scene.namedFeatures.filter((feature) => feature.label === "Seoul Axis").length, 1);
+  assert.deepEqual(scene.viewport, { minX: 14.2, maxX: 51.2, minY: 31, maxY: 60.8 });
+  assert.ok(camera.zoom > 1.05);
+  assert.ok(Math.abs(midpoint.x - scene.width / 2) < 55);
+  assert.ok(Math.abs(midpoint.y - scene.height / 2) < 50);
+  assert.ok(inchon.x > 55 && seoul.x < scene.width - 75);
 });
 
 test("map scene honors authored objective categories and builds named feature geometry rows", () => {
   const snapshot = {
-    units: [],
+    units: [
+      {
+        id: "u1",
+        name: "1st Marine Division",
+        map_label: "1ST MAR DIV",
+        label_priority: 4,
+        side: "ALLIED",
+        kind: "land",
+        x: 4,
+        y: 4,
+      },
+    ],
     objectives: [
       {
         id: "o1",
         name: "Seoul",
+        map_label: "SEOUL",
         value: 100,
         state: "unheld",
         side: "ALLIED",
@@ -185,23 +304,31 @@ test("map scene honors authored objective categories and builds named feature ge
         objective_type: "political",
         importance_tier: 3,
         visibility: "always",
+        label_offset_x: -14,
+        label_offset_y: -18,
+        label_anchor: "end",
       },
     ],
     named_features: [
       {
         id: "f1",
         label: "Hill 902",
+        map_label: "HILL 902",
         kind: "hill",
         geometry_type: "point",
         x: 5,
         y: 5,
         visibility: "operational",
         label_priority: 2,
+        label_offset_x: 8,
+        label_offset_y: -14,
+        label_anchor: "middle",
         aliases: [{ name: "Height 902", era: "historical" }],
       },
       {
         id: "f2",
         label: "Phase Line Bravo",
+        map_label: "PHASE LINE BRAVO",
         kind: "phase_line",
         geometry_type: "line",
         x: 7,
@@ -209,6 +336,9 @@ test("map scene honors authored objective categories and builds named feature ge
         points: [{ x: 4, y: 6 }, { x: 7, y: 6 }, { x: 10, y: 7 }],
         visibility: "always",
         label_priority: 3,
+        label_offset_x: 12,
+        label_offset_y: -8,
+        label_anchor: "end",
       },
     ],
   };
@@ -217,9 +347,14 @@ test("map scene honors authored objective categories and builds named feature ge
 
   assert.equal(scene.objectives[0].objectiveOverlay?.category, "political");
   assert.equal(scene.objectives[0].objectiveOverlay?.importanceTier, 3);
+  assert.equal(scene.objectives[0].map_label, "SEOUL");
   assert.equal(scene.namedFeatures[0].geometryType, "point");
+  assert.equal(scene.namedFeatures[0].map_label, "HILL 902");
+  assert.equal(scene.namedFeatures[0].labelOffsetY, -14);
   assert.equal(scene.namedFeatures[1].geometryType, "line");
   assert.equal(scene.namedFeatures[1].important, true);
+  assert.equal(scene.namedFeatures[1].labelAnchor, "end");
+  assert.equal(scene.units[0].labelForceVisible, true);
   assert.equal(scene.stats.visibleNamedFeatures, 2);
 });
 
@@ -612,7 +747,7 @@ test("operational overlay state surfaces night conditions without inventing visi
   assert.equal(overlays.weatherImpact.timeState, "Night");
   assert.equal(overlays.weatherImpact.visibility, "Not exposed");
   assert.equal(overlays.weatherImpact.nightOperations, "Not modeled");
-  assert.match(overlays.weatherImpact.note, /Night conditions are visible over the Henderson\/Lunga perimeter/i);
+  assert.match(overlays.weatherImpact.note, /Night conditions are visible over the current front/i);
   assert.doesNotMatch(overlays.weatherImpact.note, /reduced visibility/i);
 });
 
@@ -659,7 +794,7 @@ test("map zoom presentation keeps counters near screen-stable while trimming min
   const closeView = summarizeMapZoomPresentation(1.55);
   const point = projectMapCameraPoint({ x: 200, y: 100 }, { zoom: 1.2, offsetX: -40, offsetY: 15 });
 
-  assert.equal(broadView.counterScale, 0.94);
+  assert.equal(broadView.counterScale, 0.98);
   assert.equal(broadView.labelPolicy.zoomTier, "far");
   assert.equal(broadView.showUnitLabels, false);
   assert.equal(broadView.showSiteLabels, false);
@@ -674,7 +809,7 @@ test("map zoom presentation keeps counters near screen-stable while trimming min
   assert.equal(operationalView.showObjectiveMarkers, true);
   assert.equal(operationalView.showAirfieldLabels, false);
   assert.equal(operationalView.showAirfieldMarkers, true);
-  assert.equal(closeView.counterScale, 1.06);
+  assert.equal(closeView.counterScale, 1.12);
   assert.equal(closeView.labelPolicy.zoomTier, "close");
   assert.equal(closeView.showUnitLabels, true);
   assert.equal(closeView.showSiteLabels, true);

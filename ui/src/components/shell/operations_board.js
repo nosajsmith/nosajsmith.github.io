@@ -1,14 +1,14 @@
 import {
   buildObjectiveDisplayName,
-  formatReportPresentation,
   humanizeCampaignStatus,
   humanizeIntent,
   humanizePressureReason,
 } from "../../lib/view_snapshot.js";
-import { orderRecentReports } from "./dashboard_summary.js";
+import { summarizeCommunications } from "./communications_summary.js";
 import { humanizeObjectiveState } from "./map_scene.js";
+import { summarizeTrackedOperations } from "./operations_planner.js";
 
-export function summarizeOperationsBoard(snapshot) {
+export function summarizeOperationsBoard(snapshot, operations = []) {
   const objectives = Array.isArray(snapshot?.objectives) ? snapshot.objectives : [];
   const duplicateNames = new Set(
     objectives
@@ -16,7 +16,8 @@ export function summarizeOperationsBoard(snapshot) {
       .filter(Boolean)
       .filter((name, index, items) => items.indexOf(name) !== index),
   );
-  const reports = orderRecentReports(snapshot?.reports?.recent).slice(0, 3);
+  const communications = summarizeCommunications(snapshot, operations);
+  const trackedOperations = summarizeTrackedOperations(snapshot, operations);
   const pressureReasons = Array.isArray(snapshot?.pressure?.reasons)
     ? snapshot.pressure.reasons.map((reason) => humanizePressureReason(reason))
     : [];
@@ -39,12 +40,16 @@ export function summarizeOperationsBoard(snapshot) {
       reasons: pressureReasons,
     },
     aiIntent: humanizeIntent(snapshot?.ai?.last_intent),
-    developments: reports.map((report) => {
-      const display = formatReportPresentation(report);
+    operations: {
+      available: trackedOperations.available,
+      headline: trackedOperations.lead ? `${trackedOperations.lead.name} • ${trackedOperations.lead.status}` : trackedOperations.headline,
+      detail: trackedOperations.lead?.statusDetail ?? trackedOperations.note,
+    },
+    developments: communications.history.slice(0, 3).map((report) => {
       return {
         id: String(report?.id || ""),
-        title: display.title,
-        summary: display.summary,
+        title: String(report?.title || "Dispatch"),
+        summary: String(report?.summary || "Operational update."),
         severity: String(report?.severity || "info").toUpperCase(),
       };
     }),

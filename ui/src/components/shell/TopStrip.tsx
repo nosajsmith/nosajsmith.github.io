@@ -1,5 +1,6 @@
 import type { ViewSnapshot } from "../../types/viewSnapshot";
-import { humanizeScenarioLabel } from "../../lib/view_snapshot.js";
+import { humanizeCampaignStatus, humanizeScenarioLabel, humanizeToken, inferScenarioPresentation } from "../../lib/view_snapshot.js";
+import { DEFAULT_PITCH_SCENARIO } from "../../lib/scenario_adapter.js";
 import type { PlannerWorkbenchTab } from "./OperationPlannerPanel";
 
 type ActionKind = "refresh" | "launch" | "step" | "ai" | null;
@@ -27,6 +28,7 @@ type TopStripProps = {
   aiControlAvailable: boolean;
   aiActivityState: "active" | "idle" | "unavailable";
   autoSaveEnabled: boolean;
+  selectionSummary: { label: string; detail: string } | null;
   onSelectBranch: (branch: "Theatre" | "Land" | "Air" | "Naval" | "Logistics" | "Intelligence" | "Dashboard" | "Reinforcements") => void;
   onOpenPlannerWorkbench: (tab: PlannerWorkbenchTab) => void;
   onSelectScenario: (value: string) => void;
@@ -40,11 +42,11 @@ type TopStripProps = {
   onLoad: () => void;
 };
 
-function buildScenarioInstant(currentHours: number | null): Date | null {
-  if (currentHours == null) {
+function buildScenarioInstant(currentHours: number | null, epoch: { year: number; monthIndex: number; day: number } | null): Date | null {
+  if (currentHours == null || !epoch) {
     return null;
   }
-  return new Date(Date.UTC(1942, 8, 1, 0, 0, 0) + currentHours * 60 * 60 * 1000);
+  return new Date(Date.UTC(epoch.year, epoch.monthIndex, epoch.day, 0, 0, 0) + currentHours * 60 * 60 * 1000);
 }
 
 function formatScenarioCalendar(instant: Date | null): string {
@@ -100,6 +102,7 @@ export default function TopStrip({
   aiControlAvailable,
   aiActivityState,
   autoSaveEnabled,
+  selectionSummary,
   onSelectBranch,
   onOpenPlannerWorkbench,
   onSelectScenario,
@@ -112,15 +115,21 @@ export default function TopStrip({
   onSave,
   onLoad,
 }: TopStripProps) {
-  const scenarioName = humanizeScenarioLabel(snapshot?.scenario.name ?? (selectedScenario || "Awaiting scenario"));
+  const fallbackScenario = selectedScenario || DEFAULT_PITCH_SCENARIO;
+  const presentation = inferScenarioPresentation(snapshot ?? { scenario: { id: fallbackScenario, name: fallbackScenario } });
+  const scenarioName = presentation.scenarioLabel || humanizeScenarioLabel(snapshot?.scenario.name ?? fallbackScenario);
   const currentHours = snapshot?.time.current_hours ?? null;
-  const scenarioInstant = buildScenarioInstant(currentHours);
+  const scenarioInstant = buildScenarioInstant(currentHours, presentation.calendarEpoch);
+  const turnLabel = snapshot?.time.turn != null ? String(snapshot.time.turn) : "--";
   const day = currentHours != null ? `Day ${Math.floor(currentHours / 24) + 1}` : "Day ?";
+  const phaseLabel = snapshot?.time.phase ? humanizeToken(snapshot.time.phase) : "Phase unavailable";
+  const unitCount = snapshot?.units.length ?? null;
+  const campaignStatus = snapshot?.campaign?.status ? humanizeCampaignStatus(snapshot.campaign.status) : "Status unavailable";
   const calendar = formatScenarioCalendar(scenarioInstant);
-  const referenceClocks = [
-    { label: "Seoul", value: formatReferenceClock(scenarioInstant, "Asia/Seoul") },
-    { label: "Washington", value: formatReferenceClock(scenarioInstant, "America/New_York") },
-  ];
+  const referenceClocks = presentation.referenceClocks.map((clock) => ({
+    label: clock.label,
+    value: formatReferenceClock(scenarioInstant, clock.timeZone),
+  }));
   const capabilities = snapshot?.capabilities;
   const hasSnapshot = !!snapshot;
   const controlsBusy = refreshing || actionKind !== null;
@@ -133,12 +142,12 @@ export default function TopStrip({
   const loadUnavailable = !capabilities?.can_load_snapshot;
   const baiTone = aiActivityState === "active" ? "is-live" : "is-idle";
   const baiTitle = !hasSnapshot
-    ? "Balck AI status is unavailable until a scenario picture is loaded."
+    ? "BAI status is unavailable until a scenario picture is loaded."
     : aiActivityState === "active"
-      ? "Balck AI is actively evaluating or processing."
+      ? "BAI is actively evaluating or processing."
       : aiControlAvailable
-        ? "Balck AI is idle and not actively processing."
-        : "Balck AI control is unavailable on this bridge.";
+        ? "BAI is idle and not actively processing."
+        : "BAI control is unavailable on this bridge.";
   const bridgeTitle = connected ? "Bridge connection is live and reporting." : "Bridge connection is offline or not reporting.";
   const autoSaveTitle = autoSaveEnabled ? "Auto Save is enabled for this shell." : "Auto Save is disabled for this shell.";
   const actionButtons = [
@@ -168,21 +177,41 @@ export default function TopStrip({
   return (
     <header className="shell-topstrip">
       <div className="shell-topstrip__identity">
-        <div className="shell-eyebrow">Command Header</div>
-        <h1 className="shell-title">{scenarioName}</h1>
-        <div className="shell-topstrip__identity-note">Theatre command</div>
+        <div className="shell-eyebrow">{presentation.theaterLabel}</div>
+        <h1 className="shell-title">{presentation.shellTitle}</h1>
+        <div className="shell-topstrip__identity-note">
+          {[scenarioName, presentation.frontLabel, campaignStatus].filter(Boolean).join(" • ")}
+        </div>
       </div>
 
       <div className="shell-topstrip__center">
         <div className="shell-topstrip__status">
           <div className="shell-chip">
+            <span className="shell-chip__label">Turn</span>
+            <strong>{turnLabel}</strong>
+          </div>
+          <div className="shell-chip">
             <span className="shell-chip__label">Day</span>
             <strong>{day}</strong>
+          </div>
+          <div className="shell-chip">
+            <span className="shell-chip__label">Phase</span>
+            <strong>{phaseLabel}</strong>
           </div>
           <div className="shell-chip">
             <span className="shell-chip__label">Calendar</span>
             <strong>{calendar}</strong>
           </div>
+          <div className="shell-chip">
+            <span className="shell-chip__label">Units</span>
+            <strong>{unitCount ?? "--"}</strong>
+          </div>
+          {selectionSummary ? (
+            <div className="shell-chip shell-chip--selection" title={selectionSummary.detail}>
+              <span className="shell-chip__label">Selection</span>
+              <strong>{selectionSummary.label}</strong>
+            </div>
+          ) : null}
           <div className="shell-topstrip__clocks" aria-label="Reference clocks">
             {referenceClocks.map((clock) => (
               <div className="shell-topstrip__clock" key={clock.label}>
@@ -273,7 +302,7 @@ export default function TopStrip({
             onClick={onToggleAi}
             disabled={!canToggleAi}
             aria-pressed={snapshot?.ai.enabled ?? false}
-            aria-label={`Balck AI status: ${aiActivityState}`}
+            aria-label={`BAI status: ${aiActivityState}`}
             title={baiTitle}
           >
             <span>BAI</span>

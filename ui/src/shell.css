@@ -20,29 +20,29 @@
   --shell-accent-soft: rgba(107, 90, 62, 0.14);
   --shell-ok: #6a6b5c;
   --shell-warn: #d8b778;
-  --map-token-terrain-stage: #4f5845;
-  --map-token-terrain-plains: #90886b;
-  --map-token-terrain-forest: #46533d;
-  --map-token-terrain-rough: #946f56;
-  --map-token-terrain-hills: #a08a65;
-  --map-token-terrain-mountain: #736b59;
-  --map-token-terrain-urban: #a39786;
-  --map-token-terrain-water: #5b6765;
-  --map-token-terrain-river: rgba(123, 152, 166, 0.88);
-  --map-token-terrain-river-bank: rgba(199, 190, 158, 0.42);
-  --map-token-terrain-field: rgba(118, 122, 100, 0.84);
-  --map-token-terrain-sea: #596664;
-  --map-token-terrain-coast: #93896a;
-  --map-token-terrain-ridge: #625c4b;
-  --map-token-relief-sea-level: rgba(100, 114, 116, 0.08);
-  --map-token-relief-coastal-low: rgba(186, 178, 146, 0.18);
-  --map-token-relief-lowland: rgba(158, 153, 114, 0.17);
-  --map-token-relief-rolling: rgba(181, 168, 120, 0.22);
-  --map-token-relief-upland: rgba(198, 182, 131, 0.27);
-  --map-token-relief-ridge: rgba(211, 195, 153, 0.34);
-  --map-token-faction-friendly: #5a6b3c;
-  --map-token-faction-enemy: #6a5842;
-  --map-token-faction-neutral: #55624a;
+  --map-token-terrain-stage: #68725d;
+  --map-token-terrain-plains: #b4aa80;
+  --map-token-terrain-forest: #687352;
+  --map-token-terrain-rough: #967860;
+  --map-token-terrain-hills: #c1ae82;
+  --map-token-terrain-mountain: #807366;
+  --map-token-terrain-urban: #c4b8a6;
+  --map-token-terrain-water: #718594;
+  --map-token-terrain-river: rgba(149, 180, 193, 0.94);
+  --map-token-terrain-river-bank: rgba(214, 204, 179, 0.38);
+  --map-token-terrain-field: rgba(153, 150, 121, 0.78);
+  --map-token-terrain-sea: #667d8b;
+  --map-token-terrain-coast: #d5c89f;
+  --map-token-terrain-ridge: #776b5d;
+  --map-token-relief-sea-level: rgba(136, 163, 173, 0.06);
+  --map-token-relief-coastal-low: rgba(212, 203, 166, 0.12);
+  --map-token-relief-lowland: rgba(192, 183, 134, 0.1);
+  --map-token-relief-rolling: rgba(206, 191, 141, 0.13);
+  --map-token-relief-upland: rgba(216, 200, 153, 0.18);
+  --map-token-relief-ridge: rgba(223, 207, 168, 0.23);
+  --map-token-faction-friendly: #68775a;
+  --map-token-faction-enemy: #7a604d;
+  --map-token-faction-neutral: #5e6b59;
   --map-token-faction-contested: #6a6b5c;
   --map-token-border-ink: rgba(24, 26, 23, 0.92);
   --map-token-border-panel: rgba(68, 70, 63, 0.72);
@@ -72,17 +72,17 @@
   --map-token-overlay-planning-core: rgba(208, 182, 128, 0.22);
   --map-token-overlay-artillery: rgba(190, 176, 123, 0.54);
   --map-token-overlay-artillery-bracket: rgba(214, 205, 176, 0.66);
-  --map-token-overlay-terrain-emphasis: rgba(214, 205, 176, 0.16);
-  --map-token-overlay-road-primary: rgba(212, 197, 152, 0.64);
-  --map-token-overlay-road-secondary: rgba(188, 175, 136, 0.48);
-  --map-token-overlay-rail: rgba(154, 158, 146, 0.48);
-  --map-token-overlay-hydro-casing: rgba(36, 41, 40, 0.5);
-  --map-token-overlay-coast-casing: rgba(41, 42, 39, 0.28);
-  --map-token-overlay-coastline: rgba(193, 191, 171, 0.78);
-  --map-token-overlay-road-casing: rgba(43, 39, 32, 0.42);
+  --map-token-overlay-terrain-emphasis: rgba(219, 209, 178, 0.12);
+  --map-token-overlay-road-primary: rgba(236, 224, 194, 0.82);
+  --map-token-overlay-road-secondary: rgba(212, 199, 166, 0.66);
+  --map-token-overlay-rail: rgba(162, 166, 153, 0.44);
+  --map-token-overlay-hydro-casing: rgba(45, 53, 58, 0.34);
+  --map-token-overlay-coast-casing: rgba(86, 88, 80, 0.34);
+  --map-token-overlay-coastline: rgba(245, 239, 222, 0.98);
+  --map-token-overlay-road-casing: rgba(70, 62, 49, 0.34);
   --map-token-overlay-rail-casing: rgba(43, 45, 40, 0.34);
-  --map-token-overlay-crossing-halo: rgba(22, 26, 25, 0.62);
-  --map-token-overlay-bridge: rgba(238, 229, 199, 0.92);
+  --map-token-overlay-crossing-halo: rgba(30, 35, 35, 0.56);
+  --map-token-overlay-bridge: rgba(244, 236, 208, 0.94);
   --map-token-overlay-infrastructure-alert: rgba(189, 102, 90, 0.76);
   --map-token-overlay-barrier-minor: rgba(112, 138, 144, 0.74);
   --map-token-overlay-barrier-major: rgba(124, 148, 154, 0.9);
@@ -166,14 +166,14 @@
   --map-token-settlement-supply: rgba(214, 188, 134, 0.94);
   --map-token-opacity-underlay: 0.78;
   --map-token-opacity-underlay-field: 0.22;
-  --map-token-opacity-grid-minor: 0.42;
-  --map-token-opacity-grid-major: 0.6;
+  --map-token-opacity-grid-minor: 0.32;
+  --map-token-opacity-grid-major: 0.48;
   --map-token-opacity-overlay-emphasis: 0.9;
   --map-token-line-hex-minor: 0.76px;
   --map-token-line-hex-major: 0.98px;
   --map-token-line-leader: 0.95px;
   --map-token-line-objective: 1.05px;
-  --map-token-line-unit-border: 1.1px;
+  --map-token-line-unit-border: 1.16px;
   --map-token-line-site-border: 1.05px;
   --map-token-line-terrain-emphasis: 1.1px;
   --map-token-line-road-primary: 2.4px;
@@ -218,18 +218,18 @@
   --shell-map-leader-unit: rgba(80, 102, 104, 0.34);
   --shell-map-label-stroke: var(--map-token-text-halo);
   --shell-map-label-ghost-opacity: 0.62;
-  --shell-map-label-basemap-size: 7.4px;
-  --shell-map-label-basemap-halo-width: 1.55px;
-  --shell-map-label-objective-size: 9.35px;
-  --shell-map-label-objective-meta-size: 7.1px;
-  --shell-map-label-objective-halo-width: 2.45px;
-  --shell-map-label-objective-meta-halo-width: 2.06px;
-  --shell-map-label-feature-size: 8.2px;
-  --shell-map-label-feature-halo-width: 2.36px;
-  --shell-map-label-site-size: 7.45px;
-  --shell-map-label-site-halo-width: 2.32px;
-  --shell-map-label-unit-size: 7.05px;
-  --shell-map-label-unit-halo-width: 2.55px;
+  --shell-map-label-basemap-size: 7.25px;
+  --shell-map-label-basemap-halo-width: 1.88px;
+  --shell-map-label-objective-size: 11.45px;
+  --shell-map-label-objective-meta-size: 7.65px;
+  --shell-map-label-objective-halo-width: 3.24px;
+  --shell-map-label-objective-meta-halo-width: 2.52px;
+  --shell-map-label-feature-size: 9.55px;
+  --shell-map-label-feature-halo-width: 2.94px;
+  --shell-map-label-site-size: 8.35px;
+  --shell-map-label-site-halo-width: 2.62px;
+  --shell-map-label-unit-size: 7.8px;
+  --shell-map-label-unit-halo-width: 2.84px;
   --shell-map-overlay-text: #22231f;
   --shell-map-overlay-muted: rgba(34, 35, 31, 0.74);
   --shell-army-allied: var(--map-token-faction-friendly);
@@ -329,6 +329,427 @@ textarea {
   grid-template-rows: auto 1fr auto auto;
   gap: clamp(6px, 0.7vw, 10px);
   padding: var(--shell-frame-pad);
+}
+
+.shell-launcher {
+  position: relative;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: clamp(18px, 3vw, 40px);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at top left, rgba(160, 140, 88, 0.18), transparent 34%),
+    radial-gradient(circle at 82% 18%, rgba(84, 101, 69, 0.16), transparent 30%),
+    linear-gradient(180deg, rgba(14, 19, 24, 0.94) 0%, rgba(18, 23, 27, 0.98) 44%, rgba(11, 15, 18, 1) 100%);
+}
+
+.shell-launcher__cinematic-bg {
+  position: absolute;
+  inset: -5%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 76% center;
+  opacity: 0.36;
+  filter: blur(22px) saturate(0.76) brightness(0.42);
+  transform: scale(1.05);
+  pointer-events: none;
+}
+
+.shell-launcher__cinematic-bg.is-fallback {
+  background:
+    radial-gradient(circle at 74% 26%, rgba(170, 145, 86, 0.16), transparent 26%),
+    radial-gradient(circle at 28% 62%, rgba(92, 112, 88, 0.12), transparent 28%),
+    linear-gradient(180deg, rgba(36, 41, 39, 0.72), rgba(16, 20, 20, 0.94));
+}
+
+.shell-launcher__cinematic-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 72% 24%, rgba(182, 158, 94, 0.08), transparent 24%),
+    linear-gradient(90deg, rgba(8, 10, 12, 0.86) 0%, rgba(8, 10, 12, 0.56) 32%, rgba(8, 10, 12, 0.6) 68%, rgba(8, 10, 12, 0.82) 100%),
+    linear-gradient(180deg, rgba(6, 8, 10, 0.78) 0%, rgba(7, 9, 11, 0.26) 24%, rgba(7, 9, 11, 0.38) 62%, rgba(6, 8, 10, 0.86) 100%);
+}
+
+.shell-launcher__backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(196, 186, 153, 0.05) 1px, transparent 1px),
+    linear-gradient(rgba(196, 186, 153, 0.04) 1px, transparent 1px);
+  background-size: 112px 112px, 112px 112px;
+  mask-image: radial-gradient(circle at center, black 28%, transparent 90%);
+  opacity: 0.38;
+  pointer-events: none;
+}
+
+.shell-launcher__inner {
+  position: relative;
+  z-index: 1;
+  width: min(1360px, 100%);
+  display: grid;
+  gap: clamp(16px, 2vw, 24px);
+}
+
+.shell-launcher__hero,
+.shell-launcher__card {
+  border: 1px solid rgba(162, 151, 120, 0.22);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(34, 39, 35, 0.9) 0%, rgba(22, 26, 24, 0.96) 100%);
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+}
+
+.shell-launcher__hero {
+  display: grid;
+  gap: 12px;
+  padding: clamp(22px, 3vw, 34px);
+}
+
+.shell-launcher__hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.shell-launcher__title {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  line-height: 0.94;
+}
+
+.shell-launcher__title-main,
+.shell-launcher__title-sub {
+  display: block;
+  font-family: var(--shell-font-title);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.shell-launcher__title-main {
+  font-size: clamp(28px, 3.2vw, 44px);
+  color: #e8dec0;
+}
+
+.shell-launcher__title-sub {
+  font-size: clamp(42px, 5vw, 74px);
+  color: #d5bd7f;
+}
+
+.shell-launcher__theater {
+  color: #b5b8a7;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.shell-launcher__lede {
+  max-width: 70ch;
+  margin: 0;
+  color: #c5c0b1;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.shell-launcher__signal-band {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.shell-launcher__signal {
+  display: grid;
+  gap: 5px;
+  min-height: 96px;
+  padding: 14px 15px;
+  border: 1px solid rgba(176, 164, 128, 0.18);
+  border-radius: 12px;
+  background:
+    linear-gradient(180deg, rgba(38, 43, 40, 0.8), rgba(24, 27, 26, 0.9));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+.shell-launcher__signal-label,
+.shell-launcher__audio-title {
+  color: #8f9485;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.shell-launcher__signal-value {
+  color: #f0e4c6;
+  font-family: var(--shell-font-title);
+  font-size: clamp(18px, 1.8vw, 24px);
+  letter-spacing: 0.05em;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.shell-launcher__signal-note,
+.shell-launcher__audio-note {
+  color: #b4b0a2;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.shell-launcher__grid {
+  display: grid;
+  grid-template-columns: minmax(360px, 0.92fr) minmax(420px, 1.08fr);
+  gap: clamp(14px, 1.8vw, 24px);
+  align-items: stretch;
+}
+
+.shell-launcher__rail {
+  display: grid;
+  gap: clamp(14px, 1.8vw, 22px);
+}
+
+.shell-launcher__card {
+  display: grid;
+  gap: 14px;
+  padding: clamp(18px, 2.2vw, 24px);
+}
+
+.shell-launcher__card--art {
+  padding: 0;
+  overflow: hidden;
+}
+
+.shell-launcher__brief-name {
+  font-family: var(--shell-font-title);
+  font-size: clamp(22px, 2vw, 30px);
+  color: #efe3c3;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.shell-launcher__brief-status,
+.shell-launcher__statusnote {
+  color: #bab6a8;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.shell-launcher__brief-grid {
+  display: grid;
+  gap: 9px;
+}
+
+.shell-launcher__brief-row,
+.shell-launcher__statusline {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid rgba(121, 118, 103, 0.24);
+}
+
+.shell-launcher__brief-row span,
+.shell-launcher__statusline-label,
+.shell-launcher__field-label {
+  color: #8f9485;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.shell-launcher__brief-row strong,
+.shell-launcher__statusline strong {
+  color: #ebe2c7;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: right;
+}
+
+.shell-launcher__audio-bank {
+  display: grid;
+  gap: 8px;
+  padding: 12px 13px;
+  border: 1px solid rgba(118, 115, 100, 0.24);
+  border-radius: 11px;
+  background: rgba(24, 27, 25, 0.5);
+}
+
+.shell-launcher__audio-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.shell-launcher__audio-value {
+  color: #e8ddbe;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.shell-launcher__audio-slider {
+  width: 100%;
+  accent-color: #c4aa68;
+  cursor: pointer;
+}
+
+.shell-launcher__audio-slider:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.shell-launcher__field {
+  display: grid;
+  gap: 8px;
+}
+
+.shell-launcher__actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.shell-launcher__button {
+  min-height: 42px;
+  justify-content: center;
+}
+
+.shell-launcher__pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 11px;
+  border: 1px solid rgba(176, 167, 138, 0.28);
+  border-radius: 999px;
+  background: rgba(39, 42, 37, 0.72);
+  color: #cfc7b0;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.shell-launcher__pill--active {
+  border-color: rgba(214, 191, 132, 0.44);
+  background: rgba(86, 72, 38, 0.3);
+  color: #eee0b7;
+}
+
+.shell-launcher__art-frame {
+  position: relative;
+  display: grid;
+  min-height: clamp(460px, 58vw, 760px);
+  background:
+    radial-gradient(circle at 18% 18%, rgba(176, 154, 98, 0.16), transparent 30%),
+    linear-gradient(180deg, rgba(26, 31, 30, 0.9), rgba(15, 18, 19, 0.96));
+}
+
+.shell-launcher__art-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 54% center;
+  display: block;
+  filter: saturate(0.94) contrast(1.04) brightness(0.92);
+}
+
+.shell-launcher__art-fallback {
+  display: grid;
+  align-content: end;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  padding: clamp(22px, 2.4vw, 30px);
+  background:
+    radial-gradient(circle at 70% 28%, rgba(176, 154, 98, 0.18), transparent 24%),
+    linear-gradient(180deg, rgba(30, 34, 34, 0.9), rgba(18, 21, 22, 0.98));
+}
+
+.shell-launcher__art-vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 76% 18%, rgba(0, 0, 0, 0.08), transparent 20%),
+    linear-gradient(180deg, rgba(8, 11, 12, 0.08) 0%, rgba(8, 10, 12, 0) 28%, rgba(8, 10, 12, 0.16) 74%, rgba(6, 8, 10, 0.48) 100%),
+    linear-gradient(90deg, rgba(8, 10, 12, 0.46) 0%, rgba(8, 10, 12, 0.1) 28%, rgba(8, 10, 12, 0.12) 74%, rgba(8, 10, 12, 0.32) 100%);
+  pointer-events: none;
+}
+
+.shell-launcher__art-badges {
+  position: absolute;
+  top: clamp(16px, 2vw, 22px);
+  left: clamp(16px, 2vw, 22px);
+  right: clamp(16px, 2vw, 22px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.shell-launcher__art-caption {
+  position: absolute;
+  left: clamp(18px, 2vw, 24px);
+  right: clamp(18px, 2vw, 24px);
+  bottom: clamp(18px, 2vw, 24px);
+  display: grid;
+  gap: 5px;
+  padding: 16px 18px;
+  border: 1px solid rgba(181, 170, 139, 0.24);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(26, 28, 25, 0.74), rgba(18, 20, 18, 0.84));
+  box-shadow:
+    0 14px 30px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(8px);
+}
+
+.shell-launcher__art-kicker {
+  color: #b29b67;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.shell-launcher__art-title {
+  color: #f1e4c2;
+  font-family: var(--shell-font-title);
+  font-size: clamp(22px, 2vw, 30px);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.shell-launcher__art-copy {
+  color: #cbc3b0;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+@media (max-width: 900px) {
+  .shell-launcher__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .shell-launcher__signal-band {
+    grid-template-columns: 1fr;
+  }
+
+  .shell-launcher__cinematic-bg {
+    background-position: 64% center;
+    opacity: 0.28;
+  }
+
+  .shell-launcher__art-frame {
+    min-height: clamp(360px, 72vw, 560px);
+  }
+
+  .shell-launcher__actions {
+    grid-template-columns: 1fr;
+  }
 }
 
 .shell-topstrip,
@@ -598,6 +1019,17 @@ textarea {
   background: rgba(58, 58, 46, 0.58);
   display: grid;
   gap: 1px;
+}
+
+.shell-chip--selection {
+  min-width: 122px;
+  max-width: 168px;
+}
+
+.shell-chip--selection strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .shell-chip__label,
@@ -988,18 +1420,20 @@ textarea {
   height: 100%;
   overflow: hidden;
   background:
-    radial-gradient(circle at 18% 24%, rgba(188, 177, 138, 0.1), transparent 28%),
-    radial-gradient(circle at 76% 28%, rgba(100, 114, 86, 0.1), transparent 30%),
-    radial-gradient(circle at 62% 76%, rgba(81, 92, 72, 0.12), transparent 34%),
-    linear-gradient(180deg, rgba(108, 114, 95, 0.4) 0%, rgba(86, 94, 74, 0.58) 42%, var(--shell-map-stage) 100%);
+    radial-gradient(circle at 12% 56%, rgba(88, 124, 134, 0.22), transparent 24%),
+    radial-gradient(circle at 18% 28%, rgba(195, 186, 148, 0.14), transparent 28%),
+    radial-gradient(circle at 78% 22%, rgba(108, 124, 96, 0.12), transparent 30%),
+    radial-gradient(circle at 60% 78%, rgba(82, 96, 74, 0.15), transparent 34%),
+    linear-gradient(180deg, rgba(126, 132, 108, 0.42) 0%, rgba(92, 102, 81, 0.6) 42%, var(--shell-map-stage) 100%);
 }
 
 .shell-map__stage--underlay {
   background:
-    radial-gradient(circle at 18% 22%, rgba(165, 158, 127, 0.1), transparent 26%),
+    radial-gradient(circle at 12% 54%, rgba(78, 106, 114, 0.16), transparent 24%),
+    radial-gradient(circle at 18% 22%, rgba(165, 158, 127, 0.11), transparent 26%),
     radial-gradient(circle at 74% 28%, rgba(92, 102, 84, 0.1), transparent 30%),
     radial-gradient(circle at 58% 78%, rgba(72, 79, 63, 0.1), transparent 34%),
-    linear-gradient(180deg, rgba(101, 109, 91, 0.36) 0%, rgba(82, 90, 72, 0.54) 42%, var(--shell-map-stage) 100%);
+    linear-gradient(180deg, rgba(104, 112, 93, 0.36) 0%, rgba(82, 90, 72, 0.54) 42%, var(--shell-map-stage) 100%);
 }
 
 .shell-map__stage::before {
@@ -2061,6 +2495,50 @@ textarea {
   border-color: rgba(170, 146, 94, 0.48);
   background: rgba(63, 48, 28, 0.78);
   color: rgba(244, 234, 214, 0.94);
+}
+
+.shell-map__status-note--quickcommand {
+  display: grid;
+  gap: 2px;
+  max-width: 320px;
+  padding: 8px 10px;
+  border: 1px solid rgba(171, 161, 133, 0.34);
+  border-radius: 8px;
+  background: rgba(42, 43, 35, 0.88);
+  color: rgba(234, 226, 208, 0.94);
+  box-shadow: 0 10px 22px rgba(8, 10, 10, 0.22);
+}
+
+.shell-map__status-note--quickcommand strong,
+.shell-map__status-note--quickcommand span,
+.shell-map__status-note--quickcommand em {
+  display: block;
+}
+
+.shell-map__status-note--quickcommand strong {
+  color: rgba(246, 239, 224, 0.98);
+  font-size: 11px;
+  letter-spacing: 0.03em;
+}
+
+.shell-map__status-note--quickcommand span {
+  color: rgba(198, 189, 165, 0.84);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.shell-map__status-note--quickcommand em {
+  color: rgba(225, 217, 199, 0.86);
+  font-style: normal;
+}
+
+.shell-map__status-note--quickcommand.is-move strong {
+  color: rgba(212, 223, 194, 0.98);
+}
+
+.shell-map__status-note--quickcommand.is-attack strong {
+  color: rgba(242, 211, 194, 0.98);
 }
 
 .shell-map__card,
@@ -4032,6 +4510,7 @@ textarea {
 
 .shell-map__field {
   fill: var(--shell-map-field);
+  filter: saturate(0.9) brightness(1.02) contrast(1.01);
 }
 
 .shell-map__field.has-underlay {
@@ -4096,10 +4575,12 @@ textarea {
 
 .shell-map__basemap-hex-fill.is-water {
   fill: var(--map-token-terrain-water);
+  filter: saturate(1.02) brightness(1.05);
 }
 
 .shell-map__basemap-hex-fill.is-coast {
   fill: var(--map-token-terrain-coast);
+  filter: saturate(1.01) brightness(1.07);
 }
 
 .shell-map__basemap-hex-tint.is-sea_level {
@@ -4127,8 +4608,13 @@ textarea {
 }
 
 .shell-map__basemap-hex-relief {
-  fill: rgba(30, 29, 24, 0.84);
+  fill: rgba(68, 60, 50, 0.24);
   mix-blend-mode: multiply;
+}
+
+.shell-map__basemap-hex-texture {
+  stroke: none;
+  mix-blend-mode: soft-light;
 }
 
 .shell-map__basemap-coast-casing,
@@ -4146,6 +4632,7 @@ textarea {
 
 .shell-map__basemap-coast-casing {
   stroke: var(--map-token-overlay-coast-casing);
+  filter: drop-shadow(0 0 3px rgba(212, 224, 230, 0.14));
 }
 
 .shell-map__basemap-coast-ring {
@@ -4153,6 +4640,7 @@ textarea {
   stroke: var(--map-token-overlay-coastline);
   stroke-linecap: round;
   stroke-linejoin: round;
+  opacity: 1;
 }
 
 .shell-map__basemap-river-ring.is-major {
@@ -4165,12 +4653,12 @@ textarea {
 
 .shell-map__basemap-contour {
   fill: none;
-  stroke: rgba(214, 205, 176, 0.58);
+  stroke: rgba(216, 207, 181, 0.36);
   stroke-linejoin: round;
 }
 
 .shell-map__basemap-contour.is-major {
-  stroke: rgba(226, 216, 185, 0.74);
+  stroke: rgba(232, 223, 191, 0.5);
 }
 
 .shell-map__basemap-segment {
@@ -4194,6 +4682,7 @@ textarea {
 
 .shell-map__basemap-segment.is-road {
   stroke: var(--map-token-overlay-road-secondary);
+  filter: drop-shadow(0 0 1px rgba(248, 241, 224, 0.08));
 }
 
 .shell-map__basemap-segment.is-road.is-primary_road {
@@ -4206,7 +4695,7 @@ textarea {
 }
 
 .shell-map__basemap-settlement-core {
-  fill: rgba(233, 225, 204, 0.74);
+  fill: rgba(241, 233, 212, 0.8);
   stroke: rgba(30, 31, 28, 0.82);
   stroke-width: 0.72px;
 }
@@ -4218,14 +4707,14 @@ textarea {
 }
 
 .shell-map__basemap-airfield-runway {
-  fill: rgba(214, 205, 176, 0.24);
-  stroke: rgba(233, 225, 204, 0.74);
+  fill: rgba(223, 215, 189, 0.28);
+  stroke: rgba(241, 233, 212, 0.82);
   stroke-width: 0.82px;
 }
 
 .shell-map__basemap-airfield-spine {
   fill: none;
-  stroke: rgba(240, 232, 212, 0.82);
+  stroke: rgba(244, 236, 216, 0.88);
   stroke-width: 0.82px;
   stroke-linecap: round;
 }
@@ -4265,11 +4754,11 @@ textarea {
 }
 
 .shell-map__basemap-node-label {
-  fill: var(--map-token-text-secondary);
-  opacity: var(--shell-map-label-ghost-opacity);
+  fill: rgba(244, 237, 220, 0.86);
+  opacity: calc(var(--shell-map-label-ghost-opacity) + 0.1);
   font-size: var(--shell-map-label-basemap-size);
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-weight: 690;
+  letter-spacing: 0.092em;
   paint-order: stroke;
   stroke: var(--map-token-text-halo);
   stroke-width: var(--shell-map-label-basemap-halo-width);
@@ -4294,7 +4783,26 @@ textarea {
 }
 
 .shell-map__terrain-emphasis {
-  opacity: 1;
+  mix-blend-mode: soft-light;
+}
+
+.shell-map__paper-grain {
+  mix-blend-mode: soft-light;
+}
+
+.shell-map__paper-grain-dot {
+  fill: rgba(244, 237, 219, 0.18);
+}
+
+.shell-map__paper-grain-fiber {
+  fill: none;
+  stroke: rgba(90, 81, 69, 0.14);
+  stroke-width: 0.9px;
+  stroke-linecap: round;
+}
+
+.shell-map__paper-grain-fiber.is-soft {
+  opacity: 0.58;
 }
 
 .shell-map__terrain-emphasis-line {
@@ -4306,6 +4814,18 @@ textarea {
 
 .shell-map__terrain-emphasis-line.is-soft {
   opacity: 0.62;
+}
+
+.shell-map__water-texture-line {
+  fill: none;
+  stroke: rgba(244, 247, 248, 0.28);
+  stroke-width: 1.02px;
+  stroke-linecap: round;
+}
+
+.shell-map__water-texture-line.is-soft {
+  stroke: rgba(214, 226, 232, 0.18);
+  stroke-width: 0.82px;
 }
 
 .shell-map__fog-wash {
@@ -4605,6 +5125,58 @@ textarea {
   opacity: 0.92;
 }
 
+.shell-map__quickcommand-path,
+.shell-map__quickcommand-target,
+.shell-map__quickcommand-core {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.shell-map__quickcommand-path {
+  stroke: rgba(216, 208, 182, 0.86);
+  stroke-width: calc(var(--map-token-line-movement) * 0.95);
+  stroke-dasharray: 6 4;
+  opacity: 0.86;
+}
+
+.shell-map__quickcommand.is-move .shell-map__quickcommand-path {
+  stroke: var(--map-token-overlay-move);
+}
+
+.shell-map__quickcommand.is-attack .shell-map__quickcommand-path {
+  stroke: var(--map-token-overlay-attack);
+}
+
+.shell-map__quickcommand.is-review .shell-map__quickcommand-path {
+  stroke: rgba(210, 199, 170, 0.78);
+}
+
+.shell-map__quickcommand-target {
+  stroke: rgba(227, 219, 198, 0.88);
+  stroke-width: calc(var(--map-token-line-movement) * 0.82);
+  opacity: 0.88;
+}
+
+.shell-map__quickcommand-core {
+  fill: rgba(230, 223, 205, 0.92);
+  stroke: none;
+}
+
+.shell-map__quickcommand.is-move .shell-map__quickcommand-target,
+.shell-map__quickcommand.is-move .shell-map__quickcommand-core {
+  stroke: var(--map-token-overlay-move);
+  fill: var(--map-token-overlay-move);
+}
+
+.shell-map__quickcommand.is-attack .shell-map__quickcommand-target,
+.shell-map__quickcommand.is-attack .shell-map__quickcommand-core {
+  stroke: var(--map-token-overlay-attack);
+  fill: var(--map-token-overlay-attack);
+}
+
 .shell-map__movement-waypoint {
   fill: var(--map-token-overlay-waypoint);
   stroke: rgba(30, 31, 28, 0.84);
@@ -4808,7 +5380,7 @@ textarea {
 .shell-map__leader {
   stroke-linecap: round;
   stroke-width: var(--map-token-line-leader);
-  opacity: 0.64;
+  opacity: 0.72;
   stroke-dasharray: 2 5;
 }
 
@@ -4824,6 +5396,7 @@ textarea {
   --shell-settlement-fill: var(--map-token-settlement-unknown);
   --shell-settlement-ring: var(--map-token-settlement-ring);
   --shell-settlement-detail: var(--map-token-text-primary);
+  filter: drop-shadow(0 0 7px rgba(34, 31, 25, 0.26)) drop-shadow(0 7px 12px rgba(20, 19, 16, 0.22));
 }
 
 .shell-map__objective.is-friendly {
@@ -4837,6 +5410,7 @@ textarea {
 .shell-map__objective.is-contested {
   --shell-settlement-fill: var(--map-token-settlement-contested);
   --shell-settlement-ring: var(--map-token-settlement-key);
+  filter: drop-shadow(0 0 8px rgba(194, 137, 96, 0.22)) drop-shadow(0 6px 12px rgba(20, 19, 16, 0.2));
 }
 
 .shell-map__objective.is-neutral {
@@ -4904,22 +5478,65 @@ textarea {
   stroke-width: calc(var(--shell-settlement-stroke, 1.02) * 0.72);
 }
 
+.shell-map__objective-emphasis-ring,
+.shell-map__objective-emphasis-core {
+  vector-effect: non-scaling-stroke;
+}
+
+.shell-map__objective-emphasis-ring {
+  fill: rgba(235, 225, 200, 0.045);
+  stroke: rgba(234, 224, 198, 0.48);
+  stroke-width: 1.08px;
+}
+
+.shell-map__objective-emphasis-core {
+  fill: rgba(232, 223, 201, 0.095);
+  stroke: none;
+}
+
+.shell-map__objective-emphasis.is-primary .shell-map__objective-emphasis-ring,
+.shell-map__objective-emphasis.is-supply .shell-map__objective-emphasis-ring,
+.shell-map__objective-emphasis.is-strategic .shell-map__objective-emphasis-ring,
+.shell-map__objective-emphasis.is-axis-focus .shell-map__objective-emphasis-ring {
+  stroke: rgba(234, 214, 164, 0.76);
+}
+
+.shell-map__objective-emphasis.is-primary .shell-map__objective-emphasis-core,
+.shell-map__objective-emphasis.is-supply .shell-map__objective-emphasis-core,
+.shell-map__objective-emphasis.is-strategic .shell-map__objective-emphasis-core,
+.shell-map__objective-emphasis.is-axis-focus .shell-map__objective-emphasis-core {
+  fill: rgba(234, 217, 176, 0.13);
+}
+
+.shell-map__objective-emphasis.is-contested .shell-map__objective-emphasis-ring {
+  stroke: rgba(216, 168, 112, 0.72);
+  stroke-dasharray: 3.2 2.4;
+}
+
 .shell-map__objective-label {
-  fill: #f6f1e5;
+  fill: rgba(247, 241, 227, 0.99);
   font-size: var(--shell-map-label-objective-size);
-  font-weight: 650;
-  letter-spacing: 0.02em;
+  font-weight: 800;
+  letter-spacing: 0.055em;
   paint-order: stroke;
   stroke: var(--shell-map-label-stroke);
   stroke-width: var(--shell-map-label-objective-halo-width);
   stroke-linejoin: round;
+  text-transform: uppercase;
+}
+
+.shell-map__objective.is-primary .shell-map__objective-label,
+.shell-map__objective.is-strategic .shell-map__objective-label,
+.shell-map__objective.is-axis-focus .shell-map__objective-label {
+  fill: rgba(246, 232, 188, 0.99);
+  letter-spacing: 0.065em;
 }
 
 .shell-map__objective-state {
-  fill: rgba(240, 230, 205, 0.86);
+  fill: rgba(239, 230, 206, 0.86);
   font-size: var(--shell-map-label-objective-meta-size);
   text-transform: uppercase;
-  letter-spacing: 0.11em;
+  letter-spacing: 0.14em;
   paint-order: stroke;
   stroke: var(--shell-map-label-stroke);
   stroke-width: var(--shell-map-label-objective-meta-halo-width);
@@ -4936,14 +5553,14 @@ textarea {
 
 .shell-map__named-feature-line {
   fill: none;
-  stroke: rgba(214, 205, 176, 0.48);
-  stroke-width: 1.15px;
+  stroke: rgba(220, 212, 184, 0.6);
+  stroke-width: 1.22px;
   stroke-dasharray: 8 6;
 }
 
 .shell-map__named-feature-zone {
-  fill: rgba(214, 205, 176, 0.05);
-  stroke: rgba(214, 205, 176, 0.34);
+  fill: rgba(220, 211, 184, 0.055);
+  stroke: rgba(220, 211, 184, 0.38);
   stroke-width: 1px;
   stroke-dasharray: 6 5;
 }
@@ -4955,8 +5572,9 @@ textarea {
 }
 
 .shell-map__named-feature--phase_line .shell-map__named-feature-line {
-  stroke: rgba(214, 188, 134, 0.54);
-  stroke-dasharray: 10 6;
+  stroke: rgba(226, 202, 148, 0.76);
+  stroke-width: 1.42px;
+  stroke-dasharray: 10 5;
 }
 
 .shell-map__named-feature--sector .shell-map__named-feature-zone,
@@ -4973,15 +5591,19 @@ textarea {
 }
 
 .shell-map__named-feature-label {
-  fill: rgba(239, 230, 213, 0.88);
+  fill: rgba(245, 237, 220, 0.94);
   font-size: var(--shell-map-label-feature-size);
-  font-weight: 650;
-  letter-spacing: 0.07em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   paint-order: stroke;
   stroke: var(--shell-map-label-stroke);
   stroke-width: var(--shell-map-label-feature-halo-width);
   stroke-linejoin: round;
+}
+
+.shell-map__named-feature--phase_line .shell-map__named-feature-label {
+  fill: rgba(235, 218, 176, 0.96);
 }
 
 .shell-map__objective.is-plannable {
@@ -5176,6 +5798,7 @@ textarea {
 
 .shell-map__unit {
   cursor: pointer;
+  filter: drop-shadow(0 1px 0 rgba(24, 26, 23, 0.68)) drop-shadow(0 4px 8px rgba(18, 20, 17, 0.22));
 }
 
 .shell-map__unit:focus-visible .shell-map__unit-body,
@@ -5186,6 +5809,10 @@ textarea {
 
 .shell-map__unit.is-selected .shell-map__unit-divider {
   stroke: var(--map-token-selection-soft);
+}
+
+.shell-map__unit.is-selected {
+  filter: drop-shadow(0 0 7px rgba(241, 226, 186, 0.26)) drop-shadow(0 6px 12px rgba(18, 20, 17, 0.3));
 }
 
 .shell-map__unit.is-primary,
@@ -5214,11 +5841,11 @@ textarea {
 }
 
 .shell-map__unit-frame-inner {
-  opacity: 0.72;
+  opacity: 0.82;
 }
 
 .shell-map__unit-frame-rule {
-  opacity: 0.56;
+  opacity: 0.64;
 }
 
 .shell-map__unit-hq-staff {
@@ -5239,16 +5866,16 @@ textarea {
 
 .shell-map__unit-code {
   fill: var(--shell-counter-code, var(--map-token-text-primary));
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: 0.07em;
+  font-size: 8.65px;
+  font-weight: 780;
+  letter-spacing: 0.085em;
 }
 
 .shell-map__unit-name {
-  fill: var(--shell-counter-name, var(--map-token-text-secondary));
+  fill: rgba(241, 233, 219, 0.92);
   font-size: var(--shell-map-label-unit-size);
-  font-weight: 600;
-  letter-spacing: 0.03em;
+  font-weight: 680;
+  letter-spacing: 0.048em;
   paint-order: stroke;
   stroke: var(--shell-map-label-stroke);
   stroke-width: var(--shell-map-label-unit-halo-width);
@@ -6003,14 +6630,15 @@ textarea {
 }
 
 .shell-map__site-label {
-  fill: var(--map-token-text-secondary);
+  fill: rgba(241, 233, 216, 0.92);
   font-size: var(--shell-map-label-site-size);
-  font-weight: 600;
-  letter-spacing: 0.03em;
+  font-weight: 640;
+  letter-spacing: 0.055em;
   paint-order: stroke;
   stroke: var(--shell-map-label-stroke);
   stroke-width: var(--shell-map-label-site-halo-width);
   stroke-linejoin: round;
+  text-transform: uppercase;
 }
 
 .shell-map__stage--underlay .shell-map__objective-label {
@@ -9392,6 +10020,22 @@ textarea {
 .shell-report--compact {
   padding: var(--shell-bottom-band-card-pad-y) var(--shell-bottom-band-card-pad-x) var(--shell-bottom-band-card-pad-bottom);
   gap: var(--shell-bottom-band-tight-gap);
+  border: 1px solid rgba(76, 79, 71, 0.42);
+  border-radius: var(--shell-bottom-band-inner-radius);
+  background: rgba(30, 31, 28, 0.16);
+}
+
+.shell-report--compact .shell-report__title {
+  -webkit-line-clamp: 1;
+  font-size: var(--shell-bottom-band-type-title-compact);
+}
+
+.shell-report--compact .shell-report__summary {
+  color: var(--shell-muted);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
 
 .shell-report__head {

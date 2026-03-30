@@ -67,7 +67,9 @@ test("location inspector sections use clearer site and status wording", () => {
 test("reports and weather cards surface clearer state wording", () => {
   assert.match(homeCommandBarSource, /shell-commandbar__state/);
   assert.match(homeCommandBarSource, /shell-commandbar__support/);
-  assert.match(homeCommandBarSource, /Current hotspot/);
+  assert.match(homeCommandBarSource, /Intelligence \/ Comms/);
+  assert.match(homeCommandBarSource, /landAlert/);
+  assert.match(homeCommandBarSource, /landOperation/);
 
   assert.match(reportsFeedSource, /Dispatch queue unavailable/);
   assert.match(reportsFeedSource, /No pending dispatches/);

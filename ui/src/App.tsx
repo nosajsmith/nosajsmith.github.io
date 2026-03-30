@@ -7,6 +7,7 @@ import HomeCommandBar from "./components/shell/HomeCommandBar";
 import MapWeatherBrief from "./components/shell/MapWeatherBrief";
 import CommunicationsCenter from "./components/shell/CommunicationsCenter";
 import BranchPlaceholder from "./components/shell/BranchPlaceholder";
+import LauncherScreen from "./components/shell/LauncherScreen";
 import TheaterDashboardScreen from "./components/shell/TheaterDashboardScreen";
 import LandOperationsScreen from "./components/shell/LandOperationsScreen";
 import LogisticsBranchScreen from "./components/shell/LogisticsBranchScreen";
@@ -18,6 +19,7 @@ import StateScreen from "./components/shell/StateScreen";
 import type { InspectorSelection } from "./components/shell/inspector_types";
 import type { PlannerWorkbenchTab } from "./components/shell/OperationPlannerPanel";
 import {
+  seedPlannerStateFromMapCommand,
   buildDefaultPlannerAssignments,
   createApprovedOperation,
   createOperationPlannerState,
@@ -26,9 +28,28 @@ import {
   sanitizeTrackedOperations,
   upsertTrackedOperation,
 } from "./components/shell/operations_planner.js";
-import type { OperationPlannerState, TrackedDemoOperation } from "./components/shell/operations_planner_types";
+import type { FastCommandPreview, OperationPlannerState, TrackedDemoOperation } from "./components/shell/operations_planner_types";
 import { makeWsRpc } from "./lib/ws_rpc";
-import { humanizeScenarioLabel } from "./lib/view_snapshot.js";
+import {
+  buildObjectiveDisplayName,
+  containsLegacySouthPacificText,
+  humanizeScenarioLabel,
+  humanizeSideLabel,
+  humanizeToken,
+  inferScenarioPresentation,
+  isKoreaScenarioContext,
+} from "./lib/view_snapshot.js";
+import {
+  DEFAULT_LAUNCHER_MUSIC_VOLUME,
+  LAUNCHER_MUSIC_SRC,
+  LAUNCHER_SESSION_KEY,
+  deriveLauncherPrimaryAction,
+  describeLauncherMusicState,
+  loadLauncherScenarioRoster,
+  normalizeLauncherMusicVolume,
+  selectLauncherScenario,
+  shouldStartInShell,
+} from "./lib/launcher.js";
 import {
   BridgeRpcError,
   bootstrapDemoScenario,
@@ -38,6 +59,7 @@ import {
   stepHours,
   wsUrl,
 } from "./lib/view_snapshot.ts";
+import { DEFAULT_PITCH_SCENARIO, pickPreferredPitchScenario, scenarioKeysMatch } from "./lib/scenario_adapter.js";
 import type { ViewSnapshot } from "./types/viewSnapshot";
 import { summarizeCommunications } from "./components/shell/communications_summary.js";
 import { buildMapScene, buildOperationalOverlayState } from "./components/shell/map_scene.js";
@@ -117,20 +139,152 @@ function formatPreviousSnapshotLabel(snapshot: ViewSnapshot | null): string | nu
   return parts.length ? `previous snapshot (${parts.join(" • ")})` : "previous snapshot";
 }
 
+function formatMapReference(entry: { x?: number | null; y?: number | null } | null | undefined): string | null {
+  if (!entry || typeof entry.x !== "number" || typeof entry.y !== "number") {
+    return null;
+  }
+  return `Hex ${entry.x}, ${entry.y}`;
+}
+
+function buildSelectionSummary(
+  snapshot: ViewSnapshot | null,
+  selection: InspectorSelection | null,
+  operations: TrackedDemoOperation[] = [],
+): { label: string; detail: string } | null {
+  if (!snapshot || !selection) {
+    return null;
+  }
+
+  switch (selection.kind) {
+    case "unit": {
+      const unit = snapshot.units.find((entry) => entry.id === selection.id);
+      if (!unit) {
+        return null;
+      }
+      const inspector = unit.inspector && typeof unit.inspector === "object" ? unit.inspector : {};
+      const operational = inspector.operational_state && typeof inspector.operational_state === "object" ? inspector.operational_state : {};
+      const supply = inspector.supply && typeof inspector.supply === "object" ? inspector.supply : {};
+      const orders = inspector.orders && typeof inspector.orders === "object" ? inspector.orders : {};
+      const liveOrder = Array.isArray(snapshot?.bai_report?.unit_orders)
+        ? snapshot.bai_report.unit_orders.find((order) => String(order?.unit_id ?? "").trim() === String(unit.id ?? "").trim()) ?? null
+        : null;
+      const trackedOperation = operations.find((operation) => (
+        operation?.seedUnitId === unit.id
+        || (Array.isArray(operation?.participants) && operation.participants.some((participant) => participant?.unitId === unit.id))
+      )) ?? null;
+      const location = String(operational.location_status ?? unit.location_id ?? "").trim();
+      const readiness = typeof operational.readiness === "number"
+        ? `${Math.round(operational.readiness)} readiness`
+        : typeof unit.readiness === "number"
+          ? `${Math.round(unit.readiness)} readiness`
+          : "";
+      const supplyState = typeof supply.supply_days_current === "number"
+        ? `${supply.supply_days_current.toFixed(1)}d supply`
+        : typeof supply.supply_pct === "number"
+          ? `${Math.round(supply.supply_pct)}% supply`
+          : "";
+      const locState = String(operational?.loc?.label ?? "").trim();
+      const taskAction = String(liveOrder?.action ?? trackedOperation?.commandIntent ?? orders.action ?? "").trim();
+      const taskTarget = String(
+        liveOrder?.target_location_id
+          ?? liveOrder?.objective_id
+          ?? trackedOperation?.targetLabel
+          ?? trackedOperation?.objectiveName
+          ?? "",
+      ).trim();
+      const taskStatus = String(
+        liveOrder?.lifecycle_state
+          ?? liveOrder?.status
+          ?? (trackedOperation
+            ? trackedOperation.source === "map_shortcut"
+              ? "queued"
+              : "approved"
+            : orders.lifecycle_state ?? orders.status ?? "")
+      ).trim();
+      const taskDetail = [
+        taskAction ? humanizeToken(taskAction) : "",
+        taskTarget ? humanizeToken(taskTarget) : "",
+        taskStatus ? humanizeToken(taskStatus) : "",
+      ].filter(Boolean).join(" • ");
+      const detail = [
+        humanizeSideLabel(unit.side),
+        humanizeToken(unit.unit_type ?? unit.kind ?? "formation"),
+        location ? humanizeToken(location) : formatMapReference(unit),
+        readiness,
+        supplyState,
+        locState,
+        taskDetail ? `Task ${taskDetail}` : "",
+      ].filter(Boolean).join(" • ");
+
+      return {
+        label: String(unit.name ?? unit.id ?? "Formation").trim() || "Formation",
+        detail: detail || "Selected formation",
+      };
+    }
+    case "objective": {
+      const objective = snapshot.objectives.find((entry) => entry.id === selection.id);
+      if (!objective) {
+        return null;
+      }
+      const detail = [
+        objective.state ? humanizeToken(objective.state) : "",
+        objective.side ? humanizeSideLabel(objective.side) : "",
+        typeof objective.value === "number" ? `Value ${objective.value}` : "",
+      ].filter(Boolean).join(" • ");
+
+      return {
+        label: buildObjectiveDisplayName(objective),
+        detail: detail || "Selected objective",
+      };
+    }
+    case "airfield": {
+      const airfield = snapshot.airfields.find((entry) => entry.id === selection.id);
+      if (!airfield) {
+        return null;
+      }
+      const detail = [
+        airfield.state || airfield.control_state ? humanizeToken(airfield.state ?? airfield.control_state) : "",
+        airfield.side ? humanizeSideLabel(airfield.side) : "",
+        formatMapReference(airfield),
+      ].filter(Boolean).join(" • ");
+
+      return {
+        label: String(airfield.name ?? airfield.id ?? "Airfield").trim() || "Airfield",
+        detail: detail || "Selected airfield",
+      };
+    }
+    case "port": {
+      const port = snapshot.ports.find((entry) => entry.id === selection.id);
+      if (!port) {
+        return null;
+      }
+
+      return {
+        label: String(port.name ?? port.id ?? "Port").trim() || "Port",
+        detail: [humanizeToken("port anchor"), formatMapReference(port)].filter(Boolean).join(" • ") || "Selected port",
+      };
+    }
+    default:
+      return null;
+  }
+}
+
 function buildToolbarLayerCatalog(
   scene: ReturnType<typeof buildMapScene> | null,
   overlayState: ReturnType<typeof buildOperationalOverlayState> | null,
   greaseEnabled: boolean,
   greaseMarkupCount: number,
   basemapAvailable: boolean,
+  snapshot: ViewSnapshot | null,
 ) {
+  const presentation = inferScenarioPresentation(snapshot ?? undefined);
   return {
     basemap: {
       label: "Packaged basemap",
       available: basemapAvailable,
       status: basemapAvailable ? "Packaged" : "Unavailable",
       detail: basemapAvailable
-        ? "Hex-space runtime basemap package is available for the current theater family."
+        ? `${presentation.basemapLabel} is available for the active scenario shell path.`
         : "No packaged runtime basemap is registered for the current scenario family.",
     },
     historicalUnderlay: overlayState?.historicalUnderlay ?? {
@@ -224,6 +378,88 @@ function buildToolbarLayerCatalog(
   };
 }
 
+function preferredScenarioChoice(scenarios: string[]): string {
+  return pickPreferredPitchScenario(scenarios) ?? "";
+}
+
+function snapshotScenarioValue(snapshot: ViewSnapshot | null): string {
+  return String(snapshot?.scenario?.id ?? snapshot?.scenario?.name ?? "").trim();
+}
+
+function snapshotMatchesScenarioSelection(snapshot: ViewSnapshot | null, selectedScenario: string): boolean {
+  if (!selectedScenario) {
+    return Boolean(snapshot);
+  }
+  return scenarioKeysMatch(selectedScenario, snapshotScenarioValue(snapshot));
+}
+
+function readLauncherOpenPreference(): boolean {
+  if (typeof window === "undefined") {
+    return false;
+  }
+  const persistedDismissed = window.sessionStorage.getItem(LAUNCHER_SESSION_KEY) === "true";
+  return !shouldStartInShell(window.location.search, persistedDismissed);
+}
+
+function readUnknownLabel(value: unknown): string | null {
+  if (value == null) {
+    return null;
+  }
+  if (typeof value === "string" || typeof value === "number") {
+    const raw = String(value).trim();
+    return raw ? humanizeToken(raw) : null;
+  }
+  if (typeof value === "object") {
+    for (const key of ["name", "label", "title", "objective_id", "target_objective", "target_location_id", "id"]) {
+      const candidate = (value as Record<string, unknown>)[key];
+      if (candidate != null) {
+        const raw = String(candidate).trim();
+        if (raw) {
+          return humanizeToken(raw);
+        }
+      }
+    }
+  }
+  return null;
+}
+
+function readLauncherObjective(snapshot: ViewSnapshot | null, scenarioContext: unknown = snapshot): string {
+  const suppressLegacy = isKoreaScenarioContext(scenarioContext);
+  const greaseObjective = snapshot?.grease_board?.objective?.trim();
+  if (greaseObjective && !(suppressLegacy && containsLegacySouthPacificText(greaseObjective))) {
+    return greaseObjective;
+  }
+  const aiObjective = readUnknownLabel(snapshot?.bai_report?.main_objective);
+  if (aiObjective && !(suppressLegacy && containsLegacySouthPacificText(aiObjective))) {
+    return aiObjective;
+  }
+  const topObjective = [...(snapshot?.objectives ?? [])]
+    .filter((objective) => !(suppressLegacy && containsLegacySouthPacificText(objective?.name)))
+    .sort((left, right) => (Number(right.value ?? 0) - Number(left.value ?? 0)))
+    .find((objective) => Boolean(objective.name || objective.id));
+  if (topObjective) {
+    return buildObjectiveDisplayName(topObjective);
+  }
+  return "Seoul Axis";
+}
+
+function readLauncherMainEffort(snapshot: ViewSnapshot | null, scenarioContext: unknown = snapshot): string {
+  const suppressLegacy = isKoreaScenarioContext(scenarioContext);
+  const greaseEffort = snapshot?.grease_board?.main_effort?.trim();
+  if (greaseEffort && !(suppressLegacy && containsLegacySouthPacificText(greaseEffort))) {
+    return greaseEffort;
+  }
+  const chosenOperation = readUnknownLabel(snapshot?.bai_report?.chosen_operation);
+  if (chosenOperation && !(suppressLegacy && containsLegacySouthPacificText(chosenOperation))) {
+    return chosenOperation;
+  }
+  const aiIntent = snapshot?.ai?.last_intent?.trim();
+  if (aiIntent && !(suppressLegacy && containsLegacySouthPacificText(aiIntent))) {
+    return humanizeToken(aiIntent);
+  }
+  return "Inchon / Seoul Push";
+}
+
 export default function App() {
   const rpc = useMemo(() => makeWsRpc(wsUrl(), { proto: "1.0" }), []);
   const isPrintPreview = useMemo(() => new URLSearchParams(window.location.search).get("print") === "1", []);
@@ -250,8 +486,19 @@ export default function App() {
   const [mapLayerToggles, setMapLayerToggles] = useState<Record<string, boolean>>({});
   const [greaseMarkup, setGreaseMarkup] = useState<GreaseMarkupState>(() => createGreaseMarkupState(null));
   const [autoSaveEnabled, setAutoSaveEnabled] = useState<boolean>(() => readStoredAutoSaveEnabled());
+  const [launcherOpen, setLauncherOpen] = useState<boolean>(() => readLauncherOpenPreference());
+  const [launcherMusicEnabled, setLauncherMusicEnabled] = useState(false);
+  const [launcherMusicAvailable, setLauncherMusicAvailable] = useState<boolean | null>(null);
+  const [launcherMusicPlaying, setLauncherMusicPlaying] = useState(false);
+  const [launcherMusicVolume, setLauncherMusicVolume] = useState(DEFAULT_LAUNCHER_MUSIC_VOLUME);
   const snapshotRef = useRef<ViewSnapshot | null>(null);
-  const aiControlAvailable = false;
+  const launcherAudioRef = useRef<HTMLAudioElement | null>(null);
+  const aiControlAvailable = Boolean(snapshot?.ai?.controller_available ?? snapshot?.ai?.enabled);
+  const aiActivityState = !snapshot || !aiControlAvailable
+    ? "unavailable"
+    : actionKind === "ai" || Boolean(snapshot.ai.last_orders && snapshot.ai.last_orders > 0)
+      ? "active"
+      : "idle";
   const plannerState = useMemo(() => sanitizeOperationPlannerState(snapshot, operationPlanner), [snapshot, operationPlanner]);
   const toolbarScene = useMemo(
     () => (snapshot ? buildMapScene(snapshot, { width: 1000, height: 620, inset: 60 }) : null),
@@ -268,6 +515,7 @@ export default function App() {
       plannerState.greaseEnabled,
       greaseMarkup.items.length,
       Boolean(snapshot && resolveBasemapPackageTheater(snapshot)),
+      snapshot ?? null,
     ),
     [toolbarScene, toolbarOverlayState, plannerState.greaseEnabled, greaseMarkup.items.length, snapshot],
   );
@@ -315,6 +563,49 @@ export default function App() {
   const activeLayerCount = useMemo(
     () => toolbarOverlayManager.registry.filter((layer) => layer.toggleable && isMapLayerEnabled(toolbarOverlayManager, layer.id)).length,
     [toolbarOverlayManager],
+  );
+  const fallbackPitchScenario = selectedScenario || preferredScenarioChoice(scenarios) || DEFAULT_PITCH_SCENARIO;
+  const launcherScenarioMismatch = useMemo(
+    () => Boolean(snapshot && selectedScenario && !snapshotMatchesScenarioSelection(snapshot, selectedScenario)),
+    [snapshot, selectedScenario],
+  );
+  const launcherScenarioContext = useMemo(
+    () => (
+      snapshot && !launcherScenarioMismatch
+        ? snapshot
+        : { scenario: { id: fallbackPitchScenario, name: fallbackPitchScenario } }
+    ),
+    [snapshot, launcherScenarioMismatch, fallbackPitchScenario],
+  );
+  const launcherPresentation = useMemo(
+    () => inferScenarioPresentation(launcherScenarioContext),
+    [launcherScenarioContext],
+  );
+  const launcherObjective = useMemo(
+    () => readLauncherObjective(snapshot, launcherScenarioContext),
+    [snapshot, launcherScenarioContext],
+  );
+  const launcherMainEffort = useMemo(
+    () => readLauncherMainEffort(snapshot, launcherScenarioContext),
+    [snapshot, launcherScenarioContext],
+  );
+  const launcherPrimaryAction = useMemo(
+    () => deriveLauncherPrimaryAction({
+      hasSnapshot: Boolean(snapshot),
+      phase,
+      selectedScenario,
+      activeScenario: snapshotScenarioValue(snapshot),
+      actionKind,
+    }),
+    [snapshot, phase, selectedScenario, actionKind],
+  );
+  const launcherMusicLabel = useMemo(
+    () => describeLauncherMusicState({
+      available: launcherMusicAvailable,
+      enabled: launcherMusicEnabled,
+      playing: launcherMusicPlaying,
+    }),
+    [launcherMusicAvailable, launcherMusicEnabled, launcherMusicPlaying],
   );
 
   const updateOperationPlanner = (updater: (current: OperationPlannerState) => OperationPlannerState) => {
@@ -475,6 +766,39 @@ export default function App() {
     },
   };
 
+  function commitFastCommand(preview: FastCommandPreview | null) {
+    if (!snapshot || !preview?.available) {
+      return;
+    }
+
+    const seededPlannerState = seedPlannerStateFromMapCommand(snapshot, plannerState, preview);
+
+    setActiveBranch("Theatre");
+    setPlannerWorkbenchTab("plan");
+    setSelectedSelection({ kind: "unit", id: preview.unitId });
+    setDetailDrawerOpen(true);
+
+    if (preview.commandIntent === "operation" || preview.mode === "planner_review") {
+      setOperationPlanner(seededPlannerState);
+      setControlStatus(preview.note);
+      return;
+    }
+
+    const approvedOperation = createApprovedOperation(snapshot, seededPlannerState);
+    if (!approvedOperation) {
+      setOperationPlanner(seededPlannerState);
+      setControlStatus("Fast command seeded the planner, but deliberate objective review is still required.");
+      return;
+    }
+
+    setOperationPlanner(sanitizeOperationPlannerState(snapshot, {
+      ...seededPlannerState,
+      approved: true,
+    }));
+    setApprovedOperations((current) => upsertTrackedOperation(sanitizeTrackedOperations(snapshot, current), approvedOperation));
+    setControlStatus(preview.note);
+  }
+
   const openPlannerWorkbench = (tab: PlannerWorkbenchTab) => {
     if (!snapshot) {
       return;
@@ -532,16 +856,18 @@ export default function App() {
   async function refreshScenarioList() {
     setScenariosLoading(true);
     try {
-      await rpc.connect();
-      setConnected(true);
-      const nextScenarios = await listScenarios(rpc);
-      setScenarios(nextScenarios);
-      setSelectedScenario((current) => {
-        if (current && nextScenarios.includes(current)) {
-          return current;
-        }
-        return nextScenarios[0] ?? "";
+      const nextScenarios = await loadLauncherScenarioRoster({
+        connect: () => rpc.connect(),
+        listScenarios: () => listScenarios(rpc),
       });
+      setConnected(true);
+      setScenarios(nextScenarios);
+      setSelectedScenario((current) => selectLauncherScenario(current, nextScenarios));
+      setControlStatus(
+        nextScenarios.length
+          ? `${nextScenarios.length} scenario${nextScenarios.length === 1 ? "" : "s"} available on the active bridge.`
+          : "No scenarios are available on the active bridge.",
+      );
     } catch (error) {
       setControlStatus(error instanceof Error ? error.message : "Unable to load scenarios.");
     } finally {
@@ -595,7 +921,7 @@ export default function App() {
     }
   }
 
-  async function launchDemo() {
+  async function launchDemo(): Promise<boolean> {
     setActionKind("launch");
     setControlStatus("Launching demo scenario...");
     try {
@@ -604,30 +930,40 @@ export default function App() {
       snapshotRef.current = null;
       setPreviousSnapshot(null);
       setApprovedOperations([]);
-      const started = await bootstrapDemoScenario(rpc);
-      if (started) {
+      const startedScenario = await bootstrapDemoScenario(rpc);
+      if (startedScenario) {
         const [refreshed] = await Promise.all([loadSnapshot(), refreshScenarioList()]);
+        if (refreshed && !snapshotMatchesScenarioSelection(snapshotRef.current, startedScenario)) {
+          const runtimeLabel = humanizeScenarioLabel(snapshotScenarioValue(snapshotRef.current) || "unknown scenario");
+          setControlStatus(`Selected ${humanizeScenarioLabel(startedScenario)}, but bridge returned ${runtimeLabel}. Refusing silent fallback.`);
+          return false;
+        }
+        setSelectedScenario(startedScenario);
         setControlStatus(refreshed ? "Demo scenario launched." : "Scenario launched, but picture refresh failed.");
+        return true;
       } else {
         setPhase("empty");
         setControlStatus("No scenarios are available on the active bridge.");
         setMessage("No scenarios are available on the active bridge.");
+        return false;
       }
     } catch (error) {
       setPhase("bridge_error");
       setConnected(false);
       setControlStatus(error instanceof Error ? error.message : "Unable to reach the bridge.");
+      return false;
     } finally {
       setActionKind(null);
     }
   }
 
-  async function launchSelectedScenario() {
+  async function launchSelectedScenario(): Promise<boolean> {
     if (!selectedScenario) {
       setControlStatus("No scenario is selected.");
-      return;
+      return false;
     }
-    const scenarioLabel = humanizeScenarioLabel(selectedScenario);
+    const targetScenario = selectedScenario;
+    const scenarioLabel = humanizeScenarioLabel(targetScenario);
     setActionKind("launch");
     setControlStatus(`Launching ${scenarioLabel}...`);
     try {
@@ -636,22 +972,30 @@ export default function App() {
       snapshotRef.current = null;
       setPreviousSnapshot(null);
       setApprovedOperations([]);
-      await launchScenario(rpc, selectedScenario);
+      await launchScenario(rpc, targetScenario);
       const refreshed = await loadSnapshot();
+      if (refreshed && !snapshotMatchesScenarioSelection(snapshotRef.current, targetScenario)) {
+        const runtimeLabel = humanizeScenarioLabel(snapshotScenarioValue(snapshotRef.current) || "unknown scenario");
+        setControlStatus(`Selected ${scenarioLabel}, but bridge returned ${runtimeLabel}. Refusing silent fallback.`);
+        return false;
+      }
       setControlStatus(refreshed ? `${scenarioLabel} launched.` : `${scenarioLabel} launched, but refresh failed.`);
+      return true;
     } catch (error) {
       setControlStatus(error instanceof Error ? error.message : "Scenario launch failed.");
+      return false;
     } finally {
       setActionKind(null);
     }
   }
 
-  async function refreshPicture() {
+  async function refreshPicture(): Promise<boolean> {
     setActionKind("refresh");
     setControlStatus("Refreshing situation...");
     try {
       const refreshed = await loadSnapshot();
       setControlStatus(refreshed ? "Situation refreshed." : "Refresh failed.");
+      return refreshed;
     } finally {
       setActionKind(null);
     }
@@ -663,9 +1007,19 @@ export default function App() {
     try {
       await rpc.connect();
       setConnected(true);
-      await stepHours(rpc, 6);
+      const advanceResult = await stepHours(rpc, 6);
       const refreshed = await loadSnapshot();
-      setControlStatus(refreshed ? "Advanced by +6 hours." : "Time advanced, but refresh failed.");
+      if (refreshed) {
+        setControlStatus(
+          advanceResult.dtHoursApplied
+            ? "Advanced by +6 hours."
+            : advanceResult.command === "process_turn"
+              ? "Processed live turn update."
+              : "Advanced using bridge fallback timing.",
+        );
+      } else {
+        setControlStatus("Time advanced, but refresh failed.");
+      }
     } catch (error) {
       setControlStatus(error instanceof Error ? error.message : "Unable to advance time.");
     } finally {
@@ -712,6 +1066,85 @@ export default function App() {
     setControlStatus("Snapshot load is not wired into this shell path yet.");
   }
 
+  function finalizeEnterCommandShell() {
+    const audio = launcherAudioRef.current;
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+    setLauncherMusicEnabled(false);
+    setLauncherMusicPlaying(false);
+    setLauncherOpen(false);
+  }
+
+  async function enterCommandShell() {
+    if (selectedScenario && !snapshotMatchesScenarioSelection(snapshotRef.current, selectedScenario)) {
+      setControlStatus(`Syncing ${humanizeScenarioLabel(selectedScenario)} with the live command shell...`);
+      const launched = await launchSelectedScenario();
+      if (!launched) {
+        return;
+      }
+    }
+    finalizeEnterCommandShell();
+  }
+
+  async function handleLauncherPrimaryAction() {
+    if (launcherPrimaryAction.disabled) {
+      return;
+    }
+    if (launcherPrimaryAction.intent === "enter") {
+      await enterCommandShell();
+      return;
+    }
+    if (launcherPrimaryAction.intent === "refresh") {
+      const refreshed = await refreshPicture();
+      if (refreshed && snapshotRef.current) {
+        await enterCommandShell();
+      }
+      return;
+    }
+    const launched = selectedScenario ? await launchSelectedScenario() : await launchDemo();
+    if (launched) {
+      finalizeEnterCommandShell();
+    }
+  }
+
+  async function toggleLauncherMusic() {
+    if (launcherMusicAvailable === false) {
+      return;
+    }
+    const audio = launcherAudioRef.current;
+    if (!audio) {
+      return;
+    }
+    if (launcherMusicEnabled) {
+      audio.pause();
+      audio.currentTime = 0;
+      setLauncherMusicEnabled(false);
+      setLauncherMusicPlaying(false);
+      return;
+    }
+    audio.volume = normalizeLauncherMusicVolume(launcherMusicVolume);
+    audio.currentTime = 0;
+    setLauncherMusicEnabled(true);
+    try {
+      await audio.play();
+      setLauncherMusicAvailable(true);
+      setLauncherMusicPlaying(true);
+    } catch {
+      setLauncherMusicPlaying(false);
+    }
+  }
+
+  function updateLauncherMusicVolume(nextValue: number) {
+    const volume = normalizeLauncherMusicVolume(nextValue);
+    setLauncherMusicVolume(volume);
+    const audio = launcherAudioRef.current;
+    if (audio) {
+      audio.volume = volume;
+    }
+  }
+
   useEffect(() => {
     void refreshScenarioList();
     void loadSnapshot();
@@ -721,6 +1154,32 @@ export default function App() {
       rpc.close();
     };
   }, [rpc]);
+
+  useEffect(() => {
+    if (scenariosLoading || refreshing || actionKind === "launch") {
+      return undefined;
+    }
+    if (connected && scenarios.length > 0) {
+      return undefined;
+    }
+    const timer = window.setTimeout(() => {
+      void refreshScenarioList();
+    }, 4000);
+    return () => window.clearTimeout(timer);
+  }, [actionKind, connected, refreshing, scenarios.length, scenariosLoading]);
+
+  useEffect(() => {
+    if (refreshing || actionKind === "launch") {
+      return undefined;
+    }
+    if (!connected || phase !== "bridge_error") {
+      return undefined;
+    }
+    const timer = window.setTimeout(() => {
+      void loadSnapshot();
+    }, 4500);
+    return () => window.clearTimeout(timer);
+  }, [actionKind, connected, phase, refreshing]);
 
   useEffect(() => {
     if (phase !== "ready") {
@@ -773,6 +1232,71 @@ export default function App() {
   }, [autoSaveEnabled]);
 
   useEffect(() => {
+    if (launcherOpen) {
+      window.sessionStorage.removeItem(LAUNCHER_SESSION_KEY);
+    } else {
+      window.sessionStorage.setItem(LAUNCHER_SESSION_KEY, "true");
+    }
+  }, [launcherOpen]);
+
+  useEffect(() => {
+    const audio = launcherAudioRef.current;
+    if (!audio) {
+      return;
+    }
+    audio.volume = normalizeLauncherMusicVolume(launcherMusicVolume);
+  }, [launcherMusicVolume]);
+
+  useEffect(() => {
+    const audio = launcherAudioRef.current;
+    if (!audio) {
+      return undefined;
+    }
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        audio.pause();
+        setLauncherMusicPlaying(false);
+        return;
+      }
+      if (!launcherOpen || !launcherMusicEnabled || launcherMusicAvailable === false) {
+        return;
+      }
+      void audio.play().then(
+        () => {
+          setLauncherMusicAvailable(true);
+          setLauncherMusicPlaying(true);
+        },
+        () => {
+          setLauncherMusicPlaying(false);
+        },
+      );
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, [launcherMusicAvailable, launcherMusicEnabled, launcherOpen]);
+
+  useEffect(() => {
+    const audio = launcherAudioRef.current;
+    if (!audio) {
+      return;
+    }
+    if (!launcherOpen || !launcherMusicEnabled || launcherMusicAvailable === false) {
+      audio.pause();
+      setLauncherMusicPlaying(false);
+      return;
+    }
+    void audio.play().then(
+      () => {
+        setLauncherMusicAvailable(true);
+        setLauncherMusicPlaying(true);
+      },
+      () => {
+        setLauncherMusicPlaying(false);
+      },
+    );
+  }, [launcherOpen, launcherMusicEnabled, launcherMusicAvailable]);
+
+  useEffect(() => {
     document.documentElement.classList.toggle("shell-html--print", isPrintPreview);
     document.body.classList.toggle("shell-body--print", isPrintPreview);
     return () => {
@@ -781,11 +1305,14 @@ export default function App() {
     };
   }, [isPrintPreview]);
 
+  const trackedOperations = phase === "ready" && snapshot
+    ? sanitizeTrackedOperations(snapshot, approvedOperations)
+    : [];
+
   let body;
   if (phase === "ready" && snapshot) {
-    const communications = summarizeCommunications(snapshot.reports);
+    const communications = summarizeCommunications(snapshot, trackedOperations);
     const selectedUnitId = selectedSelection?.kind === "unit" ? selectedSelection.id : null;
-    const trackedOperations = sanitizeTrackedOperations(snapshot, approvedOperations);
     const previousSnapshotLabel = previousSnapshot && previousSnapshot.scenario?.id === snapshot.scenario?.id
       ? formatPreviousSnapshotLabel(previousSnapshot)
       : null;
@@ -833,6 +1360,7 @@ export default function App() {
               greaseMarkupActions={greaseMarkupActions}
               onToggleLayer={toggleMapOverlay}
               onSelectPlannerWorkbenchTab={setPlannerWorkbenchTab}
+              onCommitFastCommand={commitFastCommand}
               onSelectSelection={(selection) => {
                 setSelectedSelection(selection);
                 setDetailDrawerOpen(true);
@@ -841,6 +1369,7 @@ export default function App() {
             <MainMapDrawer
               snapshot={snapshot}
               selection={selectedSelection}
+              operations={trackedOperations}
               previousSelectedUnit={previousSelectedUnit}
               previousSnapshotLabel={previousSnapshotLabel}
               open={detailDrawerOpen}
@@ -866,6 +1395,7 @@ export default function App() {
             </div>
             <ReportsFeed
               snapshot={snapshot}
+              operations={trackedOperations}
               onOpenCenter={() => {
                 setCommunicationsOpen(true);
                 if (!selectedCommunicationId && communications.latest) {
@@ -904,7 +1434,7 @@ export default function App() {
       ) : activeBranch === "Naval" ? (
         <NavalOperationsScreen snapshot={snapshot} onReturnHome={() => setActiveBranch("Theatre")} />
       ) : activeBranch === "Intelligence" ? (
-        <IntelligenceBranchScreen snapshot={snapshot} onReturnHome={() => setActiveBranch("Theatre")} />
+        <IntelligenceBranchScreen snapshot={snapshot} operations={trackedOperations} onReturnHome={() => setActiveBranch("Theatre")} />
       ) : activeBranch === "Logistics" ? (
         <LogisticsBranchScreen
           snapshot={snapshot}
@@ -956,7 +1486,7 @@ export default function App() {
     body = <StateScreen title="Loading shell" message={message} />;
   }
 
-  return (
+  const shellChrome = (
     <div className={`shell-root${isPrintPreview ? " shell-root--print" : ""}`}>
       <TopStrip
         snapshot={snapshot}
@@ -971,8 +1501,9 @@ export default function App() {
         controlStatus={controlStatus}
         actionKind={actionKind}
         aiControlAvailable={aiControlAvailable}
-        aiActivityState={!snapshot || !aiControlAvailable ? "unavailable" : actionKind === "ai" ? "active" : "idle"}
+        aiActivityState={aiActivityState}
         autoSaveEnabled={autoSaveEnabled}
+        selectionSummary={phase === "ready" && snapshot ? buildSelectionSummary(snapshot, selectedSelection, trackedOperations) : null}
         onSelectBranch={setActiveBranch}
         onOpenPlannerWorkbench={openPlannerWorkbench}
         onSelectScenario={setSelectedScenario}
@@ -987,5 +1518,61 @@ export default function App() {
       />
       {body}
     </div>
+  );
+
+  return (
+    <>
+      <audio
+        ref={launcherAudioRef}
+        src={LAUNCHER_MUSIC_SRC}
+        loop
+        preload="metadata"
+        playsInline
+        onLoadedMetadata={() => setLauncherMusicAvailable(true)}
+        onCanPlayThrough={() => setLauncherMusicAvailable(true)}
+        onError={() => {
+          setLauncherMusicAvailable(false);
+          setLauncherMusicEnabled(false);
+          setLauncherMusicPlaying(false);
+        }}
+        onPause={() => setLauncherMusicPlaying(false)}
+        onPlay={() => setLauncherMusicPlaying(true)}
+      />
+      {launcherOpen && !isPrintPreview ? (
+        <LauncherScreen
+          title="Theater of Operations"
+          subtitle="Inchon"
+          theaterLabel={launcherPresentation.theaterLabel}
+          scenarioName={launcherPresentation.scenarioLabel}
+          scenarioStatus={launcherScenarioMismatch
+            ? `Runtime mismatch: ${humanizeScenarioLabel(snapshotScenarioValue(snapshot))} is active`
+            : snapshot ? "Live operational picture ready" : phase === "bridge_error" ? "Bridge offline" : "Awaiting launch state"}
+          bridgeStatus={connected ? "Connected" : "Offline"}
+          currentTurn={snapshot?.time.turn != null ? `Turn ${snapshot.time.turn}` : "Turn unavailable"}
+          currentPhase={snapshot?.time.phase ? humanizeToken(snapshot.time.phase) : "Phase unavailable"}
+          objective={launcherObjective}
+          mainEffort={launcherMainEffort}
+          selectedScenario={selectedScenario}
+          scenarios={scenarios}
+          scenariosLoading={scenariosLoading}
+          controlStatus={controlStatus}
+          primaryActionLabel={launcherPrimaryAction.label}
+          primaryActionDisabled={launcherPrimaryAction.disabled}
+          enterActionDisabled={actionKind !== null}
+          refreshDisabled={refreshing || actionKind !== null}
+          musicLabel={launcherMusicLabel}
+          musicVolume={launcherMusicVolume}
+          musicDisabled={launcherMusicAvailable === false}
+          musicEnabled={launcherMusicEnabled}
+          onSelectScenario={setSelectedScenario}
+          onPrimaryAction={() => void handleLauncherPrimaryAction()}
+          onEnterShell={() => void enterCommandShell()}
+          onRefresh={() => void refreshPicture()}
+          onToggleMusic={() => void toggleLauncherMusic()}
+          onSetMusicVolume={updateLauncherMusicVolume}
+        />
+      ) : null}
+      {!launcherOpen || isPrintPreview ? shellChrome : null}
+    </>
   );
 }

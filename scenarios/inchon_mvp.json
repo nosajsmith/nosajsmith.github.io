@@ -1,0 +1,593 @@
+{
+  "id": "inchon_mvp",
+  "scenario_id": "inchon_mvp",
+  "name": "Inchon Demo Vertical Slice",
+  "description": "Curated Inchon-to-Seoul publisher vertical slice for Theater of Operations: Korea.",
+  "theater_id": "korea_peninsula_coarse_v1",
+  "map_package": "korea_peninsula_coarse_v1",
+  "map_presentation": {
+    "hex_scale_km": 5,
+    "playable_scale_locked": true,
+    "world_bounds": {
+      "min_x": 14.2,
+      "max_x": 51.2,
+      "min_y": 31,
+      "max_y": 60.8
+    },
+    "basemap_raw_bounds": {
+      "min_x": -2.32,
+      "max_x": 0.72,
+      "min_y": 21.02,
+      "max_y": 22.34
+    },
+    "focus_points": [
+      { "id": "focus_inchon_harbor", "label": "Inchon Harbor", "x": 18.2, "y": 58.1 },
+      { "id": "focus_inchon_beachhead", "label": "Inchon Beachhead", "x": 20.8, "y": 55.1 },
+      { "id": "focus_kimpo_airfield", "label": "Kimpo Airfield", "x": 31, "y": 46 },
+      { "id": "focus_yongdungpo_crossings", "label": "Yongdungpo Crossings", "x": 39.4, "y": 40.6 },
+      { "id": "focus_seoul", "label": "Seoul", "x": 46, "y": 36 },
+      { "id": "focus_seoul_ring", "label": "Seoul Defensive Ring", "x": 47.2, "y": 34.4 },
+      { "id": "focus_kpa_reserve", "label": "NKPA Reserve Belt", "x": 49.1, "y": 32.6 }
+    ]
+  },
+  "start_day": 1,
+  "weather": "Clear",
+  "grease_board": {
+    "turn": "TURN 1 — 15 SEP 1950",
+    "objective": "SEOUL",
+    "front_status": "INCHON BEACHHEAD SECURE",
+    "supply_status": "PORT OPEN / AXIS ADVANCE",
+    "main_effort": "INCHON / SEOUL AXIS",
+    "orders": [
+      "1st Marines push east from Inchon toward Kimpo.",
+      "7th Infantry secures the beachhead and port throughput.",
+      "Axis garrison falls back onto the Seoul defensive ring."
+    ],
+    "alerts": [
+      "Kimpo corridor remains contested.",
+      "NKPA reserves are forming south of Seoul."
+    ],
+    "staff_notes": "Exploit the landing before the Seoul defensive ring stabilizes."
+  },
+  "map": {
+    "tiles": {
+      "INCHON_PORT": {
+        "name": "Inchon Harbor",
+        "terrain": "URBAN",
+        "neighbors": ["KIMPO_AIRFIELD"],
+        "is_port": true,
+        "is_airfield": false,
+        "base_move_cost": 1,
+        "defense_bonus": 2,
+        "supply_bonus": 3
+      },
+      "KIMPO_AIRFIELD": {
+        "name": "Kimpo Airfield",
+        "terrain": "CLEAR",
+        "neighbors": ["INCHON_PORT", "YONGDUNGPO", "SEOUL"],
+        "is_port": false,
+        "is_airfield": true,
+        "base_move_cost": 1,
+        "defense_bonus": 1,
+        "supply_bonus": 1
+      },
+      "YONGDUNGPO": {
+        "name": "Yongdungpo",
+        "terrain": "URBAN",
+        "neighbors": ["KIMPO_AIRFIELD", "SEOUL", "SUWON"],
+        "is_port": false,
+        "is_airfield": false,
+        "base_move_cost": 1,
+        "defense_bonus": 2,
+        "supply_bonus": 1
+      },
+      "SEOUL": {
+        "name": "Seoul",
+        "terrain": "URBAN",
+        "neighbors": ["KIMPO_AIRFIELD", "YONGDUNGPO", "SUWON"],
+        "is_port": false,
+        "is_airfield": false,
+        "base_move_cost": 1,
+        "defense_bonus": 3,
+        "supply_bonus": 2
+      },
+      "SUWON": {
+        "name": "Suwon",
+        "terrain": "CLEAR",
+        "neighbors": ["SEOUL", "YONGDUNGPO"],
+        "is_port": false,
+        "is_airfield": false,
+        "base_move_cost": 1,
+        "defense_bonus": 1,
+        "supply_bonus": 1
+      }
+    }
+  },
+  "ports": [
+    {
+      "id": "INCHON_PORT",
+      "name": "Inchon Harbor",
+      "location_id": "INCHON_PORT",
+      "x": 18,
+      "y": 58
+    }
+  ],
+  "airfields": [
+    {
+      "id": "KIMPO_AIRFIELD",
+      "name": "Kimpo Airfield",
+      "location_id": "KIMPO_AIRFIELD",
+      "x": 31,
+      "y": 46
+    }
+  ],
+  "named_features": [
+    {
+      "id": "inchon_beachhead_feature",
+      "label": "Inchon Beachhead",
+      "map_label": "INCHON BEACHHEAD",
+      "kind": "sector",
+      "geometry_type": "zone",
+      "visibility": "always",
+      "label_priority": 5,
+      "label_offset_x": 6,
+      "label_offset_y": 12,
+      "label_anchor": "middle",
+      "points": [
+        { "x": 15.8, "y": 60.4 },
+        { "x": 22.4, "y": 59.4 },
+        { "x": 24.3, "y": 55.1 },
+        { "x": 21, "y": 52.4 },
+        { "x": 15.9, "y": 53.7 },
+        { "x": 14.4, "y": 57.6 }
+      ]
+    },
+    {
+      "id": "seoul_axis",
+      "label": "Seoul Axis",
+      "map_label": "SEOUL AXIS",
+      "kind": "phase_line",
+      "geometry_type": "line",
+      "visibility": "always",
+      "label_priority": 5,
+      "label_offset_x": 14,
+      "label_offset_y": -8,
+      "label_anchor": "middle",
+      "points": [
+        { "x": 18.2, "y": 58.2 },
+        { "x": 25.1, "y": 52.1 },
+        { "x": 31, "y": 46 },
+        { "x": 39.4, "y": 40.6 },
+        { "x": 46, "y": 36 }
+      ]
+    },
+    {
+      "id": "kimpo_corridor_trace",
+      "label": "Kimpo Corridor",
+      "map_label": "KIMPO CORRIDOR",
+      "kind": "corridor",
+      "geometry_type": "line",
+      "visibility": "always",
+      "label_priority": 5,
+      "label_offset_x": 0,
+      "label_offset_y": -12,
+      "label_anchor": "middle",
+      "points": [
+        { "x": 22.6, "y": 55 },
+        { "x": 26.8, "y": 50.7 },
+        { "x": 31, "y": 46 }
+      ]
+    },
+    {
+      "id": "han_estuary_feature",
+      "label": "Han Estuary",
+      "map_label": "HAN ESTUARY",
+      "kind": "sector",
+      "geometry_type": "zone",
+      "visibility": "always",
+      "label_priority": 5,
+      "label_offset_x": -10,
+      "label_offset_y": 4,
+      "label_anchor": "middle",
+      "points": [
+        { "x": 16.6, "y": 59.4 },
+        { "x": 22.8, "y": 58.6 },
+        { "x": 28.4, "y": 55.8 },
+        { "x": 31.6, "y": 51.4 },
+        { "x": 29.8, "y": 48.8 },
+        { "x": 24.2, "y": 49.6 },
+        { "x": 18.9, "y": 52.4 },
+        { "x": 16.1, "y": 56.4 }
+      ]
+    },
+    {
+      "id": "han_river",
+      "label": "Han River",
+      "map_label": "HAN RIVER",
+      "kind": "waterway",
+      "geometry_type": "line",
+      "visibility": "operational",
+      "label_priority": 4,
+      "label_offset_x": 16,
+      "label_offset_y": -6,
+      "label_anchor": "middle",
+      "points": [
+        { "x": 27.4, "y": 47.8 },
+        { "x": 33.2, "y": 44.7 },
+        { "x": 39, "y": 41.6 },
+        { "x": 45.4, "y": 38.3 },
+        { "x": 50.8, "y": 36.8 }
+      ]
+    },
+    {
+      "id": "yongdungpo_crossings_feature",
+      "label": "Yongdungpo Crossings",
+      "map_label": "YONGDUNGPO CROSSINGS",
+      "kind": "choke_point",
+      "geometry_type": "point",
+      "visibility": "always",
+      "label_priority": 4,
+      "label_offset_x": 0,
+      "label_offset_y": -16,
+      "label_anchor": "middle",
+      "x": 39.4,
+      "y": 40.6
+    },
+    {
+      "id": "seoul_western_approaches",
+      "label": "Seoul Western Approaches",
+      "map_label": "SEOUL WESTERN APPROACHES",
+      "kind": "sector",
+      "geometry_type": "zone",
+      "visibility": "operational",
+      "label_priority": 4,
+      "label_offset_x": -6,
+      "label_offset_y": 12,
+      "label_anchor": "middle",
+      "points": [
+        { "x": 38.5, "y": 43 },
+        { "x": 46.8, "y": 41.2 },
+        { "x": 49.6, "y": 36.4 },
+        { "x": 46.6, "y": 32.8 },
+        { "x": 39.8, "y": 34.5 },
+        { "x": 36.8, "y": 39.4 }
+      ]
+    },
+    {
+      "id": "seoul_defensive_belt_feature",
+      "label": "Seoul Defensive Belt",
+      "map_label": "SEOUL DEFENSIVE BELT",
+      "kind": "sector",
+      "geometry_type": "zone",
+      "visibility": "always",
+      "label_priority": 5,
+      "label_offset_x": -8,
+      "label_offset_y": -18,
+      "label_anchor": "end",
+      "points": [
+        { "x": 42.6, "y": 38.8 },
+        { "x": 47.8, "y": 39.1 },
+        { "x": 49.8, "y": 35.4 },
+        { "x": 47.8, "y": 32.5 },
+        { "x": 43.2, "y": 32.8 },
+        { "x": 41.1, "y": 35.9 }
+      ]
+    }
+  ],
+  "local_pressure_areas": [
+    {
+      "id": "inchon_beachhead",
+      "label": "Inchon Beachhead",
+      "kind": "lodgment",
+      "location_id": "INCHON_PORT",
+      "x": 20.6,
+      "y": 55.2,
+      "pressure_reasons": ["amphibious_landing", "port_unloading", "beachhead_expansion"],
+      "defensive_preparation": {
+        "state": "secured",
+        "fortification_state": "improvised_perimeter",
+        "obstacle_state": "tidal_causeways",
+        "engineer_state": "port_clearance"
+      }
+    },
+    {
+      "id": "kimpo_corridor",
+      "label": "Kimpo Corridor",
+      "kind": "corridor",
+      "location_id": "KIMPO_AIRFIELD",
+      "x": 31,
+      "y": 46,
+      "pressure_reasons": ["kimpo_screening_force", "landing_axis_friction", "airfield_access_control"],
+      "defensive_preparation": {
+        "state": "contested",
+        "fortification_state": "screen_line",
+        "obstacle_state": "roadblocks",
+        "engineer_state": "limited"
+      }
+    },
+    {
+      "id": "yongdungpo_crossings",
+      "label": "Yongdungpo Crossings",
+      "kind": "crossing",
+      "location_id": "YONGDUNGPO",
+      "objective_id": "obj_yongdungpo_crossings",
+      "x": 39.4,
+      "y": 40.6,
+      "pressure_reasons": ["han_crossing_control", "bridge_demolition_risk", "urban_blocking_position"],
+      "defensive_preparation": {
+        "state": "prepared",
+        "fortification_state": "bridgehead_blocks",
+        "obstacle_state": "demolition_charges",
+        "engineer_state": "active"
+      }
+    },
+    {
+      "id": "seoul_ring",
+      "label": "Seoul Defensive Ring",
+      "kind": "defensive_belt",
+      "location_id": "SEOUL",
+      "objective_id": "obj_seoul_ring",
+      "x": 47.2,
+      "y": 34.4,
+      "pressure_reasons": ["urban_defense", "reserve_assembly", "interior_line_counterstroke"],
+      "defensive_preparation": {
+        "state": "prepared",
+        "fortification_state": "urban_strongpoints",
+        "obstacle_state": "road_craters",
+        "engineer_state": "coordinated"
+      }
+    }
+  ],
+  "units": [
+    {
+      "id": "US-1MAR",
+      "unit_id": "US-1MAR",
+      "name": "1st Marine Division",
+      "side": "ALLIED",
+      "unit_type": "INFANTRY",
+      "strength": 96,
+      "fatigue": 8,
+      "morale": 78,
+      "supply": 84,
+      "readiness": 72,
+      "location_id": "INCHON_PORT",
+      "map_label": "1ST MAR DIV",
+      "label_priority": 4,
+      "position": [2, 9],
+      "x": 20.4,
+      "y": 54.8,
+      "posture": "ATTACK"
+    },
+    {
+      "id": "US-7INF",
+      "unit_id": "US-7INF",
+      "name": "7th Infantry Division",
+      "side": "ALLIED",
+      "unit_type": "INFANTRY",
+      "strength": 92,
+      "fatigue": 10,
+      "morale": 74,
+      "supply": 82,
+      "readiness": 68,
+      "location_id": "INCHON_PORT",
+      "map_label": "7TH INF DIV",
+      "label_priority": 3,
+      "position": [3, 9],
+      "x": 18.6,
+      "y": 57.3,
+      "posture": "MOVE"
+    },
+    {
+      "id": "ROK-MAR",
+      "unit_id": "ROK-MAR",
+      "name": "ROK Marine Regiment",
+      "side": "ALLIED",
+      "unit_type": "INFANTRY",
+      "strength": 78,
+      "fatigue": 6,
+      "morale": 70,
+      "supply": 80,
+      "readiness": 66,
+      "location_id": "INCHON_PORT",
+      "map_label": "ROK MARINES",
+      "label_priority": 2,
+      "position": [2, 10],
+      "x": 17.6,
+      "y": 55.6,
+      "posture": "MOVE"
+    },
+    {
+      "id": "NKPA-KIMPO",
+      "unit_id": "NKPA-KIMPO",
+      "name": "NKPA Kimpo Screen",
+      "side": "AXIS",
+      "unit_type": "INFANTRY",
+      "strength": 74,
+      "fatigue": 14,
+      "morale": 58,
+      "supply": 66,
+      "readiness": 52,
+      "location_id": "KIMPO_AIRFIELD",
+      "map_label": "NKPA KIMPO SCREEN",
+      "label_priority": 3,
+      "position": [7, 7],
+      "x": 31.6,
+      "y": 46.8,
+      "posture": "DEFEND"
+    },
+    {
+      "id": "NKPA-SEOUL",
+      "unit_id": "NKPA-SEOUL",
+      "name": "NKPA Seoul Garrison",
+      "side": "AXIS",
+      "unit_type": "INFANTRY",
+      "strength": 88,
+      "fatigue": 12,
+      "morale": 64,
+      "supply": 70,
+      "readiness": 58,
+      "location_id": "SEOUL",
+      "map_label": "NKPA SEOUL GARRISON",
+      "label_priority": 4,
+      "position": [11, 5],
+      "x": 46.5,
+      "y": 35.6,
+      "posture": "DEFEND"
+    },
+    {
+      "id": "NKPA-RES",
+      "unit_id": "NKPA-RES",
+      "name": "NKPA Counterattack Reserve",
+      "side": "AXIS",
+      "unit_type": "INFANTRY",
+      "strength": 82,
+      "fatigue": 8,
+      "morale": 62,
+      "supply": 68,
+      "readiness": 56,
+      "location_id": "SUWON",
+      "map_label": "NKPA RESERVE",
+      "label_priority": 3,
+      "position": [13, 7],
+      "x": 49.1,
+      "y": 32.6,
+      "posture": "HOLD"
+    }
+  ],
+  "supply_sources": [
+    {
+      "location_id": "INCHON_PORT",
+      "side": "ALLIED",
+      "daily_supply": 14,
+      "description": "UN landing supply throughput through Inchon Harbor."
+    },
+    {
+      "location_id": "SEOUL",
+      "side": "AXIS",
+      "daily_supply": 9,
+      "description": "NKPA interior supply distribution through Seoul."
+    },
+    {
+      "location_id": "SUWON",
+      "side": "AXIS",
+      "daily_supply": 6,
+      "description": "Rear-area reserve supply node."
+    }
+  ],
+  "objectives": [
+    {
+      "id": "obj_inchon_harbor",
+      "location_id": "INCHON_PORT",
+      "name": "Inchon Harbor",
+      "side": "ALLIED",
+      "value": 60,
+      "description": "Secure the landing port and keep supply flowing ashore.",
+      "objective_type": "supply",
+      "visibility": "always",
+      "importance_tier": 3,
+      "map_label": "INCHON",
+      "label_priority": 5,
+      "label_offset_x": 14,
+      "label_offset_y": -14,
+      "label_anchor": "start",
+      "controlled": true,
+      "state": "held_allied",
+      "x": 18.2,
+      "y": 58.1
+    },
+    {
+      "id": "obj_kimpo",
+      "location_id": "KIMPO_AIRFIELD",
+      "name": "Kimpo Airfield",
+      "side": "ALLIED",
+      "value": 80,
+      "description": "Capture Kimpo to support the drive on Seoul.",
+      "objective_type": "supply",
+      "visibility": "always",
+      "importance_tier": 4,
+      "map_label": "KIMPO",
+      "label_priority": 4,
+      "label_offset_x": 12,
+      "label_offset_y": -14,
+      "label_anchor": "start",
+      "controlled": false,
+      "state": "unheld",
+      "x": 31,
+      "y": 46
+    },
+    {
+      "id": "obj_yongdungpo_crossings",
+      "location_id": "YONGDUNGPO",
+      "name": "Yongdungpo Crossings",
+      "side": "ALLIED",
+      "value": 70,
+      "description": "Force the Han crossings west of Seoul before the NKPA ring consolidates.",
+      "objective_type": "primary",
+      "visibility": "always",
+      "importance_tier": 4,
+      "map_label": "YONGDUNGPO CROSSINGS",
+      "label_priority": 4,
+      "label_offset_x": 0,
+      "label_offset_y": -18,
+      "label_anchor": "middle",
+      "controlled": false,
+      "state": "unheld",
+      "x": 39.4,
+      "y": 40.6
+    },
+    {
+      "id": "obj_seoul",
+      "location_id": "SEOUL",
+      "name": "Seoul",
+      "side": "ALLIED",
+      "value": 120,
+      "description": "Seize Seoul and break NKPA control of the axis.",
+      "objective_type": "strategic",
+      "visibility": "always",
+      "importance_tier": 5,
+      "map_label": "SEOUL",
+      "label_priority": 5,
+      "label_offset_x": -14,
+      "label_offset_y": -18,
+      "label_anchor": "end",
+      "controlled": false,
+      "state": "unheld",
+      "x": 46,
+      "y": 36
+    },
+    {
+      "id": "obj_seoul_ring",
+      "location_id": "SEOUL",
+      "name": "Seoul Defensive Ring",
+      "side": "AXIS",
+      "value": 90,
+      "description": "Hold Seoul long enough to organize a counterstroke.",
+      "objective_type": "primary",
+      "visibility": "close",
+      "importance_tier": 4,
+      "controlled": true,
+      "state": "held_axis",
+      "x": 47.2,
+      "y": 34.4
+    }
+  ],
+  "reinforcements": [
+    {
+      "id": "ROK-17REG",
+      "name": "ROK 17th Regiment",
+      "side": "ALLIED",
+      "unit_type": "INFANTRY",
+      "strength": 74,
+      "fatigue": 0,
+      "morale": 68,
+      "supply": 88,
+      "readiness": 62,
+      "arrival_day": 2,
+      "entry_location_id": "INCHON_PORT"
+    }
+  ],
+  "ai": {
+    "enabled": true,
+    "side": "AXIS"
+  }
+}

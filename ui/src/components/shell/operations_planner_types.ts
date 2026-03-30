@@ -3,6 +3,7 @@ export type GroundRoleId = "none" | "main_effort" | "support" | "flank" | "scree
 export type AirRoleId = "none" | "air_superiority" | "cas" | "interdiction" | "recon";
 export type NavalRoleId = "none" | "shore_support" | "task_force_support";
 export type TempoId = "immediate" | "standard" | "night_movement" | "slow_concealed";
+export type PlannerCommandIntent = "operation" | "move" | "attack";
 
 export type OperationPlannerState = {
   scenarioId: string | null;
@@ -17,6 +18,12 @@ export type OperationPlannerState = {
   navalRole: NavalRoleId;
   tempo: TempoId;
   approved: boolean;
+  commandIntent: PlannerCommandIntent;
+  commandSource: "planner" | "map_shortcut";
+  seedUnitId: string | null;
+  targetHex: { q: number; r: number } | null;
+  targetLabel: string | null;
+  enemyTargetId: string | null;
 };
 
 export type TrackedDemoOperationParticipant = {
@@ -40,6 +47,33 @@ export type TrackedDemoOperation = {
   estimatedPrepHours: number | null;
   approvedAtTurn: number | null;
   approvedAtHours: number | null;
+  commandIntent: PlannerCommandIntent;
+  source: "planner" | "map_shortcut";
+  seedUnitId: string | null;
+  targetHex: { q: number; r: number } | null;
+  targetLabel: string | null;
+  enemyTargetId: string | null;
+};
+
+export type FastCommandPreview = {
+  available: boolean;
+  unitId: string;
+  unitName: string;
+  commandIntent: PlannerCommandIntent;
+  mode: "immediate" | "planner_review";
+  legal: boolean;
+  targetHex: { q: number; r: number };
+  targetLabel: string;
+  objectiveId: string | null;
+  objectiveName: string | null;
+  enemyTargetId: string | null;
+  enemyTargetName: string | null;
+  route: Array<{ x: number; y: number }>;
+  distance: number;
+  note: string;
+  title: string;
+  statusLabel: string;
+  previewTone: "move" | "attack" | "review";
 };
 
 export type OperationPlannerActions = {

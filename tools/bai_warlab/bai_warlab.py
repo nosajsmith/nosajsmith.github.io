@@ -18,7 +18,16 @@ from tools.bai_warlab.config_loader import ConfigLoader
 from tools.bai_warlab.manifest import build_manifest_record, write_manifest
 from tools.bai_warlab.models import ManifestRecord, RunRequest, SeedPolicy
 from tools.bai_warlab.presets.benchmark_suites import list_suite_names, load_benchmark_suite
-from tools.bai_warlab.report_io import default_output_dir, ensure_output_dir, run_result_to_row, stable_hash, write_json, write_report_txt, write_results_csv
+from tools.bai_warlab.report_io import (
+    default_output_dir,
+    ensure_output_dir,
+    run_result_to_row,
+    stable_hash,
+    summarize_core_metric_rows,
+    write_json,
+    write_report_txt,
+    write_results_csv,
+)
 from tools.bai_warlab.reports.summary_report import render_report
 from tools.bai_warlab.runners import execute_batch_run, execute_compare_run, execute_single_run, execute_suite_run, resolve_seed_policy
 
@@ -41,6 +50,76 @@ def _seed_policy_record(seed_policy: SeedPolicy) -> Dict[str, Any]:
         "base_seed": seed_policy.base_seed,
         "count": seed_policy.count,
     }
+
+
+def _print_console_metric_summary(rows: List[Dict[str, Any]]) -> None:
+    metrics = summarize_core_metric_rows(rows)
+    for payload in metrics.values():
+        print(
+            f"{payload['label']}: "
+            f"mean={payload['mean']} min={payload['min']} max={payload['max']} sd={payload.get('stddev', 0.0)} n={payload['count']}"
+        )
+
+
+def _format_counts(counts: Dict[str, Any]) -> str:
+    mapping = dict(counts or {})
+    if not mapping:
+        return "none"
+    return ", ".join(f"{key}={value}" for key, value in mapping.items())
+
+
+def _print_batch_console_summary(result: Any, output_dir: Path) -> None:
+    aggregate = getattr(result, "aggregate", None)
+    rows = [
+        run_result_to_row(run)
+        for run in list(getattr(result, "runs", []) or [])
+        if getattr(run, "ok", False)
+    ]
+
+    print("BAI War Lab — Batch Summary")
+    print(f"Scenario: {result.scenario}")
+    print(f"Doctrine: {result.doctrine}")
+    print(f"Personality: {result.personality}")
+    print(f"Tuning: {result.tuning}")
+    print(f"Seeds: {', '.join(str(seed) for seed in result.seed_policy.seeds)}")
+    if aggregate is not None:
+        print(f"Runs: {aggregate.total_runs} | OK: {aggregate.ok_runs} | Failed: {aggregate.failure_count}")
+        print(f"Success rate: {aggregate.success_rate}")
+        if aggregate.victory_proxy.get("available"):
+            print(
+                "Results: "
+                f"{_format_counts(aggregate.result_counts)} | Non-loss rate: {aggregate.victory_proxy.get('non_loss_rate')}"
+            )
+            print(f"Scenario outcomes: {_format_counts(aggregate.scenario_outcome_counts)}")
+    _print_console_metric_summary(rows)
+    if result.warnings:
+        print(f"Warnings: {result.warnings[0]}")
+    print(f"Artifacts: {output_dir}")
+
+
+def _print_suite_console_summary(result: Any, output_dir: Path) -> None:
+    aggregate = getattr(result, "aggregate", None)
+    rows = [
+        run_result_to_row(run)
+        for run in list(getattr(result, "runs", []) or [])
+        if getattr(run, "ok", False)
+    ]
+
+    print("BAI War Lab — Suite Summary")
+    print(f"Suite: {result.suite_name}")
+    if aggregate is not None:
+        print(f"Runs: {aggregate.total_runs} | OK: {aggregate.ok_runs} | Failed: {aggregate.failure_count}")
+        print(f"Success rate: {aggregate.success_rate}")
+        if aggregate.victory_proxy.get("available"):
+            print(
+                "Results: "
+                f"{_format_counts(aggregate.result_counts)} | Non-loss rate: {aggregate.victory_proxy.get('non_loss_rate')}"
+            )
+            print(f"Scenario outcomes: {_format_counts(aggregate.scenario_outcome_counts)}")
+    _print_console_metric_summary(rows)
+    if result.warnings:
+        print(f"Warnings: {result.warnings[0]}")
+    print(f"Artifacts: {output_dir}")
 
 
 def _compare_variant_config(args: argparse.Namespace) -> tuple[Dict[str, str], Dict[str, str]]:
@@ -165,7 +244,7 @@ def _batch_command(args: argparse.Namespace, loader: ConfigLoader, command_line:
     )
     rows = [run_result_to_row(run) for run in result.runs]
     _write_bundle(output_dir=output_dir, summary_obj=result, manifest=manifest, rows=rows, text_report=render_report(result))
-    print(output_dir)
+    _print_batch_console_summary(result, output_dir)
     return 0 if result.ok else 1
 
 
@@ -264,7 +343,7 @@ def _suite_command(args: argparse.Namespace, loader: ConfigLoader, command_line:
     )
     rows = [run_result_to_row(run) for run in result.runs]
     _write_bundle(output_dir=output_dir, summary_obj=result, manifest=manifest, rows=rows, text_report=render_report(result))
-    print(output_dir)
+    _print_suite_console_summary(result, output_dir)
     return 0 if result.ok else 1
 
 

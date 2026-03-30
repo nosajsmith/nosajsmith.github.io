@@ -7,9 +7,11 @@ import {
   humanizePressureReason,
   humanizeReportKind,
   humanizeSideLabel,
+  inferScenarioPresentation,
 } from "../../lib/view_snapshot.js";
 
 export function renderReadyShellSmoke(snapshot) {
+  const presentation = inferScenarioPresentation(snapshot);
   const scoreRows = Object.entries(snapshot.campaign.score_by_side || {}).map(([side, value]) =>
     React.createElement("div", { key: side }, `${humanizeSideLabel(side)} ${value}`),
   );
@@ -25,7 +27,7 @@ export function renderReadyShellSmoke(snapshot) {
     React.createElement(
       "main",
       null,
-      React.createElement("header", null, `Theatre Command ${snapshot.scenario.name}`),
+      React.createElement("header", null, `${presentation.shellTitle} ${presentation.scenarioLabel}`),
       React.createElement("section", null, `Campaign ${humanizeCampaignStatus(snapshot.campaign.status)}`),
       React.createElement(
         "section",
@@ -50,6 +52,35 @@ export function renderStateScreenSmoke(title, message) {
       React.createElement("div", null, "Command Post"),
       React.createElement("h2", null, title),
       React.createElement("p", null, message),
+    ),
+  );
+}
+
+export function renderLauncherSmoke({
+  title = "Theater of Operations",
+  subtitle = "Inchon",
+  theaterLabel = "Korea Theater • Operation Chromite",
+  scenarioName = "Inchon MVP",
+  bridgeStatus = "Connected",
+  objective = "Seoul",
+  musicLabel = "Theme active",
+  musicVolume = "34%",
+} = {}) {
+  return renderToStaticMarkup(
+    React.createElement(
+      "section",
+      null,
+      React.createElement("div", null, "Publisher Demo Vertical Slice"),
+      React.createElement("h1", null, `${title} ${subtitle}`),
+      React.createElement("div", null, theaterLabel),
+      React.createElement("div", null, "Current Vertical Slice: Inchon"),
+      React.createElement("div", null, "Shell Handoff Direct shell handoff ready"),
+      React.createElement("div", null, "Franchise Key Art"),
+      React.createElement("div", null, scenarioName),
+      React.createElement("div", null, `Bridge ${bridgeStatus}`),
+      React.createElement("div", null, `Objective ${objective}`),
+      React.createElement("div", null, `Launcher Audio ${musicLabel}`),
+      React.createElement("div", null, `Optional Menu Theme ${musicVolume}`),
     ),
   );
 }

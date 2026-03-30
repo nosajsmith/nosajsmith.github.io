@@ -123,5 +123,5 @@ test("local sustainment summary stays explicit when the local slice is unavailab
   assert.equal(summary.status, "Unavailable");
   assert.equal(summary.resources[0].value, "Not exposed");
   assert.equal(summary.atRisk.length, 0);
-  assert.match(summary.note, /unavailable outside the current Henderson\/Lunga perimeter slice/i);
+  assert.match(summary.note, /unavailable outside the current operational theater slice/i);
 });

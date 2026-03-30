@@ -22,12 +22,42 @@ test("ready-state shell render uses operator-facing labels and humanized backend
     },
   });
 
-  assert.match(html, /Theatre Command/);
+  assert.match(html, /Theater of Operations: Inchon/);
   assert.match(html, /Campaign Ongoing/);
   assert.match(html, /Enemy Pressure North/);
   assert.match(html, /Maintain pressure north/);
   assert.match(html, /Player Order Marine advance continues\./);
   assert.doesNotMatch(html, /Operation Shell|Main Map Panel|Backend source|Map V0/i);
+});
+
+test("ready-state shell infers the Inchon slice from live Korea context even when the scenario label is generic", () => {
+  const html = renderReadyShellSmoke({
+    scenario: { id: "publisher_demo_slice", name: "Publisher Demo" },
+    time: { current_hours: 24 },
+    campaign: {
+      status: "ongoing",
+      score_by_side: { ALLIED: 35, AXIS: 12 },
+    },
+    pressure: {
+      reasons: ["seoul_axis_pressure"],
+    },
+    ai: {
+      last_intent: "secure_inchon_corridor",
+    },
+    reports: {
+      recent: [{ id: "r1", kind: "status", summary: "Pressure rising on the Seoul approach." }],
+    },
+    objectives: [{ id: "o1", name: "Seoul" }],
+    ports: [{ id: "p1", name: "Inchon Harbor" }],
+    grease_board: {
+      objective: "SEOUL",
+      main_effort: "INCHON / SEOUL AXIS",
+    },
+  });
+
+  assert.match(html, /Theater of Operations: Inchon/);
+  assert.match(html, /Operation Chromite Vertical Slice/);
+  assert.doesNotMatch(html, /Guadalcanal|Henderson|Lunga/i);
 });
 
 test("not-ready state render remains explicit and operator-facing", () => {

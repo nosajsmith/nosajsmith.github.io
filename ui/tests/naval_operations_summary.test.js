@@ -24,7 +24,7 @@ test("naval operations summary uses exposed naval formations and maritime contex
   assert.equal(summary.overview.formationsTracked, 1);
   assert.equal(summary.overview.portsTracked, 1);
   assert.equal(summary.overview.supportWindowsTracked, 1);
-  assert.equal(summary.formations[0].endurance, "Fuel and endurance not exposed");
+  assert.equal(summary.formations[0].endurance, "4.2 days sustainment");
   assert.equal(summary.operatingContext.windows[0].timing, "H+0 to H+24");
   assert.match(summary.concerns[0], /naval support window/);
 });
@@ -52,10 +52,10 @@ test("local naval support summary stays truthful when only Lunga Point shore con
   });
 
   assert.equal(summary.available, true);
-  assert.equal(summary.availability, "Not exposed");
-  assert.equal(summary.supportPosture, "Support posture not exposed");
+  assert.equal(summary.availability, "Context exposed");
+  assert.equal(summary.supportPosture, "Port anchor only");
   assert.match(summary.note, /Lunga Point/);
-  assert.match(summary.constraint, /No local naval support window is exposed/i);
+  assert.match(summary.constraint, /only currently exposed shore-support anchor/i);
   assert.match(summary.supportingFormation, /No supporting naval formation/i);
 });
 

@@ -120,13 +120,27 @@ def execute_compare_run(
         "ok_runs": left_aggregate.ok_runs,
         "failed_runs": left_aggregate.failed_runs,
         "failure_count": left_aggregate.failure_count,
+        "success_rate": left_aggregate.success_rate,
+        "result_counts": left_aggregate.result_counts,
+        "scenario_outcome_counts": left_aggregate.scenario_outcome_counts,
+        "winning_side_counts": left_aggregate.winning_side_counts,
+        "core_metrics": left_aggregate.core_metrics,
+        "victory_proxy": left_aggregate.victory_proxy,
         "mean_summary": left_aggregate.mean_summary,
+        "mean_metrics": left_aggregate.mean_metrics,
     }
     comparison["right_aggregate"] = {
         "ok_runs": right_aggregate.ok_runs,
         "failed_runs": right_aggregate.failed_runs,
         "failure_count": right_aggregate.failure_count,
+        "success_rate": right_aggregate.success_rate,
+        "result_counts": right_aggregate.result_counts,
+        "scenario_outcome_counts": right_aggregate.scenario_outcome_counts,
+        "winning_side_counts": right_aggregate.winning_side_counts,
+        "core_metrics": right_aggregate.core_metrics,
+        "victory_proxy": right_aggregate.victory_proxy,
         "mean_summary": right_aggregate.mean_summary,
+        "mean_metrics": right_aggregate.mean_metrics,
     }
 
     if comparison.get("partial_failures"):

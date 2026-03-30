@@ -18,7 +18,7 @@ export function makeWsRpc(url, { proto = "1.0", timeoutMs = 5000 } = {}) {
     ws.onmessage = (ev) => {
       let msg;
       try { msg = JSON.parse(ev.data); } catch { return; }
-      const id = msg?.req_id;
+      const id = msg?.req_id ?? msg?.id;
       if (!id) return;
       const p = pending.get(id);
       if (!p) return;
@@ -44,7 +44,15 @@ export function makeWsRpc(url, { proto = "1.0", timeoutMs = 5000 } = {}) {
   async function rpc(cmd, payload = {}, id = crypto.randomUUID()) {
     await connect();
 
-    const req = { req_id: id, v: proto, cmd, payload };
+    const req = {
+      req_id: id,
+      id,
+      v: proto,
+      proto,
+      cmd,
+      payload,
+      args: payload,
+    };
     const body = JSON.stringify(req);
 
     return new Promise((resolve, reject) => {

@@ -1,4 +1,4 @@
-import { buildObjectiveDisplayName, humanizePressureReason, humanizeToken } from "../../lib/view_snapshot.js";
+import { buildObjectiveDisplayName, humanizePressureReason, humanizeToken, inferScenarioPresentation } from "../../lib/view_snapshot.js";
 import { orderRecentReports, summarizeObjectives } from "./dashboard_summary.js";
 import { humanizeObjectiveState } from "./map_scene.js";
 import { summarizeLocalAirSupport } from "./air_operations_summary.js";
@@ -162,6 +162,7 @@ function buildReserveStatus(localReports) {
 }
 
 function buildOperationsOverview(snapshot, operations, options = {}) {
+  const presentation = inferScenarioPresentation(snapshot);
   const trackedOperations = summarizeTrackedOperations(snapshot, operations);
   const objectives = summarizeObjectives(snapshot?.objectives);
   const keyObjective = objectives.key[0] ?? null;
@@ -174,11 +175,11 @@ function buildOperationsOverview(snapshot, operations, options = {}) {
         : "No objective situation exposed on the current shell path.";
   const localBattle = options.available
     ? `${options.overallStatus ?? "Local battle status unavailable"} • ${options.hotspotsSummary ?? "No named local engagement focus is exposed."}`
-    : "Local battle unavailable outside the current perimeter slice.";
+    : `${presentation.frontLabel} battle picture is unavailable on the current shell path.`;
   const immediateConcern = options.immediateConcern ?? "No immediate local battle concern is exposed on the current shell path.";
 
   return {
-    title: trackedOperations.lead?.name ?? (options.available ? "Henderson Operations" : "Operations Picture"),
+    title: trackedOperations.lead?.name ?? (options.available ? presentation.operationsTitle : "Operations Picture"),
     activeOperation: trackedOperations.lead
       ? `${trackedOperations.lead.name} • ${trackedOperations.lead.status}`
       : "No approved operation tracked",
@@ -732,18 +733,19 @@ function buildConcernSummary(localReports, pressureReasons) {
 }
 
 export function summarizeHendersonPressureBoard(snapshot, operations = []) {
+  const presentation = inferScenarioPresentation(snapshot);
   const areas = localPressureAreas(snapshot);
   if (!areas.length) {
     return {
       available: false,
-      title: "Henderson Perimeter",
+      title: presentation.localBattleTitle,
       operationsOverview: buildOperationsOverview(snapshot, operations),
-      note: "Local Henderson/Lunga perimeter pressure is unavailable outside the current perimeter slice.",
+      note: `Local ${presentation.frontLabel.toLowerCase()} pressure is unavailable until the active scenario exposes authored local battle areas.`,
       perimeterStatus: [],
       pressureAxes: [],
       engagementSummary: {
         summary: "No current engagement summary is exposed.",
-        note: "Engagement summary is unavailable because the active scenario does not expose local Henderson perimeter areas.",
+        note: `Engagement summary is unavailable because the active scenario does not expose local ${presentation.frontLabel.toLowerCase()} battle areas.`,
         hotspotsSummary: "No named local engagement focus is exposed.",
         formationSummary: "No formation is directly tied to the exposed local fight.",
         hotspots: [],
@@ -752,12 +754,12 @@ export function summarizeHendersonPressureBoard(snapshot, operations = []) {
       reserveStatus: "Not exposed on the current shell path.",
       responseReadiness: {
         summary: "No current response-readiness data.",
-        note: "Response readiness is unavailable because the active scenario does not expose local Henderson perimeter areas.",
+        note: `Response readiness is unavailable because the active scenario does not expose local ${presentation.frontLabel.toLowerCase()} battle areas.`,
         units: [],
       },
       counterattackPlanning: {
         summary: "No current counterattack-planning data.",
-        note: "Counterattack planning is unavailable because the active scenario does not expose local Henderson perimeter areas.",
+        note: `Counterattack planning is unavailable because the active scenario does not expose local ${presentation.frontLabel.toLowerCase()} battle areas.`,
         bestCandidate: "No best-positioned local counterattack formation is exposed.",
         candidates: [],
       },
@@ -768,13 +770,13 @@ export function summarizeHendersonPressureBoard(snapshot, operations = []) {
         engineer: "Not exposed",
         mostPrepared: "No prepared local objective exposed.",
         leastPrepared: "No lightly prepared local objective exposed.",
-        note: "Local fortification, obstacle, and engineer-preparation state is unavailable because the active scenario does not expose local Henderson perimeter areas.",
+        note: `Local fortification, obstacle, and engineer-preparation state is unavailable because the active scenario does not expose local ${presentation.frontLabel.toLowerCase()} battle areas.`,
         areas: [],
       },
       localSustainment: {
         available: false,
         status: "Unavailable",
-        note: "Local sustainment is unavailable because the active scenario does not expose the Henderson perimeter picture.",
+        note: `Local sustainment is unavailable because the active scenario does not expose the ${presentation.frontLabel.toLowerCase()} picture.`,
         resources: [
           { label: "Supply", value: "Not exposed" },
           { label: "Ammo", value: "Not exposed" },
@@ -788,17 +790,17 @@ export function summarizeHendersonPressureBoard(snapshot, operations = []) {
       airSupport: {
         available: false,
         availability: "Unavailable",
-        note: "Local air-support context is unavailable because the active scenario does not expose the Henderson perimeter picture.",
+        note: `Local air-support context is unavailable because the active scenario does not expose the ${presentation.frontLabel.toLowerCase()} picture.`,
         sortiePosture: "Sortie posture unavailable",
-        constraint: "Weather-linked local air-response limits are unavailable outside the Henderson slice.",
+        constraint: `Weather-linked local air-response limits are unavailable outside the current ${presentation.theaterLabel.toLowerCase()} slice.`,
         supportingFormation: "No supporting air formation exposed.",
       },
       navalSupport: {
         available: false,
         availability: "Unavailable",
-        note: "Local naval-support context is unavailable because the active scenario does not expose the Henderson perimeter picture.",
+        note: `Local naval-support context is unavailable because the active scenario does not expose the ${presentation.frontLabel.toLowerCase()} picture.`,
         supportPosture: "Support posture unavailable",
-        constraint: "Offshore-support limits are unavailable outside the Henderson slice.",
+        constraint: `Offshore-support limits are unavailable outside the current ${presentation.theaterLabel.toLowerCase()} slice.`,
         supportingFormation: "No supporting naval formation exposed.",
       },
       recentContacts: [],
@@ -824,7 +826,7 @@ export function summarizeHendersonPressureBoard(snapshot, operations = []) {
 
   return {
     available: true,
-    title: "Henderson Perimeter",
+    title: presentation.localBattleTitle,
     operationsOverview: buildOperationsOverview(snapshot, operations, {
       available: true,
       overallStatus,

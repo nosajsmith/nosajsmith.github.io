@@ -1,9 +1,11 @@
 import { useState } from "react";
 import type { ViewSnapshot } from "../../types/viewSnapshot";
+import type { TrackedDemoOperation } from "./operations_planner_types";
 import { summarizeIntelligenceBranch } from "./intelligence_branch_summary.js";
 
 type IntelligenceBranchScreenProps = {
   snapshot: ViewSnapshot;
+  operations?: TrackedDemoOperation[];
   onReturnHome: () => void;
 };
 
@@ -11,8 +13,8 @@ function severityLabel(severity: string) {
   return severity === "warning" ? "Warning" : "Info";
 }
 
-export default function IntelligenceBranchScreen({ snapshot, onReturnHome }: IntelligenceBranchScreenProps) {
-  const summary = summarizeIntelligenceBranch(snapshot);
+export default function IntelligenceBranchScreen({ snapshot, operations = [], onReturnHome }: IntelligenceBranchScreenProps) {
+  const summary = summarizeIntelligenceBranch(snapshot, operations);
   const [selectedMessageId, setSelectedMessageId] = useState<string | null>(summary.dispatches[0]?.id ?? null);
   const selectedMessage = summary.dispatches.find((message) => message.id === selectedMessageId) ?? summary.dispatches[0] ?? null;
 

@@ -39,7 +39,9 @@ export default function CommunicationsCenter({
     return null;
   }
 
-  const selectedMessage = messages.find((message) => message.id === selectedMessageId) ?? (demoExample?.id === selectedMessageId ? demoExample : null);
+  const showDemoExample = !messages.length && Boolean(demoExample);
+  const selectedMessage = messages.find((message) => message.id === selectedMessageId)
+    ?? (showDemoExample && demoExample?.id === selectedMessageId ? demoExample : null);
 
   return (
     <div className="shell-commcenter" role="dialog" aria-modal="true" aria-label="Communications Center">
@@ -57,7 +59,7 @@ export default function CommunicationsCenter({
         </div>
 
         <div className="shell-commcenter__body">
-          {demoExample ? (
+          {showDemoExample && demoExample ? (
             <button
               type="button"
               className={"shell-commcenter__message shell-commcenter__message--demo" + (demoExample.id === selectedMessageId ? " is-selected" : "")}

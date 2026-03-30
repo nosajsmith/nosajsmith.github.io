@@ -76,6 +76,35 @@ export interface SnapshotStaff {
 export interface SnapshotAI {
   enabled: boolean;
   last_intent: string | null;
+  side?: string | null;
+  requested?: boolean;
+  controller_available?: boolean;
+  last_orders?: number | null;
+  budget_exceeded?: boolean;
+}
+
+export interface SnapshotGreaseBoard {
+  turn: string | null;
+  objective: string | null;
+  front_status: string | null;
+  supply_status: string | null;
+  main_effort: string | null;
+  orders: string[];
+  alerts: string[];
+  staff_notes?: string | null;
+}
+
+export interface SnapshotBaiReport {
+  posture: string | null;
+  main_objective: unknown;
+  chosen_operation: unknown;
+  reserve_level: unknown;
+  timing_breakdown: Record<string, unknown>;
+  tactical_intents: Record<string, unknown>[];
+  unit_orders: Record<string, unknown>[];
+  attack_reason_summaries: string[];
+  hold_reason_summaries: string[];
+  summary_lines: string[];
 }
 
 export interface SnapshotForceChangeRow {
@@ -99,8 +128,14 @@ export interface SnapshotForceChanges {
 export interface SnapshotAirfield {
   id: string;
   name: string;
+  location_id?: string | null;
   x: number | null;
   y: number | null;
+  map_label?: string | null;
+  label_priority?: number | null;
+  label_offset_x?: number | null;
+  label_offset_y?: number | null;
+  label_anchor?: string | null;
   side?: string | null;
   state?: string | null;
   control_state?: string | null;
@@ -117,8 +152,23 @@ export interface SnapshotAirfield {
 export interface SnapshotPort {
   id: string;
   name: string;
+  location_id?: string | null;
   x: number | null;
   y: number | null;
+  map_label?: string | null;
+  label_priority?: number | null;
+  label_offset_x?: number | null;
+  label_offset_y?: number | null;
+  label_anchor?: string | null;
+  side?: string | null;
+  state?: string | null;
+  control_state?: string | null;
+  tier?: string | null;
+  readiness?: number | null;
+  readiness_band?: string | null;
+  damaged?: boolean | null;
+  destroyed?: boolean | null;
+  damage_state?: string | null;
 }
 
 export interface SnapshotNavalSupportWindow {
@@ -281,6 +331,13 @@ export interface SnapshotUnit {
   kind: string;
   unit_type?: string | null;
   location_id?: string | null;
+  map_label?: string | null;
+  label_priority?: number | null;
+  label_offset_x?: number | null;
+  label_offset_y?: number | null;
+  label_anchor?: string | null;
+  fatigue?: number | null;
+  posture?: string | null;
   x: number | null;
   y: number | null;
   strength: number | null;
@@ -296,8 +353,14 @@ export interface SnapshotUnit {
 export interface SnapshotObjective {
   id: string;
   name: string;
+  location_id?: string | null;
   x: number | null;
   y: number | null;
+  map_label?: string | null;
+  label_priority?: number | null;
+  label_offset_x?: number | null;
+  label_offset_y?: number | null;
+  label_anchor?: string | null;
   side: string | null;
   value: number | null;
   controlled: boolean | null;
@@ -341,15 +404,41 @@ export interface SnapshotNamedFeaturePoint {
   y: number;
 }
 
+export interface SnapshotMapPresentationBounds {
+  min_x: number;
+  max_x: number;
+  min_y: number;
+  max_y: number;
+}
+
+export interface SnapshotMapPresentationFocusPoint {
+  id: string | null;
+  label: string | null;
+  x: number;
+  y: number;
+}
+
+export interface SnapshotMapPresentation {
+  world_bounds: SnapshotMapPresentationBounds | null;
+  basemap_raw_bounds: SnapshotMapPresentationBounds | null;
+  focus_points: SnapshotMapPresentationFocusPoint[];
+  hex_scale_km: number | null;
+  playable_scale_locked: boolean | null;
+}
+
 export interface SnapshotNamedFeature {
   id: string;
   label: string;
+  map_label?: string | null;
   kind: string;
   geometry_type: string;
   location_id: string | null;
   objective_id: string | null;
   visibility: string | null;
   label_priority: number | null;
+  label_offset_x?: number | null;
+  label_offset_y?: number | null;
+  label_anchor?: string | null;
   aliases: SnapshotNamedAlias[];
   historical_name: string | null;
   modern_name: string | null;
@@ -373,6 +462,9 @@ export interface ViewSnapshot {
   reports: SnapshotReports;
   staff: SnapshotStaff;
   ai: SnapshotAI;
+  grease_board: SnapshotGreaseBoard | null;
+  bai_report: SnapshotBaiReport | null;
+  map_presentation: SnapshotMapPresentation | null;
   local_pressure_areas: SnapshotLocalPressureArea[];
   named_features: SnapshotNamedFeature[];
   force_changes: SnapshotForceChanges;

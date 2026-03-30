@@ -5,7 +5,15 @@ import json
 from pathlib import Path
 
 from tools.bai_warlab.models import ManifestRecord, RunResult, to_plain
-from tools.bai_warlab.report_io import RESULTS_CSV_COLUMNS, run_result_to_row, write_json, write_report_txt, write_results_csv
+from tools.bai_warlab.report_io import (
+    RESULTS_CSV_COLUMNS,
+    run_result_to_row,
+    summarize_core_metric_rows,
+    summarize_outcome_rows,
+    write_json,
+    write_report_txt,
+    write_results_csv,
+)
 from tools.bai_warlab.reports.summary_report import render_report
 
 
@@ -56,6 +64,8 @@ def test_bai_warlab_results_csv_row_uses_stable_columns_and_blank_optional_metri
     assert row["scenario"] == "foundation_smoke.json"
     assert row["result"] == "error"
     assert row["vp_margin"] is None
+    assert row["allied_casualties"] is None
+    assert row["axis_casualties"] is None
     assert row["casualty_ratio"] is None
     assert row["objective_hold_duration"] is None
     assert row["line_collapse_rate"] is None
@@ -64,6 +74,27 @@ def test_bai_warlab_results_csv_row_uses_stable_columns_and_blank_optional_metri
     assert row["failure_message"] == "synthetic failure"
     for column in RESULTS_CSV_COLUMNS:
         assert column in row
+
+
+def test_bai_warlab_row_summaries_capture_spread_and_outcomes():
+    rows = [
+        {"result": "win", "scenario_outcome": "allied_victory", "winning_side": "ALLIED", "ai_side": "ALLIED", "vp_margin": 4, "allied_casualties": 3, "hours_elapsed": 8},
+        {"result": "draw", "scenario_outcome": "draw", "winning_side": "", "ai_side": "ALLIED", "vp_margin": 1, "allied_casualties": 5, "hours_elapsed": 10},
+        {"result": "loss", "scenario_outcome": "axis_victory", "winning_side": "AXIS", "ai_side": "ALLIED", "vp_margin": -2, "allied_casualties": 7, "hours_elapsed": 12},
+    ]
+
+    metrics = summarize_core_metric_rows(rows)
+    outcomes = summarize_outcome_rows(rows)
+
+    assert metrics["vp_margin"]["mean"] == 1.0
+    assert metrics["vp_margin"]["median"] == 1.0
+    assert metrics["vp_margin"]["spread"] == 6.0
+    assert metrics["vp_margin"]["stddev"] == 2.449
+    assert metrics["allied_casualties"]["mean"] == 5.0
+    assert outcomes["result_counts"] == {"draw": 1, "loss": 1, "win": 1}
+    assert outcomes["scenario_outcome_counts"] == {"allied_victory": 1, "axis_victory": 1, "draw": 1}
+    assert outcomes["winning_side_counts"] == {"ALLIED": 1, "AXIS": 1, "DRAW": 1}
+    assert outcomes["non_loss_rate"] == 0.667
 
 
 def test_bai_warlab_report_writers_emit_stable_artifacts(tmp_path: Path):

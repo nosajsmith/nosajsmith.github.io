@@ -3,8 +3,10 @@ import assert from "node:assert/strict";
 
 import { buildMapScene } from "../src/components/shell/map_scene.js";
 import {
+  buildMapCommandPreview,
   createApprovedOperation,
   createOperationPlannerState,
+  seedPlannerStateFromMapCommand,
   sanitizeOperationPlannerState,
   summarizeOperationPlanner,
   summarizeTrackedOperations,
@@ -237,4 +239,50 @@ test("operations planner sanitizes stale demo planner state against the current 
   assert.equal(sanitized.navalRole, "none");
   assert.equal(sanitized.tempo, "standard");
   assert.equal(sanitized.approved, false);
+});
+
+test("map move shortcuts seed the existing planner state and remain planner-authored command objects", () => {
+  const snapshot = buildPlannerSnapshot();
+  const preview = buildMapCommandPreview(snapshot, "u1", { q: 2, r: 0 });
+  assert.ok(preview);
+  assert.equal(preview.commandIntent, "move");
+  assert.equal(preview.mode, "immediate");
+  assert.equal(preview.targetLabel, "Henderson Field");
+
+  const seeded = seedPlannerStateFromMapCommand(snapshot, createOperationPlannerState(snapshot.scenario.id), preview);
+  assert.equal(seeded.commandSource, "map_shortcut");
+  assert.equal(seeded.commandIntent, "move");
+  assert.equal(seeded.seedUnitId, "u1");
+  assert.deepEqual(seeded.targetHex, { q: 2, r: 0 });
+  assert.equal(seeded.targetLabel, "Henderson Field");
+  assert.equal(seeded.objectiveId, "o1");
+  assert.equal(seeded.unitRoles.u1, "main_effort");
+  assert.equal(seeded.approved, true);
+});
+
+test("map attack shortcuts stay deterministic and use the same planner seed path", () => {
+  const snapshot = buildPlannerSnapshot();
+  snapshot.units.push({
+    id: "e1",
+    name: "Sendai Regiment",
+    side: "AXIS",
+    kind: "ground",
+    unit_type: "INFANTRY",
+    x: 1,
+    y: 0,
+  });
+
+  const preview = buildMapCommandPreview(snapshot, "u1", { q: 1, r: 0 });
+  assert.ok(preview);
+  assert.equal(preview.commandIntent, "attack");
+  assert.equal(preview.mode, "immediate");
+  assert.equal(preview.enemyTargetId, "e1");
+  assert.equal(preview.targetLabel, "Sendai Regiment");
+
+  const seeded = seedPlannerStateFromMapCommand(snapshot, createOperationPlannerState(snapshot.scenario.id), preview);
+  assert.equal(seeded.commandIntent, "attack");
+  assert.equal(seeded.commandSource, "map_shortcut");
+  assert.equal(seeded.enemyTargetId, "e1");
+  assert.equal(seeded.tempo, "immediate");
+  assert.equal(seeded.unitRoles.u1, "main_effort");
 });

@@ -12,6 +12,6 @@ export interface GreaseBoardPayload {
 export interface GreaseBoardSummary {
   available: boolean;
   data: GreaseBoardPayload | null;
-  source: "snapshot" | "mock" | "unavailable";
+  source: "snapshot" | "derived" | "mock" | "unavailable";
   note: string | null;
 }

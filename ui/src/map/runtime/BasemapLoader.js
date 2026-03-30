@@ -24,10 +24,36 @@ function normalizeSearchText(value) {
     .trim();
 }
 
+function labelFromRecord(value) {
+  if (typeof value === "string" || typeof value === "number") {
+    return String(value).trim();
+  }
+  if (!value || typeof value !== "object") {
+    return "";
+  }
+  for (const key of ["name", "label", "title", "summary", "objective", "main_objective", "target_objective", "id"]) {
+    const candidate = value[key];
+    if (candidate != null) {
+      const text = String(candidate).trim();
+      if (text) {
+        return text;
+      }
+    }
+  }
+  return "";
+}
+
 function packageEntryForSnapshot(snapshot) {
-  const searchText = normalizeSearchText(
-    `${snapshot?.scenario?.id ?? ""} ${snapshot?.scenario?.name ?? ""}`,
-  );
+  const searchText = normalizeSearchText([
+    snapshot?.scenario?.id ?? "",
+    snapshot?.scenario?.name ?? "",
+    ...(Array.isArray(snapshot?.objectives) ? snapshot.objectives.map((objective) => labelFromRecord(objective)) : []),
+    ...(Array.isArray(snapshot?.airfields) ? snapshot.airfields.map((airfield) => labelFromRecord(airfield)) : []),
+    ...(Array.isArray(snapshot?.ports) ? snapshot.ports.map((port) => labelFromRecord(port)) : []),
+    ...(Array.isArray(snapshot?.local_pressure_areas) ? snapshot.local_pressure_areas.map((area) => labelFromRecord(area)) : []),
+    labelFromRecord(snapshot?.grease_board?.objective),
+    labelFromRecord(snapshot?.bai_report?.main_objective),
+  ].join(" "));
   if (!searchText) {
     return null;
   }

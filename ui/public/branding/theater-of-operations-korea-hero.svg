@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Theater of Operations: Korea hero art</title>
+  <desc id="desc">Atmospheric operational command-table splash art for the Korea franchise umbrella, with restrained title treatment and Inchon-Seoul estuary map geometry.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#13181d"/>
+      <stop offset="42%" stop-color="#1f2629"/>
+      <stop offset="100%" stop-color="#101417"/>
+    </linearGradient>
+    <radialGradient id="warmGlow" cx="66%" cy="28%" r="46%">
+      <stop offset="0%" stop-color="#c29f58" stop-opacity="0.46"/>
+      <stop offset="36%" stop-color="#8e7142" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#101417" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="coolGlow" cx="28%" cy="74%" r="44%">
+      <stop offset="0%" stop-color="#73889a" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#101417" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="paper" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#d6cfbb" stop-opacity="0.92"/>
+      <stop offset="100%" stop-color="#b9af97" stop-opacity="0.9"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4e6676"/>
+      <stop offset="100%" stop-color="#2c3a44"/>
+    </linearGradient>
+    <pattern id="grid" width="44" height="44" patternUnits="userSpaceOnUse">
+      <path d="M 44 0 L 0 0 0 44" fill="none" stroke="#e8ddc3" stroke-opacity="0.07" stroke-width="1"/>
+    </pattern>
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+    <filter id="grain" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 0.03"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect width="1600" height="900" fill="url(#warmGlow)"/>
+  <rect width="1600" height="900" fill="url(#coolGlow)"/>
+  <rect width="1600" height="900" fill="url(#grid)"/>
+  <rect width="1600" height="900" fill="#0d1114" opacity="0.14" filter="url(#grain)"/>
+
+  <g opacity="0.28">
+    <ellipse cx="1080" cy="580" rx="400" ry="220" fill="#000000" filter="url(#softGlow)"/>
+    <ellipse cx="450" cy="760" rx="280" ry="130" fill="#000000" filter="url(#softGlow)"/>
+  </g>
+
+  <g transform="rotate(-7 1030 510)">
+    <rect x="670" y="170" width="700" height="470" rx="18" fill="#202523" opacity="0.62" stroke="#6d654f" stroke-opacity="0.36"/>
+    <rect x="708" y="205" width="624" height="400" rx="12" fill="url(#paper)" stroke="#efe7d4" stroke-opacity="0.28"/>
+    <rect x="708" y="205" width="624" height="400" rx="12" fill="#000000" opacity="0.06" filter="url(#grain)"/>
+
+    <path d="M 755 300 C 860 250 945 250 1048 300 C 1115 332 1156 345 1230 338 L 1230 425 C 1162 440 1108 472 1054 520 C 1006 564 944 579 876 575 C 820 572 777 555 744 525 Z" fill="url(#water)" opacity="0.88"/>
+    <path d="M 763 318 C 860 275 942 274 1038 319 C 1096 346 1140 355 1215 349" fill="none" stroke="#efe5c5" stroke-opacity="0.92" stroke-width="5"/>
+    <path d="M 749 515 C 786 544 825 558 875 562 C 946 568 1006 553 1050 510 C 1094 467 1145 434 1221 417" fill="none" stroke="#d6c79f" stroke-opacity="0.68" stroke-width="3"/>
+
+    <path d="M 942 277 L 995 598" fill="none" stroke="#86775f" stroke-opacity="0.48" stroke-width="6"/>
+    <path d="M 1020 288 L 1068 579" fill="none" stroke="#efe5cb" stroke-opacity="0.58" stroke-width="3"/>
+    <path d="M 815 370 L 1180 462" fill="none" stroke="#e6d8b3" stroke-opacity="0.48" stroke-width="3"/>
+    <path d="M 838 507 L 1164 414" fill="none" stroke="#e6d8b3" stroke-opacity="0.42" stroke-width="2.5"/>
+
+    <g font-family="'Segoe UI', 'Source Sans 3', sans-serif" fill="#312f27" opacity="0.8">
+      <text x="786" y="334" font-size="32" letter-spacing="4">INCHON</text>
+      <text x="960" y="458" font-size="28" letter-spacing="3">KIMPO</text>
+      <text x="1086" y="334" font-size="34" letter-spacing="4">SEOUL</text>
+      <text x="1106" y="515" font-size="18" letter-spacing="3">YONGDUNGPO CROSSINGS</text>
+      <text x="832" y="244" font-size="16" letter-spacing="4">HAN ESTUARY</text>
+    </g>
+
+    <g fill="none" stroke="#6a614b" stroke-opacity="0.44" stroke-width="1.2">
+      <path d="M 760 250 H 1280"/>
+      <path d="M 760 290 H 1280"/>
+      <path d="M 760 330 H 1280"/>
+      <path d="M 760 370 H 1280"/>
+      <path d="M 760 410 H 1280"/>
+      <path d="M 760 450 H 1280"/>
+      <path d="M 760 490 H 1280"/>
+      <path d="M 760 530 H 1280"/>
+      <path d="M 760 570 H 1280"/>
+      <path d="M 800 225 V 585"/>
+      <path d="M 860 225 V 585"/>
+      <path d="M 920 225 V 585"/>
+      <path d="M 980 225 V 585"/>
+      <path d="M 1040 225 V 585"/>
+      <path d="M 1100 225 V 585"/>
+      <path d="M 1160 225 V 585"/>
+      <path d="M 1220 225 V 585"/>
+    </g>
+
+    <g fill="#b99453">
+      <circle cx="816" cy="324" r="10"/>
+      <circle cx="984" cy="448" r="9"/>
+      <circle cx="1103" cy="324" r="11"/>
+    </g>
+    <g fill="none" stroke="#f1e2b4" stroke-opacity="0.72" stroke-width="2.4">
+      <circle cx="816" cy="324" r="22"/>
+      <circle cx="984" cy="448" r="19"/>
+      <circle cx="1103" cy="324" r="26"/>
+    </g>
+  </g>
+
+  <g transform="translate(120 136)">
+    <text x="0" y="0" font-family="'Segoe UI', 'Source Sans 3', sans-serif" font-size="18" letter-spacing="9" fill="#d1c19a" opacity="0.86">THEATER OF OPERATIONS</text>
+    <text x="0" y="118" font-family="'Segoe UI', 'Source Sans 3', sans-serif" font-size="118" font-weight="700" letter-spacing="4" fill="#f3ead4">KOREA</text>
+    <text x="2" y="156" font-family="'Segoe UI', 'Source Sans 3', sans-serif" font-size="18" letter-spacing="7" fill="#cab98f" opacity="0.9">OPERATIONAL COMMAND • FRANCHISE PREVIEW</text>
+    <line x1="0" y1="188" x2="330" y2="188" stroke="#d0c093" stroke-opacity="0.7" stroke-width="2"/>
+    <text x="0" y="240" font-family="'Segoe UI', 'Source Sans 3', sans-serif" font-size="26" letter-spacing="5" fill="#eadfbe">INCHON / OPERATION CHROMITE</text>
+    <text x="0" y="278" font-family="'Segoe UI', 'Source Sans 3', sans-serif" font-size="18" fill="#c7c0ad" opacity="0.94">Landing at Inchon. Break inland through Kimpo.</text>
+    <text x="0" y="308" font-family="'Segoe UI', 'Source Sans 3', sans-serif" font-size="18" fill="#c7c0ad" opacity="0.94">Seize the Seoul axis before the defenders can recover.</text>
+  </g>
+
+  <g transform="translate(132 706)">
+    <text x="0" y="0" font-family="'Segoe UI', 'Source Sans 3', sans-serif" font-size="16" letter-spacing="6" fill="#d1c4a2" opacity="0.7">PUBLISHER DEMO VERTICAL SLICE</text>
+    <text x="0" y="34" font-family="'Segoe UI', 'Source Sans 3', sans-serif" font-size="15" fill="#a9a59a" opacity="0.82">Bright operational cartography. Restrained staff-map tone. Live command shell handoff.</text>
+  </g>
+</svg>

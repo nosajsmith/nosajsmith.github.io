@@ -103,6 +103,9 @@ test("map design tokens define shared size and animation standards", () => {
   assert.deepEqual(Object.keys(MAP_BASEMAP_TOKENS.coastOpacityFactorByTier), ["far", "operational", "close"]);
   assert.deepEqual(Object.keys(MAP_BASEMAP_TOKENS.coastCasingOpacityFactorByTier), ["far", "operational", "close"]);
   assert.deepEqual(Object.keys(MAP_BASEMAP_TOKENS.riverCasingOpacityFactorByTier), ["far", "operational", "close"]);
+  assert.deepEqual(Object.keys(MAP_BASEMAP_TOKENS.paperGrainOpacityByTier), ["far", "operational", "close"]);
+  assert.deepEqual(Object.keys(MAP_BASEMAP_TOKENS.terrainWashOpacityByTier), ["far", "operational", "close"]);
+  assert.deepEqual(Object.keys(MAP_BASEMAP_TOKENS.waterTextureOpacityByTier), ["far", "operational", "close"]);
   assert.deepEqual(Object.keys(MAP_BASEMAP_TOKENS.transportCasingOpacityFactorByTier), ["far", "operational", "close"]);
   assert.deepEqual(Object.keys(MAP_BASEMAP_TOKENS.roadPrimaryOpacityFactorByTier), ["far", "operational", "close"]);
   assert.deepEqual(Object.keys(MAP_BASEMAP_TOKENS.roadSecondaryOpacityFactorByTier), ["far", "operational", "close"]);
@@ -118,6 +121,8 @@ test("map design tokens define shared size and animation standards", () => {
   assert.ok(MAP_BASEMAP_TOKENS.crossingOpacityFactorByTier.operational >= MAP_BASEMAP_TOKENS.crossingHaloOpacityFactorByTier.operational);
   assert.ok(MAP_BASEMAP_TOKENS.markerSizePx.airfield.operational > MAP_BASEMAP_TOKENS.markerSizePx.settlement.operational);
   assert.ok(MAP_BASEMAP_TOKENS.markerSizePx.crossing.operational > MAP_BASEMAP_TOKENS.markerSizePx.crossing.far);
+  assert.ok(MAP_BASEMAP_TOKENS.paperGrainOpacityByTier.close > MAP_BASEMAP_TOKENS.paperGrainOpacityByTier.far);
+  assert.ok(MAP_BASEMAP_TOKENS.waterTextureOpacityByTier.operational > 0);
   assert.ok(MAP_GRID_PRESENTATION_BY_ZOOM_TIER.operational.gridMajorOpacity < 0.6);
   assert.ok(MAP_OBJECTIVE_BADGE_SCALE_BY_ZOOM_TIER.operational > MAP_OBJECTIVE_BADGE_SCALE_BY_ZOOM_TIER.far);
   assert.ok(MAP_LABEL_STYLE_TOKENS.fontSizePx.objective > MAP_LABEL_STYLE_TOKENS.fontSizePx.site);

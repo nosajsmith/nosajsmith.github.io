@@ -6,6 +6,48 @@ import { axialToPixel } from "./hex.js";
 
 function isNum(n) { return typeof n === "number" && Number.isFinite(n); }
 
+export const DEFAULT_PITCH_SCENARIO = "inchon_mvp";
+
+export function canonicalScenarioKey(value) {
+  return String(value ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/\.json$/i, "")
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+}
+
+export function scenarioKeysMatch(left, right) {
+  const leftKey = canonicalScenarioKey(left);
+  const rightKey = canonicalScenarioKey(right);
+  return Boolean(leftKey && rightKey && leftKey === rightKey);
+}
+
+function pitchScenarioScore(value) {
+  const text = canonicalScenarioKey(value).replace(/_/g, " ");
+  if (!text) {
+    return Number.POSITIVE_INFINITY;
+  }
+  if (text === "inchon mvp") {
+    return 0;
+  }
+  if (/inchon|incheon|chromite/.test(text)) {
+    return 1;
+  }
+  if (/korea|waegwan|naktong|nakdong|seoul|kimpo|pusan/.test(text)) {
+    return 2;
+  }
+  return 3;
+}
+
+export function pickPreferredPitchScenario(scenarios) {
+  if (!Array.isArray(scenarios) || !scenarios.length) {
+    return null;
+  }
+  return [...scenarios]
+    .sort((left, right) => pitchScenarioScore(left) - pitchScenarioScore(right) || left.localeCompare(right))[0] ?? null;
+}
+
 function seedCoords(units) {
   // deterministic spread if coords missing
   let bi = 0, ri = 0, ni = 0;

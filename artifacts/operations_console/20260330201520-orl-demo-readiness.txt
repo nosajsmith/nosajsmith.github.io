@@ -1,0 +1,131 @@
+Name: ORL / Demo Readiness
+Status: FAIL
+Summary: Suite completed with status FAIL. ORL / Smoke Suite=FAIL, ORL / UI Build Check=PASS
+Scenario: inchon_mvp
+Started: 2026-03-30T20:15:16.208100+00:00
+Finished: 2026-03-30T20:15:20.125554+00:00
+Duration (ms): 3917
+Artifacts:
+- /home/jason/dev/mwe/ui/dist/index.html
+Details:
+- ## ORL / Demo Readiness
+- [1/2] ORL / Smoke Suite
+- ## ORL / Smoke Suite
+- [1/2] ORL / Connectivity
+- [ORL] ORL / Connectivity
+- Connecting to bridge at ws://127.0.0.1:8766
+- Bridge unavailable: [Errno 1] Operation not permitted
+- FAIL: Bridge connectivity check failed.
+- [2/2] ORL / Scenario Integrity
+- [ORL] ORL / Scenario Integrity
+- Connecting to bridge at ws://127.0.0.1:8766
+- Requested scenario: inchon_mvp
+- Bridge unavailable: [Errno 1] Operation not permitted
+- FAIL: Scenario integrity check failed.
+- FAIL: Suite completed with status FAIL. ORL / Connectivity=FAIL, ORL / Scenario Integrity=FAIL
+- [2/2] ORL / UI Build Check
+- [ORL] ORL / UI Build Check
+- Inspecting UI directory: /home/jason/dev/mwe/ui
+- package.json found
+- build script found
+- Running build command: npm run build
+- stdout: > ui@0.0.0 build
+- stdout: > vite build
+- stdout: vite v7.3.1 building client environment for production...
+- stdout: transforming...
+- stdout: ✓ 113 modules transformed.
+- stdout: rendering chunks...
+- stdout: computing gzip size...
+- stdout: dist/index.html                                  0.45 kB │ gzip:   0.29 kB
+- stdout: dist/assets/lunga_point_underlay-DIXecpoO.svg    5.06 kB │ gzip:   1.49 kB
+- stdout: dist/assets/index-3yHW4cfe.css                 230.85 kB │ gzip:  35.40 kB
+- stdout: dist/assets/index-BigxHkVe.js                  701.92 kB │ gzip: 190.58 kB
+- stdout: ✓ built in 3.13s
+- stderr: (!) Some chunks are larger than 500 kB after minification. Consider:
+- stderr: - Using dynamic import() to code-split the application
+- stderr: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- stderr: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+- UI build completed
+- Build artifact found: /home/jason/dev/mwe/ui/dist/index.html
+- PASS: UI build completed successfully.
+Subresults:
+  Name: ORL / Smoke Suite
+  Status: FAIL
+  Summary: Suite completed with status FAIL. ORL / Connectivity=FAIL, ORL / Scenario Integrity=FAIL
+  Scenario: inchon_mvp
+  Started: 2026-03-30T20:15:16.208123+00:00
+  Finished: 2026-03-30T20:15:16.247671+00:00
+  Duration (ms): 39
+  Details:
+  - ## ORL / Smoke Suite
+  - [1/2] ORL / Connectivity
+  - [ORL] ORL / Connectivity
+  - Connecting to bridge at ws://127.0.0.1:8766
+  - Bridge unavailable: [Errno 1] Operation not permitted
+  - FAIL: Bridge connectivity check failed.
+  - [2/2] ORL / Scenario Integrity
+  - [ORL] ORL / Scenario Integrity
+  - Connecting to bridge at ws://127.0.0.1:8766
+  - Requested scenario: inchon_mvp
+  - Bridge unavailable: [Errno 1] Operation not permitted
+  - FAIL: Scenario integrity check failed.
+  Subresults:
+    Name: ORL / Connectivity
+    Status: FAIL
+    Summary: Bridge connectivity check failed.
+    Scenario: inchon_mvp
+    Started: 2026-03-30T20:15:16.208131+00:00
+    Finished: 2026-03-30T20:15:16.247176+00:00
+    Duration (ms): 39
+    Errors:
+    - [Errno 1] Operation not permitted
+    Details:
+    - [ORL] ORL / Connectivity
+    - Connecting to bridge at ws://127.0.0.1:8766
+    - Bridge unavailable: [Errno 1] Operation not permitted
+    Name: ORL / Scenario Integrity
+    Status: FAIL
+    Summary: Scenario integrity check failed.
+    Scenario: inchon_mvp
+    Started: 2026-03-30T20:15:16.247203+00:00
+    Finished: 2026-03-30T20:15:16.247645+00:00
+    Errors:
+    - [Errno 1] Operation not permitted
+    Details:
+    - [ORL] ORL / Scenario Integrity
+    - Connecting to bridge at ws://127.0.0.1:8766
+    - Requested scenario: inchon_mvp
+    - Bridge unavailable: [Errno 1] Operation not permitted
+  Name: ORL / UI Build Check
+  Status: PASS
+  Summary: UI build completed successfully.
+  Scenario: inchon_mvp
+  Started: 2026-03-30T20:15:16.247686+00:00
+  Finished: 2026-03-30T20:15:20.125514+00:00
+  Duration (ms): 3877
+  Artifacts:
+  - /home/jason/dev/mwe/ui/dist/index.html
+  Details:
+  - [ORL] ORL / UI Build Check
+  - Inspecting UI directory: /home/jason/dev/mwe/ui
+  - package.json found
+  - build script found
+  - Running build command: npm run build
+  - stdout: > ui@0.0.0 build
+  - stdout: > vite build
+  - stdout: vite v7.3.1 building client environment for production...
+  - stdout: transforming...
+  - stdout: ✓ 113 modules transformed.
+  - stdout: rendering chunks...
+  - stdout: computing gzip size...
+  - stdout: dist/index.html                                  0.45 kB │ gzip:   0.29 kB
+  - stdout: dist/assets/lunga_point_underlay-DIXecpoO.svg    5.06 kB │ gzip:   1.49 kB
+  - stdout: dist/assets/index-3yHW4cfe.css                 230.85 kB │ gzip:  35.40 kB
+  - stdout: dist/assets/index-BigxHkVe.js                  701.92 kB │ gzip: 190.58 kB
+  - stdout: ✓ built in 3.13s
+  - stderr: (!) Some chunks are larger than 500 kB after minification. Consider:
+  - stderr: - Using dynamic import() to code-split the application
+  - stderr: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+  - stderr: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+  - UI build completed
+  - Build artifact found: /home/jason/dev/mwe/ui/dist/index.html

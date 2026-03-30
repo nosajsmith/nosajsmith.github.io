@@ -1,8 +1,8 @@
-import { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent, type WheelEvent } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type PointerEvent, type WheelEvent } from "react";
 import type { ViewSnapshot } from "../../types/viewSnapshot";
 import lungaPointUnderlayUrl from "../../assets/lunga_point_underlay.svg";
-import { pixelToAxial } from "../../lib/hex.js";
-import { humanizeScenarioLabel } from "../../lib/view_snapshot.js";
+import { axialRound, pixelToAxial } from "../../lib/hex.js";
+import { inferScenarioPresentation } from "../../lib/view_snapshot.js";
 import { MAP_LABEL_STYLE_TOKENS, MAP_OPERATIONAL_OVERLAY_TOKENS, MAP_SIZE_TOKENS } from "../../map/designTokens.js";
 import {
   appendGreaseMarkupPoint,
@@ -32,6 +32,7 @@ import {
 } from "../../map/runtime/BasemapLoader.js";
 import { resolveBasemapStyle } from "../../map/runtime/basemapStyle.js";
 import {
+  buildInitialMapCamera,
   buildMapScene,
   buildOperationalOverlayState,
   clampMapCamera,
@@ -60,8 +61,8 @@ import UnitCounterFrameHarnessPanel from "./UnitCounterFrameHarnessPanel";
 import UnitCounterStatusOverlay from "./UnitCounterStatusOverlay";
 import { summarizeGreaseBoard } from "./grease_board_summary.js";
 import type { InspectorSelection } from "./inspector_types";
-import { summarizeOperationPlanner, summarizeTrackedOperations } from "./operations_planner.js";
-import type { OperationPlannerActions, OperationPlannerState, TrackedDemoOperation } from "./operations_planner_types";
+import { buildMapCommandPreview, summarizeOperationPlanner, summarizeTrackedOperations } from "./operations_planner.js";
+import type { FastCommandPreview, OperationPlannerActions, OperationPlannerState, TrackedDemoOperation } from "./operations_planner_types";
 
 type MapPanelShellProps = {
   snapshot: ViewSnapshot;
@@ -100,6 +101,7 @@ type MapPanelShellProps = {
   };
   onToggleLayer: (id: string) => void;
   onSelectPlannerWorkbenchTab: (tab: PlannerWorkbenchTab) => void;
+  onCommitFastCommand: (preview: FastCommandPreview | null) => void;
   onSelectSelection: (selection: InspectorSelection) => void;
 };
 
@@ -161,13 +163,6 @@ function basemapHexCoordKey(q: number, r: number): string {
   return `${q}:${r}`;
 }
 
-function buildBasemapHexPolygonPoints(q: number, r: number, scene: ReturnType<typeof buildMapScene>): string {
-  return BASEMAP_HEX_CORNER_OFFSETS
-    .map((offset) => projectScenePoint({ x: q + offset.q, y: r + offset.r }, scene))
-    .map((point) => `${point.x.toFixed(2)},${point.y.toFixed(2)}`)
-    .join(" ");
-}
-
 function resolveBasemapCrossingKind(crossingKinds: unknown): string {
   const values = Array.isArray(crossingKinds) ? crossingKinds.map((entry) => String(entry || "").trim().toLowerCase()) : [];
   if (values.includes("bridge")) {
@@ -189,6 +184,278 @@ function resolveBasemapRoadClass(segmentClass: unknown): "primary" | "secondary"
   return String(segmentClass || "").trim().toLowerCase() === "primary_road" ? "primary" : "secondary";
 }
 
+type BasemapRawBounds = {
+  minX: number;
+  maxX: number;
+  minY: number;
+  maxY: number;
+};
+
+type BasemapProjectionContext = {
+  rawBounds: BasemapRawBounds;
+  rawViewport: BasemapRawBounds;
+  containsRawPoint: (point: unknown, pad?: number) => boolean;
+  segmentTouchesRawBounds: (segment: { from?: unknown; to?: unknown }, pad?: number) => boolean;
+  projectWorldPoint: (point: unknown, featureMeta?: { id?: unknown; name?: unknown }) => { x: number; y: number };
+};
+
+const KOREA_AO_BASEMAP_RAW_BOUNDS = Object.freeze({
+  minX: -2.45,
+  maxX: 0.95,
+  minY: 20.9,
+  maxY: 22.5,
+});
+
+function expandBasemapRawBounds(bounds: BasemapRawBounds, padX: number, padY: number): BasemapRawBounds {
+  return {
+    minX: bounds.minX - padX,
+    maxX: bounds.maxX + padX,
+    minY: bounds.minY - padY,
+    maxY: bounds.maxY + padY,
+  };
+}
+
+function numericMapCoord(value: unknown): number | null {
+  return typeof value === "number" && Number.isFinite(value) ? value : null;
+}
+
+function resolveSnapshotPresentationBounds(
+  snapshot: ViewSnapshot,
+  key: "world_bounds" | "basemap_raw_bounds",
+): BasemapRawBounds | null {
+  const bounds = snapshot?.map_presentation?.[key];
+  if (!bounds) {
+    return null;
+  }
+
+  const minX = numericMapCoord(bounds.min_x);
+  const maxX = numericMapCoord(bounds.max_x);
+  const minY = numericMapCoord(bounds.min_y);
+  const maxY = numericMapCoord(bounds.max_y);
+
+  if (minX == null || maxX == null || minY == null || maxY == null) {
+    return null;
+  }
+  if (maxX <= minX || maxY <= minY) {
+    return null;
+  }
+
+  return {
+    minX,
+    maxX,
+    minY,
+    maxY,
+  };
+}
+
+function rawPointX(point: unknown): number | null {
+  if (!point || typeof point !== "object") {
+    return null;
+  }
+  const row = point as Record<string, unknown>;
+  return numericMapCoord(row.x) ?? numericMapCoord(row.q);
+}
+
+function rawPointY(point: unknown): number | null {
+  if (!point || typeof point !== "object") {
+    return null;
+  }
+  const row = point as Record<string, unknown>;
+  return numericMapCoord(row.y) ?? numericMapCoord(row.r);
+}
+
+function normalizeBasemapLookupText(...values: unknown[]): string {
+  return values
+    .flatMap((value) => {
+      if (Array.isArray(value)) {
+        return value;
+      }
+      return [value];
+    })
+    .map((value) => String(value ?? "").trim().toLowerCase())
+    .filter(Boolean)
+    .join(" ")
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function collectNormalizedMapLabelKeys(...values: unknown[]): string[] {
+  return values
+    .flatMap((value) => {
+      if (Array.isArray(value)) {
+        return value;
+      }
+      return [value];
+    })
+    .map((value) => normalizeMapLabelKey(value))
+    .filter(Boolean);
+}
+
+const KOREA_AO_PRIORITY_LABEL_PATTERN = /inchon harbor|incheon harbor|inchon beachhead|inchon|incheon|kimpo airfield|gimpo airfield|kimpo corridor|kimpo|gimpo|yongdungpo|crossings|seoul defensive belt|seoul defensive ring|seoul axis|seoul|han river|han estuary/;
+const KOREA_AO_ROUTE_LABEL_PATTERN = /kimpo corridor|yongdungpo|crossings|seoul axis|han river|han estuary/;
+
+function isKoreaAoPriorityLabel(...values: unknown[]): boolean {
+  return KOREA_AO_PRIORITY_LABEL_PATTERN.test(normalizeBasemapLookupText(...values));
+}
+
+function isKoreaAoRouteLabel(...values: unknown[]): boolean {
+  return KOREA_AO_ROUTE_LABEL_PATTERN.test(normalizeBasemapLookupText(...values));
+}
+
+function collectSnapshotMapRows(snapshot: ViewSnapshot): Array<Record<string, unknown>> {
+  return [
+    ...(Array.isArray(snapshot?.objectives) ? snapshot.objectives : []),
+    ...(Array.isArray(snapshot?.airfields) ? snapshot.airfields : []),
+    ...(Array.isArray(snapshot?.ports) ? snapshot.ports : []),
+    ...(Array.isArray(snapshot?.local_pressure_areas) ? snapshot.local_pressure_areas : []),
+    ...(Array.isArray(snapshot?.units) ? snapshot.units : []),
+  ].filter((row) => row && typeof row === "object") as Array<Record<string, unknown>>;
+}
+
+function findWorldAnchor(snapshot: ViewSnapshot, tokens: string[]): { x: number; y: number } | null {
+  const rows = collectSnapshotMapRows(snapshot);
+  for (const row of rows) {
+    const x = numericMapCoord(row.x);
+    const y = numericMapCoord(row.y);
+    if (x == null || y == null) {
+      continue;
+    }
+    const searchText = normalizeBasemapLookupText(
+      row.id,
+      row.name,
+      row.label,
+      row.location_id,
+      row.objective_id,
+      row.historical_name,
+      row.modern_name,
+    );
+    if (tokens.some((token) => searchText.includes(token))) {
+      return { x, y };
+    }
+  }
+  return null;
+}
+
+function buildKoreaAoBasemapProjection(snapshot: ViewSnapshot): BasemapProjectionContext | null {
+  const searchText = normalizeBasemapLookupText(
+    snapshot?.scenario?.id,
+    snapshot?.scenario?.name,
+    (snapshot?.objectives || []).map((objective) => objective?.name),
+    (snapshot?.airfields || []).map((airfield) => airfield?.name),
+    (snapshot?.ports || []).map((port) => port?.name),
+  );
+  if (!/inchon|incheon|chromite|kimpo|gimpo|seoul/.test(searchText)) {
+    return null;
+  }
+
+  const seoulWorld = findWorldAnchor(snapshot, ["seoul"]) || { x: 46, y: 36 };
+  const inchonWorld = findWorldAnchor(snapshot, ["inchon harbor", "incheon harbor", "inchon", "incheon"]) || { x: 18, y: 58 };
+  const kimpoWorld = findWorldAnchor(snapshot, ["kimpo", "gimpo"]) || {
+    x: Number((inchonWorld.x + (seoulWorld.x - inchonWorld.x) * 0.46).toFixed(2)),
+    y: Number((inchonWorld.y + (seoulWorld.y - inchonWorld.y) * 0.54).toFixed(2)),
+  };
+  const suwonWorld = findWorldAnchor(snapshot, ["suwon"]) || {
+    x: Number((seoulWorld.x + 12.4).toFixed(2)),
+    y: Number((seoulWorld.y - 5.5).toFixed(2)),
+  };
+  const qBasis = {
+    x: Number((seoulWorld.x - inchonWorld.x).toFixed(4)),
+    y: Number((seoulWorld.y - inchonWorld.y).toFixed(4)),
+  };
+  const rBasis = {
+    x: Number((seoulWorld.x - suwonWorld.x).toFixed(4)),
+    y: Number((seoulWorld.y - suwonWorld.y).toFixed(4)),
+  };
+  const authoredRawBounds = resolveSnapshotPresentationBounds(snapshot, "basemap_raw_bounds");
+  const rawBounds = authoredRawBounds ?? KOREA_AO_BASEMAP_RAW_BOUNDS;
+  const rawViewport = expandBasemapRawBounds(
+    rawBounds,
+    authoredRawBounds ? 0.18 : 0.44,
+    authoredRawBounds ? 0.16 : 0.38,
+  );
+  const incheonIntlWorld = {
+    x: Number((inchonWorld.x - qBasis.x * 0.22 + rBasis.x * 0.08).toFixed(2)),
+    y: Number((inchonWorld.y - qBasis.y * 0.22 + rBasis.y * 0.08).toFixed(2)),
+  };
+  const overrideRows = [
+    { tokens: ["kimpo", "gimpo"], point: kimpoWorld },
+    { tokens: ["seoul"], point: seoulWorld },
+    { tokens: ["suwon"], point: suwonWorld },
+    { tokens: ["inchon harbor", "incheon harbor", "inchon", "incheon"], point: inchonWorld },
+    { tokens: ["incheon int l", "incheon intl"], point: incheonIntlWorld },
+  ];
+
+  function containsRawPoint(point: unknown, pad = 0): boolean {
+    const x = rawPointX(point);
+    const y = rawPointY(point);
+    if (x == null || y == null) {
+      return false;
+    }
+    return x >= rawBounds.minX - pad
+      && x <= rawBounds.maxX + pad
+      && y >= rawBounds.minY - pad
+      && y <= rawBounds.maxY + pad;
+  }
+
+  function segmentTouchesRawBounds(segment: { from?: unknown; to?: unknown }, pad = 0.9): boolean {
+    const fromX = rawPointX(segment?.from);
+    const fromY = rawPointY(segment?.from);
+    const toX = rawPointX(segment?.to);
+    const toY = rawPointY(segment?.to);
+    if (fromX == null || fromY == null || toX == null || toY == null) {
+      return false;
+    }
+    const minX = Math.min(fromX, toX);
+    const maxX = Math.max(fromX, toX);
+    const minY = Math.min(fromY, toY);
+    const maxY = Math.max(fromY, toY);
+    return maxX >= rawBounds.minX - pad
+      && minX <= rawBounds.maxX + pad
+      && maxY >= rawBounds.minY - pad
+      && minY <= rawBounds.maxY + pad;
+  }
+
+  function resolveFeatureOverride(featureMeta?: { id?: unknown; name?: unknown }): { x: number; y: number } | null {
+    if (!featureMeta) {
+      return null;
+    }
+    const search = normalizeBasemapLookupText(featureMeta.id, featureMeta.name);
+    const match = overrideRows.find((row) => row.tokens.some((token) => search.includes(token)));
+    return match?.point ?? null;
+  }
+
+  function projectWorldPoint(point: unknown, featureMeta?: { id?: unknown; name?: unknown }): { x: number; y: number } {
+    const override = resolveFeatureOverride(featureMeta);
+    if (override) {
+      return override;
+    }
+    const rawX = rawPointX(point) ?? 0;
+    const rawY = rawPointY(point) ?? 22;
+    return {
+      x: Number((seoulWorld.x + rawX * qBasis.x + (rawY - 22) * rBasis.x).toFixed(2)),
+      y: Number((seoulWorld.y + rawX * qBasis.y + (rawY - 22) * rBasis.y).toFixed(2)),
+    };
+  }
+
+  return {
+    rawBounds,
+    rawViewport,
+    containsRawPoint,
+    segmentTouchesRawBounds,
+    projectWorldPoint,
+  };
+}
+
+function normalizeMapLabelKey(value: unknown): string {
+  return String(value ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 export default function MapPanelShell({
   snapshot,
   selectedSelection,
@@ -201,12 +468,14 @@ export default function MapPanelShell({
   greaseMarkupActions,
   onToggleLayer,
   onSelectPlannerWorkbenchTab,
+  onCommitFastCommand,
   onSelectSelection,
 }: MapPanelShellProps) {
   const [legendOpen, setLegendOpen] = useState(false);
   const [plannerPinned, setPlannerPinned] = useState(false);
   const [cameraState, setCameraState] = useState({ zoom: 1, offsetX: 0, offsetY: 0 });
   const [isPanning, setIsPanning] = useState(false);
+  const [commandHoverHex, setCommandHoverHex] = useState<{ q: number; r: number } | null>(null);
   const [stageSize, setStageSize] = useState({ width: 1000, height: 620 });
   const [greaseDraft, setGreaseDraft] = useState<{
     pointerId: number;
@@ -221,6 +490,8 @@ export default function MapPanelShell({
   const qaWorkbenchVisible = import.meta.env.DEV;
   const stageRef = useRef<HTMLDivElement | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const cameraAutoFitKeyRef = useRef<string | null>(null);
+  const cameraInteractedRef = useRef(false);
   const dragStateRef = useRef<{
     pointerId: number;
     clientX: number;
@@ -250,19 +521,28 @@ export default function MapPanelShell({
     return { width, height, inset };
   }, [stageSize]);
   const scene = useMemo(() => buildMapScene(snapshot, sceneOptions), [snapshot, sceneOptions]);
+  const presentation = useMemo(() => inferScenarioPresentation(snapshot), [snapshot]);
   const camera = useMemo(() => clampMapCamera(cameraState, scene), [cameraState, scene]);
   const zoomPresentation = useMemo(() => summarizeMapZoomPresentation(camera.zoom), [camera.zoom]);
   const basemapStyle = useMemo(() => resolveBasemapStyle(camera.zoom), [camera.zoom]);
+  const basemapProjection = useMemo(
+    () => (resolveBasemapPackageTheater(snapshot) === "korea_peninsula_coarse_v1" ? buildKoreaAoBasemapProjection(snapshot) : null),
+    [snapshot],
+  );
   const overlayState = useMemo(() => buildOperationalOverlayState(snapshot, scene), [snapshot, scene]);
   const plannerSummary = useMemo(() => summarizeOperationPlanner(snapshot, scene, plannerState), [snapshot, scene, plannerState]);
   const trackedOperations = useMemo(() => summarizeTrackedOperations(snapshot, operations, { scene }), [snapshot, operations, scene]);
-  const greaseBoard = useMemo(() => summarizeGreaseBoard(snapshot), [snapshot]);
+  const greaseBoard = useMemo(() => summarizeGreaseBoard(snapshot, operations), [snapshot, operations]);
   const weatherOverlay = summarizeWeatherOverlay(snapshot);
   const selectedUnitId = selectedSelection?.kind === "unit" ? selectedSelection.id : null;
   const selectedObjectiveId = selectedSelection?.kind === "objective" ? selectedSelection.id : null;
   const selectedAirfieldId = selectedSelection?.kind === "airfield" ? selectedSelection.id : null;
   const selectedPortId = selectedSelection?.kind === "port" ? selectedSelection.id : null;
   const basemapTheaterId = useMemo(() => resolveBasemapPackageTheater(snapshot), [snapshot]);
+  const basemapTileScene = useMemo(
+    () => (basemapProjection ? { ...scene, viewport: basemapProjection.rawViewport } : scene),
+    [basemapProjection, scene],
+  );
   const basemapPackageExpected = Boolean(basemapTheaterId);
   const hasHistoricalUnderlay = scene.underlay?.available && scene.underlay.id === "lunga_point_henderson";
   const resolvedLayerToggles = useMemo(() => {
@@ -323,6 +603,25 @@ export default function MapPanelShell({
   const terrainTransform = `translate(${camera.offsetX} ${camera.offsetY}) scale(${camera.zoom})`;
   const objectiveSelectionActive = plannerState.greaseEnabled && (plannerState.selectingObjective || (plannerState.plannerOpen && !plannerState.approved));
   const greaseToolArmed = Boolean(plannerState.greaseEnabled && greasePlanningLayerVisible && greaseMarkup.activeTool && !objectiveSelectionActive);
+  const quickCommandPreview = useMemo(() => {
+    if (!selectedUnitId || !commandHoverHex || greaseToolArmed || objectiveSelectionActive) {
+      return null;
+    }
+    return buildMapCommandPreview(snapshot, selectedUnitId, commandHoverHex);
+  }, [snapshot, selectedUnitId, commandHoverHex, greaseToolArmed, objectiveSelectionActive]);
+  const transformedQuickCommandPreview = useMemo(() => {
+    if (!quickCommandPreview?.available) {
+      return null;
+    }
+    return {
+      ...quickCommandPreview,
+      cameraRoute: quickCommandPreview.route.map((point) => projectMapCameraPoint(projectScenePoint(point, scene), camera)),
+      cameraTarget: projectMapCameraPoint(
+        projectScenePoint({ x: quickCommandPreview.targetHex.q, y: quickCommandPreview.targetHex.r }, scene),
+        camera,
+      ),
+    };
+  }, [quickCommandPreview, scene, camera]);
   const topControlInset = plannerState.plannerOpen
     ? "calc(min(348px, calc(100vw - 24px)) + clamp(10px, 1vw, 16px))"
     : "calc(188px + clamp(10px, 1vw, 16px))";
@@ -372,8 +671,8 @@ export default function MapPanelShell({
     [transformedUnits],
   );
   const visibleBasemapTileRefs = useMemo(
-    () => collectVisibleBasemapTiles(basemapManifest, scene, basemapStyle.tileTier),
-    [basemapManifest, scene, basemapStyle.tileTier],
+    () => collectVisibleBasemapTiles(basemapManifest, basemapTileScene, basemapStyle.tileTier),
+    [basemapManifest, basemapTileScene, basemapStyle.tileTier],
   );
   const visibleBasemapTileKey = useMemo(
     () => visibleBasemapTileRefs.map((tile) => `${tile.tileId}:${tile.tx}:${tile.ty}`).join("|"),
@@ -435,9 +734,9 @@ export default function MapPanelShell({
       label: "Packaged basemap",
       available: true,
       status: `Ready (${basemapTiles.length} tile${basemapTiles.length === 1 ? "" : "s"} in view)`,
-      detail: "Hex-space packaged basemap tiles are aligned beneath the current Theatre overlays and grid.",
+      detail: `${presentation.basemapLabel} tiles are aligned beneath the current theater overlays and grid.`,
     };
-  }, [basemapFallbackUnderlayActive, basemapPackageExpected, basemapRuntimeState, basemapTiles.length]);
+  }, [basemapFallbackUnderlayActive, basemapPackageExpected, basemapRuntimeState, basemapTiles.length, presentation.basemapLabel]);
   const overlayLayerCatalog = useMemo(() => ({
     basemap: basemapLayerSummary,
     historicalUnderlay: overlayState.historicalUnderlay,
@@ -539,6 +838,13 @@ export default function MapPanelShell({
     },
   ].filter((group) => group.entries.length)), [overlayControlEntries]);
   const transformedBasemap = useMemo(() => {
+    const mapBasemapWorldPoint = (point: unknown, featureMeta?: { id?: unknown; name?: unknown }) => (
+      basemapProjection?.projectWorldPoint(point, featureMeta)
+      ?? {
+        x: rawPointX(point) ?? 0,
+        y: rawPointY(point) ?? 0,
+      }
+    );
     const hexLookup = new Map(
       (basemapFeatures.hexes || []).map((hexRecord) => [basemapHexCoordKey(Number(hexRecord.q), Number(hexRecord.r)), hexRecord]),
     );
@@ -561,39 +867,58 @@ export default function MapPanelShell({
     return {
       hexes: (basemapFeatures.hexes || [])
         .filter((hexRecord) => hexRecord.zoomRelevance?.[basemapStyle.tileTier] !== false)
+        .filter((hexRecord) => !basemapProjection || basemapProjection.containsRawPoint(hexRecord, 0.84))
         .map((hexRecord) => {
           const q = Number(hexRecord.q);
           const r = Number(hexRecord.r);
-          const center = projectScenePoint({ x: q, y: r }, scene);
+          const center = projectScenePoint(mapBasemapWorldPoint({ x: q, y: r }), scene);
           return {
             ...hexRecord,
             center,
-            points: buildBasemapHexPolygonPoints(q, r, scene),
+            points: BASEMAP_HEX_CORNER_OFFSETS
+              .map((offset) => mapBasemapWorldPoint({ x: q + offset.q, y: r + offset.r }))
+              .map((point) => projectScenePoint(point, scene))
+              .map((point) => `${point.x.toFixed(2)},${point.y.toFixed(2)}`)
+              .join(" "),
             terrainClass: normalizeBasemapTerrainClass(hexRecord.terrainClass),
             showContour: contourHexIds.has(String(hexRecord.hexId)),
             majorContour: Number(hexRecord.contourBand || 0) % contourMajorModulo === 0,
           };
         }),
-      settlements: (basemapFeatures.settlements || []).map((settlement) => ({
-        ...settlement,
-        point: projectScenePoint({ x: Number(settlement.q), y: Number(settlement.r) }, scene),
-      })),
-      airfields: (basemapFeatures.airfields || []).map((airfield) => ({
-        ...airfield,
-        point: projectScenePoint({ x: Number(airfield.q), y: Number(airfield.r) }, scene),
-      })),
-      roadSegments: (basemapFeatures.roadSegments || []).map((segment) => ({
-        ...segment,
-        from: projectScenePoint(segment.from, scene),
-        to: projectScenePoint(segment.to, scene),
-      })),
-      railSegments: (basemapFeatures.railSegments || []).map((segment) => ({
-        ...segment,
-        from: projectScenePoint(segment.from, scene),
-        to: projectScenePoint(segment.to, scene),
-      })),
+      settlements: (basemapFeatures.settlements || [])
+        .filter((settlement) => !basemapProjection || basemapProjection.containsRawPoint(settlement, 0.68))
+        .map((settlement) => ({
+          ...settlement,
+          point: projectScenePoint(
+            mapBasemapWorldPoint({ x: Number(settlement.q), y: Number(settlement.r) }, settlement),
+            scene,
+          ),
+        })),
+      airfields: (basemapFeatures.airfields || [])
+        .filter((airfield) => !basemapProjection || basemapProjection.containsRawPoint(airfield, 0.68))
+        .map((airfield) => ({
+          ...airfield,
+          point: projectScenePoint(
+            mapBasemapWorldPoint({ x: Number(airfield.q), y: Number(airfield.r) }, airfield),
+            scene,
+          ),
+        })),
+      roadSegments: (basemapFeatures.roadSegments || [])
+        .filter((segment) => !basemapProjection || basemapProjection.segmentTouchesRawBounds(segment, 1.05))
+        .map((segment) => ({
+          ...segment,
+          from: projectScenePoint(mapBasemapWorldPoint(segment.from), scene),
+          to: projectScenePoint(mapBasemapWorldPoint(segment.to), scene),
+        })),
+      railSegments: (basemapFeatures.railSegments || [])
+        .filter((segment) => !basemapProjection || basemapProjection.segmentTouchesRawBounds(segment, 1.05))
+        .map((segment) => ({
+          ...segment,
+          from: projectScenePoint(mapBasemapWorldPoint(segment.from), scene),
+          to: projectScenePoint(mapBasemapWorldPoint(segment.to), scene),
+        })),
     };
-  }, [basemapFeatures, basemapStyle.tileTier, scene]);
+  }, [basemapFeatures, basemapProjection, basemapStyle.tileTier, scene]);
 
   useEffect(() => {
     let cancelled = false;
@@ -691,31 +1016,103 @@ export default function MapPanelShell({
   }, [transformedObjectives, transformedAirfields, transformedPorts, transformedUnits, zoomPresentation.counterScale]);
   const labelDeclutter = useMemo(() => {
     const scale = zoomPresentation.counterScale;
+    const koreaFocusedLabeling = /korea|inchon|seoul/.test(`${presentation.shellTitle} ${presentation.theaterLabel}`.toLowerCase());
+    const basemapSettlementLabelMin = basemapStyle.tier === "close" ? 4 : koreaFocusedLabeling ? 4 : 6;
+    const basemapAirfieldLabelMin = basemapStyle.tier === "close" ? 2 : koreaFocusedLabeling ? 2 : 4;
+    const objectiveLabelKeys = new Set(
+      transformedObjectives.flatMap((objective) => collectNormalizedMapLabelKeys(
+        objective.map_label,
+        objective.displayName,
+        objective.name,
+        objective.historical_name,
+        objective.modern_name,
+      )),
+    );
+    const objectiveLocationIds = new Set(
+      transformedObjectives.map((objective) => String(objective.location_id || "").trim()).filter(Boolean),
+    );
+    const authoredMapLabelKeys = new Set([
+      ...transformedObjectives.flatMap((objective) => collectNormalizedMapLabelKeys(
+        objective.map_label,
+        objective.displayName,
+        objective.name,
+        objective.historical_name,
+        objective.modern_name,
+      )),
+      ...transformedAirfields.flatMap((airfield) => collectNormalizedMapLabelKeys(airfield.map_label, airfield.name)),
+      ...transformedPorts.flatMap((port) => collectNormalizedMapLabelKeys(port.map_label, port.name)),
+    ].filter(Boolean));
     const candidates = [
+      ...transformedBasemap.settlements
+        .filter((settlement) => String(settlement.name || "").trim())
+        .filter((settlement) => Number(settlement.importance || 0) >= basemapSettlementLabelMin)
+        .filter((settlement) => !authoredMapLabelKeys.has(normalizeMapLabelKey(settlement.name)))
+        .map((settlement) => {
+          const ownerId = `basemap:settlement:${settlement.id}`;
+          const importance = Number(settlement.importance || 0);
+          return {
+            id: `${ownerId}:label`,
+            ownerId,
+            kind: "featureLabel",
+            text: settlement.name,
+            x: settlement.point.x + 7.5 * scale,
+            y: settlement.point.y - 6.5 * scale,
+            textAnchor: "start",
+            scale,
+            important: importance >= basemapSettlementLabelMin + 2 || ["major_city", "capital"].includes(String(settlement.tier || "")),
+            visibility: basemapStyle.tier === "close" ? "close" : "operational",
+            priorityBoost: importance * 5,
+          };
+        }),
+      ...transformedBasemap.airfields
+        .filter((airfield) => String(airfield.name || "").trim())
+        .filter((airfield) => Number(airfield.importance || 0) >= basemapAirfieldLabelMin)
+        .filter((airfield) => !authoredMapLabelKeys.has(normalizeMapLabelKey(airfield.name)))
+        .map((airfield) => {
+          const ownerId = `basemap:airfield:${airfield.id}`;
+          const importance = Number(airfield.importance || 0);
+          return {
+            id: `${ownerId}:label`,
+            ownerId,
+            kind: "airfieldLabel",
+            text: airfield.name,
+            x: airfield.point.x + 8 * scale,
+            y: airfield.point.y - 6 * scale,
+            textAnchor: "start",
+            scale,
+            important: importance >= basemapAirfieldLabelMin + 1 || String(airfield.tier || "") === "major_airbase",
+            visibility: basemapStyle.tier === "close" ? "close" : "operational",
+            priorityBoost: importance * 4,
+          };
+        }),
       ...transformedObjectives.flatMap((objective) => {
         const ownerId = `objective:${objective.id}`;
         const importanceTier = Number(objective.objectiveOverlay?.importanceTier || 0);
+        const koreaAxisObjective = koreaFocusedLabeling
+          && isKoreaAoPriorityLabel(objective.displayName || objective.name, objective.id, objective.location_id);
         const important = objective.settlement?.tier === "capital"
           || objective.settlement?.tier === "major_city"
-          || importanceTier >= 2;
+          || importanceTier >= 2
+          || koreaAxisObjective;
         const selected = selectedObjectiveId === objective.id;
+        const forceVisible = koreaAxisObjective && importanceTier >= 3;
         return [
           {
             id: `${ownerId}:label`,
             ownerId,
             ownerObstacleId: ownerId,
             kind: "objectiveLabel",
-            text: objective.name,
+            text: objective.map_label || objective.displayName || objective.name,
             x: objective.cameraDisplayAnchor.x + objective.labelX * scale,
             y: objective.cameraDisplayAnchor.y + objective.labelY * scale,
             textAnchor: objective.labelAnchor,
             scale,
             important,
             selected,
-            forceVisible: selected,
+            forceVisible: selected || forceVisible,
             visibility: objective.visibility,
             tier: objective.settlement?.tier,
-            priorityBoost: importanceTier * 6,
+            priorityBoost: importanceTier * 6 + (koreaAxisObjective ? 22 : 0),
           },
           {
             id: `${ownerId}:state`,
@@ -732,59 +1129,73 @@ export default function MapPanelShell({
             forceVisible: selected,
             visibility: objective.visibility,
             tier: objective.settlement?.tier,
-            priorityBoost: importanceTier * 4,
+            priorityBoost: importanceTier * 4 + (koreaAxisObjective ? 14 : 0),
           },
         ];
       }),
       ...transformedAirfields.map((airfield) => {
         const ownerId = `airfield:${airfield.id}`;
         const selected = selectedAirfieldId === airfield.id;
+        const koreaAxisAirfield = koreaFocusedLabeling && isKoreaAoPriorityLabel(airfield.name, airfield.id);
+        const duplicatesObjective = objectiveLocationIds.has(String(airfield.location_id || "").trim())
+          || collectNormalizedMapLabelKeys(airfield.map_label, airfield.name).some((key) => objectiveLabelKeys.has(key));
         return {
           id: `${ownerId}:label`,
           ownerId,
           ownerObstacleId: ownerId,
           kind: "airfieldLabel",
-          text: airfield.name,
+          text: airfield.map_label || airfield.name,
           x: airfield.cameraDisplayAnchor.x + airfield.labelOffsetX * scale,
           y: airfield.cameraDisplayAnchor.y + airfield.labelOffsetY * scale,
           textAnchor: airfield.labelAnchor,
           scale,
-          important: airfield.airfield?.tier === "major_airbase",
+          important: airfield.airfield?.tier === "major_airbase" || koreaAxisAirfield,
           selected,
-          forceVisible: selected,
+          forceVisible: selected || (koreaAxisAirfield && !duplicatesObjective),
+          priorityBoost: koreaAxisAirfield ? 18 : 0,
         };
       }),
       ...transformedPorts.map((port) => {
         const ownerId = `port:${port.id}`;
         const selected = selectedPortId === port.id;
+        const koreaAxisPort = koreaFocusedLabeling && isKoreaAoPriorityLabel(port.name, port.id);
+        const duplicatesObjective = objectiveLocationIds.has(String(port.location_id || "").trim())
+          || collectNormalizedMapLabelKeys(port.map_label, port.name).some((key) => objectiveLabelKeys.has(key));
         return {
           id: `${ownerId}:label`,
           ownerId,
           ownerObstacleId: ownerId,
           kind: "portLabel",
-          text: port.name,
+          text: port.map_label || port.name,
           x: port.cameraDisplayAnchor.x + port.labelOffsetX * scale,
           y: port.cameraDisplayAnchor.y + port.labelOffsetY * scale,
           textAnchor: port.labelAnchor,
           scale,
           selected,
-          forceVisible: selected,
+          important: koreaAxisPort,
+          forceVisible: selected || (koreaAxisPort && !duplicatesObjective),
+          priorityBoost: koreaAxisPort ? 20 : 0,
         };
       }),
       ...transformedNamedFeatures.map((feature) => {
         const ownerId = `feature:${feature.id}`;
+        const koreaAxisFeature = koreaFocusedLabeling && isKoreaAoPriorityLabel(feature.label, feature.id);
+        const koreaRouteFeature = koreaFocusedLabeling
+          && isKoreaAoRouteLabel(feature.label, feature.id)
+          && (feature.kindKey === "phase_line" || feature.kindKey === "corridor" || feature.kindKey === "choke_point" || feature.kindKey === "waterway");
         return {
           id: `${ownerId}:label`,
           ownerId,
           kind: "featureLabel",
-          text: feature.label,
+          text: feature.map_label || feature.label,
           x: feature.cameraAnchor.x + feature.labelOffsetX * scale,
           y: feature.cameraAnchor.y + feature.labelOffsetY * scale,
           textAnchor: feature.labelAnchor,
           scale,
-          important: Boolean(feature.important),
+          important: Boolean(feature.important || koreaAxisFeature),
           visibility: feature.visibility,
-          priorityBoost: (Math.max(1, Number(feature.label_priority || 1)) - 1) * 8,
+          forceVisible: koreaRouteFeature,
+          priorityBoost: (Math.max(1, Number(feature.label_priority || 1)) - 1) * 8 + (koreaAxisFeature ? 18 : 0) + (koreaRouteFeature ? 20 : 0),
         };
       }),
       ...transformedUnits.map((unit) => {
@@ -795,14 +1206,15 @@ export default function MapPanelShell({
           ownerId,
           ownerObstacleId: ownerId,
           kind: "unitLabel",
-          text: unit.name,
+          text: unit.map_label || unit.name,
           x: unit.cameraDisplayAnchor.x + unit.labelOffsetX * scale,
           y: unit.cameraDisplayAnchor.y + unit.labelOffsetY * scale,
           textAnchor: unit.labelAnchor,
           scale,
-          important: Boolean(unit.counterFrame?.isHeadquarters),
+          important: Boolean(unit.labelImportant),
           selected,
-          forceVisible: selected,
+          forceVisible: selected || Boolean(unit.labelForceVisible),
+          priorityBoost: Number(unit.labelPriorityBoost || 0),
         };
       }),
     ];
@@ -813,14 +1225,17 @@ export default function MapPanelShell({
     transformedAirfields,
     transformedPorts,
     transformedNamedFeatures,
+    transformedBasemap,
     transformedUnits,
     labelObstacles,
     selectedObjectiveId,
     selectedAirfieldId,
     selectedPortId,
     selectedUnitId,
+    basemapStyle.tier,
     zoomPresentation.counterScale,
     camera.zoom,
+    presentation,
   ]);
   const visibleLabelIds = labelDeclutter.visibleIds;
   const visibleLabelOwners = labelDeclutter.visibleOwners;
@@ -1005,11 +1420,28 @@ export default function MapPanelShell({
   );
 
   useEffect(() => {
-    setCameraState({ zoom: 1, offsetX: 0, offsetY: 0 });
     setIsPanning(false);
     setGreaseDraft(null);
+    setCommandHoverHex(null);
     dragStateRef.current = null;
+    cameraInteractedRef.current = false;
+    cameraAutoFitKeyRef.current = null;
   }, [snapshot.scenario?.id]);
+
+  useEffect(() => {
+    const autoFitKey = `${String(snapshot.scenario?.id ?? "unknown")}:${scene.width}:${scene.height}`;
+    if (cameraInteractedRef.current || cameraAutoFitKeyRef.current === autoFitKey) {
+      return;
+    }
+    setCameraState(buildInitialMapCamera(snapshot, scene));
+    cameraAutoFitKeyRef.current = autoFitKey;
+  }, [snapshot, scene]);
+
+  useEffect(() => {
+    if (!selectedUnitId || greaseToolArmed || objectiveSelectionActive || isPanning) {
+      setCommandHoverHex(null);
+    }
+  }, [selectedUnitId, greaseToolArmed, objectiveSelectionActive, isPanning]);
 
   useEffect(() => {
     const stage = stageRef.current;
@@ -1057,6 +1489,19 @@ export default function MapPanelShell({
     }
   }, [plannerState.greaseEnabled, greasePlanningLayerVisible]);
 
+  useEffect(() => {
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key !== "Escape") {
+        return;
+      }
+      setCommandHoverHex(null);
+      setGreaseDraft(null);
+    }
+
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, []);
+
   function pointerToScenePoint(clientX: number, clientY: number) {
     const svg = svgRef.current;
     if (!svg) {
@@ -1091,6 +1536,7 @@ export default function MapPanelShell({
     const nextZoom = Number(targetZoom);
     const worldX = (focusPoint.x - camera.offsetX) / camera.zoom;
     const worldY = (focusPoint.y - camera.offsetY) / camera.zoom;
+    cameraInteractedRef.current = true;
     setCameraState(
       clampMapCamera(
         {
@@ -1104,7 +1550,8 @@ export default function MapPanelShell({
   }
 
   function resetCamera() {
-    setCameraState({ zoom: 1, offsetX: 0, offsetY: 0 });
+    cameraInteractedRef.current = false;
+    setCameraState(buildInitialMapCamera(snapshot, scene));
   }
 
   function handleMapWheel(event: WheelEvent<SVGSVGElement>) {
@@ -1158,6 +1605,7 @@ export default function MapPanelShell({
       offsetX: camera.offsetX,
       offsetY: camera.offsetY,
     };
+    cameraInteractedRef.current = true;
     setIsPanning(true);
     event.currentTarget.setPointerCapture(event.pointerId);
   }
@@ -1189,6 +1637,15 @@ export default function MapPanelShell({
     }
     const dragState = dragStateRef.current;
     if (!dragState || dragState.pointerId !== event.pointerId) {
+      if (!selectedUnitId || greaseToolArmed || objectiveSelectionActive) {
+        return;
+      }
+      const pointerPoint = pointerToWorldPoint(event.clientX, event.clientY);
+      if (!pointerPoint) {
+        return;
+      }
+      const nextHex = axialRound(pointerPoint.worldPoint.x, pointerPoint.worldPoint.y);
+      setCommandHoverHex((current) => (current?.q === nextHex.q && current?.r === nextHex.r ? current : nextHex));
       return;
     }
     const svg = svgRef.current;
@@ -1241,6 +1698,30 @@ export default function MapPanelShell({
     if (event.currentTarget.hasPointerCapture(event.pointerId)) {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
+  }
+
+  function handleMapPointerLeave() {
+    if (!isPanning) {
+      setCommandHoverHex(null);
+    }
+  }
+
+  function handleMapContextMenu(event: MouseEvent<SVGSVGElement>) {
+    if (!selectedUnitId || greaseToolArmed || objectiveSelectionActive) {
+      return;
+    }
+    event.preventDefault();
+    const pointerPoint = pointerToWorldPoint(event.clientX, event.clientY);
+    if (!pointerPoint) {
+      return;
+    }
+    const targetHex = axialRound(pointerPoint.worldPoint.x, pointerPoint.worldPoint.y);
+    const preview = buildMapCommandPreview(snapshot, selectedUnitId, targetHex);
+    if (!preview?.available) {
+      return;
+    }
+    setCommandHoverHex(targetHex);
+    onCommitFastCommand(preview);
   }
 
   const plannerPlanWorkbench = (
@@ -1406,12 +1887,14 @@ export default function MapPanelShell({
           className={"shell-map__svg" + (isPanning ? " is-panning" : "") + (greaseToolArmed ? " is-grease-armed" : "")}
           viewBox={`0 0 ${scene.width} ${scene.height}`}
           role="img"
-          aria-label={`${humanizeScenarioLabel(snapshot.scenario.name)} theatre map`}
+          aria-label={`${presentation.scenarioLabel} theatre map`}
           onWheel={handleMapWheel}
           onPointerDown={handleMapPointerDown}
           onPointerMove={handleMapPointerMove}
           onPointerUp={endMapPointer}
           onPointerCancel={endMapPointer}
+          onPointerLeave={handleMapPointerLeave}
+          onContextMenu={handleMapContextMenu}
         >
           <defs>
             <pattern id="map-grid-major" width="96" height="83.14" patternUnits="userSpaceOnUse">
@@ -1423,6 +1906,21 @@ export default function MapPanelShell({
             <pattern id="map-terrain-emphasis" width="108" height="54" patternUnits="userSpaceOnUse">
               <path d="M0 16 Q18 4 36 16 T72 16 T108 16" className="shell-map__terrain-emphasis-line" />
               <path d="M-6 36 Q18 26 42 36 T90 36 T138 36" className="shell-map__terrain-emphasis-line is-soft" />
+            </pattern>
+            <pattern id="map-paper-grain" width="168" height="168" patternUnits="userSpaceOnUse">
+              <circle cx="18" cy="22" r="0.85" className="shell-map__paper-grain-dot" />
+              <circle cx="74" cy="46" r="0.72" className="shell-map__paper-grain-dot" />
+              <circle cx="138" cy="28" r="0.8" className="shell-map__paper-grain-dot" />
+              <circle cx="42" cy="118" r="0.78" className="shell-map__paper-grain-dot" />
+              <circle cx="116" cy="132" r="0.88" className="shell-map__paper-grain-dot" />
+              <circle cx="150" cy="96" r="0.68" className="shell-map__paper-grain-dot" />
+              <path d="M-8 62 Q34 54 74 62 T156 62 T238 62" className="shell-map__paper-grain-fiber" />
+              <path d="M-16 108 Q24 101 64 108 T144 108 T224 108" className="shell-map__paper-grain-fiber is-soft" />
+            </pattern>
+            <pattern id="map-water-texture" width="168" height="88" patternUnits="userSpaceOnUse">
+              <path d="M-18 18 Q12 10 42 18 T102 18 T162 18" className="shell-map__water-texture-line" />
+              <path d="M0 44 Q28 36 56 44 T112 44 T168 44" className="shell-map__water-texture-line is-soft" />
+              <path d="M-12 70 Q16 60 44 70 T100 70 T156 70" className="shell-map__water-texture-line" />
             </pattern>
             <pattern id="map-fog-hatch" width="22" height="22" patternUnits="userSpaceOnUse" patternTransform="rotate(24)">
               <path d="M0 0 V22" className="shell-map__fog-line" />
@@ -1497,6 +1995,19 @@ export default function MapPanelShell({
                         ).toFixed(3)),
                       }}
                     />
+                    {hexRecord.terrainClass === "water" || hexRecord.terrainClass === "coast" ? (
+                      <polygon
+                        points={hexRecord.points}
+                        className={`shell-map__basemap-hex-texture is-${hexRecord.terrainClass}`}
+                        fill="url(#map-water-texture)"
+                        style={{
+                          opacity: Number((
+                            basemapStyle.waterTextureOpacity
+                            * (hexRecord.terrainClass === "coast" ? 0.72 : 1)
+                          ).toFixed(3)),
+                        }}
+                      />
+                    ) : null}
                     {hexRecord.riverClass ? (
                       <>
                         <polygon
@@ -1659,7 +2170,7 @@ export default function MapPanelShell({
                       r={basemapStyle.markerSizePx.settlement + Math.min(2.4, Math.max(0, Number(settlement.importance || 0) - 4) * 0.22)}
                       className="shell-map__basemap-settlement-core"
                     />
-                    {labelsLayerVisible && basemapStyle.showSettlementNames && Number(settlement.importance || 0) >= 7 ? (
+                    {labelsLayerVisible && basemapStyle.showSettlementNames && visibleLabelIds.has(`basemap:settlement:${settlement.id}:label`) ? (
                       <text className="shell-map__basemap-node-label" x="6" y="-5">
                         {settlement.name}
                       </text>
@@ -1685,7 +2196,7 @@ export default function MapPanelShell({
                       d={`M0 ${(-basemapStyle.markerSizePx.airfield * 0.92).toFixed(2)} V ${(basemapStyle.markerSizePx.airfield * 0.92).toFixed(2)}`}
                       className="shell-map__basemap-airfield-spine"
                     />
-                    {labelsLayerVisible && basemapStyle.showSettlementNames && Number(airfield.importance || 0) >= 4 ? (
+                    {labelsLayerVisible && basemapStyle.showSettlementNames && visibleLabelIds.has(`basemap:airfield:${airfield.id}:label`) ? (
                       <text className="shell-map__basemap-node-label" x="8" y="-6">
                         {airfield.name}
                       </text>
@@ -1694,11 +2205,28 @@ export default function MapPanelShell({
                 )) : null}
               </g>
             ) : null}
+            {terrainEmphasisLayerVisible ? (
+              <rect
+                x="0"
+                y="0"
+                width={scene.width}
+                height={scene.height}
+                className="shell-map__terrain-emphasis"
+                fill="url(#map-terrain-emphasis)"
+                style={{ opacity: basemapStyle.terrainWashOpacity }}
+              />
+            ) : null}
+            <rect
+              x="0"
+              y="0"
+              width={scene.width}
+              height={scene.height}
+              className="shell-map__paper-grain"
+              fill="url(#map-paper-grain)"
+              style={{ opacity: basemapStyle.paperGrainOpacity }}
+            />
             {gridLayerVisible ? <rect x="0" y="0" width={scene.width} height={scene.height} fill="url(#map-grid-minor)" opacity={zoomPresentation.gridMinorOpacity} /> : null}
             {gridLayerVisible ? <rect x="0" y="0" width={scene.width} height={scene.height} fill="url(#map-grid-major)" opacity={zoomPresentation.gridMajorOpacity} /> : null}
-            {terrainEmphasisLayerVisible ? (
-              <rect x="0" y="0" width={scene.width} height={scene.height} className="shell-map__terrain-emphasis" fill="url(#map-terrain-emphasis)" />
-            ) : null}
           </g>
 
           {fogIntelLayerVisible ? (
@@ -1896,6 +2424,28 @@ export default function MapPanelShell({
             </g>
           ) : null}
 
+          {transformedQuickCommandPreview ? (
+            <g className={`shell-map__quickcommand is-${transformedQuickCommandPreview.previewTone}`} aria-hidden="true">
+              <path
+                className="shell-map__quickcommand-path"
+                d={routePathData(transformedQuickCommandPreview.cameraRoute)}
+                markerEnd={transformedQuickCommandPreview.commandIntent === "attack" ? "url(#map-path-arrow-attack)" : "url(#map-path-arrow-move)"}
+              />
+              <circle
+                className="shell-map__quickcommand-target"
+                cx={transformedQuickCommandPreview.cameraTarget.x}
+                cy={transformedQuickCommandPreview.cameraTarget.y}
+                r={9 * zoomPresentation.counterScale}
+              />
+              <circle
+                className="shell-map__quickcommand-core"
+                cx={transformedQuickCommandPreview.cameraTarget.x}
+                cy={transformedQuickCommandPreview.cameraTarget.y}
+                r={3.2 * zoomPresentation.counterScale}
+              />
+            </g>
+          ) : null}
+
           {artilleryLayerVisible ? (
             <g className="shell-map__artillery-overlay" aria-hidden="true">
               {transformedArtilleryMarkers.map((marker) => (
@@ -2009,7 +2559,7 @@ export default function MapPanelShell({
                         y={feature.cameraAnchor.y + feature.labelOffsetY}
                         textAnchor={feature.labelAnchor}
                       >
-                        {feature.label}
+                        {feature.map_label || feature.label}
                       </text>
                     ) : null}
                   </g>
@@ -2034,6 +2584,8 @@ export default function MapPanelShell({
                   `shell-map__objective is-${objective.visualState}`
                   + ` is-${objective.settlement?.controlState ?? "unknown"}`
                   + ` is-${objective.settlement?.tier ?? "town"}`
+                  + ` is-${objective.objectiveOverlay?.category ?? "secondary"}`
+                  + (objective.axisFocus ? " is-axis-focus" : "")
                   + (objectiveSelectionActive ? " is-plannable" : "")
                   + (plannerSummary.objectiveArea.marker?.id === objective.id ? " is-planned" : "")
                   + (selectedObjectiveId === objective.id ? " is-selected" : "")
@@ -2057,6 +2609,28 @@ export default function MapPanelShell({
                   }
                 }}
               >
+                {objective.axisFocus || Number(objective.objectiveOverlay?.importanceTier || 0) >= 2 ? (
+                  <g
+                    className={
+                      "shell-map__objective-emphasis"
+                      + ` is-${objective.objectiveOverlay?.category ?? "secondary"}`
+                      + (objective.objectiveOverlay?.contested ? " is-contested" : "")
+                      + (objective.axisFocus ? " is-axis-focus" : "")
+                    }
+                    aria-hidden="true"
+                  >
+                    <circle
+                      className="shell-map__objective-emphasis-ring"
+                      r={objective.axisFocus ? 23 : Number(objective.objectiveOverlay?.importanceTier || 0) >= 3 ? 19.4 : 18}
+                    />
+                    {objective.axisFocus ? (
+                      <circle
+                        className="shell-map__objective-emphasis-core"
+                        r={objective.objectiveOverlay?.category === "strategic" ? 16.2 : 14.2}
+                      />
+                    ) : null}
+                  </g>
+                ) : null}
                 <ObjectiveOverlayBadge
                   category={objective.objectiveOverlay?.category}
                   importanceTier={objective.objectiveOverlay?.importanceTier}
@@ -2073,7 +2647,7 @@ export default function MapPanelShell({
                 />
                 {labelsLayerVisible && visibleLabelIds.has(`objective:${objective.id}:label`) ? (
                   <text className="shell-map__objective-label" x={objective.labelX} y={objective.labelY} textAnchor={objective.labelAnchor}>
-                    {objective.name}
+                    {objective.map_label || objective.displayName || objective.name}
                   </text>
                 ) : null}
                 {labelsLayerVisible && visibleLabelIds.has(`objective:${objective.id}:state`) ? (
@@ -2128,7 +2702,7 @@ export default function MapPanelShell({
                 />
                 {labelsLayerVisible && visibleLabelIds.has(`airfield:${airfield.id}:label`) ? (
                   <text className="shell-map__site-label" x={airfield.labelOffsetX} y={airfield.labelOffsetY} textAnchor={airfield.labelAnchor}>
-                    {airfield.name}
+                    {airfield.map_label || airfield.name}
                   </text>
                 ) : null}
               </g>
@@ -2165,7 +2739,7 @@ export default function MapPanelShell({
                 <text className="shell-map__site-code" x="0" y="4" textAnchor="middle">PT</text>
                 {labelsLayerVisible && visibleLabelIds.has(`port:${port.id}:label`) ? (
                   <text className="shell-map__site-label" x={port.labelOffsetX} y={port.labelOffsetY} textAnchor={port.labelAnchor}>
-                    {port.name}
+                    {port.map_label || port.name}
                   </text>
                 ) : null}
               </g>
@@ -2223,7 +2797,7 @@ export default function MapPanelShell({
                 />
                 {labelsLayerVisible && visibleLabelIds.has(`unit:${unit.id}:label`) ? (
                   <text className="shell-map__unit-name" x={unit.labelOffsetX} y={unit.labelOffsetY} textAnchor={unit.labelAnchor}>
-                    {unit.name}
+                    {unit.map_label || unit.name}
                   </text>
                 ) : null}
               </g>
@@ -2231,7 +2805,7 @@ export default function MapPanelShell({
           )) : null}
         </svg>
 
-        {basemapRuntimeState.invalid || (scene.emptyState && import.meta.env.DEV) ? (
+        {basemapRuntimeState.invalid || scene.emptyState ? (
           <div
             className="shell-map__overlay shell-map__overlay--top"
             style={{ "--shell-map-control-left": topControlInset } as CSSProperties}
@@ -2242,6 +2816,19 @@ export default function MapPanelShell({
               </div>
             ) : null}
             {scene.emptyState && import.meta.env.DEV ? <p className="shell-map__status-note">{scene.emptyState}</p> : null}
+          </div>
+        ) : null}
+
+        {transformedQuickCommandPreview ? (
+          <div
+            className="shell-map__overlay shell-map__overlay--top"
+            style={{ "--shell-map-control-left": topControlInset } as CSSProperties}
+          >
+            <div className={`shell-map__status-note shell-map__status-note--quickcommand is-${transformedQuickCommandPreview.previewTone}`}>
+              <strong>{transformedQuickCommandPreview.title}</strong>
+              <span>{transformedQuickCommandPreview.statusLabel}</span>
+              <em>{transformedQuickCommandPreview.note}</em>
+            </div>
           </div>
         ) : null}
 

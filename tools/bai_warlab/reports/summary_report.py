@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List
 
+from ..report_io import run_result_to_row, summarize_core_metric_rows, summarize_outcome_rows
 from .comparison_report import render_comparison_report
 
 
@@ -16,6 +17,46 @@ def _lines_for_metrics(metrics: Dict[str, Dict[str, Any]]) -> List[str]:
 
 def _joined(items: List[str]) -> str:
     return ", ".join(items) if items else "none"
+
+
+def _count_lines(title: str, payload: Dict[str, Any]) -> List[str]:
+    counts = dict(payload or {})
+    if not counts:
+        return [f"{title}: none"]
+    return [f"{title}: {', '.join(f'{key}={value}' for key, value in counts.items())}"]
+
+
+def _core_metric_lines(metrics: Dict[str, Dict[str, Any]]) -> List[str]:
+    metrics = dict(metrics or {})
+    if not metrics:
+        return []
+    lines = ["[core_metrics]"]
+    for payload in metrics.values():
+        lines.append(
+            f"{payload['label']}: "
+            f"mean={payload['mean']} median={payload.get('median', payload['mean'])} "
+            f"min={payload['min']} max={payload['max']} spread={payload.get('spread', 0.0)} "
+            f"sd={payload.get('stddev', 0.0)} n={payload['count']}"
+        )
+    return lines
+
+
+def _victory_proxy_lines(payload: Dict[str, Any]) -> List[str]:
+    proxy = dict(payload or {})
+    if not proxy.get("available"):
+        return []
+    lines = ["[victory_proxy]"]
+    lines.extend(_count_lines("AI sides", proxy.get("ai_side_counts") or {}))
+    lines.extend(_count_lines("Results", proxy.get("result_counts") or {}))
+    lines.extend(_count_lines("Scenario outcomes", proxy.get("scenario_outcome_counts") or {}))
+    lines.extend(_count_lines("Winning sides", proxy.get("winning_side_counts") or {}))
+    lines.append(f"Win rate: {proxy.get('win_rate')}")
+    lines.append(f"Draw rate: {proxy.get('draw_rate')}")
+    lines.append(f"Loss rate: {proxy.get('loss_rate')}")
+    lines.append(f"Non-loss rate: {proxy.get('non_loss_rate')}")
+    if proxy.get("mean_result_score") is not None:
+        lines.append(f"Mean result score: {proxy.get('mean_result_score')}")
+    return lines
 
 
 def render_report(result: Any) -> str:
@@ -80,6 +121,8 @@ def _render_run(result: Any) -> str:
 
 
 def _render_batch(result: Any) -> str:
+    rows = [run_result_to_row(run) for run in list(getattr(result, "runs", []) or [])]
+    successful_rows = [row for row in rows if row.get("ok")]
     lines = [
         "BAI War Lab — Batch Report",
         f"Scenario: {result.scenario}",
@@ -97,8 +140,19 @@ def _render_batch(result: Any) -> str:
                 f"OK Runs: {result.aggregate.ok_runs}",
                 f"Failed Runs: {result.aggregate.failed_runs}",
                 f"Failure Count: {result.aggregate.failure_count}",
+                f"Success Rate: {result.aggregate.success_rate}",
             ]
         )
+        core_metric_lines = _core_metric_lines(
+            getattr(result.aggregate, "core_metrics", None) or summarize_core_metric_rows(successful_rows)
+        )
+        if core_metric_lines:
+            lines.extend([""] + core_metric_lines)
+        victory_proxy_lines = _victory_proxy_lines(
+            getattr(result.aggregate, "victory_proxy", None) or summarize_outcome_rows(successful_rows)
+        )
+        if victory_proxy_lines:
+            lines.extend([""] + victory_proxy_lines)
         if result.aggregate.partial_failures:
             lines.append("Partial failures: yes")
         lines.append("Status counts:")
@@ -147,6 +201,8 @@ def _render_compare(result: Any) -> str:
 def _render_suite(result: Any) -> str:
     suite_summary = dict(getattr(result, "suite_summary", {}) or {})
     jobs = list(getattr(result, "jobs", []) or [])
+    rows = [run_result_to_row(run) for run in list(getattr(result, "runs", []) or [])]
+    successful_rows = [row for row in rows if row.get("ok")]
     lines = [
         "BAI War Lab — Suite Report",
         f"Suite: {result.suite_name}",
@@ -180,8 +236,19 @@ def _render_suite(result: Any) -> str:
                 f"OK: {result.aggregate.ok_runs}",
                 f"Failed: {result.aggregate.failed_runs}",
                 f"Failure Count: {result.aggregate.failure_count}",
+                f"Success Rate: {result.aggregate.success_rate}",
             ]
         )
+        core_metric_lines = _core_metric_lines(
+            getattr(result.aggregate, "core_metrics", None) or summarize_core_metric_rows(successful_rows)
+        )
+        if core_metric_lines:
+            lines.extend([""] + core_metric_lines)
+        victory_proxy_lines = _victory_proxy_lines(
+            getattr(result.aggregate, "victory_proxy", None) or summarize_outcome_rows(successful_rows)
+        )
+        if victory_proxy_lines:
+            lines.extend([""] + victory_proxy_lines)
         if result.aggregate.mean_summary:
             lines.extend(["", "[summary_averages]"])
             lines.extend(f"  {key}: {value}" for key, value in result.aggregate.mean_summary.items())

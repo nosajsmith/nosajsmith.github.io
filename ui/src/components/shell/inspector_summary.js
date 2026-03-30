@@ -404,7 +404,7 @@ export function summarizeInspector(snapshot, selection, options = {}) {
 
   if (selection.kind === "unit") {
     const unit = (Array.isArray(snapshot?.units) ? snapshot.units : []).find((row) => String(row?.id ?? "") === String(selection.id ?? "")) ?? null;
-    return summarizeUnitInspector(unit, options);
+    return summarizeUnitInspector(unit, { ...options, snapshot, operations: options.operations });
   }
 
   const collection = selection.kind === "objective"

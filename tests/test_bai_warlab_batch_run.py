@@ -41,8 +41,30 @@ def test_execute_batch_run_aggregates_and_continues_on_partial_failure(monkeypat
                 "terminal_status": "scenario_complete",
                 "hours_elapsed": request.seed,
                 "steps_completed": 4,
+                "ai_side": "ALLIED",
+                "scenario_outcome": "allied_victory" if request.seed >= 23 else "draw",
+                "winning_side": "ALLIED" if request.seed >= 23 else "",
+                "result": "win" if request.seed >= 23 else "draw",
             },
-            metrics={"outcome": {"available": True, "vp_margin": request.seed - 20}},
+            metrics={
+                "outcome": {
+                    "available": True,
+                    "vp_margin_allied": request.seed - 20,
+                    "win_loss_draw_allied": "win" if request.seed >= 23 else "draw",
+                },
+                "behavior": {
+                    "available": True,
+                    "allied_casualties": request.seed,
+                    "axis_casualties": request.seed + 3,
+                    "casualty_ratio_allied": round((request.seed + 3) / request.seed, 3),
+                    "objective_hold_turns_allied": request.seed - 19,
+                    "line_collapse_rate_allied": 0.25,
+                },
+                "logistics": {
+                    "available": True,
+                    "low_supply_turns_allied": request.seed - 21,
+                },
+            },
         )
 
     monkeypatch.setattr("tools.bai_warlab.runners.batch_run.execute_single_run", fake_single_run)
@@ -66,17 +88,26 @@ def test_execute_batch_run_aggregates_and_continues_on_partial_failure(monkeypat
     assert result.aggregate.failed_runs == 1
     assert result.aggregate.failure_count == 1
     assert result.aggregate.partial_failures is True
+    assert result.aggregate.success_rate == 0.75
     assert result.aggregate.status_counts["scenario_complete"] == 3
     assert result.aggregate.status_counts["batch_run_exception"] == 1
+    assert result.aggregate.result_counts == {"draw": 1, "win": 2}
+    assert result.aggregate.scenario_outcome_counts == {"allied_victory": 2, "draw": 1}
+    assert result.aggregate.winning_side_counts == {"ALLIED": 2, "DRAW": 1}
+    assert result.aggregate.victory_proxy["non_loss_rate"] == 1.0
+    assert result.aggregate.victory_proxy["mean_result_score"] == 0.833
     assert result.aggregate.mean_summary["hours_elapsed"] == 22.667
     assert result.aggregate.min_summary["hours_elapsed"] == 21.0
     assert result.aggregate.max_summary["hours_elapsed"] == 24.0
-    assert result.aggregate.mean_metrics["outcome.vp_margin"] == 2.667
+    assert result.aggregate.mean_metrics["outcome.vp_margin_allied"] == 2.667
+    assert result.aggregate.core_metrics["vp_margin"]["stddev"] == 1.247
+    assert result.aggregate.core_metrics["allied_casualties"]["median"] == 23.0
+    assert result.aggregate.core_metrics["low_supply_turns"]["spread"] == 3.0
     assert result.aggregate.averages["summary"]["hours_elapsed"] == 22.667
     assert "Partial failure" in result.warnings[0]
 
 
-def test_bai_warlab_batch_cli_outputs(tmp_path: Path):
+def test_bai_warlab_batch_cli_outputs(tmp_path: Path, capsys):
     batch_dir = tmp_path / "batch"
 
     assert bai_warlab_main(
@@ -109,10 +140,14 @@ def test_bai_warlab_batch_cli_outputs(tmp_path: Path):
     manifest_payload = json.loads((batch_dir / "manifest.json").read_text(encoding="utf-8"))
     report_text = (batch_dir / "report.txt").read_text(encoding="utf-8")
     csv_rows = list(csv.DictReader((batch_dir / "results.csv").open(encoding="utf-8")))
+    stdout = capsys.readouterr().out
 
     assert summary_payload["command"] == "batch"
     assert summary_payload["aggregate"]["total_runs"] == 3
     assert summary_payload["aggregate"]["failure_count"] == 0
+    assert summary_payload["aggregate"]["success_rate"] == 1.0
+    assert summary_payload["aggregate"]["core_metrics"]["vp_margin"]["stddev"] >= 0.0
+    assert summary_payload["aggregate"]["victory_proxy"]["available"] is True
     assert summary_payload["aggregate"]["mean_summary"]
     assert summary_payload["aggregate"]["min_summary"]
     assert summary_payload["aggregate"]["max_summary"]
@@ -123,7 +158,14 @@ def test_bai_warlab_batch_cli_outputs(tmp_path: Path):
     assert "Batch Report" in report_text
     assert "Failure Count: 0" in report_text
     assert "[aggregate_summary]" in report_text
+    assert "[core_metrics]" in report_text
+    assert "[victory_proxy]" in report_text
     assert len(csv_rows) == 3
+    assert "BAI War Lab — Batch Summary" in stdout
+    assert "Runs: 3 | OK: 3 | Failed: 0" in stdout
+    assert "Success rate:" in stdout
+    assert "Results:" in stdout
+    assert f"Artifacts: {batch_dir}" in stdout
     for column in [
         "scenario",
         "doctrine",
@@ -132,6 +174,8 @@ def test_bai_warlab_batch_cli_outputs(tmp_path: Path):
         "seed",
         "result",
         "vp_margin",
+        "allied_casualties",
+        "axis_casualties",
         "casualty_ratio",
         "objective_hold_duration",
         "low_supply_turns",

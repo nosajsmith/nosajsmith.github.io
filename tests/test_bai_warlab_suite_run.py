@@ -30,8 +30,15 @@ def _successful_run(case: SuiteCase, seed: int, variant_label: str) -> RunResult
             "hours_elapsed": 8,
             "steps_completed": 2,
             "ai_side": "ALLIED",
+            "scenario_outcome": "allied_victory",
+            "winning_side": "ALLIED",
+            "result": "win",
         },
-        metrics={"outcome": {"available": True, "vp_margin_allied": 1.0}},
+        metrics={
+            "outcome": {"available": True, "vp_margin_allied": 1.0, "win_loss_draw_allied": "win"},
+            "behavior": {"available": True, "allied_casualties": 3, "axis_casualties": 4, "casualty_ratio_allied": 1.333},
+            "logistics": {"available": True, "low_supply_turns_allied": 1},
+        },
     )
 
 
@@ -116,11 +123,15 @@ def test_execute_suite_run_batches_jobs_and_survives_job_failure(monkeypatch):
     assert result.aggregate.total_runs == 3
     assert result.aggregate.ok_runs == 2
     assert result.aggregate.failed_runs == 1
+    assert result.aggregate.success_rate == 0.667
+    assert result.aggregate.result_counts == {"win": 2}
     assert result.jobs[0]["id"] == "job_alpha"
     assert result.jobs[1]["id"] == "job_bravo"
     assert result.jobs[0]["metric_focus"] == ["vp_margin"]
     assert result.jobs[1]["metric_thresholds"] == {"objective_hold_duration": 1.0}
     assert result.jobs[1]["aggregate"]["failure_count"] == 1
+    assert result.jobs[0]["aggregate"]["success_rate"] == 1.0
+    assert result.jobs[0]["aggregate"]["victory_proxy"]["result_counts"] == {"win": 2}
     assert result.runs[0].variant_label.startswith("job_alpha:")
     assert result.runs[-1].variant_label.startswith("job_bravo:")
     assert "Partial failure" in result.warnings[0]
@@ -148,7 +159,7 @@ def test_core_regression_suite_definition_is_korea_focused():
         assert case.notes
 
 
-def test_bai_warlab_suite_cli_outputs(tmp_path: Path):
+def test_bai_warlab_suite_cli_outputs(tmp_path: Path, capsys):
     suite_dir = tmp_path / "suite"
 
     exit_code = bai_warlab_main(
@@ -172,6 +183,7 @@ def test_bai_warlab_suite_cli_outputs(tmp_path: Path):
     manifest_payload = json.loads((suite_dir / "manifest.json").read_text(encoding="utf-8"))
     report_text = (suite_dir / "report.txt").read_text(encoding="utf-8")
     csv_rows = list(csv.DictReader((suite_dir / "results.csv").open(encoding="utf-8")))
+    stdout = capsys.readouterr().out
 
     assert summary_payload["command"] == "suite"
     assert summary_payload["suite_name"] == "core_regression"
@@ -185,7 +197,13 @@ def test_bai_warlab_suite_cli_outputs(tmp_path: Path):
     assert "Suite Report" in report_text
     assert "[evaluation_notes]" in report_text
     assert "[suite_jobs]" in report_text
+    assert "[core_metrics]" in report_text
+    assert "[victory_proxy]" in report_text
     assert "korea_defense_benchmark" in report_text
     assert "metric_focus:" in report_text
     assert "thresholds:" in report_text
     assert len(csv_rows) == 4
+    assert "BAI War Lab — Suite Summary" in stdout
+    assert "Suite: core_regression" in stdout
+    assert "Success rate:" in stdout
+    assert f"Artifacts: {suite_dir}" in stdout

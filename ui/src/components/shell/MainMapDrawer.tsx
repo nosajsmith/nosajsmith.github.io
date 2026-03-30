@@ -3,11 +3,13 @@ import type { ViewSnapshot } from "../../types/viewSnapshot";
 import type { SnapshotUnit } from "../../types/viewSnapshot";
 import { summarizeInspector } from "./inspector_summary.js";
 import type { InspectorSelection } from "./inspector_types";
+import type { TrackedDemoOperation } from "./operations_planner_types";
 import CommanderScreen from "./CommanderScreen";
 
 type MainMapDrawerProps = {
   snapshot: ViewSnapshot;
   selection: InspectorSelection | null;
+  operations: TrackedDemoOperation[];
   previousSelectedUnit: SnapshotUnit | null;
   previousSnapshotLabel: string | null;
   open: boolean;
@@ -21,6 +23,7 @@ type MainMapDrawerProps = {
 export default function MainMapDrawer({
   snapshot,
   selection,
+  operations,
   previousSelectedUnit,
   previousSnapshotLabel,
   open,
@@ -31,6 +34,7 @@ export default function MainMapDrawer({
   onClearSelection,
 }: MainMapDrawerProps) {
   const inspector = summarizeInspector(snapshot, selection, {
+    operations,
     previousUnit: previousSelectedUnit,
     previousSnapshotLabel,
   });

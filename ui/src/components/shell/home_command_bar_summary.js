@@ -1,8 +1,14 @@
-import { pressureFallback } from "../../lib/view_snapshot.js";
+import {
+  containsLegacySouthPacificText,
+  humanizeIntent,
+  humanizeToken,
+  isKoreaScenarioContext,
+  pressureFallback,
+} from "../../lib/view_snapshot.js";
 import { summarizeCampaign, summarizeObjectives, summarizeReports } from "./dashboard_summary.js";
-import { summarizeLogisticsBranch } from "./logistics_branch_summary.js";
-import { summarizeAirOperations } from "./air_operations_summary.js";
-import { summarizeNavalOperations } from "./naval_operations_summary.js";
+import { summarizeLocalSustainment, summarizeLogisticsBranch } from "./logistics_branch_summary.js";
+import { summarizeAirOperations, summarizeLocalAirSupport } from "./air_operations_summary.js";
+import { summarizeLocalNavalSupport, summarizeNavalOperations } from "./naval_operations_summary.js";
 import { summarizeIntelligenceBranch } from "./intelligence_branch_summary.js";
 import { summarizeHendersonPressureBoard } from "./henderson_pressure_board_summary.js";
 import { summarizeTrackedOperations } from "./operations_planner.js";
@@ -11,9 +17,11 @@ function pluralize(count, singular, plural = `${singular}s`) {
   return `${count} ${count === 1 ? singular : plural}`;
 }
 
-function formatPendingDispatchLabel(pending) {
+function formatPendingDispatchLabel(pending, historyCount = 0) {
   if (pending == null) {
-    return "Dispatch queue unavailable";
+    return historyCount
+      ? `${historyCount} live dispatch${historyCount === 1 ? "" : "es"}`
+      : "Dispatch queue unavailable";
   }
   if (pending === 0) {
     return "No pending dispatches";
@@ -23,27 +31,106 @@ function formatPendingDispatchLabel(pending) {
 
 function sentenceParts(...parts) {
   return parts
-    .map((value) => String(value ?? "").trim())
+    .map((value) => String(value ?? "").trim().replace(/[.]+$/, ""))
     .filter(Boolean)
     .join(". ");
 }
 
+function normalizeString(value) {
+  return String(value ?? "").trim();
+}
+
+function numericValue(value) {
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return value;
+  }
+  const raw = String(value ?? "").trim();
+  if (!raw) {
+    return null;
+  }
+  const parsed = Number(raw);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function labelFromValue(value) {
+  if (typeof value === "string") {
+    const direct = normalizeString(value);
+    if (direct) {
+      return humanizeToken(direct);
+    }
+  }
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return "";
+  }
+
+  for (const key of ["name", "label", "title", "summary", "objective_id", "target_objective", "id"]) {
+    const candidate = normalizeString(value[key]);
+    if (candidate) {
+      return humanizeToken(candidate);
+    }
+  }
+
+  return "";
+}
+
+function formatReserveLevel(value) {
+  const numeric = numericValue(value);
+  if (numeric == null) {
+    return "";
+  }
+  if (numeric > 0 && numeric <= 1) {
+    return `${Math.round(numeric * 100)}% reserve`;
+  }
+  return `${Math.round(numeric)} reserve`;
+}
+
 export function summarizeHomeCommandBar(snapshot, operations = []) {
+  const koreaScenario = isKoreaScenarioContext(snapshot);
   const campaign = summarizeCampaign(snapshot);
   const objectives = summarizeObjectives(snapshot?.objectives);
   const reports = summarizeReports(snapshot?.reports);
   const logistics = summarizeLogisticsBranch(snapshot);
+  const localSustainment = summarizeLocalSustainment(snapshot);
   const air = summarizeAirOperations(snapshot);
+  const localAir = summarizeLocalAirSupport(snapshot);
   const naval = summarizeNavalOperations(snapshot);
-  const intelligence = summarizeIntelligenceBranch(snapshot);
+  const localNaval = summarizeLocalNavalSupport(snapshot);
+  const intelligence = summarizeIntelligenceBranch(snapshot, operations);
   const trackedOperations = summarizeTrackedOperations(snapshot, operations);
   const localBattle = summarizeHendersonPressureBoard(snapshot, operations);
   const operationsOverview = localBattle.operationsOverview;
   const turnLabel = campaign.turn ?? "Unknown";
   const timeRemainingLabel = campaign.timeRemaining != null ? `${campaign.timeRemaining}h remaining` : "Time remaining unavailable";
+  const chosenOperationRaw = labelFromValue(snapshot?.bai_report?.chosen_operation);
+  const mainObjectiveRaw = labelFromValue(snapshot?.bai_report?.main_objective);
+  const chosenOperation = koreaScenario && containsLegacySouthPacificText(chosenOperationRaw) ? "" : chosenOperationRaw;
+  const mainObjective = (
+    koreaScenario && containsLegacySouthPacificText(mainObjectiveRaw)
+      ? ""
+      : mainObjectiveRaw
+  ) || objectives.key[0]?.name || "";
+  const reserveLevel = formatReserveLevel(snapshot?.bai_report?.reserve_level);
+  const aiOrderCount = Array.isArray(snapshot?.bai_report?.unit_orders) ? snapshot.bai_report.unit_orders.length : 0;
+  const rawIntent = normalizeString(snapshot?.ai?.last_intent);
+  const aiIntent = rawIntent && !(koreaScenario && containsLegacySouthPacificText(rawIntent))
+    ? humanizeIntent(rawIntent)
+    : "";
   const theatreDetail = trackedOperations.lead
     ? `Turn ${turnLabel} • ${timeRemainingLabel} • ${trackedOperations.lead.status}`
     : `Turn ${turnLabel} • ${timeRemainingLabel}`;
+  const airFormationDetail = air.overview.formationsTracked
+    ? `${pluralize(air.overview.formationsTracked, "air formation")} tracked`
+    : "";
+  const navalFormationDetail = naval.overview.formationsTracked
+    ? `${pluralize(naval.overview.formationsTracked, "naval formation")} tracked`
+    : "";
+  const latestDispatchLine = normalizeString(intelligence.overview.latestTitle) !== "No current dispatch"
+    ? `Latest dispatch ${intelligence.overview.latestTitle}`
+    : "";
+  const logisticsConcern = localSustainment.concerns?.[0] || logistics.warnings?.[0] || logistics.overview.supportHeadline;
+  const airAnchorLabel = normalizeString(localAir.anchorLabel);
+  const navalAnchorLabel = normalizeString(localNaval.anchorLabel);
+  const liveDispatchCount = intelligence.dispatches.length;
 
   return {
     theatre: {
@@ -53,8 +140,13 @@ export function summarizeHomeCommandBar(snapshot, operations = []) {
       detail: theatreDetail,
     },
     operations: {
-      status: operationsOverview.activeOperation,
-      detail: sentenceParts(operationsOverview.objectiveSituation, operationsOverview.immediateConcern),
+      status: chosenOperation || operationsOverview.activeOperation || aiIntent || "Operations picture incomplete",
+      detail: sentenceParts(
+        mainObjective ? `Objective ${mainObjective}` : operationsOverview.objectiveSituation,
+        aiOrderCount ? `${aiOrderCount} task${aiOrderCount === 1 ? "" : "s"} issued` : "",
+        reserveLevel ? `${reserveLevel} retained` : trackedOperations.lead?.statusDetail,
+        operationsOverview.immediateConcern || pressureFallback(snapshot?.pressure ?? { summary: null, reasons: [] }),
+      ),
     },
     objectives: {
       total: objectives.total,
@@ -66,33 +158,60 @@ export function summarizeHomeCommandBar(snapshot, operations = []) {
     },
     air: {
       label: air.overview.formationsTracked
-        ? `${pluralize(air.overview.formationsTracked, "air formation")} tracked`
-        : "Air picture incomplete",
+        ? air.overview.readinessAverage != null
+          ? `${Math.round(air.overview.readinessAverage)} readiness avg`
+          : airFormationDetail
+        : air.overview.airfieldsTracked
+          ? (airAnchorLabel || "Air context partial")
+          : "Air picture incomplete",
       detail: air.overview.formationsTracked
-        ? "Built from exposed air-capable formations on the current shell path."
-        : air.overview.statusLine,
+        ? sentenceParts(airFormationDetail, localAir.supportingFormation, localAir.constraint)
+        : localAir.available
+          ? sentenceParts(
+            localAir.availability && localAir.availability !== "Not exposed" ? `${localAir.availability} local air support` : "",
+            localAir.note,
+            localAir.constraint,
+          )
+          : air.overview.statusLine,
     },
     naval: {
       label: naval.overview.formationsTracked
-        ? `${pluralize(naval.overview.formationsTracked, "naval formation")} tracked`
-        : "Naval picture incomplete",
+        ? naval.overview.supportWindowsTracked
+          ? `${naval.overview.supportWindowsTracked} support window${naval.overview.supportWindowsTracked === 1 ? "" : "s"}`
+          : navalFormationDetail
+        : naval.overview.portsTracked || localNaval.available
+          ? (navalAnchorLabel || "Naval context partial")
+          : "Naval picture incomplete",
       detail: naval.overview.formationsTracked
-        ? "Built from exposed fleets and task forces on the current shell path."
-        : naval.overview.statusLine,
+        ? sentenceParts(navalFormationDetail, localNaval.supportPosture, localNaval.constraint)
+        : localNaval.available
+          ? sentenceParts(
+            localNaval.availability && localNaval.availability !== "Not exposed" ? `${localNaval.availability} local naval support` : "",
+            localNaval.note,
+            localNaval.supportPosture,
+            localNaval.constraint,
+          )
+          : naval.overview.statusLine,
     },
     logistics: {
-      label: logistics.overview.supplyAverageDays != null
-        ? `${logistics.overview.supplyAverageDays.toFixed(1)}d sustainment`
-        : "Logistics picture incomplete",
-      detail: logistics.overview.supplyAverageDays != null
-        ? `${logistics.overview.supplyAverageDays.toFixed(1)} days average sustainment at current tempo.`
-        : logistics.overview.supportHeadline,
+      label: localSustainment.available && localSustainment.status !== "Stable"
+        ? `${localSustainment.status} sustainment`
+        : logistics.overview.supplyAverageDays != null
+          ? `${logistics.overview.supplyAverageDays.toFixed(1)}d sustainment`
+          : "Logistics picture incomplete",
+      detail: localSustainment.available
+        ? sentenceParts(logisticsConcern, localSustainment.atRisk?.[0] ? `${localSustainment.atRisk[0].name} • ${localSustainment.atRisk[0].detail}` : "")
+        : logistics.overview.supplyAverageDays != null
+          ? `${logistics.overview.supplyAverageDays.toFixed(1)} days average current tempo.`
+          : logistics.overview.supportHeadline,
     },
     intelligence: {
-      label: formatPendingDispatchLabel(intelligence.overview.pending),
-      detail: (intelligence.overview.pending ?? 0) > 0 || intelligence.overview.latestTitle !== "No current dispatch"
-        ? "Built from current dispatch traffic and exposed pressure cues."
-        : intelligence.overview.statusLine,
+      label: formatPendingDispatchLabel(intelligence.overview.pending, liveDispatchCount),
+      detail: latestDispatchLine
+        ? sentenceParts(latestDispatchLine, intelligence.overview.latestSummary, intelligence.overview.staffSummary)
+        : (intelligence.overview.pending ?? 0) > 0 || liveDispatchCount > 0
+          ? "Built from current dispatch traffic and exposed pressure cues."
+          : intelligence.overview.statusLine,
     },
     reports: {
       pending: reports.pending ?? "Unknown",

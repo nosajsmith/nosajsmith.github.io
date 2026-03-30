@@ -15,6 +15,9 @@ test("unit inspector summary organizes authoritative unit state into stable sect
     name: "1st Marines",
     side: "ALLIED",
     kind: "land",
+    location_id: "BLOODY_RIDGE",
+    x: 7,
+    y: 9,
     strength: 92,
     readiness: 70,
     readiness_band: "steady",
@@ -141,11 +144,21 @@ test("unit inspector summary organizes authoritative unit state into stable sect
 
   assert.equal(summary.selected, true);
   assert.equal(summary.header.title, "1st Marines");
+  assert.equal(summary.header.subtitle, "ALLIED • Land • Defend");
   assert.equal(summary.header.loc.state, "connected");
   assert.equal(summary.header.loc.label, "LOC Connected");
   assert.equal(summary.summary.title, "Current Summary");
-  assert.equal(summary.summary.rows[0].value, "70");
-  assert.equal(summary.summary.rows[1].value, "4.2 days current tempo");
+  assert.deepEqual(summary.summary.rows, [
+    { label: "Side", value: "ALLIED" },
+    { label: "Type / Role", value: "Land • Defend" },
+    { label: "Location / Hex", value: "BLOODY RIDGE • Hex 7, 9" },
+    { label: "Readiness", value: "70" },
+    { label: "Fatigue", value: "14" },
+    { label: "Supply", value: "4.2 days current tempo" },
+  ]);
+  assert.match(summary.summary.note, /Tasking Move To\./);
+  assert.match(summary.summary.note, /HQ 1st Marine Division HQ\./);
+  assert.match(summary.summary.note, /Movement route under review\./);
   assert.deepEqual(
     summary.sections.slice(0, 4).map((section) => section.title),
     ["Formation Summary", "Command Lead", "Access / LOC", "Readiness / Tasking"],
@@ -164,8 +177,9 @@ test("unit inspector summary organizes authoritative unit state into stable sect
   const replacement = sectionByTitle(summary, "Experience / Reconstitution");
 
   assert.equal(identity.rows[0].value, "1st Marines");
-  assert.equal(identity.rows[1].value, "Land");
-  assert.equal(identity.rows[3].value, "ALLIED");
+  assert.equal(identity.rows[1].value, "ALLIED");
+  assert.equal(identity.rows[2].value, "Land • Defend");
+  assert.equal(identity.rows[3].value, "BLOODY RIDGE • Hex 7, 9");
   assert.equal(commander.variant, "commander-link");
   assert.equal(commander.commander.rank, "Rank unavailable");
   assert.equal(commander.commander.name, "Commander not exposed");
@@ -229,8 +243,12 @@ test("unit inspector summary tolerates units without nested inspector data", () 
     name: "Legacy Unit",
     side: "ALLIED",
     kind: "land",
+    location_id: "KUKUM",
+    x: 4,
+    y: 6,
     strength: 51,
     readiness: 42,
+    fatigue: 31,
     readiness_band: "fatigued",
     morale: 39,
     morale_band: "shaken",
@@ -240,8 +258,17 @@ test("unit inspector summary tolerates units without nested inspector data", () 
 
   assert.equal(summary.selected, true);
   assert.equal(summary.header.title, "Legacy Unit");
-  assert.equal(summary.header.loc, null);
+  assert.equal(summary.header.subtitle, "ALLIED • Land");
+  assert.equal(summary.header.loc.label, "Location Reported");
   assert.equal(summary.summary.title, "Current Summary");
+  assert.deepEqual(summary.summary.rows, [
+    { label: "Side", value: "ALLIED" },
+    { label: "Type / Role", value: "Land" },
+    { label: "Location / Hex", value: "KUKUM • Hex 4, 6" },
+    { label: "Readiness", value: "42" },
+    { label: "Fatigue", value: "31" },
+    { label: "Supply", value: "unknown" },
+  ]);
   assert.deepEqual(
     summary.sections.slice(0, 4).map((section) => section.title),
     ["Formation Summary", "Command Lead", "Access / LOC", "Readiness / Tasking"],
@@ -585,4 +612,128 @@ test("unit inspector summary adapts to naval and logistics formations", () => {
   assert.equal(sectionByTitle(logistics, "Logistics Readiness").title, "Logistics Readiness");
   assert.equal(sectionByTitle(logistics, "Transport Capacity").rows[1].label, "Vehicles");
   assert.deepEqual(sectionByTitle(logistics, "Transport Capacity").rows[1], { label: "Vehicles", onHand: 120, authorized: 140, status: null });
+});
+
+test("unit inspector summary surfaces tracked shortcut orders through the same tasking presentation", () => {
+  const summary = summarizeUnitInspector({
+    id: "u1",
+    name: "1st Marines",
+    side: "ALLIED",
+    kind: "land",
+    location_id: "SEOUL_AXIS",
+    x: 3,
+    y: 4,
+    inspector: {
+      operational_state: {
+        posture: "advance",
+        readiness: 71,
+        fatigue: 11,
+        loc: {
+          state: "connected",
+          label: "LOC Connected",
+          detail: "Linked to the west-axis route",
+        },
+      },
+      toe: { toe_pct: 91, men: { on_hand: 2200, authorized: 2400 } },
+      supply: {
+        supply_pct: 82,
+        supply_display: "4.0 days",
+        supply_days_current: 4,
+      },
+      movement: {},
+      command: {
+        superior: { name: "X Corps" },
+      },
+      attachments_support: {},
+      branch_specific: {},
+    },
+  }, {
+    operations: [
+      {
+        id: "shortcut-u1-3-4",
+        scenarioId: "inchon_mvp",
+        name: "1st Marines Move • Seoul Axis",
+        type: "offensive",
+        objectiveId: "o-seoul",
+        objectiveName: "Seoul",
+        leadHq: "X Corps",
+        participants: [{ unitId: "u1", name: "1st Marines", roleId: "main_effort" }],
+        airRole: "none",
+        navalRole: "none",
+        tempo: "standard",
+        estimatedPrepHours: 0,
+        approvedAtTurn: 1,
+        approvedAtHours: 6,
+        commandIntent: "move",
+        source: "map_shortcut",
+        seedUnitId: "u1",
+        targetHex: { q: 4, r: 4 },
+        targetLabel: "Seoul Axis",
+        enemyTargetId: null,
+      },
+    ],
+  });
+
+  assert.match(summary.summary.note, /Pending move order through the planner approval path/i);
+  assert.equal(sectionByTitle(summary, "Readiness / Tasking").rows[5].value, "Move");
+  assert.equal(sectionByTitle(summary, "Readiness / Tasking").rows[6].value, "Queued");
+});
+
+test("unit inspector summary prefers live runtime order state when it is exposed", () => {
+  const unit = {
+    id: "u1",
+    name: "1st Marines",
+    side: "ALLIED",
+    kind: "land",
+    location_id: "SEOUL_AXIS",
+    x: 3,
+    y: 4,
+    inspector: {
+      operational_state: {
+        posture: null,
+        readiness: 71,
+        fatigue: 11,
+        loc: {
+          state: "connected",
+          label: "LOC Connected",
+          detail: "Linked to the west-axis route",
+        },
+      },
+      toe: { toe_pct: 91, men: { on_hand: 2200, authorized: 2400 } },
+      supply: {
+        supply_pct: 82,
+        supply_display: "4.0 days",
+        supply_days_current: 4,
+      },
+      movement: {},
+      orders: {
+        action: "hold",
+        lifecycle_state: "planned",
+      },
+      command: {
+        superior: { name: "X Corps" },
+      },
+      attachments_support: {},
+      branch_specific: {},
+    },
+  };
+
+  const summary = summarizeUnitInspector(unit, {
+    snapshot: {
+      bai_report: {
+        unit_orders: [
+          {
+            unit_id: "u1",
+            action: "attack",
+            lifecycle_state: "executing",
+            target_location_id: "SEOUL",
+          },
+        ],
+      },
+    },
+  });
+
+  assert.equal(summary.header.subtitle, "ALLIED • Land • Attack");
+  assert.equal(sectionByTitle(summary, "Readiness / Tasking").rows[5].value, "Attack");
+  assert.equal(sectionByTitle(summary, "Readiness / Tasking").rows[6].value, "Executing");
 });

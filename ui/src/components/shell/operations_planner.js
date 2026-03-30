@@ -1,4 +1,5 @@
 import { humanizeToken } from "../../lib/view_snapshot.js";
+import { axialRound } from "../../lib/hex.js";
 import { summarizeLocalAirSupport } from "./air_operations_summary.js";
 import { buildOperationalOverlayState } from "./map_scene.js";
 import { summarizeLocalNavalSupport } from "./naval_operations_summary.js";
@@ -64,6 +65,7 @@ const validGroundRoleIds = optionIds(GROUND_ROLE_OPTIONS);
 const validAirRoleIds = optionIds(AIR_ROLE_OPTIONS);
 const validNavalRoleIds = optionIds(NAVAL_ROLE_OPTIONS);
 const validTempoIds = optionIds(TEMPO_OPTIONS);
+const validCommandIntentIds = new Set(["operation", "move", "attack"]);
 
 function isCombatGroundFormation(unit) {
   const unitType = String(unit?.unit_type ?? "").trim().toUpperCase();
@@ -158,6 +160,112 @@ function distanceBetween(left, right) {
     return null;
   }
   return Math.hypot(lx - rx, ly - ry);
+}
+
+function roundHexPoint(point) {
+  const q = toNumber(point?.x);
+  const r = toNumber(point?.y);
+  if (q == null || r == null) {
+    return null;
+  }
+  return axialRound(q, r);
+}
+
+function formatHexLabel(hex) {
+  if (!hex) {
+    return "Unknown hex";
+  }
+  return `Hex ${hex.q}, ${hex.r}`;
+}
+
+function commandIntentLabel(intent) {
+  if (intent === "move") {
+    return "Move";
+  }
+  if (intent === "attack") {
+    return "Attack";
+  }
+  return "Operation";
+}
+
+function targetHexKey(targetHex) {
+  if (!targetHex) {
+    return "unknown";
+  }
+  return `${targetHex.q}:${targetHex.r}`;
+}
+
+function estimateQuickMoveReach(unit) {
+  const movement = unit?.inspector && typeof unit.inspector === "object" && unit.inspector.movement && typeof unit.inspector.movement === "object"
+    ? unit.inspector.movement
+    : {};
+  const operational = unit?.inspector && typeof unit.inspector === "object" && unit.inspector.operational_state && typeof unit.inspector.operational_state === "object"
+    ? unit.inspector.operational_state
+    : {};
+  const movementState = normalizeText(movement?.remaining);
+  const movementKm = toNumber(movement?.km_remaining);
+  const fatigue = toNumber(operational?.fatigue);
+  let reach = movementKm != null ? Math.max(1, Math.min(6, movementKm / 2)) : 3.25;
+
+  if (movementState === "restricted") {
+    reach = Math.min(reach, 2.25);
+  } else if (movementState === "fixed") {
+    reach = Math.min(reach, 0.75);
+  } else if (movementState === "free") {
+    reach = Math.max(reach, 3.25);
+  }
+
+  if (fatigue != null && fatigue > 30) {
+    reach = Math.max(0.75, reach - 0.75);
+  }
+
+  return Number(reach.toFixed(2));
+}
+
+function objectiveAtHex(snapshot, targetHex) {
+  if (!targetHex) {
+    return null;
+  }
+  const objectives = Array.isArray(snapshot?.objectives) ? snapshot.objectives : [];
+  return objectives.find((objective) => {
+    const hex = roundHexPoint(objective);
+    return hex && hex.q === targetHex.q && hex.r === targetHex.r;
+  }) ?? null;
+}
+
+function nearestObjective(snapshot, targetHex) {
+  if (!targetHex) {
+    return null;
+  }
+  const objectives = Array.isArray(snapshot?.objectives) ? snapshot.objectives : [];
+  return [...objectives]
+    .filter((objective) => toNumber(objective?.x) != null && toNumber(objective?.y) != null)
+    .sort((left, right) => {
+      const leftDistance = distanceBetween(left, targetHex) ?? Number.POSITIVE_INFINITY;
+      const rightDistance = distanceBetween(right, targetHex) ?? Number.POSITIVE_INFINITY;
+      if (leftDistance !== rightDistance) {
+        return leftDistance - rightDistance;
+      }
+      return String(left?.name ?? left?.id ?? "").localeCompare(String(right?.name ?? right?.id ?? ""));
+    })[0] ?? null;
+}
+
+function enemyTargetAtHex(snapshot, unit, targetHex) {
+  if (!targetHex || !unit) {
+    return null;
+  }
+  const side = normalizeText(unit?.side);
+  const units = Array.isArray(snapshot?.units) ? snapshot.units : [];
+  return units.find((candidate) => {
+    if (!candidate || String(candidate?.id ?? "") === String(unit?.id ?? "")) {
+      return false;
+    }
+    if (side && normalizeText(candidate?.side) === side) {
+      return false;
+    }
+    const hex = roundHexPoint(candidate);
+    return hex && hex.q === targetHex.q && hex.r === targetHex.r;
+  }) ?? null;
 }
 
 function proximityLabel(distance) {
@@ -306,6 +414,12 @@ export function createOperationPlannerState(scenarioId = null) {
     navalRole: "none",
     tempo: "standard",
     approved: false,
+    commandIntent: "operation",
+    commandSource: "planner",
+    seedUnitId: null,
+    targetHex: null,
+    targetLabel: null,
+    enemyTargetId: null,
   };
 }
 
@@ -340,6 +454,14 @@ export function sanitizeTrackedOperations(snapshot, operations) {
       estimatedPrepHours: toNumber(operation.estimatedPrepHours),
       approvedAtTurn: toNumber(operation.approvedAtTurn),
       approvedAtHours: toNumber(operation.approvedAtHours),
+      commandIntent: validCommandIntentIds.has(operation.commandIntent) ? operation.commandIntent : "operation",
+      source: operation.source === "map_shortcut" ? "map_shortcut" : "planner",
+      seedUnitId: typeof operation.seedUnitId === "string" && operation.seedUnitId.trim() ? operation.seedUnitId.trim() : null,
+      targetHex: operation.targetHex && Number.isFinite(Number(operation.targetHex.q)) && Number.isFinite(Number(operation.targetHex.r))
+        ? { q: Number(operation.targetHex.q), r: Number(operation.targetHex.r) }
+        : null,
+      targetLabel: typeof operation.targetLabel === "string" && operation.targetLabel.trim() ? operation.targetLabel.trim() : null,
+      enemyTargetId: typeof operation.enemyTargetId === "string" && operation.enemyTargetId.trim() ? operation.enemyTargetId.trim() : null,
     }));
 }
 
@@ -382,6 +504,14 @@ export function sanitizeOperationPlannerState(snapshot, plannerState) {
     Object.entries(plannerState.unitRoles ?? {}).filter(([unitId, roleId]) => validUnitIds.has(unitId) && validGroundRoleIds.has(roleId)),
   );
   const nextObjectiveId = validObjectiveIds.has(plannerState.objectiveId) ? plannerState.objectiveId : null;
+  const nextTargetHex = plannerState?.targetHex && Number.isFinite(Number(plannerState.targetHex.q)) && Number.isFinite(Number(plannerState.targetHex.r))
+    ? { q: Number(plannerState.targetHex.q), r: Number(plannerState.targetHex.r) }
+    : null;
+  const nextCommandIntent = validCommandIntentIds.has(plannerState.commandIntent) ? plannerState.commandIntent : "operation";
+  const nextSeedUnitId = validUnitIds.has(String(plannerState.seedUnitId ?? "")) ? String(plannerState.seedUnitId) : null;
+  const nextTargetLabel = typeof plannerState.targetLabel === "string" && plannerState.targetLabel.trim()
+    ? plannerState.targetLabel.trim()
+    : null;
   const nextState = {
     scenarioId,
     greaseEnabled: !!plannerState.greaseEnabled,
@@ -395,6 +525,14 @@ export function sanitizeOperationPlannerState(snapshot, plannerState) {
     navalRole: validNavalRoleIds.has(plannerState.navalRole) ? plannerState.navalRole : "none",
     tempo: validTempoIds.has(plannerState.tempo) ? plannerState.tempo : "standard",
     approved: !!plannerState.approved && !!nextObjectiveId,
+    commandIntent: nextCommandIntent,
+    commandSource: plannerState.commandSource === "map_shortcut" ? "map_shortcut" : "planner",
+    seedUnitId: nextSeedUnitId,
+    targetHex: nextTargetHex,
+    targetLabel: nextTargetLabel,
+    enemyTargetId: typeof plannerState.enemyTargetId === "string" && plannerState.enemyTargetId.trim()
+      ? plannerState.enemyTargetId.trim()
+      : null,
   };
 
   if (
@@ -409,12 +547,124 @@ export function sanitizeOperationPlannerState(snapshot, plannerState) {
     && nextState.navalRole === plannerState.navalRole
     && nextState.tempo === plannerState.tempo
     && nextState.approved === plannerState.approved
+    && nextState.commandIntent === plannerState.commandIntent
+    && nextState.commandSource === plannerState.commandSource
+    && nextState.seedUnitId === plannerState.seedUnitId
+    && nextState.targetLabel === plannerState.targetLabel
+    && nextState.enemyTargetId === plannerState.enemyTargetId
+    && nextState.targetHex?.q === plannerState.targetHex?.q
+    && nextState.targetHex?.r === plannerState.targetHex?.r
     && shallowEqualRoles(nextState.unitRoles, plannerState.unitRoles ?? {})
   ) {
     return plannerState;
   }
 
   return nextState;
+}
+
+export function buildMapCommandPreview(snapshot, unitId, targetHex) {
+  if (!snapshot || !unitId || !targetHex) {
+    return null;
+  }
+
+  const unit = (Array.isArray(snapshot?.units) ? snapshot.units : []).find((row) => String(row?.id ?? "") === String(unitId)) ?? null;
+  if (!unit) {
+    return null;
+  }
+
+  const roundedTargetHex = roundHexPoint({ x: targetHex.q, y: targetHex.r });
+  const currentHex = roundHexPoint(unit);
+  if (!roundedTargetHex || !currentHex) {
+    return null;
+  }
+
+  const enemyTarget = enemyTargetAtHex(snapshot, unit, roundedTargetHex);
+  const matchedObjective = objectiveAtHex(snapshot, roundedTargetHex) ?? nearestObjective(snapshot, roundedTargetHex);
+  const distance = Number((distanceBetween(currentHex, roundedTargetHex) ?? 0).toFixed(2));
+  const quickMoveReach = estimateQuickMoveReach(unit);
+  const attackReach = 1.75;
+  const sameHex = currentHex.q === roundedTargetHex.q && currentHex.r === roundedTargetHex.r;
+  const commandIntent = sameHex ? "operation" : enemyTarget ? "attack" : "move";
+  const immediate = sameHex
+    ? false
+    : commandIntent === "attack"
+      ? distance <= attackReach
+      : distance <= quickMoveReach;
+  const targetLabel = enemyTarget?.name
+    || matchedObjective?.name
+    || formatHexLabel(roundedTargetHex);
+  const statusLabel = sameHex
+    ? "Planner ready"
+    : immediate
+      ? commandIntent === "attack" ? "Attack available" : "Move available"
+      : "Planner review";
+  const note = sameHex
+    ? `Open the planner with ${unit.name} preloaded for a deliberate operation order.`
+    : immediate
+      ? commandIntent === "attack"
+        ? `${unit.name} can attack toward ${targetLabel} through the planner approval path.`
+        : `${unit.name} can move toward ${targetLabel} through the planner approval path.`
+      : commandIntent === "attack"
+        ? `${unit.name} is not in immediate attack position. Seed the planner for a staged attack toward ${targetLabel}.`
+        : `${targetLabel} sits beyond the current quick-order reach estimate. Seed the planner for a deliberate move.`;
+
+  return {
+    available: true,
+    unitId: String(unit.id),
+    unitName: String(unit.name ?? "Formation"),
+    commandIntent,
+    mode: immediate ? "immediate" : "planner_review",
+    legal: immediate || sameHex,
+    targetHex: roundedTargetHex,
+    targetLabel,
+    objectiveId: matchedObjective?.id ? String(matchedObjective.id) : null,
+    objectiveName: matchedObjective?.name ? String(matchedObjective.name) : null,
+    enemyTargetId: enemyTarget?.id ? String(enemyTarget.id) : null,
+    enemyTargetName: enemyTarget?.name ? String(enemyTarget.name) : null,
+    route: [
+      { x: toNumber(unit?.x) ?? currentHex.q, y: toNumber(unit?.y) ?? currentHex.r },
+      { x: roundedTargetHex.q, y: roundedTargetHex.r },
+    ],
+    distance,
+    note,
+    title: sameHex
+      ? `Open planner for ${unit.name}`
+      : `${commandIntentLabel(commandIntent)} • ${unit.name}`,
+    statusLabel,
+    previewTone: sameHex ? "review" : commandIntent === "attack" ? "attack" : immediate ? "move" : "review",
+  };
+}
+
+export function seedPlannerStateFromMapCommand(snapshot, plannerState, preview) {
+  const state = sanitizeOperationPlannerState(snapshot, plannerState);
+  if (!preview?.available) {
+    return state;
+  }
+
+  const objectiveId = preview.objectiveId ?? state.objectiveId;
+  const fallbackObjectiveLabel = preview.objectiveName || preview.targetLabel || "Objective";
+  const commandLabel = commandIntentLabel(preview.commandIntent);
+  const operationName = preview.commandIntent === "operation"
+    ? `${preview.unitName} ${commandLabel} • ${fallbackObjectiveLabel}`
+    : `${preview.unitName} ${commandLabel} • ${preview.targetLabel}`;
+
+  return sanitizeOperationPlannerState(snapshot, {
+    ...state,
+    greaseEnabled: true,
+    plannerOpen: preview.mode === "planner_review" || preview.commandIntent === "operation" || state.plannerOpen,
+    selectingObjective: !objectiveId,
+    objectiveId,
+    name: operationName,
+    unitRoles: { [preview.unitId]: "main_effort" },
+    tempo: preview.commandIntent === "attack" ? "immediate" : state.tempo,
+    approved: preview.mode === "immediate" && Boolean(objectiveId),
+    commandIntent: preview.commandIntent,
+    commandSource: "map_shortcut",
+    seedUnitId: preview.unitId,
+    targetHex: preview.targetHex,
+    targetLabel: preview.targetLabel,
+    enemyTargetId: preview.enemyTargetId,
+  });
 }
 
 export function defaultOperationName(snapshot, objectiveId, operationType = "offensive") {
@@ -506,9 +756,13 @@ export function createApprovedOperation(snapshot, plannerState) {
   const leadHq = dominantCommandLabel(assigned.length ? assigned : candidates);
   const prepHours = assigned.length ? Math.max(...assigned.map((candidate) => candidate.assembly.hours)) : (leadFormation?.assembly.hours ?? null);
   const scenarioId = typeof snapshot?.scenario?.id === "string" ? snapshot.scenario.id : null;
+  const operationTargetHex = state.targetHex ?? roundHexPoint(objective);
+  const operationId = state.commandSource === "map_shortcut"
+    ? `${scenarioId ?? "scenario"}:${state.commandIntent}:${state.seedUnitId ?? "unit"}:${targetHexKey(operationTargetHex)}`
+    : `${scenarioId ?? "scenario"}:${state.operationType}:${objective.id}`;
 
   return {
-    id: `${scenarioId ?? "scenario"}:${state.operationType}:${objective.id}`,
+    id: operationId,
     scenarioId,
     name: state.name.trim() || defaultOperationName(snapshot, objective.id, state.operationType),
     type: state.operationType,
@@ -526,6 +780,12 @@ export function createApprovedOperation(snapshot, plannerState) {
     estimatedPrepHours: prepHours,
     approvedAtTurn: toNumber(snapshot?.time?.turn),
     approvedAtHours: toNumber(snapshot?.time?.current_hours),
+    commandIntent: state.commandIntent,
+    source: state.commandSource,
+    seedUnitId: state.seedUnitId,
+    targetHex: state.targetHex,
+    targetLabel: state.targetLabel ?? (state.commandIntent === "move" ? formatHexLabel(state.targetHex) : objective.name),
+    enemyTargetId: state.enemyTargetId,
   };
 }
 
@@ -710,6 +970,17 @@ function operationStatus(operation, snapshot, participants, objectiveContext) {
   };
 }
 
+function operationTaskLabel(operation) {
+  const target = operation?.targetLabel || operation?.objectiveName || "objective";
+  if (operation?.commandIntent === "move") {
+    return `Move toward ${target}`;
+  }
+  if (operation?.commandIntent === "attack") {
+    return `Attack toward ${target}`;
+  }
+  return `Operation toward ${target}`;
+}
+
 function operationStatusRank(status) {
   const normalized = normalizeText(status);
   if (normalized === "stalled") {
@@ -777,14 +1048,16 @@ export function summarizeTrackedOperations(snapshot, operations, options = {}) {
       id: operation.id,
       name: operation.name,
       type: humanizeToken(operation.type),
-      objective: objective?.name ?? operation.objectiveName,
+      objective: operation.targetLabel ?? objective?.name ?? operation.objectiveName,
       leadHq: operation.leadHq ?? "Lead HQ not exposed",
       status: state.status,
-      statusDetail: state.detail,
+      statusDetail: `${operationTaskLabel(operation)}. ${state.detail}`,
       participatingForces: participatingForces.length ? participatingForces : ["Participating forces no longer exposed"],
       supportAssigned: supportAssigned.length ? supportAssigned : ["No support assigned"],
       prepStatus: formatRemainingPrep(prepRemaining),
       readinessNote,
+      commandIntent: operation.commandIntent,
+      source: operation.source,
       approvedLabel: approvedAtLabel(operation),
       marker: objectiveScene
         ? {
@@ -796,7 +1069,9 @@ export function summarizeTrackedOperations(snapshot, operations, options = {}) {
           }
         : null,
       objectiveState: objective?.state ? humanizeToken(objective.state) : "Objective state unavailable",
-      note: "Prototype operation state tracks approved demo plans plus current objective pressure, readiness, LOC, and elapsed theatre time only. No combat progress meter is implied.",
+      note: operation.source === "map_shortcut"
+        ? "Fast map command routed through the same approved demo plan path. Lifecycle state still uses approved prep time, elapsed theatre time, and current shell-visible conditions only."
+        : "Prototype operation state tracks approved demo plans plus current objective pressure, readiness, LOC, and elapsed theatre time only. No combat progress meter is implied.",
     };
   }).sort((left, right) => {
     const rankDiff = operationStatusRank(left.status) - operationStatusRank(right.status);
@@ -845,7 +1120,7 @@ export function summarizeOperationPlanner(snapshot, scene, plannerState) {
   const currentPlan = state.approved && objective
     ? {
         headline: operationName,
-        detail: `${humanizeToken(state.operationType)} toward ${objective.name}. ${prepDays} demo prep estimate.`,
+        detail: `${commandIntentLabel(state.commandIntent)} toward ${state.targetLabel ?? objective.name}. ${prepDays} demo prep estimate.`,
         note: supportAssigned.length
           ? `${supportAssigned.join(" • ")}. ${weatherImpact.timeState} conditions currently exposed.`
           : `${weatherImpact.timeState} conditions currently exposed. Support remains unassigned.`,
@@ -880,7 +1155,7 @@ export function summarizeOperationPlanner(snapshot, scene, plannerState) {
       name: operationName,
       type: roleLabel(state.operationType, OPERATION_TYPE_OPTIONS),
       leadHq: leadHq ?? "Lead HQ not exposed",
-      objectiveArea: objective?.name ?? "No objective area marked",
+      objectiveArea: state.targetLabel ?? objective?.name ?? "No objective area marked",
       status: state.approved ? "Approved demo plan" : "Draft planning object",
     },
     groundForces: {
@@ -935,7 +1210,7 @@ export function summarizeOperationPlanner(snapshot, scene, plannerState) {
     approval: {
       ready: approvalReady,
       operationName,
-      objective: objective?.name ?? "No objective area marked",
+      objective: state.targetLabel ?? objective?.name ?? "No objective area marked",
       participatingForces: participatingForces.length ? participatingForces : ["No forces assigned"],
       supportAssigned: supportAssigned.length ? supportAssigned : ["No support assigned"],
       estimatedPrepTime: prepDays,

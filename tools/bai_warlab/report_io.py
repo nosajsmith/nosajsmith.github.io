@@ -3,7 +3,9 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+from collections import Counter
 from pathlib import Path
+from statistics import median, pstdev
 from typing import Any, Dict, Iterable, List
 
 from . import ARTIFACT_ROOT
@@ -24,6 +26,8 @@ RESULTS_CSV_COLUMNS = [
     "scenario_outcome",
     "winning_side",
     "vp_margin",
+    "allied_casualties",
+    "axis_casualties",
     "casualty_ratio",
     "objective_hold_duration",
     "line_collapse_rate",
@@ -35,6 +39,17 @@ RESULTS_CSV_COLUMNS = [
     "execution_status",
     "steps_completed",
     "hours_elapsed",
+]
+
+CORE_METRIC_COLUMNS = [
+    ("vp_margin", "VP Margin"),
+    ("allied_casualties", "Allied Casualties"),
+    ("axis_casualties", "Axis Casualties"),
+    ("casualty_ratio", "Casualty Ratio"),
+    ("objective_hold_duration", "Objective Hold Duration"),
+    ("line_collapse_rate", "Line Collapse Rate"),
+    ("low_supply_turns", "Low Supply Turns"),
+    ("hours_elapsed", "Tempo (Hours Elapsed)"),
 ]
 
 
@@ -86,6 +101,113 @@ def flatten_mapping(mapping: Dict[str, Any], prefix: str = "") -> Dict[str, Any]
         else:
             row[field] = _scalar_csv_value(value)
     return row
+
+
+def _coerce_float(value: Any) -> float | None:
+    if value is None or value == "":
+        return None
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, (int, float)):
+        return float(value)
+    try:
+        return float(str(value).strip())
+    except Exception:
+        return None
+
+
+def _round_metric(value: float) -> float:
+    return round(float(value), 3)
+
+
+def _result_score(value: Any) -> float | None:
+    normalized = str(value or "").strip().lower()
+    if normalized == "win":
+        return 1.0
+    if normalized == "draw":
+        return 0.5
+    if normalized == "loss":
+        return 0.0
+    return None
+
+
+def _normalized_token(value: Any, *, default: str = "unknown", uppercase: bool = False) -> str:
+    token = str(value or "").strip()
+    if not token:
+        token = default
+    return token.upper() if uppercase else token.lower()
+
+
+def _winning_side_token(row: Dict[str, Any]) -> str:
+    raw = str(row.get("winning_side") or "").strip().upper()
+    if raw:
+        return raw
+    if _normalized_token(row.get("result")) == "draw" or _normalized_token(row.get("scenario_outcome")) == "draw":
+        return "DRAW"
+    return "UNKNOWN"
+
+
+def summarize_core_metric_rows(rows: Iterable[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
+    summary: Dict[str, Dict[str, Any]] = {}
+    row_list = list(rows)
+    for key, label in CORE_METRIC_COLUMNS:
+        values = [_coerce_float(row.get(key)) for row in row_list]
+        numeric = [value for value in values if value is not None]
+        if not numeric:
+            continue
+        summary[key] = {
+            "label": label,
+            "count": len(numeric),
+            "mean": _round_metric(sum(numeric) / len(numeric)),
+            "median": _round_metric(median(numeric)),
+            "min": _round_metric(min(numeric)),
+            "max": _round_metric(max(numeric)),
+            "spread": _round_metric(max(numeric) - min(numeric)),
+            "stddev": _round_metric(pstdev(numeric)) if len(numeric) > 1 else 0.0,
+        }
+    return summary
+
+
+def summarize_outcome_rows(rows: Iterable[Dict[str, Any]]) -> Dict[str, Any]:
+    row_list = list(rows)
+    if not row_list:
+        return {
+            "available": False,
+            "sample_count": 0,
+            "ai_side_counts": {},
+            "result_counts": {},
+            "scenario_outcome_counts": {},
+            "winning_side_counts": {},
+            "win_rate": 0.0,
+            "loss_rate": 0.0,
+            "draw_rate": 0.0,
+            "non_loss_rate": 0.0,
+            "mean_result_score": None,
+        }
+
+    ai_side_counts = Counter(_normalized_token(row.get("ai_side"), default="unknown", uppercase=True) for row in row_list)
+    result_counts = Counter(_normalized_token(row.get("result")) for row in row_list)
+    scenario_outcome_counts = Counter(_normalized_token(row.get("scenario_outcome")) for row in row_list)
+    winning_side_counts = Counter(_winning_side_token(row) for row in row_list)
+    result_scores = [_result_score(row.get("result")) for row in row_list]
+    numeric_result_scores = [value for value in result_scores if value is not None]
+    sample_count = len(row_list)
+
+    return {
+        "available": True,
+        "sample_count": sample_count,
+        "ai_side_counts": dict(sorted(ai_side_counts.items())),
+        "result_counts": dict(sorted(result_counts.items())),
+        "scenario_outcome_counts": dict(sorted(scenario_outcome_counts.items())),
+        "winning_side_counts": dict(sorted(winning_side_counts.items())),
+        "win_rate": _round_metric(result_counts.get("win", 0) / sample_count),
+        "loss_rate": _round_metric(result_counts.get("loss", 0) / sample_count),
+        "draw_rate": _round_metric(result_counts.get("draw", 0) / sample_count),
+        "non_loss_rate": _round_metric((result_counts.get("win", 0) + result_counts.get("draw", 0)) / sample_count),
+        "mean_result_score": _round_metric(sum(numeric_result_scores) / len(numeric_result_scores))
+        if numeric_result_scores
+        else None,
+    }
 
 
 def _metric_block(run_result: Any, name: str) -> Dict[str, Any]:
@@ -146,6 +268,8 @@ def run_result_to_row(run_result: Any) -> Dict[str, Any]:
         "scenario_outcome": summary.get("scenario_outcome") or outcome.get("scenario_outcome") or "",
         "winning_side": summary.get("winning_side") or outcome.get("winning_side") or "",
         "vp_margin": _perspective_metric(outcome, "vp_margin", side),
+        "allied_casualties": behavior.get("allied_casualties"),
+        "axis_casualties": behavior.get("axis_casualties"),
         "casualty_ratio": _perspective_metric(behavior, "casualty_ratio", side),
         "objective_hold_duration": _perspective_metric(behavior, "objective_hold_turns", side),
         "line_collapse_rate": _perspective_metric(behavior, "line_collapse_rate", side),
@@ -180,6 +304,7 @@ def write_results_csv(path: str | Path, rows: List[Dict[str, Any]]) -> Path:
 
 
 __all__ = [
+    "CORE_METRIC_COLUMNS",
     "RESULTS_CSV_COLUMNS",
     "default_output_dir",
     "ensure_output_dir",
@@ -187,6 +312,8 @@ __all__ = [
     "run_result_to_row",
     "slugify",
     "stable_hash",
+    "summarize_core_metric_rows",
+    "summarize_outcome_rows",
     "write_json",
     "write_report_txt",
     "write_results_csv",

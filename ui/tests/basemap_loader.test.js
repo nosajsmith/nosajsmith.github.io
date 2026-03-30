@@ -37,6 +37,14 @@ test("basemap loader resolves the packaged guadalcanal theater from current shel
     resolveBasemapPackageTheater({ scenario: { id: "mwe_unknown", name: "Unknown Theater" } }),
     null,
   );
+  assert.equal(
+    resolveBasemapPackageTheater({
+      scenario: { id: "publisher_demo_slice", name: "Publisher Demo" },
+      objectives: [{ id: "o1", name: "Seoul" }],
+      ports: [{ id: "p1", name: "Inchon Harbor" }],
+    }),
+    "korea_peninsula_coarse_v1",
+  );
 });
 
 test("basemap loader picks only tiles that intersect the current scene viewport plus padding", () => {
@@ -98,6 +106,10 @@ test("basemap helpers flatten tile payloads and resolve zoom-tier style rules", 
   assert.deepEqual(Object.keys(MAP_BASEMAP_STYLE_SPEC), ["far", "operational", "close"]);
   assert.equal(resolveBasemapStyle(0.8).tileTier, "far");
   assert.equal(resolveBasemapStyle(1.0).tileTier, "operational");
+  assert.equal(resolveBasemapStyle(1.0).showSettlementNames, true);
+  assert.equal(resolveBasemapStyle(1.0).paperGrainOpacity > 0, true);
+  assert.equal(resolveBasemapStyle(1.0).terrainWashOpacity > 0, true);
+  assert.equal(resolveBasemapStyle(1.0).waterTextureOpacity > 0, true);
   assert.equal(resolveBasemapStyle(1.55).tileTier, "close");
 
   clearBasemapCaches();

@@ -1,3 +1,5 @@
+import { inferScenarioPresentation } from "../../lib/view_snapshot.js";
+
 function toNumber(value) {
   return typeof value === "number" && Number.isFinite(value) ? value : null;
 }
@@ -104,12 +106,13 @@ function localRiskEntry(unit) {
 }
 
 export function summarizeLocalSustainment(snapshot) {
+  const presentation = inferScenarioPresentation(snapshot);
   const units = localSustainmentUnits(snapshot);
   if (!units.length) {
     return {
       available: false,
       status: "Unavailable",
-      note: "Local sustainment is unavailable outside the current Henderson/Lunga perimeter slice.",
+      note: `Local sustainment is unavailable outside the current ${presentation.theaterLabel.toLowerCase()} slice.`,
       resources: [
         { label: "Supply", value: "Not exposed" },
         { label: "Ammo", value: "Not exposed" },

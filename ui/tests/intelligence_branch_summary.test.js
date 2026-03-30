@@ -19,7 +19,7 @@ test("intelligence branch summary uses communications and pressure reasons only"
   assert.equal(summary.overview.latestTitle, "Landing Continues");
   assert.equal(summary.dispatches.length, 1);
   assert.equal(summary.recon.sightings[0].title, "enemy pressure north");
-  assert.match(summary.confidence.status, /not exposed/);
+  assert.equal(summary.confidence.status, "Live picture partial");
   assert.match(summary.concerns[0], /enemy pressure north/i);
 });
 

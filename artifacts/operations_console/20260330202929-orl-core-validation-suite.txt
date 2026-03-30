@@ -1,0 +1,176 @@
+Name: ORL / Core Validation Suite
+Status: FAIL
+Summary: Suite completed with status FAIL. ORL / Smoke Suite=FAIL, ORL / Replay Validation=PASS, ORL / Snapshot Smoke=PASS, ORL / All-Green Check=PASS
+Scenario: inchon_mvp
+Started: 2026-03-30T20:29:29.404520+00:00
+Finished: 2026-03-30T20:29:29.857028+00:00
+Duration (ms): 452
+Artifacts:
+- /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260330202929-inchon-mvp-a.json
+- /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260330202929-inchon-mvp-b.json
+- /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260330202929-inchon-mvp.json
+Adapter Method: suite
+Executed Command: suite replay_validation snapshot_smoke run_all_green
+Details:
+- ## ORL / Core Validation Suite
+- [1/4] ORL / Smoke Suite
+- ## ORL / Smoke Suite
+- [1/2] ORL / Connectivity
+- [ORL] ORL / Connectivity
+- Connecting to bridge at ws://127.0.0.1:8766
+- Bridge unavailable: [Errno 1] Operation not permitted
+- FAIL: Bridge connectivity check failed.
+- [2/2] ORL / Scenario Integrity
+- [ORL] ORL / Scenario Integrity
+- Connecting to bridge at ws://127.0.0.1:8766
+- Requested scenario: inchon_mvp
+- Bridge unavailable: [Errno 1] Operation not permitted
+- FAIL: Scenario integrity check failed.
+- FAIL: Suite completed with status FAIL. ORL / Connectivity=FAIL, ORL / Scenario Integrity=FAIL
+- [2/4] ORL / Replay Validation
+- [ORL] ORL / Replay Validation
+- using adapter: replay_validation
+- Resolved scenario: inchon_mvp.json
+- Loaded scenario id: inchon_mvp
+- Started scenario: Inchon Demo Vertical Slice
+- Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260330202929-inchon-mvp-a.json
+- Resolved scenario: inchon_mvp.json
+- Loaded scenario id: inchon_mvp
+- Started scenario: Inchon Demo Vertical Slice
+- Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260330202929-inchon-mvp-b.json
+- Replay A: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260330202929-inchon-mvp-a.json
+- Replay B: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260330202929-inchon-mvp-b.json
+- Replay compare identical=True
+- Replay validation passed.
+- PASS: Replay validation passed.
+- [3/4] ORL / Snapshot Smoke
+- [ORL] ORL / Snapshot Smoke
+- using adapter: snapshot_smoke
+- Resolved scenario: inchon_mvp.json
+- Loaded scenario id: inchon_mvp
+- Started scenario: Inchon Demo Vertical Slice
+- Snapshot saved: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260330202929-inchon-mvp.json
+- Snapshot loaded: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260330202929-inchon-mvp.json
+- Scenario restored: inchon_mvp
+- Units restored: 6
+- Snapshot smoke passed.
+- PASS: Snapshot smoke passed.
+- [4/4] ORL / All-Green Check
+- [ORL] ORL / All-Green Check
+- using adapter: run_all_green
+- command: pytest -q /home/jason/dev/mwe/tests/test_inchon_scenario_stub.py /home/jason/dev/mwe/tests/test_bridge_live_path.py
+- stdout: ....                                                                     [100%]
+- stdout: 4 passed in 0.16s
+- PASS: All-green check passed.
+Subresults:
+  Name: ORL / Smoke Suite
+  Status: FAIL
+  Summary: Suite completed with status FAIL. ORL / Connectivity=FAIL, ORL / Scenario Integrity=FAIL
+  Scenario: inchon_mvp
+  Started: 2026-03-30T20:29:29.404542+00:00
+  Finished: 2026-03-30T20:29:29.436343+00:00
+  Duration (ms): 31
+  Adapter Method: suite
+  Details:
+  - ## ORL / Smoke Suite
+  - [1/2] ORL / Connectivity
+  - [ORL] ORL / Connectivity
+  - Connecting to bridge at ws://127.0.0.1:8766
+  - Bridge unavailable: [Errno 1] Operation not permitted
+  - FAIL: Bridge connectivity check failed.
+  - [2/2] ORL / Scenario Integrity
+  - [ORL] ORL / Scenario Integrity
+  - Connecting to bridge at ws://127.0.0.1:8766
+  - Requested scenario: inchon_mvp
+  - Bridge unavailable: [Errno 1] Operation not permitted
+  - FAIL: Scenario integrity check failed.
+  Subresults:
+    Name: ORL / Connectivity
+    Status: FAIL
+    Summary: Bridge connectivity check failed.
+    Scenario: inchon_mvp
+    Started: 2026-03-30T20:29:29.404551+00:00
+    Finished: 2026-03-30T20:29:29.435825+00:00
+    Duration (ms): 31
+    Errors:
+    - [Errno 1] Operation not permitted
+    Details:
+    - [ORL] ORL / Connectivity
+    - Connecting to bridge at ws://127.0.0.1:8766
+    - Bridge unavailable: [Errno 1] Operation not permitted
+    Name: ORL / Scenario Integrity
+    Status: FAIL
+    Summary: Scenario integrity check failed.
+    Scenario: inchon_mvp
+    Started: 2026-03-30T20:29:29.435853+00:00
+    Finished: 2026-03-30T20:29:29.436312+00:00
+    Errors:
+    - [Errno 1] Operation not permitted
+    Details:
+    - [ORL] ORL / Scenario Integrity
+    - Connecting to bridge at ws://127.0.0.1:8766
+    - Requested scenario: inchon_mvp
+    - Bridge unavailable: [Errno 1] Operation not permitted
+  Name: ORL / Replay Validation
+  Status: PASS
+  Summary: Replay validation passed.
+  Scenario: inchon_mvp
+  Started: 2026-03-30T20:29:29.436359+00:00
+  Finished: 2026-03-30T20:29:29.447869+00:00
+  Duration (ms): 11
+  Artifacts:
+  - /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260330202929-inchon-mvp-a.json
+  - /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260330202929-inchon-mvp-b.json
+  Adapter Method: replay_validation
+  Details:
+  - [ORL] ORL / Replay Validation
+  - using adapter: replay_validation
+  - Resolved scenario: inchon_mvp.json
+  - Loaded scenario id: inchon_mvp
+  - Started scenario: Inchon Demo Vertical Slice
+  - Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260330202929-inchon-mvp-a.json
+  - Resolved scenario: inchon_mvp.json
+  - Loaded scenario id: inchon_mvp
+  - Started scenario: Inchon Demo Vertical Slice
+  - Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260330202929-inchon-mvp-b.json
+  - Replay A: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260330202929-inchon-mvp-a.json
+  - Replay B: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260330202929-inchon-mvp-b.json
+  - Replay compare identical=True
+  - Replay validation passed.
+  Name: ORL / Snapshot Smoke
+  Status: PASS
+  Summary: Snapshot smoke passed.
+  Scenario: inchon_mvp
+  Started: 2026-03-30T20:29:29.447888+00:00
+  Finished: 2026-03-30T20:29:29.449808+00:00
+  Duration (ms): 1
+  Artifacts:
+  - /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260330202929-inchon-mvp.json
+  Adapter Method: snapshot_smoke
+  Details:
+  - [ORL] ORL / Snapshot Smoke
+  - using adapter: snapshot_smoke
+  - Resolved scenario: inchon_mvp.json
+  - Loaded scenario id: inchon_mvp
+  - Started scenario: Inchon Demo Vertical Slice
+  - Snapshot saved: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260330202929-inchon-mvp.json
+  - Snapshot loaded: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260330202929-inchon-mvp.json
+  - Scenario restored: inchon_mvp
+  - Units restored: 6
+  - Snapshot smoke passed.
+  Name: ORL / All-Green Check
+  Status: PASS
+  Summary: All-green check passed.
+  Scenario: inchon_mvp
+  Started: 2026-03-30T20:29:29.449827+00:00
+  Finished: 2026-03-30T20:29:29.856988+00:00
+  Duration (ms): 407
+  Adapter Method: run_all_green
+  Executed Command: pytest -q /home/jason/dev/mwe/tests/test_inchon_scenario_stub.py /home/jason/dev/mwe/tests/test_bridge_live_path.py
+  Return Code: 0
+  Details:
+  - [ORL] ORL / All-Green Check
+  - using adapter: run_all_green
+  - command: pytest -q /home/jason/dev/mwe/tests/test_inchon_scenario_stub.py /home/jason/dev/mwe/tests/test_bridge_live_path.py
+  - stdout: ....                                                                     [100%]
+  - stdout: 4 passed in 0.16s

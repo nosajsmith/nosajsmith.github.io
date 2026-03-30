@@ -110,6 +110,9 @@ def test_execute_compare_run_uses_shared_seed_schedule_and_computes_metric_delta
     assert result.comparison["core_metrics"]["vp_margin"]["delta_right_minus_left"] == 2.0
     assert result.comparison["core_metrics"]["casualty_ratio"]["winner"] == "left"
     assert result.comparison["core_metrics"]["low_supply_turns"]["winner"] == "right"
+    assert result.comparison["left_aggregate"]["success_rate"] == 1.0
+    assert result.comparison["right_aggregate"]["victory_proxy"]["result_counts"] == {"win": 3}
+    assert result.comparison["right_aggregate"]["core_metrics"]["vp_margin"]["mean"] == 4.0
 
     report_text = render_report(result)
     assert "Winner: B" in report_text

@@ -21,6 +21,7 @@ import {
 import { inferUnitCounterSymbol } from "../../map/unitCounterSymbol.js";
 import { buildUnitCounterOverlayPresentation } from "../../map/unitCounterOverlay.js";
 import { summarizeMapLabelPolicy } from "../../map/labelDeclutter.js";
+import { inferScenarioPresentation } from "../../lib/view_snapshot.js";
 
 export function abbreviateUnitLabel(unit) {
   const source = String(unit?.name || unit?.id || "UNIT").trim();
@@ -191,21 +192,121 @@ function collectPoints(snapshot) {
   };
 }
 
-function buildViewport(points) {
+function numericPresentationCoord(value) {
+  const numericValue = Number(value);
+  return Number.isFinite(numericValue) ? numericValue : null;
+}
+
+function normalizeSceneLabelAnchor(value, fallback = "start") {
+  return value === "start" || value === "middle" || value === "end" ? value : fallback;
+}
+
+function resolveMapPresentationBounds(snapshot, key) {
+  const mapPresentation = snapshot?.map_presentation && typeof snapshot.map_presentation === "object"
+    ? snapshot.map_presentation
+    : null;
+  const raw = mapPresentation?.[key];
+  if (!raw || typeof raw !== "object") {
+    return null;
+  }
+
+  const minX = numericPresentationCoord(raw.min_x ?? raw.minX);
+  const maxX = numericPresentationCoord(raw.max_x ?? raw.maxX);
+  const minY = numericPresentationCoord(raw.min_y ?? raw.minY);
+  const maxY = numericPresentationCoord(raw.max_y ?? raw.maxY);
+
+  if (
+    minX == null
+    || maxX == null
+    || minY == null
+    || maxY == null
+    || maxX <= minX
+    || maxY <= minY
+  ) {
+    return null;
+  }
+
+  return { minX, maxX, minY, maxY };
+}
+
+function resolveMapPresentationFocusPoints(snapshot) {
+  const focusPoints = Array.isArray(snapshot?.map_presentation?.focus_points)
+    ? snapshot.map_presentation.focus_points
+    : Array.isArray(snapshot?.map_presentation?.focusPoints)
+      ? snapshot.map_presentation.focusPoints
+      : [];
+  return dedupeWorldPoints(focusPoints.filter(hasCoord));
+}
+
+function resolvePlayableHexScaleKm(snapshot) {
+  const raw = snapshot?.map_presentation?.hex_scale_km ?? snapshot?.map_presentation?.hexScaleKm;
+  const numericValue = Number(raw);
+  return Number.isFinite(numericValue) ? numericValue : null;
+}
+
+function hasLockedFiveKmPlayableScale(snapshot) {
+  const hexScaleKm = resolvePlayableHexScaleKm(snapshot);
+  const playableScaleLocked = snapshot?.map_presentation?.playable_scale_locked ?? snapshot?.map_presentation?.playableScaleLocked;
+  return hexScaleKm === 5 && playableScaleLocked !== false;
+}
+
+function selectViewportPoints(points, snapshot = null) {
   if (!points.length) {
+    return points;
+  }
+
+  if (isKoreanOperationalSlice(snapshot)) {
+    const focusPoints = collectOperationalFocusPoints(snapshot);
+    if (focusPoints.length >= 2) {
+      return focusPoints;
+    }
+
+    const axisPoints = dedupeWorldPoints(points.filter((point) => focusPointMatchesKoreaAxis(point)));
+    if (axisPoints.length >= 2) {
+      return axisPoints;
+    }
+  }
+
+  return points;
+}
+
+function isKoreanOperationalSlice(snapshot) {
+  const presentation = inferScenarioPresentation(snapshot);
+  return /korea|inchon|incheon|chromite|seoul/.test(
+    [
+      snapshot?.scenario?.id,
+      snapshot?.scenario?.name,
+      presentation?.shellTitle,
+      presentation?.theaterLabel,
+      presentation?.frontLabel,
+    ]
+      .map((value) => String(value ?? "").trim().toLowerCase())
+      .join(" "),
+  );
+}
+
+function buildViewport(points, snapshot = null) {
+  const authoredWorldBounds = resolveMapPresentationBounds(snapshot, "world_bounds");
+  if (authoredWorldBounds) {
+    return authoredWorldBounds;
+  }
+
+  const viewportPoints = selectViewportPoints(points, snapshot);
+  if (!viewportPoints.length) {
     return { minX: 0, maxX: 12, minY: 0, maxY: 8 };
   }
 
-  const xs = points.map((item) => item.x);
-  const ys = points.map((item) => item.y);
+  const xs = viewportPoints.map((item) => item.x);
+  const ys = viewportPoints.map((item) => item.y);
   const minX = Math.min(...xs);
   const maxX = Math.max(...xs);
   const minY = Math.min(...ys);
   const maxY = Math.max(...ys);
   const spanX = Math.max(6, maxX - minX || 1);
   const spanY = Math.max(4, maxY - minY || 1);
-  const padX = Math.max(1.5, spanX * 0.18);
-  const padY = Math.max(1.5, spanY * 0.18);
+  const koreaSlice = isKoreanOperationalSlice(snapshot);
+  const padX = Math.max(koreaSlice ? 0.78 : 1.5, spanX * (koreaSlice ? 0.085 : 0.18));
+  const padY = Math.max(koreaSlice ? 0.82 : 1.5, spanY * (koreaSlice ? 0.1 : 0.18));
 
   return {
     minX: minX - padX,
@@ -252,6 +353,184 @@ export function unprojectScenePoint(point, scene) {
     x: Number((viewport.minX + normalizedX * spanX).toFixed(4)),
     y: Number((viewport.minY + normalizedY * spanY).toFixed(4)),
   };
+}
+
+function dedupeWorldPoints(points) {
+  const seen = new Set();
+  return points.filter((point) => {
+    if (!hasCoord(point)) {
+      return false;
+    }
+    const key = `${Number(point.x).toFixed(3)}:${Number(point.y).toFixed(3)}`;
+    if (seen.has(key)) {
+      return false;
+    }
+    seen.add(key);
+    return true;
+  });
+}
+
+function focusPointMatchesKoreaAxis(point) {
+  const search = [
+    point?.id,
+    point?.name,
+    point?.label,
+    point?.historical_name,
+    point?.modern_name,
+    point?.objective_id,
+    point?.location_id,
+  ]
+    .map((value) => String(value ?? "").trim().toLowerCase())
+    .join(" ");
+  return /inchon|incheon|kimpo|gimpo|seoul|yongdungpo|suwon/.test(search);
+}
+
+function importantNamedFeaturePoints(feature) {
+  const points = Array.isArray(feature?.points) ? feature.points.filter(hasCoord) : [];
+  if (hasCoord(feature)) {
+    points.push(feature);
+  }
+  return points;
+}
+
+function koreaAoFeatureFocusPoints(feature) {
+  const kindKey = normalizeNamedFeatureKind(feature?.kind);
+  const searchText = joinSearchText(
+    feature?.id,
+    feature?.label,
+    feature?.historical_name,
+    feature?.modern_name,
+    (Array.isArray(feature?.aliases) ? feature.aliases.map((alias) => alias?.name) : []),
+  );
+  const axisLike = kindKey === "axis"
+    || kindKey === "corridor"
+    || kindKey === "phase_line"
+    || kindKey === "sector"
+    || /seoul axis|kimpo corridor|seoul defensive ring|seoul defensive belt|yongdungpo|crossings|inchon|incheon|kimpo|gimpo|seoul/.test(searchText);
+
+  if (!axisLike) {
+    return [];
+  }
+
+  const points = importantNamedFeaturePoints(feature);
+  if (!points.length) {
+    return [];
+  }
+
+  if (kindKey === "phase_line" || kindKey === "axis" || kindKey === "corridor") {
+    return points;
+  }
+
+  if (hasCoord(feature)) {
+    return [feature];
+  }
+
+  return [points[Math.floor(points.length / 2)]];
+}
+
+function collectOperationalFocusPoints(snapshot) {
+  const authoredFocusPoints = resolveMapPresentationFocusPoints(snapshot);
+  if (authoredFocusPoints.length >= 2) {
+    return authoredFocusPoints;
+  }
+
+  const objectives = Array.isArray(snapshot?.objectives) ? snapshot.objectives.filter(hasCoord) : [];
+  const airfields = Array.isArray(snapshot?.airfields) ? snapshot.airfields.filter(hasCoord) : [];
+  const ports = Array.isArray(snapshot?.ports) ? snapshot.ports.filter(hasCoord) : [];
+  const localAreas = Array.isArray(snapshot?.local_pressure_areas)
+    ? snapshot.local_pressure_areas.filter(hasCoord)
+    : [];
+  const units = Array.isArray(snapshot?.units) ? snapshot.units.filter(hasCoord) : [];
+  const namedFeatures = Array.isArray(snapshot?.named_features) ? snapshot.named_features : [];
+
+  if (isKoreanOperationalSlice(snapshot)) {
+    const keyObjectives = objectives.filter((objective) => (
+      focusPointMatchesKoreaAxis(objective)
+        || Number(objective?.value ?? 0) >= 60
+        || String(objective?.state ?? "").toLowerCase() === "unheld"
+        || objective?.controlled === false
+    ));
+    const focusUnits = units.filter((unit) => focusPointMatchesKoreaAxis(unit)).slice(0, 6);
+    const featurePoints = namedFeatures.flatMap((feature) => koreaAoFeatureFocusPoints(feature));
+
+    const prioritized = dedupeWorldPoints([
+      ...ports,
+      ...airfields,
+      ...keyObjectives,
+      ...localAreas,
+      ...featurePoints,
+      ...focusUnits,
+    ]);
+
+    if (prioritized.length >= 2) {
+      return prioritized;
+    }
+  }
+
+  return dedupeWorldPoints([
+    ...objectives,
+    ...airfields,
+    ...ports,
+    ...localAreas,
+    ...namedFeatures.flatMap((feature) => importantNamedFeaturePoints(feature)),
+    ...units.slice(0, 8),
+  ]);
+}
+
+export function buildInitialMapCamera(snapshot, scene) {
+  const width = Number(scene?.width || 1000);
+  const height = Number(scene?.height || 620);
+  const focusPoints = collectOperationalFocusPoints(snapshot);
+  if (!focusPoints.length) {
+    return clampMapCamera({ zoom: 1, offsetX: 0, offsetY: 0 }, scene);
+  }
+
+  const projected = focusPoints.map((point) => projectScenePoint(point, scene));
+  const xs = projected.map((point) => point.x);
+  const ys = projected.map((point) => point.y);
+  const minX = Math.min(...xs);
+  const maxX = Math.max(...xs);
+  const minY = Math.min(...ys);
+  const maxY = Math.max(...ys);
+  const spanX = Math.max(140, maxX - minX || 1);
+  const spanY = Math.max(110, maxY - minY || 1);
+  const koreaSlice = isKoreanOperationalSlice(snapshot);
+  const lockedFiveKmScale = hasLockedFiveKmPlayableScale(snapshot);
+  const padLeft = Math.max(
+    koreaSlice ? (lockedFiveKmScale ? 44 : 48) : 70,
+    spanX * (koreaSlice ? (lockedFiveKmScale ? 0.06 : 0.065) : 0.18),
+  );
+  const padRight = Math.max(
+    koreaSlice ? (lockedFiveKmScale ? 52 : 60) : 70,
+    spanX * (koreaSlice ? (lockedFiveKmScale ? 0.07 : 0.082) : 0.18),
+  );
+  const padTop = Math.max(
+    koreaSlice ? (lockedFiveKmScale ? 60 : 64) : 66,
+    spanY * (koreaSlice ? (lockedFiveKmScale ? 0.134 : 0.15) : 0.2),
+  );
+  const padBottom = Math.max(
+    koreaSlice ? (lockedFiveKmScale ? 38 : 42) : 66,
+    spanY * (koreaSlice ? (lockedFiveKmScale ? 0.084 : 0.094) : 0.2),
+  );
+  const fitWidth = spanX + padLeft + padRight;
+  const fitHeight = spanY + padTop + padBottom;
+  const fitZoom = Math.min(width / fitWidth, height / fitHeight);
+  const targetZoom = clampMapZoom(Math.min(koreaSlice ? (lockedFiveKmScale ? 1.94 : 1.88) : 1.55, fitZoom));
+  const centerX = koreaSlice
+    ? (minX - padLeft + maxX + padRight) / 2
+    : (minX + maxX) / 2;
+  const centerY = koreaSlice
+    ? (minY - padTop + maxY + padBottom) / 2
+    : (minY + maxY) / 2;
+
+  return clampMapCamera(
+    {
+      zoom: targetZoom,
+      offsetX: width / 2 - centerX * targetZoom,
+      offsetY: height / 2 - centerY * targetZoom,
+    },
+    scene,
+  );
 }
 
 function markerSortKey(marker) {
@@ -347,8 +626,14 @@ function buildDeclutteredMarkers(units, objectives, airfields, ports, viewport, 
       const hasLeader = Math.hypot(leaderOffset.x, leaderOffset.y) >= 10;
 
       if (marker.kind === "objective") {
-        const labelAnchor = offset.x > 8 ? "end" : "start";
-        const labelX = offset.x > 8 ? -12 : 12;
+        const defaultLabelAnchor = offset.x > 8 ? "end" : "start";
+        const defaultLabelX = offset.x > 8 ? -12 : 12;
+        const defaultLabelY = offset.y <= 0 ? -12 : -11;
+        const customLabelX = numericPresentationCoord(marker.label_offset_x);
+        const customLabelY = numericPresentationCoord(marker.label_offset_y);
+        const labelAnchor = normalizeSceneLabelAnchor(marker.label_anchor, defaultLabelAnchor);
+        const labelX = customLabelX ?? defaultLabelX;
+        const labelY = customLabelY ?? defaultLabelY;
         return {
           ...marker,
           anchor: marker.baseAnchor,
@@ -356,10 +641,10 @@ function buildDeclutteredMarkers(units, objectives, airfields, ports, viewport, 
           hasLeader,
           leaderOffset,
           labelX,
-          labelY: offset.y <= 0 ? -12 : -11,
+          labelY,
           labelAnchor,
           stateX: labelX,
-          stateY: offset.y <= 0 ? 14 : 13,
+          stateY: customLabelY != null ? customLabelY + 14 : (offset.y <= 0 ? 14 : 13),
           stateAnchor: labelAnchor,
         };
       }
@@ -367,27 +652,29 @@ function buildDeclutteredMarkers(units, objectives, airfields, ports, viewport, 
       const sideLabel = Math.abs(offset.x) >= 12;
 
       if (marker.kind === "airfield" || marker.kind === "port") {
+        const defaultLabelAnchor = sideLabel ? (offset.x > 0 ? "end" : "start") : "middle";
         return {
           ...marker,
           anchor: marker.baseAnchor,
           displayAnchor,
           hasLeader,
           leaderOffset,
-          labelOffsetX: sideLabel ? (offset.x > 0 ? -22 : 22) : 0,
-          labelOffsetY: sideLabel ? 4 : (offset.y <= 0 ? 16 : -12),
-          labelAnchor: sideLabel ? (offset.x > 0 ? "end" : "start") : "middle",
+          labelOffsetX: numericPresentationCoord(marker.label_offset_x) ?? (sideLabel ? (offset.x > 0 ? -22 : 22) : 0),
+          labelOffsetY: numericPresentationCoord(marker.label_offset_y) ?? (sideLabel ? 4 : (offset.y <= 0 ? 16 : -12)),
+          labelAnchor: normalizeSceneLabelAnchor(marker.label_anchor, defaultLabelAnchor),
         };
       }
 
+      const defaultLabelAnchor = sideLabel ? (offset.x > 0 ? "end" : "start") : "middle";
       return {
         ...marker,
         anchor: marker.baseAnchor,
         displayAnchor,
         hasLeader,
         leaderOffset,
-        labelOffsetX: sideLabel ? (offset.x > 0 ? -24 : 24) : 0,
-        labelOffsetY: sideLabel ? 4 : (offset.y <= 0 ? 17 : -12),
-        labelAnchor: sideLabel ? (offset.x > 0 ? "end" : "start") : "middle",
+        labelOffsetX: numericPresentationCoord(marker.label_offset_x) ?? (sideLabel ? (offset.x > 0 ? -24 : 24) : 0),
+        labelOffsetY: numericPresentationCoord(marker.label_offset_y) ?? (sideLabel ? 4 : (offset.y <= 0 ? 17 : -12)),
+        labelAnchor: normalizeSceneLabelAnchor(marker.label_anchor, defaultLabelAnchor),
       };
     });
   });
@@ -649,7 +936,7 @@ export function buildMapScene(snapshot, options = {}) {
     trackedPorts,
     trackedNamedFeatures,
   } = collectPoints(snapshot);
-  const viewport = buildViewport(points);
+  const viewport = buildViewport(points, snapshot);
   const sideSlots = buildSideSlots(units);
   const declutteredMarkers = buildDeclutteredMarkers(units, objectives, airfields, ports, viewport, width, height, inset);
   const objectivesById = new Map(
@@ -693,6 +980,20 @@ export function buildMapScene(snapshot, options = {}) {
         faction: normalizeUnitCounterFaction(unit?.side),
         ...inferUnitCounterState(unit),
       });
+      const counterFrame = {
+        echelon: inferUnitCounterEchelon(unit),
+        isHeadquarters: isHeadquartersUnit(unit),
+      };
+      const counterStatusOverlay = buildUnitCounterOverlayPresentation(unit, {
+        disabled: counterAppearance.disabled,
+        outOfCommand: counterAppearance.outOfCommand,
+      });
+      const labelPriority = summarizeUnitLabelPriority({
+        ...unit,
+        counterAppearance,
+        counterFrame,
+        counterStatusOverlay,
+      });
 
       return {
         ...unit,
@@ -700,25 +1001,27 @@ export function buildMapScene(snapshot, options = {}) {
         visualSlot: sideSlots.sideToSlot[String(unit.side ?? "").trim().toUpperCase()] || "neutral",
         shortLabel: abbreviateUnitLabel(unit),
         counterSymbol: inferUnitCounterSymbol(unit),
-        counterFrame: {
-          echelon: inferUnitCounterEchelon(unit),
-          isHeadquarters: isHeadquartersUnit(unit),
-        },
+        counterFrame,
         counterAppearance,
-        counterStatusOverlay: buildUnitCounterOverlayPresentation(unit, {
-          disabled: counterAppearance.disabled,
-          outOfCommand: counterAppearance.outOfCommand,
-        }),
+        counterStatusOverlay,
+        labelImportant: labelPriority.important,
+        labelForceVisible: labelPriority.forceVisible,
+        labelPriorityBoost: labelPriority.priorityBoost,
       };
     }),
-    objectives: objectives.map((objective) => ({
-      ...objective,
-      ...objectivesById.get(objective.id),
-      visualState: classifyObjectiveVisualState(objective.state),
-      stateLabel: humanizeObjectiveState(objective.state),
-      settlement: summarizeSettlementLocation(objective),
-      objectiveOverlay: summarizeObjectiveOverlay(objective, { airfields, ports }),
-    })),
+    objectives: objectives.map((objective) => {
+      const objectiveOverlay = summarizeObjectiveOverlay(objective, { airfields, ports });
+      return {
+        ...objective,
+        ...objectivesById.get(objective.id),
+        displayName: objectiveDisplayName(objective),
+        axisFocus: isKoreanOperationalSlice(snapshot) && focusPointMatchesKoreaAxis(objective),
+        visualState: classifyObjectiveVisualState(objective.state),
+        stateLabel: buildObjectiveStateLabel(objective, objectiveOverlay),
+        settlement: summarizeSettlementLocation(objective),
+        objectiveOverlay,
+      };
+    }),
     airfields: airfields.map((airfield) => ({
       ...airfield,
       ...airfieldsById.get(airfield.id),
@@ -918,8 +1221,93 @@ function normalizeVisibilityRule(value, fallback = "operational") {
     : fallback;
 }
 
+function scenarioLooksKorean(snapshot) {
+  return isKoreanOperationalSlice(snapshot);
+}
+
+function collectNamedFeatureAnchors(snapshot) {
+  return [
+    ...(Array.isArray(snapshot?.objectives) ? snapshot.objectives : []),
+    ...(Array.isArray(snapshot?.airfields) ? snapshot.airfields : []),
+    ...(Array.isArray(snapshot?.ports) ? snapshot.ports : []),
+  ]
+    .filter(hasCoord)
+    .map((item) => ({
+      x: Number(item.x),
+      y: Number(item.y),
+      searchText: joinSearchText(
+        item?.name,
+        item?.label,
+        item?.historical_name,
+        item?.modern_name,
+        item?.id,
+        ...(Array.isArray(item?.aliases) ? item.aliases.map((alias) => alias?.name) : []),
+      ),
+    }));
+}
+
+function findNamedFeatureAnchor(candidates, tokens) {
+  return candidates.find((candidate) => tokens.some((token) => candidate.searchText.includes(token))) ?? null;
+}
+
+function buildScenarioFallbackNamedFeatures(snapshot) {
+  if (!scenarioLooksKorean(snapshot)) {
+    return [];
+  }
+
+  const anchors = collectNamedFeatureAnchors(snapshot);
+  const coastalAnchor = findNamedFeatureAnchor(anchors, ["inchon", "incheon", "kimpo", "gimpo"]);
+  const inlandAnchor = findNamedFeatureAnchor(anchors, ["seoul"]);
+
+  if (!coastalAnchor || !inlandAnchor) {
+    return [];
+  }
+
+  return [
+    {
+      id: "derived:korea:seoul_axis",
+      label: "Seoul Axis",
+      kind: "phase_line",
+      geometry_type: "line",
+      x: Number(((coastalAnchor.x + inlandAnchor.x) / 2).toFixed(3)),
+      y: Number(((coastalAnchor.y + inlandAnchor.y) / 2).toFixed(3)),
+      points: [
+        { x: coastalAnchor.x, y: coastalAnchor.y },
+        { x: inlandAnchor.x, y: inlandAnchor.y },
+      ],
+      visibility: "always",
+      label_priority: 4,
+      aliases: [{ name: "Inchon Seoul Corridor" }],
+    },
+  ];
+}
+
 function buildNamedFeatureSceneRows(snapshot, viewport, width, height, inset) {
-  return (Array.isArray(snapshot?.named_features) ? snapshot.named_features : [])
+  const explicitFeatures = Array.isArray(snapshot?.named_features) ? snapshot.named_features : [];
+  const derivedFeatures = buildScenarioFallbackNamedFeatures(snapshot);
+  const seenIds = new Set(
+    explicitFeatures
+      .map((feature) => String(feature?.id || "").trim())
+      .filter(Boolean),
+  );
+  const seenLabels = new Set(
+    explicitFeatures.flatMap((feature) => {
+      const aliasNames = (Array.isArray(feature?.aliases) ? feature.aliases : [])
+        .map((alias) => String(alias?.name || "").trim())
+        .filter(Boolean);
+      return [feature?.map_label, feature?.label, feature?.historical_name, feature?.modern_name, ...aliasNames]
+        .map((value) => normalizeLocationName(value))
+        .filter(Boolean);
+    }),
+  );
+
+  return [
+    ...explicitFeatures,
+    ...derivedFeatures.filter((feature) => (
+      !seenIds.has(String(feature.id || "").trim())
+      && !seenLabels.has(normalizeLocationName(feature?.label))
+    )),
+  ]
     .map((feature) => {
       const geometryType = String(feature?.geometry_type || (Array.isArray(feature?.points) && feature.points.length ? "line" : "point"))
         .trim()
@@ -956,12 +1344,12 @@ function buildNamedFeatureSceneRows(snapshot, viewport, width, height, inset) {
         kindKey,
         anchor,
         points: scenePoints,
-        labelAnchor: "middle",
-        labelOffsetX: 0,
-        labelOffsetY: geometryType === "point" ? -10 : 0,
+        labelAnchor: normalizeSceneLabelAnchor(feature?.label_anchor, "middle"),
+        labelOffsetX: numericPresentationCoord(feature?.label_offset_x) ?? 0,
+        labelOffsetY: numericPresentationCoord(feature?.label_offset_y) ?? (geometryType === "point" ? -10 : 0),
         visibility: normalizeVisibilityRule(feature?.visibility),
         important: Number(feature?.label_priority || 1) >= 3 || kindKey === "sector" || kindKey === "phase_line",
-        searchText: joinSearchText(feature?.label, feature?.historical_name, feature?.modern_name, aliasNames.join(" ")),
+        searchText: joinSearchText(feature?.map_label, feature?.label, feature?.historical_name, feature?.modern_name, aliasNames.join(" ")),
       };
     })
     .filter(Boolean);
@@ -1009,11 +1397,102 @@ function summarizeObjectiveOverlay(objective, scene) {
       ? "Strategic objective"
       : category === "political"
         ? "Political objective"
-      : category === "supply"
-        ? "Supply objective"
-        : category === "primary"
-          ? "Primary objective"
-          : "Secondary objective",
+        : category === "supply"
+          ? "Supply objective"
+          : category === "primary"
+            ? "Primary objective"
+            : "Secondary objective",
+    shortLabel: category === "strategic"
+      ? "Strategic"
+      : category === "political"
+        ? "Political"
+        : category === "supply"
+          ? "Supply"
+          : category === "primary"
+            ? "Primary"
+            : "Secondary",
+  };
+}
+
+function objectiveDisplayName(objective) {
+  const name = String(objective?.name || objective?.id || "Objective").trim();
+  const historicalName = String(objective?.historical_name || "").trim();
+  const modernName = String(objective?.modern_name || "").trim();
+
+  if (historicalName && normalizeLocationName(historicalName) !== normalizeLocationName(name)) {
+    return historicalName;
+  }
+  if (name) {
+    return name;
+  }
+  if (modernName) {
+    return modernName;
+  }
+  return "Objective";
+}
+
+function buildObjectiveStateLabel(objective, overlay) {
+  const parts = [];
+  const state = lowerText(objective?.state);
+  const value = metricNumber(objective?.value);
+
+  if (overlay?.contested) {
+    parts.push("Contested");
+  } else if (state.startsWith("held_")) {
+    parts.push("Held");
+  } else if (state === "unheld") {
+    parts.push("Unheld");
+  }
+
+  if (value != null && value > 0) {
+    parts.push(`${Math.round(value)} VP`);
+  } else if (overlay?.shortLabel) {
+    parts.push(overlay.shortLabel);
+  }
+
+  if (parts.length < 2 && overlay?.shortLabel && !parts.includes(overlay.shortLabel)) {
+    parts.push(overlay.shortLabel);
+  }
+
+  return parts.join(" • ") || humanizeObjectiveState(objective?.state);
+}
+
+function summarizeUnitLabelPriority(unit) {
+  const echelon = String(unit?.counterFrame?.echelon || "");
+  const authoredLabelPriority = Math.max(0, Number(unit?.label_priority || 0));
+  let priorityBoost = 0;
+
+  if (unit?.counterFrame?.isHeadquarters) {
+    priorityBoost += 20;
+  } else if (echelon === "corps") {
+    priorityBoost += 16;
+  } else if (echelon === "division") {
+    priorityBoost += 14;
+  } else if (echelon === "brigade") {
+    priorityBoost += 11;
+  } else if (echelon === "regiment") {
+    priorityBoost += 8;
+  }
+
+  if (unit?.counterAppearance?.service === "marines") {
+    priorityBoost += 3;
+  }
+  if (unit?.counterAppearance?.service === "navy" || unit?.counterAppearance?.service === "air_force") {
+    priorityBoost += 5;
+  }
+  if (unit?.counterStatusOverlay?.critical) {
+    priorityBoost += 6;
+  } else if (unit?.counterStatusOverlay?.engaged) {
+    priorityBoost += 4;
+  } else if (unit?.counterStatusOverlay?.lowSupply || unit?.counterStatusOverlay?.outOfCommand) {
+    priorityBoost += 2;
+  }
+  priorityBoost += authoredLabelPriority * 5;
+
+  return {
+    important: authoredLabelPriority >= 2 || priorityBoost >= 8,
+    forceVisible: authoredLabelPriority >= 4,
+    priorityBoost,
   };
 }
 
@@ -1835,6 +2314,7 @@ function currentForecastRow(snapshot, weather) {
 }
 
 export function buildWeatherImpactState(snapshot) {
+  const presentation = inferScenarioPresentation(snapshot);
   const weather = isRecord(snapshot?.weather) ? snapshot.weather : null;
   const currentHours = typeof snapshot?.time?.current_hours === "number" ? snapshot.time.current_hours : null;
   const timeState = timeOfDayState(currentHours);
@@ -1875,11 +2355,11 @@ export function buildWeatherImpactState(snapshot) {
   } else if (!note && visibility) {
     note = `Weather impact uses current condition plus exposed visibility ${visibility} only.`;
   } else if (!note && lowLight && localContext) {
-    note = `${timeState} conditions are visible over the Henderson/Lunga perimeter, but separate low-visibility operational effects are not exposed beyond the current weather state.`;
+    note = `${timeState} conditions are visible over the ${presentation.frontLabel.toLowerCase()}, but separate low-visibility operational effects are not exposed beyond the current weather state.`;
   } else if (!note && lowLight) {
     note = `${timeState} conditions are visible from the theatre clock, but separate low-visibility operational effects are not exposed beyond the current weather state.`;
   } else if (!note && localContext) {
-    note = `${condition} is the only current operational weather signal tied to the Henderson/Lunga fight. Visibility, ground-movement, air-support, and combat-readiness effects are not separately exposed.`;
+    note = `${condition} is the only current operational weather signal tied to the ${presentation.frontLabel.toLowerCase()}. Visibility, ground-movement, air-support, and combat-readiness effects are not separately exposed.`;
   } else if (!note) {
     note = `${condition} is the only current operational weather signal on the shell path. Visibility, ground-movement, air-support, and combat-readiness effects are not separately exposed.`;
   }

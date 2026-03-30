@@ -51,7 +51,8 @@ test("home command bar uses available snapshot data and explicit placeholders", 
   assert.equal(summary.theatre.timeRemaining, "36h remaining");
   assert.match(summary.theatre.detail, /Turn 4 • 36h remaining • Moving to Start Line/);
   assert.equal(summary.operations.status, "Offensive • Inchon • Moving to Start Line");
-  assert.match(summary.operations.detail, /Inchon • Held Allied/);
+  assert.match(summary.operations.detail, /Objective Inchon/);
+  assert.match(summary.operations.detail, /assembly before launch/i);
   assert.equal(summary.objectives.total, 1);
   assert.equal("operations" in summary, true);
   assert.equal(summary.air.label, "Air context partial");
@@ -60,7 +61,50 @@ test("home command bar uses available snapshot data and explicit placeholders", 
   assert.match(summary.naval.detail, /maritime context/);
   assert.equal(summary.logistics.label, "4.2d sustainment");
   assert.match(summary.logistics.detail, /4.2 days average current tempo/);
-  assert.equal(summary.intelligence.label, "2 pending");
-  assert.match(summary.intelligence.detail, /communications feed and pressure-reason path/);
+  assert.equal(summary.intelligence.label, "2 pending dispatches");
+  assert.match(summary.intelligence.detail, /Latest dispatch Player Order Update/);
+  assert.match(summary.intelligence.detail, /1st Marines/i);
+  assert.match(summary.intelligence.detail, /Inchon/i);
   assert.equal(summary.reports.pending, 2);
+});
+
+test("home command bar ignores stale Guadalcanal AI labels when the active slice is Inchon Korea", () => {
+  const summary = summarizeHomeCommandBar({
+    scenario: { id: "inchon_mvp", name: "Inchon Demo Vertical Slice" },
+    campaign: { status: "ongoing" },
+    time: { turn: 2, time_remaining_hours: 42, current_hours: 18 },
+    objectives: [{ id: "o1", state: "unheld", name: "Seoul", value: 100, side: "ALLIED" }],
+    pressure: { summary: "Pressure building on the Seoul corridor.", reasons: [] },
+    reports: { pending_count: 0, recent: [] },
+    bai_report: {
+      main_objective: { name: "Henderson Field" },
+      chosen_operation: { name: "Hold Henderson Perimeter" },
+      reserve_level: 0.25,
+      unit_orders: [],
+    },
+    ai: { last_intent: "hold_henderson_perimeter" },
+    units: [],
+    airfields: [],
+    ports: [],
+    naval_support_windows: [],
+  });
+
+  assert.doesNotMatch(summary.operations.status, /Henderson|Lunga|Guadalcanal/i);
+  assert.match(summary.operations.detail, /Objective Seoul/);
+});
+
+test("home command bar uses live dispatch count when the bridge does not expose a queue count", () => {
+  const summary = summarizeHomeCommandBar({
+    reports: {
+      pending_count: null,
+      recent: [
+        { id: "r1", kind: "status", title: "Kimpo Update", summary: "Kimpo corridor remains contested.", severity: "info", time: 18 },
+      ],
+    },
+    pressure: { active: true, reasons: ["kimpo_screening_force"] },
+    staff: { summary: "Maintain pressure on the Kimpo approach." },
+  });
+
+  assert.equal(summary.intelligence.label, "1 live dispatch");
+  assert.match(summary.intelligence.detail, /Latest dispatch Kimpo Update/);
 });

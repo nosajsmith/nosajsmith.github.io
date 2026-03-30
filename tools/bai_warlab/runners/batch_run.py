@@ -5,6 +5,7 @@ from typing import Any, Dict, Iterable, List, Tuple
 
 from ..config_loader import ConfigLoader
 from ..models import AggregateSummary, BatchResult, RunRequest, RunResult, SeedPolicy
+from ..report_io import run_result_to_row, summarize_core_metric_rows, summarize_outcome_rows
 from .single_run import execute_single_run
 
 
@@ -38,6 +39,7 @@ def mean_summary(runs: List[RunResult]) -> Dict[str, Any]:
 
 def summarize_runs(runs: List[RunResult]) -> AggregateSummary:
     successful = [run for run in runs if run.ok]
+    successful_rows = [run_result_to_row(run) for run in successful]
     status_counts = Counter(str((run.summary or {}).get("terminal_status", "unknown")) for run in runs)
     mean_summary_values, min_summary_values, max_summary_values = _aggregate_numeric(
         [dict(run.summary or {}) for run in successful]
@@ -46,6 +48,9 @@ def summarize_runs(runs: List[RunResult]) -> AggregateSummary:
         [dict(run.metrics or {}) for run in successful]
     )
     failure_count = len(runs) - len(successful)
+    success_rate = round(len(successful) / len(runs), 3) if runs else 0.0
+    core_metrics = summarize_core_metric_rows(successful_rows)
+    victory_proxy = summarize_outcome_rows(successful_rows)
 
     return AggregateSummary(
         total_runs=len(runs),
@@ -53,7 +58,13 @@ def summarize_runs(runs: List[RunResult]) -> AggregateSummary:
         failed_runs=failure_count,
         failure_count=failure_count,
         partial_failures=bool(successful) and failure_count > 0,
+        success_rate=success_rate,
         status_counts=dict(status_counts),
+        result_counts=dict(victory_proxy.get("result_counts", {}) or {}),
+        scenario_outcome_counts=dict(victory_proxy.get("scenario_outcome_counts", {}) or {}),
+        winning_side_counts=dict(victory_proxy.get("winning_side_counts", {}) or {}),
+        core_metrics=core_metrics,
+        victory_proxy=victory_proxy,
         mean_summary=mean_summary_values,
         min_summary=min_summary_values,
         max_summary=max_summary_values,

@@ -135,13 +135,120 @@ function buildSupportRows(attachmentsSupport) {
   return rows;
 }
 
-function buildIdentityRows(unit) {
-  const typeLabel = unit?.unit_type ? humanizeOrFallback(unit.unit_type, "Unavailable") : humanizeOrFallback(unit?.kind, "Unavailable");
+function formatCoordinate(value) {
+  if (typeof value !== "number" || !Number.isFinite(value)) {
+    return null;
+  }
+  return Number.isInteger(value) ? String(value) : value.toFixed(1).replace(/\.0$/, "");
+}
+
+function buildHexReference(unit) {
+  const x = formatCoordinate(unit?.x);
+  const y = formatCoordinate(unit?.y);
+  return x && y ? `Hex ${x}, ${y}` : null;
+}
+
+function labelFromValue(value) {
+  if (typeof value === "string") {
+    const direct = value.trim();
+    if (direct) {
+      return humanizeOrFallback(direct, "");
+    }
+  }
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return "";
+  }
+
+  for (const key of ["name", "label", "title", "objective_id", "target_location_id", "target_unit_id", "id"]) {
+    const candidate = String(value[key] ?? "").trim();
+    if (candidate) {
+      return humanizeOrFallback(candidate, "");
+    }
+  }
+
+  return "";
+}
+
+function buildLocationValue(unit, operational) {
+  const locationLabel = operational?.location_status
+    ? humanizeOrFallback(operational.location_status, "Unavailable")
+    : unit?.location_id
+      ? humanizeOrFallback(unit.location_id, "Unavailable")
+      : null;
+  const hexReference = buildHexReference(unit);
+
+  if (locationLabel && hexReference) {
+    return `${locationLabel} • ${hexReference}`;
+  }
+  if (locationLabel) {
+    return locationLabel;
+  }
+  if (hexReference) {
+    return hexReference;
+  }
+  return "Location not exposed";
+}
+
+function buildFormationTypeLabel(unit) {
+  return unit?.unit_type
+    ? humanizeOrFallback(unit.unit_type, "Formation")
+    : humanizeOrFallback(unit?.kind, "Formation");
+}
+
+function buildRoleValue(unit, operational, orders) {
+  const typeLabel = buildFormationTypeLabel(unit);
+  const taskLabel = operational?.posture
+    ? humanizeOrFallback(operational.posture, "Unavailable")
+    : orders?.action
+      ? humanizeOrFallback(orders.action, "Unavailable")
+      : unit?.status
+        ? humanizeOrFallback(unit.status, "Unavailable")
+        : null;
+
+  if (taskLabel && taskLabel !== typeLabel) {
+    return `${typeLabel} • ${taskLabel}`;
+  }
+  return typeLabel;
+}
+
+function buildOrderDirective(order) {
+  if (!order) {
+    return "";
+  }
+  const action = order.action ? humanizeOrFallback(order.action, "") : "";
+  const target = labelFromValue(order.target_location_id) || labelFromValue(order.objective_id) || labelFromValue(order.target_unit_id);
+  const rationale = String(order?.metadata?.evaluation?.dominant_reason ?? order?.rationale ?? "").trim();
+  const directive = [action, target].filter(Boolean).join(" ");
+
+  if (directive && rationale) {
+    return `${directive} — ${rationale}`;
+  }
+  return directive || rationale;
+}
+
+function buildHeaderSubtitle(unit, operational, orders) {
+  const parts = [humanizeOrFallback(unit?.side, "Unknown Side"), buildFormationTypeLabel(unit)];
+  const role = operational?.posture
+    ? humanizeOrFallback(operational.posture, "")
+    : orders?.action
+      ? humanizeOrFallback(orders.action, "")
+      : unit?.status
+        ? humanizeOrFallback(unit.status, "")
+        : null;
+
+  if (role && !parts.includes(role)) {
+    parts.push(role);
+  }
+
+  return parts.filter(Boolean).join(" • ");
+}
+
+function buildIdentityRows(unit, operational, orders) {
   return [
     { label: "Formation", value: formatValue(unit?.name, "Formation unavailable") },
-    { label: "Formation Type", value: typeLabel },
-    { label: "Service / Branch", value: humanizeOrFallback(unitVariant(unit), "Unavailable") },
     { label: "Alignment", value: humanizeOrFallback(unit?.side, "Unavailable") },
+    { label: "Type / Role", value: buildRoleValue(unit, operational, orders) },
+    { label: "Location / Hex", value: buildLocationValue(unit, operational) },
     { label: "Map Reference", value: formatValue(unit?.id, "Unavailable") },
   ];
 }
@@ -462,28 +569,39 @@ function normalizeInspector(unit) {
   const attachmentsSupport = raw.attachments_support && typeof raw.attachments_support === "object" ? raw.attachments_support : {};
   const replacementQuality = raw.replacement_quality && typeof raw.replacement_quality === "object" ? raw.replacement_quality : {};
   const branchSpecific = raw.branch_specific && typeof raw.branch_specific === "object" ? raw.branch_specific : {};
+  const fallbackLocationStatus = operational.location_status ?? unit?.location_id ?? null;
+  const fallbackLoc = operational.loc && typeof operational.loc === "object"
+    ? {
+        state: operational.loc.state ?? "unavailable",
+        label: operational.loc.label ?? "LOC Unavailable",
+        detail: operational.loc.detail ?? "LOC state unavailable",
+        broken_at: operational.loc.broken_at ?? null,
+      }
+    : fallbackLocationStatus || buildHexReference(unit)
+      ? {
+          state: fallbackLocationStatus ? "connected" : "unavailable",
+          label: fallbackLocationStatus ? "Location Reported" : "Map Position Reported",
+          detail: fallbackLocationStatus
+            ? `Formation reported at ${humanizeOrFallback(fallbackLocationStatus, "current position")}.`
+            : `Current map reference ${buildHexReference(unit)}.`,
+          broken_at: null,
+        }
+      : null;
 
   return {
     operational_state: {
       strength_pct: operational.strength_pct ?? unit?.strength ?? null,
       readiness: operational.readiness ?? unit?.readiness ?? null,
       readiness_band: operational.readiness_band ?? unit?.readiness_band ?? null,
-      fatigue: operational.fatigue ?? null,
+      fatigue: operational.fatigue ?? unit?.fatigue ?? null,
       fatigue_trend: operational.fatigue_trend ?? null,
       morale: operational.morale ?? unit?.morale ?? null,
       morale_band: operational.morale_band ?? unit?.morale_band ?? null,
       cohesion: operational.cohesion ?? null,
-      posture: operational.posture ?? null,
+      posture: operational.posture ?? unit?.posture ?? unit?.status ?? null,
       status: operational.status ?? unit?.status ?? null,
-      location_status: operational.location_status ?? null,
-      loc: operational.loc && typeof operational.loc === "object"
-        ? {
-            state: operational.loc.state ?? "unavailable",
-            label: operational.loc.label ?? "LOC Unavailable",
-            detail: operational.loc.detail ?? "LOC state unavailable",
-            broken_at: operational.loc.broken_at ?? null,
-          }
-        : null,
+      location_status: fallbackLocationStatus,
+      loc: fallbackLoc,
     },
     toe: {
       toe_pct: toe.toe_pct ?? null,
@@ -947,7 +1065,7 @@ function buildRecentChangeSection(inspector, previousUnit, previousSnapshotLabel
   };
 }
 
-function buildUnitSummary(operational, supply, orders, command) {
+function buildUnitSummary(unit, operational, supply, orders, command) {
   const commandValue = buildRelationshipValue(command.superior) !== "Unavailable"
     ? buildRelationshipValue(command.superior)
     : formatValue(command.hq_unit_id, "HQ link unavailable");
@@ -958,21 +1076,86 @@ function buildUnitSummary(operational, supply, orders, command) {
       : supply.supply_pct != null
         ? formatPercent(supply.supply_pct)
         : "Supply not exposed";
-  const taskingValue = orders.action
-    ? humanizeOrFallback(orders.action, "Not exposed")
-    : humanizeOrFallback(operational.posture, "Not exposed");
+  const notes = [];
+
+  if (operational.status) {
+    notes.push(`Status ${humanizeOrFallback(operational.status, "Unavailable")}.`);
+  }
+  const taskDirective = buildOrderDirective(orders);
+  if (taskDirective) {
+    notes.push(`Tasking ${taskDirective}.`);
+  } else if (orders.action) {
+    notes.push(`Tasking ${humanizeOrFallback(orders.action, "Not exposed")}.`);
+  } else if (operational.posture) {
+    notes.push(`Posture ${humanizeOrFallback(operational.posture, "Not exposed")}.`);
+  }
+
+  if (operational.loc?.state === "broken" || operational.loc?.state === "threatened") {
+    notes.push(`${formatValue(operational.loc.label, "LOC alert")}.`);
+  }
+
+  if (commandValue !== "HQ link unavailable") {
+    notes.push(`HQ ${commandValue}.`);
+  }
+
+  if (orders.note || orders.delay_reason) {
+    notes.push(formatValue(orders.note || orders.delay_reason, ""));
+  }
 
   return {
     title: "Current Summary",
     rows: [
+      { label: "Side", value: humanizeOrFallback(unit?.side, "Unavailable") },
+      { label: "Type / Role", value: buildRoleValue(unit, operational, orders) },
+      { label: "Location / Hex", value: buildLocationValue(unit, operational) },
       { label: "Readiness", value: operational.readiness != null ? String(operational.readiness) : "Unavailable" },
+      { label: "Fatigue", value: operational.fatigue != null ? String(operational.fatigue) : "Unavailable" },
       { label: "Supply", value: supplyValue },
-      { label: "Command", value: commandValue },
-      { label: "Tasking", value: taskingValue },
     ],
-    note: orders.note || orders.delay_reason
-      ? formatValue(orders.note || orders.delay_reason, "No current tasking note exposed")
-      : "Summary is limited to currently exposed readiness, sustainment, command, and tasking rows.",
+    note: notes.length
+      ? notes.join(" ")
+      : "Summary reflects the currently exposed side, role, location, readiness, fatigue, and sustainment fields.",
+  };
+}
+
+function findLiveOrderForUnit(snapshot, unitId) {
+  if (!snapshot || !unitId) {
+    return null;
+  }
+
+  const report = snapshot?.bai_report;
+  if (!report || typeof report !== "object") {
+    return null;
+  }
+
+  const unitOrders = Array.isArray(report.unit_orders) ? report.unit_orders : [];
+  return unitOrders.find((order) => String(order?.unit_id ?? "").trim() === String(unitId).trim()) ?? null;
+}
+
+function findTrackedOperationForUnit(operations, unitId) {
+  const rows = Array.isArray(operations) ? operations : [];
+  return rows.find((operation) => (
+    Array.isArray(operation?.participants)
+      && operation.participants.some((participant) => String(participant?.unitId ?? "").trim() === String(unitId).trim())
+  )) ?? null;
+}
+
+function trackedOperationToOrder(operation) {
+  if (!operation) {
+    return null;
+  }
+  return {
+    action: operation.commandIntent === "move" ? "move" : operation.commandIntent === "attack" ? "attack" : "operation",
+    status: operation.source === "map_shortcut" ? "pending_player_order" : "planned_operation",
+    lifecycle_state: operation.source === "map_shortcut" ? "queued" : "approved",
+    target_location_id: operation.targetLabel ?? operation.objectiveName ?? null,
+    objective_id: operation.objectiveName ?? null,
+    note: operation.source === "map_shortcut"
+      ? `Pending ${operation.commandIntent} order through the planner approval path.`
+      : "Approved operation visible on the current shell path.",
+    rationale: operation.targetLabel
+      ? `${humanizeOrFallback(operation.commandIntent, "operation")} toward ${operation.targetLabel}`
+      : null,
   };
 }
 
@@ -1001,7 +1184,12 @@ export function summarizeUnitInspector(unit, options = {}) {
   const command = inspector.command;
   const attachmentsSupport = inspector.attachments_support;
   const artillery = inspector.branch_specific.artillery;
-  const commanderScreen = buildCommanderScreen(unit, command, operational, orders, supply);
+  const trackedOperation = findTrackedOperationForUnit(options?.operations ?? [], unit?.id);
+  const trackedOrder = trackedOperationToOrder(trackedOperation);
+  const activeOrders = trackedOrder ? { ...orders, ...trackedOrder } : orders;
+  const liveOrder = findLiveOrderForUnit(options?.snapshot ?? null, unit?.id);
+  const visibleOrders = liveOrder ? { ...activeOrders, ...liveOrder } : activeOrders;
+  const commanderScreen = buildCommanderScreen(unit, command, operational, visibleOrders, supply);
   const variantSections = buildVariantSections(unit, inspector, operational, toe, supply, movement, artillery);
   const previousUnit = options?.previousUnit ?? null;
   const previousSnapshotLabel = typeof options?.previousSnapshotLabel === "string" && options.previousSnapshotLabel.trim()
@@ -1014,10 +1202,10 @@ export function summarizeUnitInspector(unit, options = {}) {
     header: {
       eyebrow: "Inspector",
       title: unit.name || "Unnamed Unit",
-      subtitle: `${humanizeOrFallback(unit.side, "Unknown Side")} ${humanizeOrFallback(unit.kind, "Formation")}`,
+      subtitle: buildHeaderSubtitle(unit, operational, visibleOrders),
       loc: operational.loc ?? null,
     },
-    summary: buildUnitSummary(operational, supply, orders, command),
+    summary: buildUnitSummary(unit, operational, supply, visibleOrders, command),
     commanderScreen,
     sections: [
       {
@@ -1025,7 +1213,7 @@ export function summarizeUnitInspector(unit, options = {}) {
         group: "Current Summary",
         title: "Formation Summary",
         variant: "key-list",
-        rows: buildIdentityRows(unit),
+        rows: buildIdentityRows(unit, operational, visibleOrders),
       },
       {
         id: "commander-screen",
@@ -1041,9 +1229,9 @@ export function summarizeUnitInspector(unit, options = {}) {
         group: "Current Summary",
         title: "Readiness / Tasking",
         variant: "key-list",
-        rows: buildToeStatusRows(operational, toe, orders),
-        note: orders.note || orders.delay_reason
-          ? formatValue(orders.note || orders.delay_reason, "No current command note exposed")
+        rows: buildToeStatusRows(operational, toe, visibleOrders),
+        note: visibleOrders.note || visibleOrders.delay_reason
+          ? formatValue(visibleOrders.note || visibleOrders.delay_reason, "No current command note exposed")
           : "Current status uses only exposed order, posture, and TO&E fields.",
       },
       ...variantSections,
