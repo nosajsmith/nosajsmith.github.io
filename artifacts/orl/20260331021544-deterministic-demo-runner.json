@@ -1,0 +1,90 @@
+{
+  "status": "pass",
+  "selected_scenario": "inchon_mvp",
+  "checks": [
+    {
+      "check_id": "demo.campaign_status",
+      "label": "Campaign Status",
+      "blocker_class": "demo.campaign_status",
+      "status": "pass",
+      "summary": "Campaign Status passed.",
+      "artifacts": [],
+      "logs": [
+        "CAMPAIGN STATUS: scenario=Inchon Demo Vertical Slice | objective=SEOUL | front=INCHON BEACHHEAD SECURE | supply=PORT OPEN / AXIS ADVANCE | main=INCHON / SEOUL AXIS",
+        "CAMPAIGN STATUS DETAIL: turn=TURN 1 \u2014 15 SEP 1950 | units=6 | objectives=5 | alerts=2"
+      ],
+      "executed_command": []
+    },
+    {
+      "check_id": "demo.campaign_explain",
+      "label": "Campaign Explain",
+      "blocker_class": "demo.campaign_explain",
+      "status": "pass",
+      "summary": "Campaign Explain passed.",
+      "artifacts": [],
+      "logs": [
+        "CAMPAIGN EXPLAIN: Curated Inchon-to-Seoul publisher vertical slice for Theater of Operations: Korea.",
+        "CAMPAIGN NOTES: Exploit the landing before the Seoul defensive ring stabilizes.",
+        "CAMPAIGN OBJECTIVES: Inchon Harbor; Kimpo Airfield; Yongdungpo Crossings (+2 more)",
+        "CAMPAIGN ALERTS: Kimpo corridor remains contested.; NKPA reserves are forming south of Seoul.",
+        "CAMPAIGN ORDERS: 1st Marines push east from Inchon toward Kimpo.; 7th Infantry secures the beachhead and port throughput. (+1 more)"
+      ],
+      "executed_command": []
+    },
+    {
+      "check_id": "demo.snapshot_smoke",
+      "label": "Snapshot Smoke",
+      "blocker_class": "demo.snapshot_smoke",
+      "status": "pass",
+      "summary": "Snapshot Smoke passed.",
+      "artifacts": [
+        "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331021544-inchon-mvp.json"
+      ],
+      "logs": [
+        "Resolved scenario: inchon_mvp.json",
+        "Loaded scenario id: inchon_mvp",
+        "Started scenario: Inchon Demo Vertical Slice",
+        "Snapshot saved: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331021544-inchon-mvp.json",
+        "Snapshot loaded: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331021544-inchon-mvp.json",
+        "Scenario restored: inchon_mvp",
+        "Units restored: 6",
+        "Snapshot smoke passed."
+      ],
+      "executed_command": []
+    },
+    {
+      "check_id": "demo.replay_compare",
+      "label": "Replay Compare",
+      "blocker_class": "demo.replay_compare",
+      "status": "pass",
+      "summary": "Replay Compare passed.",
+      "artifacts": [
+        "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331021544-inchon-mvp-a.json",
+        "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331021544-inchon-mvp-b.json",
+        "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331021544-inchon-mvp.json"
+      ],
+      "logs": [
+        "Resolved scenario: inchon_mvp.json",
+        "Loaded scenario id: inchon_mvp",
+        "Started scenario: Inchon Demo Vertical Slice",
+        "Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331021544-inchon-mvp-a.json",
+        "Resolved scenario: inchon_mvp.json",
+        "Loaded scenario id: inchon_mvp",
+        "Started scenario: Inchon Demo Vertical Slice",
+        "Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331021544-inchon-mvp-b.json",
+        "Replay A: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331021544-inchon-mvp-a.json",
+        "Replay B: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331021544-inchon-mvp-b.json",
+        "Replay compare identical=True",
+        "Replay compare output: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331021544-inchon-mvp.json",
+        "Replay validation passed."
+      ],
+      "executed_command": []
+    }
+  ],
+  "expected_outcomes": [
+    "The bridge roster resolves the scenario without typing the exact filename every time.",
+    "The current UI build succeeds and the console can launch the UI against the selected bridge.",
+    "Replay compare stays deterministic and snapshot smoke remains stable for the current demo slice."
+  ],
+  "bug_reports_to": "Attach the latest ORL / Demo Readiness report and any incident bundle under artifacts/operations_console/incidents to the demo blocker report."
+}

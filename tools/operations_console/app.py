@@ -3,6 +3,7 @@ from __future__ import annotations
 import queue
 import sys
 import threading
+from dataclasses import replace
 from pathlib import Path
 from tkinter import END, NSEW, StringVar, TclError, Tk
 from tkinter import scrolledtext, ttk
@@ -13,11 +14,22 @@ if __package__ in {None, ""}:
     if str(ROOT) not in sys.path:
         sys.path.insert(0, str(ROOT))
 
-from tools.operations_console.models import ConsoleRegistryEntry, ConsoleResult
+from engine.testing_api import EngineTestingAPI
+from tools.operations_console.models import ConsoleAction, ConsoleRegistryEntry, ConsoleResult
+from tools.operations_console.baselines import BaselineComparison, compare_result_to_baseline, save_baseline
+from tools.operations_console.divergence_finder import FirstDivergence, compare_result_to_baseline_divergence, find_first_divergence
+from tools.operations_console.incident_log import AnomalyCatalog, IncidentBundleResult, load_anomaly_rules, log_incident_bundle
+from tools.operations_console.known_issues import KnownIssuesCatalog, load_known_issues
 from tools.operations_console.process_control import ManagedProcessController, ProcessControlResult
 from tools.operations_console.report_export import export_result_json, export_result_text
 from tools.operations_console.registry import DEFAULT_BRIDGE_URI, ActionRegistry, build_default_registry, list_live_scenarios
-from tools.operations_console.runner_utils import run_registry_entry
+from tools.operations_console.runner_utils import make_result, roll_up_statuses, run_registry_entry
+from tools.operations_console.scenario_contracts import (
+    ScenarioContractCatalog,
+    ScenarioContractEvaluation,
+    apply_scenario_contracts,
+    load_scenario_contracts,
+)
 
 
 STATUS_COLORS = {
@@ -29,11 +41,92 @@ STATUS_COLORS = {
     "error": "#8b2635",
 }
 
+EXPLAINABILITY_ACTION_NAMES = {
+    "ORL / Campaign Status",
+    "ORL / Campaign Explain",
+}
+AUTO_EXPORT_REPORT_ACTION_NAMES = {
+    "ORL / Demo Readiness",
+    "ORL / Core Validation Suite",
+}
+
+
+def _adapter_result_to_console_result(
+    context,
+    *,
+    adapter_result,
+    success_summary: str,
+    failure_summary: str,
+) -> ConsoleResult:
+    if adapter_result.adapter_method:
+        context.log(f"using adapter: {adapter_result.adapter_method}")
+    if adapter_result.executed_command:
+        context.log(f"command: {' '.join(adapter_result.executed_command)}")
+    for line in adapter_result.logs:
+        context.log(line)
+
+    status = "pass" if adapter_result.ok else ("fail" if adapter_result.error else "warn")
+    summary = success_summary if adapter_result.ok else failure_summary
+    if not adapter_result.ok and adapter_result.error:
+        summary = f"{failure_summary} {adapter_result.error}"
+    scenario_name = str(
+        adapter_result.data.get("scenario_id")
+        or adapter_result.data.get("scenario_name")
+        or context.scenario_name
+        or ""
+    ).strip()
+    return make_result(
+        name=context.action_name,
+        status=status,
+        summary=summary,
+        errors=[adapter_result.error] if adapter_result.error else [],
+        artifact_paths=adapter_result.artifacts,
+        scenario_name=scenario_name,
+        adapter_method=adapter_result.adapter_method,
+        executed_command=adapter_result.executed_command,
+        return_code=adapter_result.return_code,
+    )
+
+
+def run_orl_campaign_status(context) -> ConsoleResult:
+    adapter = EngineTestingAPI()
+    result = adapter.campaign_status(scenario_name=context.scenario_name)
+    return _adapter_result_to_console_result(
+        context,
+        adapter_result=result,
+        success_summary="Campaign status captured.",
+        failure_summary="Campaign status failed.",
+    )
+
+
+def run_orl_campaign_explain(context) -> ConsoleResult:
+    adapter = EngineTestingAPI()
+    result = adapter.campaign_explain(scenario_name=context.scenario_name)
+    return _adapter_result_to_console_result(
+        context,
+        adapter_result=result,
+        success_summary="Campaign explain captured.",
+        failure_summary="Campaign explain failed.",
+    )
+
 
 class OperationsConsoleApp:
-    def __init__(self, root: Tk, registry: ActionRegistry | None = None):
+    def __init__(
+        self,
+        root: Tk,
+        registry: ActionRegistry | None = None,
+        known_issues: KnownIssuesCatalog | None = None,
+        anomaly_catalog: AnomalyCatalog | None = None,
+        scenario_contracts: ScenarioContractCatalog | None = None,
+    ):
         self.root = root
         self.registry = registry or build_default_registry()
+        self._register_explainability_actions()
+        self.gui_action_matrix = self.registry.action_matrix()
+        self.command_registry = getattr(self.registry, "command_registry", lambda: None)()
+        self.known_issues = known_issues or load_known_issues()
+        self.anomaly_catalog = anomaly_catalog or load_anomaly_rules()
+        self.scenario_contracts = scenario_contracts or load_scenario_contracts()
         self.event_queue: "queue.Queue[tuple[str, object]]" = queue.Queue()
         self.worker: threading.Thread | None = None
         self.last_result: ConsoleResult | None = None
@@ -43,17 +136,21 @@ class OperationsConsoleApp:
 
         self.bridge_uri_var = StringVar(value=DEFAULT_BRIDGE_URI)
         self.scenario_var = StringVar(value="")
+        self.command_var = StringVar(value="")
         self.status_var = StringVar(value="IDLE")
         self.summary_var = StringVar(value="Ready.")
         self.description_var = StringVar(value="Select an action to view details.")
 
         self.tree: ttk.Treeview
         self.scenario_combo: ttk.Combobox
+        self.command_combo: ttk.Combobox
         self.description_label: ttk.Label
         self.output_text: scrolledtext.ScrolledText
         self.run_button: ttk.Button
         self.clear_button: ttk.Button
         self.export_button: ttk.Button
+        self.save_baseline_button: ttk.Button
+        self.compare_baseline_button: ttk.Button
         self.refresh_scenarios_button: ttk.Button
         self.bridge_button: ttk.Button
         self.mwe_button: ttk.Button
@@ -61,11 +158,42 @@ class OperationsConsoleApp:
         self.status_badge: ttk.Label
 
         self._build()
+        self._apply_command_options()
         self._populate_actions()
         self._set_status("idle", "Ready.")
         self._update_control_states()
         self._append_output("MWE Operations Console ready.")
+        self._append_output(f"Loaded {len(self.gui_action_matrix.entries)} GUI action matrix rows.")
+        self._append_output(f"Loaded {len(self.known_issues.issues)} known issue definitions.")
+        self._append_output(f"Loaded {len(self.anomaly_catalog.rules)} anomaly rules.")
+        self._append_output(f"Loaded {len(self.scenario_contracts.contracts)} scenario contracts.")
+        self._append_output(
+            f"Loaded {len(getattr(self.command_registry, 'commands', []))} allowlisted Konsole commands."
+        )
+        self._append_output("Baseline drift support ready.")
+        self._append_output("Explainability drilldown ready.")
+        self._append_output("First-divergence finder ready.")
         self.root.after(75, self._poll_events)
+
+    def _register_explainability_actions(self) -> None:
+        if self.registry.get("ORL / Campaign Status") is None:
+            self.registry.register(
+                ConsoleAction(
+                    name="ORL / Campaign Status",
+                    category="ORL",
+                    description="Capture concise structured campaign status for the selected scenario.",
+                    runner=run_orl_campaign_status,
+                )
+            )
+        if self.registry.get("ORL / Campaign Explain") is None:
+            self.registry.register(
+                ConsoleAction(
+                    name="ORL / Campaign Explain",
+                    category="ORL",
+                    description="Capture concise scenario explanation, staff notes, alerts, and orders.",
+                    runner=run_orl_campaign_explain,
+                )
+            )
 
     def _build(self) -> None:
         self.root.title("MWE Operations Console")
@@ -106,6 +234,15 @@ class OperationsConsoleApp:
             text="Examples: inchon_mvp or inchon_mvp.json",
             foreground="#666666",
         ).grid(row=1, column=2, columnspan=2, sticky="w", pady=(8, 0))
+        ttk.Label(top, text="Konsole Command").grid(row=2, column=0, sticky="w", padx=(0, 8), pady=(8, 0))
+        self.command_combo = ttk.Combobox(top, textvariable=self.command_var, state="readonly")
+        self.command_combo.grid(row=2, column=1, sticky="ew", padx=(0, 12), pady=(8, 0))
+        ttk.Label(
+            top,
+            text="Used only by 'Run Selected Command in Konsole'. Values come from the allowlisted command registry.",
+            wraplength=640,
+            foreground="#666666",
+        ).grid(row=2, column=2, columnspan=3, sticky="w", pady=(8, 0))
 
         left = ttk.LabelFrame(frame, text="Tools / Actions", padding=8)
         left.grid(row=1, column=0, sticky="nsw", padx=(0, 10))
@@ -138,13 +275,22 @@ class OperationsConsoleApp:
 
         controls = ttk.Frame(right)
         controls.grid(row=1, column=0, sticky="ew", pady=(10, 10))
-        controls.columnconfigure(5, weight=1)
+        controls.columnconfigure(6, weight=1)
         self.run_button = ttk.Button(controls, text="Run", command=self._run_selected, state="disabled")
         self.run_button.grid(row=0, column=0, sticky="w")
         self.clear_button = ttk.Button(controls, text="Clear Output", command=self._clear_output)
         self.clear_button.grid(row=0, column=1, sticky="w", padx=(8, 0))
         self.export_button = ttk.Button(controls, text="Export Report", command=self._export_report, state="disabled")
         self.export_button.grid(row=0, column=2, sticky="w", padx=(8, 0))
+        self.save_baseline_button = ttk.Button(controls, text="Save Baseline", command=self._save_baseline, state="disabled")
+        self.save_baseline_button.grid(row=0, column=3, sticky="w", padx=(8, 0))
+        self.compare_baseline_button = ttk.Button(
+            controls,
+            text="Compare Baseline",
+            command=self._compare_current_baseline,
+            state="disabled",
+        )
+        self.compare_baseline_button.grid(row=0, column=4, sticky="w", padx=(8, 0))
         self.bridge_button = ttk.Button(controls, text="Run Bridge", command=self._launch_bridge)
         self.bridge_button.grid(row=1, column=0, sticky="w", pady=(8, 0))
         self.mwe_button = ttk.Button(controls, text="Run MWE", command=self._launch_mwe)
@@ -192,7 +338,7 @@ class OperationsConsoleApp:
             self.description_var.set("Select an action to view details.")
             self._update_control_states()
             return
-        self.description_var.set(entry.description)
+        self.description_var.set(self._entry_description(entry))
         self._update_control_states()
 
     def _handle_double_click(self, _event=None) -> None:
@@ -209,6 +355,7 @@ class OperationsConsoleApp:
 
         scenario_input = self.scenario_var.get().strip()
         bridge_uri = self.bridge_uri_var.get().strip()
+        command_input = self.command_var.get().strip()
         self._append_output("")
         self._append_output(f"== Running {entry.name} ==")
         self._set_status("running", f"Running {entry.name}...")
@@ -220,7 +367,9 @@ class OperationsConsoleApp:
                 entry_lookup=self.registry.get,
                 scenario_input=scenario_input,
                 bridge_uri=bridge_uri,
+                command_input=command_input,
                 log_sink=lambda line: self.event_queue.put(("log", line)),
+                known_issues=self.known_issues,
             )
             self.event_queue.put(("result", result))
 
@@ -241,7 +390,7 @@ class OperationsConsoleApp:
                 scenarios = list_live_scenarios(uri)
                 self.event_queue.put(("scenario_roster", {"scenarios": scenarios, "uri": uri}))
             except Exception as exc:
-                self.event_queue.put(("task_error", ("Scenario refresh failed.", str(exc))))
+                self.event_queue.put(("task_error", ("Refresh Scenarios", "Scenario refresh failed.", str(exc))))
 
         self.worker = threading.Thread(target=worker, name="operations-console-refresh", daemon=True)
         self.worker.start()
@@ -278,9 +427,9 @@ class OperationsConsoleApp:
         def worker() -> None:
             try:
                 result = runner()
-                self.event_queue.put(("process_result", result))
+                self.event_queue.put(("process_result", (label, result)))
             except Exception as exc:
-                self.event_queue.put(("task_error", (f"{label} failed.", str(exc))))
+                self.event_queue.put(("task_error", (label, f"{label} failed.", str(exc))))
 
         self.worker = threading.Thread(target=worker, name="operations-console-process", daemon=True)
         self.worker.start()
@@ -304,12 +453,29 @@ class OperationsConsoleApp:
         self.root.after(75, self._poll_events)
 
     def _handle_result(self, result: ConsoleResult) -> None:
+        result, contract_evaluation = self._apply_scenario_contracts(result)
+        result = self._attach_explainability_follow_up(result)
+        result = self._maybe_auto_export_result(result)
+        result = self._refresh_demo_artifact_validation(result)
         self.last_result = result
+        self._append_contract_evaluation(contract_evaluation)
+        drift = self._compare_result_against_baseline(result)
+        divergence = self._find_result_divergence(result, drift)
         if result.errors:
             for error in result.errors:
                 self._append_output(f"ERROR: {error}")
+        if result.known_issue_matches:
+            for match in result.known_issue_matches:
+                self._append_output(f"KNOWN ISSUE: {match.issue_id} | {match.title}")
+            if result.original_status and result.original_status != result.status:
+                self._append_output(
+                    f"KNOWN ISSUE WAIVER APPLIED: {result.original_status.upper()} -> {result.status.upper()}"
+                )
+        self._append_baseline_drift(drift)
+        self._append_first_divergence(divergence)
+        self._emit_incident_breadcrumbs(self._log_incident_bundle(result))
         self._append_output(f"== {result.status.upper()} :: {result.summary} ({result.duration_ms} ms) ==")
-        self._set_status(result.status, result.summary)
+        self._set_status(result.status, self._result_summary_text(result, drift))
         self._update_control_states()
 
     def _handle_scenario_roster(self, payload: dict) -> None:
@@ -325,17 +491,50 @@ class OperationsConsoleApp:
             summary = f"{summary} Selected {self.scenario_var.get().strip()}."
         if not normalized:
             summary = "Scenario refresh completed, but the live roster is empty."
+        pseudo_result = make_result(
+            name="Refresh Scenarios",
+            status=status,
+            summary=summary,
+            scenario_name=self.scenario_var.get().strip(),
+            details=[
+                f"refreshed {len(normalized)} scenarios",
+                *([f"selected scenario: {self.scenario_var.get().strip()}"] if self.scenario_var.get().strip() else []),
+            ],
+        )
+        self.last_result = pseudo_result
+        self._emit_incident_breadcrumbs(self._log_incident_bundle(pseudo_result))
         self._set_status(status, summary)
         self._update_control_states()
 
-    def _handle_process_result(self, result: ProcessControlResult) -> None:
+    def _handle_process_result(self, payload: tuple[str, ProcessControlResult]) -> None:
+        label, result = payload
+        pseudo_result = make_result(
+            name=label,
+            status=result.status,
+            summary=result.summary,
+            scenario_name=self.scenario_var.get().strip(),
+            details=result.logs,
+            executed_command=result.command,
+        )
+        self.last_result = pseudo_result
+        self._emit_incident_breadcrumbs(self._log_incident_bundle(pseudo_result))
         self._append_output(f"== {result.status.upper()} :: {result.summary} ==")
         self._set_status(result.status, result.summary)
         self._update_control_states()
 
-    def _handle_task_error(self, payload: tuple[str, str]) -> None:
-        summary, error = payload
+    def _handle_task_error(self, payload: tuple[str, str, str]) -> None:
+        name, summary, error = payload
+        pseudo_result = make_result(
+            name=name,
+            status="error",
+            summary=summary,
+            scenario_name=self.scenario_var.get().strip(),
+            errors=[error],
+            details=[error],
+        )
+        self.last_result = pseudo_result
         self._append_output(f"ERROR: {error}")
+        self._emit_incident_breadcrumbs(self._log_incident_bundle(pseudo_result))
         self._set_status("error", summary)
         self._update_control_states()
 
@@ -360,6 +559,41 @@ class OperationsConsoleApp:
         self._append_output(f"Report exported (text): {text_path}")
         self.summary_var.set(f"Report exported: {json_path.name}")
 
+    def _save_baseline(self) -> None:
+        if self.last_result is None:
+            self._set_status("warn", "No completed run is available for baseline save.")
+            return
+        try:
+            path = save_baseline(
+                self.last_result,
+                action_matrix=getattr(self, "gui_action_matrix", None),
+                scenario_contracts=getattr(self, "scenario_contracts", None),
+            )
+        except Exception as exc:
+            self._append_output(f"ERROR: Baseline save failed: {exc}")
+            self._set_status("error", "Baseline save failed.")
+            return
+        self._append_output(f"BASELINE SAVED: {path}")
+        self.summary_var.set(f"Baseline saved: {path.name}")
+        self._update_control_states()
+
+    def _compare_current_baseline(self) -> None:
+        if self.last_result is None:
+            self._set_status("warn", "No completed run is available for baseline compare.")
+            return
+        drift = self._compare_result_against_baseline(self.last_result)
+        if drift is None:
+            self._set_status("error", "Baseline compare failed.")
+            return
+        if not drift.matched:
+            self._append_output(f"BASELINE: no saved baseline for {self.last_result.name}")
+            self._set_status("warn", "No matching baseline is saved for the current result.")
+            return
+        self._append_baseline_drift(drift)
+        self._append_first_divergence(self._find_result_divergence(self.last_result, drift))
+        self._set_status(self.last_result.status, self._result_summary_text(self.last_result, drift))
+        self._update_control_states()
+
     def _apply_scenario_roster(self, scenarios: list[str]) -> bool:
         normalized = tuple(str(value or "").strip() for value in scenarios if str(value or "").strip())
         self.scenario_combo["values"] = normalized
@@ -368,6 +602,15 @@ class OperationsConsoleApp:
             return False
         self.scenario_var.set(normalized[0])
         return True
+
+    def _apply_command_options(self) -> None:
+        registry = getattr(self, "command_registry", None)
+        options = tuple(getattr(registry, "command_ids", lambda: [])())
+        self.command_combo["values"] = options
+        current = self.command_var.get().strip()
+        if current in options:
+            return
+        self.command_var.set("")
 
     def _append_output(self, message: str) -> None:
         self.output_text.configure(state="normal")
@@ -382,6 +625,264 @@ class OperationsConsoleApp:
         color = STATUS_COLORS.get(text, STATUS_COLORS["idle"])
         self.status_badge.configure(foreground=color)
 
+    def _entry_description(self, entry: ConsoleRegistryEntry) -> str:
+        parts = [entry.description]
+        lookup = getattr(self.registry, "matrix_entry_for_label", None)
+        matrix_entry = lookup(entry.name) if callable(lookup) else None
+        if matrix_entry is None:
+            return parts[0]
+        if matrix_entry.automation_level:
+            parts.append(f"Automation: {matrix_entry.automation_level}")
+        if matrix_entry.runner:
+            parts.append(f"Runner: {matrix_entry.runner}")
+        if matrix_entry.inputs:
+            parts.append(f"Inputs: {', '.join(matrix_entry.inputs)}")
+        if matrix_entry.preconditions:
+            parts.append(f"Preconditions: {', '.join(matrix_entry.preconditions)}")
+        if matrix_entry.expected_status:
+            parts.append(f"Expected Status: {matrix_entry.expected_status.upper()}")
+        if matrix_entry.expected_log_fragments:
+            parts.append(f"Expected Logs: {', '.join(matrix_entry.expected_log_fragments)}")
+        if matrix_entry.artifact_types:
+            parts.append(f"Artifacts: {', '.join(matrix_entry.artifact_types)}")
+        if entry.name == "Utilities / Run Selected Command in Konsole":
+            command_ids = getattr(self.command_registry, "command_ids", lambda: [])()
+            if command_ids:
+                parts.append(f"Allowlisted Commands: {', '.join(command_ids)}")
+        return "\n\n".join(part for part in parts if part)
+
+    def _result_summary_text(
+        self,
+        result: ConsoleResult,
+        baseline_drift: BaselineComparison | None = None,
+    ) -> str:
+        summary = result.summary
+        if result.known_issue_matches:
+            issue_ids = ", ".join(match.issue_id for match in result.known_issue_matches)
+            if result.original_status and result.original_status != result.status:
+                summary = f"{summary} [KNOWN ISSUE: {issue_ids}; waived from {result.original_status.upper()}]"
+            else:
+                summary = f"{summary} [KNOWN ISSUE: {issue_ids}]"
+        if baseline_drift is not None and baseline_drift.matched:
+            summary = f"{summary} [DRIFT: {baseline_drift.status.upper()}]"
+        return summary
+
+    def _apply_scenario_contracts(self, result: ConsoleResult) -> tuple[ConsoleResult, ScenarioContractEvaluation | None]:
+        try:
+            return apply_scenario_contracts(
+                result,
+                scenario_name=self.scenario_var.get().strip(),
+                contract_catalog=getattr(self, "scenario_contracts", None),
+                action_matrix=getattr(self, "gui_action_matrix", None),
+            )
+        except Exception as exc:
+            self._append_output(f"ERROR: Scenario contract evaluation failed: {exc}")
+            return result, None
+
+    def _append_contract_evaluation(self, evaluation: ScenarioContractEvaluation | None) -> None:
+        if evaluation is None or not evaluation.matched:
+            return
+        if evaluation.status == "pass":
+            return
+        self._append_output(
+            f"SCENARIO CONTRACT: {evaluation.contract_scenario_name} [{evaluation.status.upper()}]"
+        )
+        for issue in evaluation.issues:
+            self._append_output(f"CONTRACT MISMATCH: {issue}")
+
+    def _attach_explainability_follow_up(self, result: ConsoleResult) -> ConsoleResult:
+        scenario_name = str(result.scenario_name or self.scenario_var.get() or "").strip()
+        if not scenario_name:
+            return result
+        if not str(result.name or "").startswith("ORL /"):
+            return replace(result, scenario_name=result.scenario_name or scenario_name)
+        if result.status not in {"warn", "fail", "error"}:
+            return replace(result, scenario_name=result.scenario_name or scenario_name)
+        if result.name in EXPLAINABILITY_ACTION_NAMES:
+            return replace(result, scenario_name=result.scenario_name or scenario_name)
+        if any(str(line or "").startswith("CAMPAIGN STATUS:") for line in result.details):
+            return replace(result, scenario_name=result.scenario_name or scenario_name)
+
+        adapter = EngineTestingAPI()
+        lines: list[str] = []
+        try:
+            status_result = adapter.campaign_status(scenario_name=scenario_name)
+            explain_result = adapter.campaign_explain(scenario_name=scenario_name)
+        except Exception as exc:
+            self._append_output(f"ERROR: Explainability follow-up failed: {exc}")
+            return replace(result, scenario_name=result.scenario_name or scenario_name)
+
+        if status_result.logs or explain_result.logs or status_result.error or explain_result.error:
+            lines.append("FOLLOW-UP EXPLAINABILITY:")
+        lines.extend(status_result.logs)
+        if status_result.error:
+            lines.append(f"CAMPAIGN STATUS ERROR: {status_result.error}")
+        lines.extend(explain_result.logs)
+        if explain_result.error:
+            lines.append(f"CAMPAIGN EXPLAIN ERROR: {explain_result.error}")
+
+        if not lines:
+            return replace(result, scenario_name=result.scenario_name or scenario_name)
+
+        existing = set(result.details)
+        appended = [line for line in lines if line not in existing]
+        for line in appended:
+            self._append_output(line)
+        if not appended:
+            return replace(result, scenario_name=result.scenario_name or scenario_name)
+        return replace(
+            result,
+            scenario_name=result.scenario_name or scenario_name,
+            details=[*result.details, *appended],
+        )
+
+    def _maybe_auto_export_result(self, result: ConsoleResult) -> ConsoleResult:
+        if result.name not in AUTO_EXPORT_REPORT_ACTION_NAMES:
+            return result
+        try:
+            json_path = export_result_json(result)
+            text_path = export_result_text(result)
+        except Exception as exc:
+            self._append_output(f"ERROR: Demo report export failed: {exc}")
+            return result
+
+        lines = [
+            f"AUTO REPORT JSON: {json_path}",
+            f"AUTO REPORT TEXT: {text_path}",
+        ]
+        for line in lines:
+            self._append_output(line)
+
+        artifact_paths = list(result.artifact_paths)
+        for path in (str(json_path), str(text_path)):
+            if path not in artifact_paths:
+                artifact_paths.append(path)
+
+        details = list(result.details)
+        for line in lines:
+            if line not in details:
+                details.append(line)
+        return replace(result, artifact_paths=artifact_paths, details=details)
+
+    def _refresh_demo_artifact_validation(self, result: ConsoleResult) -> ConsoleResult:
+        if result.name != "ORL / Demo Readiness":
+            return result
+        if not any(item.name == "ORL / Demo Artifact Validation" for item in result.subresults):
+            return result
+
+        entry = self.registry.get("ORL / Demo Artifact Validation")
+        if not isinstance(entry, ConsoleAction):
+            return result
+
+        log_lines: list[str] = []
+        refreshed = run_registry_entry(
+            entry,
+            entry_lookup=self.registry.get,
+            scenario_input=self.scenario_var.get().strip() or result.scenario_name,
+            bridge_uri=self.bridge_uri_var.get().strip(),
+            command_input=self.command_var.get().strip(),
+            log_sink=log_lines.append,
+            known_issues=self.known_issues,
+        )
+        for line in log_lines:
+            self._append_output(line)
+
+        new_subresults = [
+            refreshed if item.name == "ORL / Demo Artifact Validation" else item
+            for item in result.subresults
+        ]
+        artifact_paths = list(dict.fromkeys([
+            *result.artifact_paths,
+            *[path for item in new_subresults for path in item.artifact_paths],
+        ]))
+        step_summary = ", ".join(f"{item.name}={item.status.upper()}" for item in new_subresults)
+        summary = f"Suite completed with status {roll_up_statuses(item.status for item in new_subresults).upper()}."
+        if step_summary:
+            summary = f"{summary} {step_summary}"
+        details = list(result.details)
+        marker = "AUTO REFRESH: reran ORL / Demo Artifact Validation after demo report export."
+        if marker not in details:
+            details.append(marker)
+        for line in log_lines:
+            if line not in details:
+                details.append(line)
+        return replace(
+            result,
+            status=roll_up_statuses(item.status for item in new_subresults),
+            summary=summary,
+            subresults=new_subresults,
+            artifact_paths=artifact_paths,
+            details=details,
+        )
+
+    def _compare_result_against_baseline(self, result: ConsoleResult) -> BaselineComparison | None:
+        try:
+            return compare_result_to_baseline(
+                result,
+                action_matrix=getattr(self, "gui_action_matrix", None),
+                scenario_contracts=getattr(self, "scenario_contracts", None),
+            )
+        except Exception as exc:
+            self._append_output(f"ERROR: Baseline compare failed: {exc}")
+            return None
+
+    def _append_baseline_drift(self, drift: BaselineComparison | None) -> None:
+        if drift is None or not drift.matched:
+            return
+        self._append_output(f"BASELINE DRIFT: {drift.status.upper()}")
+        for finding in drift.findings:
+            self._append_output(f"DRIFT {finding.status.upper()}: {finding.message}")
+
+    def _find_result_divergence(
+        self,
+        result: ConsoleResult,
+        drift: BaselineComparison | None = None,
+    ) -> FirstDivergence | None:
+        if result.status in {"warn", "fail", "error"} and len(result.artifact_paths) >= 2:
+            try:
+                divergence = find_first_divergence(result.artifact_paths[0], result.artifact_paths[1])
+            except Exception as exc:
+                self._append_output(f"ERROR: Divergence compare failed: {exc}")
+            else:
+                if divergence.comparable and not divergence.identical:
+                    return divergence
+        if drift is None or not drift.matched or drift.status == "pass":
+            return None
+        try:
+            divergence = compare_result_to_baseline_divergence(result)
+        except Exception as exc:
+            self._append_output(f"ERROR: Baseline divergence compare failed: {exc}")
+            return None
+        if not divergence.comparable or divergence.identical:
+            return None
+        return divergence
+
+    def _append_first_divergence(self, divergence: FirstDivergence | None) -> None:
+        if divergence is None or not divergence.comparable or divergence.identical:
+            return
+        self._append_output(f"FIRST DIVERGENCE: {divergence.message}")
+        if divergence.artifact_paths:
+            self._append_output(f"DIVERGENCE INPUTS: {' | '.join(divergence.artifact_paths)}")
+
+    def _log_incident_bundle(self, result: ConsoleResult) -> IncidentBundleResult | None:
+        try:
+            return log_incident_bundle(
+                result,
+                anomaly_catalog=self.anomaly_catalog,
+                action_matrix=self.gui_action_matrix,
+            )
+        except Exception as exc:
+            self._append_output(f"ERROR: Incident logging failed: {exc}")
+            return None
+
+    def _emit_incident_breadcrumbs(self, incident: IncidentBundleResult | None) -> None:
+        if incident is None:
+            return
+        for match in incident.anomaly_matches:
+            self._append_output(f"POTENTIAL ISSUE: {match.rule_id} | {match.title}")
+        if incident.logged:
+            self._append_output(f"INCIDENT LOGGED: {incident.bundle_dir}")
+
     def _is_running(self) -> bool:
         return self.worker is not None and self.worker.is_alive()
 
@@ -394,6 +895,10 @@ class OperationsConsoleApp:
         self.stop_button.configure(state=idle_state)
         self.clear_button.configure(state=idle_state)
         self.export_button.configure(state="normal" if (not is_running and self.last_result is not None) else "disabled")
+        self.save_baseline_button.configure(state="normal" if (not is_running and self.last_result is not None) else "disabled")
+        self.compare_baseline_button.configure(
+            state="normal" if (not is_running and self.last_result is not None) else "disabled"
+        )
         if is_running or self._selected_entry() is None:
             self.run_button.configure(state="disabled")
         else:

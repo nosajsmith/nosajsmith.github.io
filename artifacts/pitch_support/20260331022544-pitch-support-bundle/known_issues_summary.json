@@ -1,0 +1,52 @@
+{
+  "source_path": "/home/jason/dev/mwe/tools/operations_console/known_issues.yaml",
+  "issue_count": 2,
+  "status_counts": {
+    "known": 1,
+    "waived": 1
+  },
+  "severity_counts": {
+    "medium": 1,
+    "high": 1
+  },
+  "rows": [
+    {
+      "id": "KI-001",
+      "title": "UI build occasionally fails when local Node dependencies are stale",
+      "severity": "medium",
+      "category": "ORL",
+      "status": "known",
+      "expected_status_override": "",
+      "affects": [
+        "ORL / UI Build Check"
+      ],
+      "scenarios": [],
+      "symptom_match": [
+        "Build command exited",
+        "build failed"
+      ],
+      "notes": "Refresh dependencies in ui/ and rerun when this reproduces on a clean branch."
+    },
+    {
+      "id": "KI-002",
+      "title": "Snapshot smoke may fail on inchon_mvp while persistence contract is in flux",
+      "severity": "high",
+      "category": "ORL",
+      "status": "waived",
+      "expected_status_override": "warn",
+      "affects": [
+        "ORL / Snapshot Smoke",
+        "ORL / Core Validation Suite"
+      ],
+      "scenarios": [
+        "inchon_mvp",
+        "inchon_mvp.json"
+      ],
+      "symptom_match": [
+        "snapshot",
+        "load"
+      ],
+      "notes": "Temporary waiver for operator visibility while the snapshot format stabilizes."
+    }
+  ]
+}

@@ -9,6 +9,13 @@ from pathlib import Path
 from typing import Dict, Iterable, List
 
 from engine.testing_api import EngineTestingAPI, TestingApiResult
+from .gui_action_matrix import GuiActionMatrix, GuiActionMatrixEntry, load_gui_action_matrix
+from .konsole_integration import (
+    CommandRegistryCatalog,
+    command_options,
+    launch_konsole_command,
+    load_command_registry,
+)
 from .models import ConsoleAction, ConsoleRegistryEntry, ConsoleRunContext, ConsoleSuite
 from .runner_utils import make_result
 
@@ -18,9 +25,16 @@ DEFAULT_CATEGORIES: tuple[str, ...] = ("ORL", "War Lab", "Utilities", "Content")
 
 
 class ActionRegistry:
-    def __init__(self, categories: Iterable[str] | None = None):
+    def __init__(
+        self,
+        categories: Iterable[str] | None = None,
+        action_matrix: GuiActionMatrix | None = None,
+        command_registry: CommandRegistryCatalog | None = None,
+    ):
         self._category_order: List[str] = []
         self._entries: "OrderedDict[str, ConsoleRegistryEntry]" = OrderedDict()
+        self._action_matrix = action_matrix or load_gui_action_matrix()
+        self._command_registry = command_registry or load_command_registry()
         for category in categories or DEFAULT_CATEGORIES:
             self._add_category(category)
 
@@ -74,6 +88,24 @@ class ActionRegistry:
             grouped.setdefault(entry.category, []).append(entry)
         return grouped
 
+    def action_matrix(self) -> GuiActionMatrix:
+        return self._action_matrix
+
+    def matrix_entry_for_label(self, label: str) -> GuiActionMatrixEntry | None:
+        return self._action_matrix.get_by_label(label)
+
+    def matrix_entry_for_id(self, action_id: str) -> GuiActionMatrixEntry | None:
+        return self._action_matrix.get_by_id(action_id)
+
+    def matrix_entries_by_category(self) -> Dict[str, List[GuiActionMatrixEntry]]:
+        return self._action_matrix.entries_by_category()
+
+    def command_registry(self) -> CommandRegistryCatalog:
+        return self._command_registry
+
+    def allowlisted_command_ids(self) -> List[str]:
+        return command_options(self._command_registry)
+
 
 def _placeholder_runner(label: str):
     def runner(context: ConsoleRunContext):
@@ -85,6 +117,54 @@ def _placeholder_runner(label: str):
         )
 
     return runner
+
+
+def _console_result_from_konsole(
+    context: ConsoleRunContext,
+    result,
+) -> object:
+    for line in result.logs:
+        context.log(line)
+    return make_result(
+        name=context.action_name,
+        status=result.status,
+        summary=result.summary,
+        details=result.logs,
+        executed_command=result.command,
+        adapter_method="konsole",
+        scenario_name=context.scenario_name,
+    )
+
+
+def _console_subresults_from_adapter_data(data: dict, scenario_name: str) -> List[object]:
+    rows = list(data.get("checks") or [])
+    subresults = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        status = str(row.get("status") or "error").strip().lower()
+        summary = str(row.get("summary") or row.get("label") or row.get("check_id") or "Check completed.").strip()
+        label = str(row.get("label") or row.get("check_id") or "Unnamed Check").strip()
+        details = list(row.get("logs") or [])
+        errors = []
+        if status in {"fail", "error"}:
+            errors.append(summary)
+        blocker_class = str(row.get("blocker_class") or "").strip()
+        if blocker_class:
+            details = [f"BLOCKER CLASS: {blocker_class}", *details]
+        subresults.append(
+            make_result(
+                name=label,
+                status=status,
+                summary=summary,
+                details=details,
+                errors=errors,
+                artifact_paths=list(row.get("artifacts") or []),
+                scenario_name=scenario_name,
+                executed_command=list(row.get("executed_command") or []),
+            )
+        )
+    return subresults
 
 
 def _console_result_from_adapter(
@@ -114,6 +194,7 @@ def _console_result_from_adapter(
         errors=errors,
         artifact_paths=result.artifacts,
         scenario_name=context.scenario_name,
+        subresults=_console_subresults_from_adapter_data(dict(result.data or {}), context.scenario_name),
         adapter_method=result.adapter_method,
         executed_command=result.executed_command,
         return_code=result.return_code,
@@ -126,6 +207,52 @@ def repo_root() -> Path:
 
 def resolve_ui_directory() -> Path:
     return repo_root() / "ui"
+
+
+def run_open_repo_konsole(context: ConsoleRunContext):
+    result = launch_konsole_command("repo_terminal", label="Open Repo Terminal")
+    return _console_result_from_konsole(context, result)
+
+
+def run_open_ui_konsole(context: ConsoleRunContext):
+    result = launch_konsole_command("ui_terminal", label="Open UI Terminal")
+    return _console_result_from_konsole(context, result)
+
+
+def run_open_bridge_konsole(context: ConsoleRunContext):
+    result = launch_konsole_command("bridge_terminal", label="Open Bridge Terminal")
+    return _console_result_from_konsole(context, result)
+
+
+def run_open_artifacts_konsole(context: ConsoleRunContext):
+    result = launch_konsole_command("artifacts_terminal", label="Open Artifacts Terminal")
+    return _console_result_from_konsole(context, result)
+
+
+def run_tail_latest_logs_in_konsole(context: ConsoleRunContext):
+    result = launch_konsole_command(
+        "tail_latest_logs",
+        label="Tail Latest Logs in Konsole",
+        bridge_uri=context.bridge_uri or DEFAULT_BRIDGE_URI,
+    )
+    return _console_result_from_konsole(context, result)
+
+
+def run_selected_command_in_konsole(context: ConsoleRunContext):
+    selected = str(context.selected_command_id or "").strip()
+    if not selected:
+        context.log("no allowlisted Konsole command selected")
+        return make_result(
+            name=context.action_name,
+            status="warn",
+            summary="No allowlisted Konsole command is selected.",
+        )
+    result = launch_konsole_command(
+        selected,
+        label="Run Selected Command in Konsole",
+        bridge_uri=context.bridge_uri or DEFAULT_BRIDGE_URI,
+    )
+    return _console_result_from_konsole(context, result)
 
 
 def resolve_target_scenario(scenarios: Iterable[object], requested: str = "") -> str | None:
@@ -376,8 +503,8 @@ def list_live_scenarios(uri: str = DEFAULT_BRIDGE_URI) -> List[str]:
     return asyncio.run(_run_connectivity_check(uri or DEFAULT_BRIDGE_URI))
 
 
-def build_default_registry() -> ActionRegistry:
-    registry = ActionRegistry()
+def build_default_registry(action_matrix: GuiActionMatrix | None = None) -> ActionRegistry:
+    registry = ActionRegistry(action_matrix=action_matrix)
     registry.register(
         ConsoleAction(
             name="ORL / Connectivity",
@@ -414,14 +541,88 @@ def build_default_registry() -> ActionRegistry:
         )
     )
     registry.register(
+        ConsoleAction(
+            name="ORL / Deterministic Demo Runner",
+            category="ORL",
+            description="Run the current demo scenario through deterministic replay/snapshot/explainability support and emit demo artifacts.",
+            runner=run_orl_deterministic_demo_runner,
+        )
+    )
+    registry.register(
+        ConsoleAction(
+            name="ORL / Demo Artifact Validation",
+            category="ORL",
+            description="Validate that the latest demo report, replay, snapshot, and compare artifacts all exist.",
+            runner=run_orl_demo_artifact_validation,
+        )
+    )
+    registry.register(
+        ConsoleAction(
+            name="ORL / Demo Checklist",
+            category="ORL",
+            description="Show the current internal demo/release checklist, expected outcomes, and bug-report guidance.",
+            runner=run_orl_demo_checklist,
+        )
+    )
+    registry.register(
+        ConsoleAction(
+            name="ORL / Latest Artifacts",
+            category="ORL",
+            description="Summarize the latest demo report, replay, snapshot, and compare output paths from the local artifact shelf.",
+            runner=run_orl_latest_artifacts,
+        )
+    )
+    registry.register(
+        ConsoleAction(
+            name="ORL / Pitch Support Bundle",
+            category="ORL",
+            description="Export the current pitch-support package from the latest validated reports, known issues, scenario facts, expected outcomes, and artifact summaries.",
+            runner=run_orl_pitch_support_bundle,
+        )
+    )
+    registry.register(
         ConsoleSuite(
             name="ORL / Demo Readiness",
             category="ORL",
-            description="Run the smoke suite and UI build check to produce a simple demo-readiness answer.",
+            description="Run the smoke suite, UI build, deterministic demo runner, and artifact validation in one operator-facing demo path.",
             action_names=[
                 "ORL / Smoke Suite",
                 "ORL / UI Build Check",
+                "ORL / Deterministic Demo Runner",
+                "ORL / Demo Artifact Validation",
             ],
+        )
+    )
+    registry.register(
+        ConsoleAction(
+            name="ORL / Scenario Validator",
+            category="ORL",
+            description="Validate the Round 1 primary scenario set, engine loadability, and support metadata.",
+            runner=run_orl_scenario_validator,
+        )
+    )
+    registry.register(
+        ConsoleAction(
+            name="ORL / Scenario Matrix",
+            category="ORL",
+            description="Run the Round 1 base/aggressive/cautious scenario matrix for known-good AI scenarios.",
+            runner=run_orl_scenario_matrix,
+        )
+    )
+    registry.register(
+        ConsoleAction(
+            name="ORL / Explainability Smoketest",
+            category="ORL",
+            description="Verify campaign status/explain support on explainability-ready scenarios.",
+            runner=run_orl_explainability_smoketest,
+        )
+    )
+    registry.register(
+        ConsoleAction(
+            name="ORL / Round 1 Gate",
+            category="ORL",
+            description="Run the utility-complete Round 1 gate across rules, AI, persistence, tooling, scenarios, and support guidance.",
+            runner=run_orl_round1_gate,
         )
     )
     registry.register(
@@ -467,6 +668,54 @@ def build_default_registry() -> ActionRegistry:
             category="War Lab",
             description="Reserved slot for future War Lab hooks.",
             runner=_placeholder_runner("War Lab"),
+        )
+    )
+    registry.register(
+        ConsoleAction(
+            name="Utilities / Open Repo Konsole",
+            category="Utilities",
+            description="Open a Konsole window at the repo root for direct terminal control.",
+            runner=run_open_repo_konsole,
+        )
+    )
+    registry.register(
+        ConsoleAction(
+            name="Utilities / Open UI Konsole",
+            category="Utilities",
+            description="Open a Konsole window in the UI directory.",
+            runner=run_open_ui_konsole,
+        )
+    )
+    registry.register(
+        ConsoleAction(
+            name="Utilities / Open Bridge Konsole",
+            category="Utilities",
+            description="Open a Konsole window in the bridge/server directory.",
+            runner=run_open_bridge_konsole,
+        )
+    )
+    registry.register(
+        ConsoleAction(
+            name="Utilities / Open Artifacts Konsole",
+            category="Utilities",
+            description="Open a Konsole window in the Operations Console artifacts directory.",
+            runner=run_open_artifacts_konsole,
+        )
+    )
+    registry.register(
+        ConsoleAction(
+            name="Utilities / Tail Latest Logs in Konsole",
+            category="Utilities",
+            description="Launch an allowlisted Konsole tail command when a canonical logs directory is configured.",
+            runner=run_tail_latest_logs_in_konsole,
+        )
+    )
+    registry.register(
+        ConsoleAction(
+            name="Utilities / Run Selected Command in Konsole",
+            category="Utilities",
+            description="Launch the selected allowlisted support command in Konsole.",
+            runner=run_selected_command_in_konsole,
         )
     )
     registry.register(
@@ -602,6 +851,61 @@ def run_orl_replay_validation(context: ConsoleRunContext):
     )
 
 
+def run_orl_deterministic_demo_runner(context: ConsoleRunContext):
+    adapter = EngineTestingAPI(repo_root=repo_root())
+    result = adapter.deterministic_demo_runner(scenario_name=context.scenario_name)
+    return _console_result_from_adapter(
+        context,
+        result,
+        success_summary="Deterministic demo runner passed.",
+        failure_summary="Deterministic demo runner failed.",
+    )
+
+
+def run_orl_demo_artifact_validation(context: ConsoleRunContext):
+    adapter = EngineTestingAPI(repo_root=repo_root())
+    result = adapter.demo_artifact_validation()
+    return _console_result_from_adapter(
+        context,
+        result,
+        success_summary="Demo artifact validation passed.",
+        failure_summary="Demo artifact validation failed.",
+    )
+
+
+def run_orl_demo_checklist(context: ConsoleRunContext):
+    adapter = EngineTestingAPI(repo_root=repo_root())
+    result = adapter.demo_checklist(scenario_name=context.scenario_name)
+    return _console_result_from_adapter(
+        context,
+        result,
+        success_summary="Demo checklist loaded.",
+        failure_summary="Demo checklist failed.",
+    )
+
+
+def run_orl_latest_artifacts(context: ConsoleRunContext):
+    adapter = EngineTestingAPI(repo_root=repo_root())
+    result = adapter.latest_artifacts()
+    return _console_result_from_adapter(
+        context,
+        result,
+        success_summary="Latest artifacts summary is complete.",
+        failure_summary="Latest artifacts summary is incomplete.",
+    )
+
+
+def run_orl_pitch_support_bundle(context: ConsoleRunContext):
+    adapter = EngineTestingAPI(repo_root=repo_root())
+    result = adapter.pitch_support_bundle(scenario_name=context.scenario_name)
+    return _console_result_from_adapter(
+        context,
+        result,
+        success_summary="Pitch support bundle exported.",
+        failure_summary="Pitch support bundle export failed.",
+    )
+
+
 def run_orl_snapshot_smoke(context: ConsoleRunContext):
     adapter = EngineTestingAPI(repo_root=repo_root())
     result = adapter.snapshot_smoke(scenario_name=context.scenario_name)
@@ -621,4 +925,48 @@ def run_orl_all_green_check(context: ConsoleRunContext):
         result,
         success_summary="All-green check passed.",
         failure_summary="All-green check failed.",
+    )
+
+
+def run_orl_scenario_validator(context: ConsoleRunContext):
+    adapter = EngineTestingAPI(repo_root=repo_root())
+    result = adapter.scenario_validator()
+    return _console_result_from_adapter(
+        context,
+        result,
+        success_summary="Scenario validator passed.",
+        failure_summary="Scenario validator failed.",
+    )
+
+
+def run_orl_scenario_matrix(context: ConsoleRunContext):
+    adapter = EngineTestingAPI(repo_root=repo_root())
+    result = adapter.scenario_matrix()
+    return _console_result_from_adapter(
+        context,
+        result,
+        success_summary="Scenario matrix passed.",
+        failure_summary="Scenario matrix failed.",
+    )
+
+
+def run_orl_explainability_smoketest(context: ConsoleRunContext):
+    adapter = EngineTestingAPI(repo_root=repo_root())
+    result = adapter.explainability_smoke()
+    return _console_result_from_adapter(
+        context,
+        result,
+        success_summary="Explainability smoketest passed.",
+        failure_summary="Explainability smoketest failed.",
+    )
+
+
+def run_orl_round1_gate(context: ConsoleRunContext):
+    adapter = EngineTestingAPI(repo_root=repo_root())
+    result = adapter.round1_gate()
+    return _console_result_from_adapter(
+        context,
+        result,
+        success_summary="Round 1 gate passed.",
+        failure_summary="Round 1 gate failed.",
     )

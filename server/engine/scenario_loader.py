@@ -20,12 +20,24 @@ def _rules_dir() -> str:
     return os.path.join(server_dir, "rules")
 
 
+def _scenario_candidate_paths(scenario_id: str) -> List[str]:
+    server_dir = os.path.dirname(_rules_dir())
+    return [
+        os.path.join(_rules_dir(), "scenarios", f"{scenario_id}.json"),
+        os.path.join(server_dir, "scenarios", f"{scenario_id}.json"),
+    ]
+
+
 def _scenario_path(scenario_id: str) -> str:
     """
-    Scenarios live in:
-      ...\\server\\rules\\scenarios\\<id>.json
+    Prefer canonical rules scenarios, but fall back to server/scenarios for
+    older engine-ready fixtures that are still used by support tooling.
     """
-    return os.path.join(_rules_dir(), "scenarios", f"{scenario_id}.json")
+    for path in _scenario_candidate_paths(scenario_id):
+        if os.path.exists(path):
+            return path
+    searched = ", ".join(_scenario_candidate_paths(scenario_id))
+    raise FileNotFoundError(f"Scenario not found for engine loader: {scenario_id} (searched: {searched})")
 
 
 def _enum_value(enum_cls, raw: Any, *, default=None):

@@ -9,7 +9,7 @@ Tracks:
 from __future__ import annotations
 from typing import List, Dict, Any, Optional
 
-from engine.staff.base_staff import StaffSection
+from server.engine.staff.base_staff import StaffSection
 from engine.core.time_system import GameTime
 from engine.core.unit_model import UnitRepository, UnitState, Side
 

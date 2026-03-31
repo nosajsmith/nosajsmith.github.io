@@ -6,7 +6,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List
 
+from .baselines import BaselineComparison, compare_result_to_baseline
+from .divergence_finder import FirstDivergence, compare_result_to_baseline_divergence, find_first_divergence
+from .gui_action_matrix import GuiActionMatrix, GuiActionMatrixEntry, load_gui_action_matrix
 from .models import ConsoleResult
+from .scenario_contracts import ScenarioContractCatalog, ScenarioContractEvaluation, evaluate_result_contract, load_scenario_contracts
 
 
 def repo_root() -> Path:
@@ -22,10 +26,23 @@ def slugify(value: str) -> str:
     return text or "run"
 
 
-def report_dict(result: ConsoleResult) -> Dict[str, object]:
+def report_dict(
+    result: ConsoleResult,
+    action_matrix: GuiActionMatrix | None = None,
+    scenario_contracts: ScenarioContractCatalog | None = None,
+    baseline_dir_path: Path | None = None,
+) -> Dict[str, object]:
+    matrix = action_matrix if action_matrix is not None else _safe_load_action_matrix()
+    matrix_entry = _report_matrix_entry(matrix, result.name)
+    contract_evaluation = _report_contract_evaluation(result, matrix, scenario_contracts)
+    baseline_drift = _report_baseline_drift(result, matrix, scenario_contracts, baseline_dir_path)
+    first_divergence = _report_first_divergence(result, baseline_drift, baseline_dir_path)
+    explainability_summary = _extract_explainability_summary(result.details)
+    key_logs = _key_log_lines(result)
     return {
         "name": result.name,
         "status": result.status,
+        "original_status": result.original_status,
         "summary": result.summary,
         "scenario_name": result.scenario_name,
         "started_at": result.started_at,
@@ -34,11 +51,45 @@ def report_dict(result: ConsoleResult) -> Dict[str, object]:
         "details": list(result.details),
         "errors": list(result.errors),
         "artifact_paths": list(result.artifact_paths),
+        "key_logs": key_logs,
         "adapter_method": result.adapter_method,
         "executed_command": list(result.executed_command),
         "return_code": result.return_code,
-        "subresults": [report_dict(item) for item in result.subresults],
+        "known_issue_matches": [
+            {
+                "id": match.issue_id,
+                "title": match.title,
+                "severity": match.severity,
+                "category": match.category,
+                "status": match.status,
+                "expected_status_override": match.expected_status_override,
+                "notes": match.notes,
+            }
+            for match in result.known_issue_matches
+        ],
+        "gui_action_matrix": matrix_entry.to_report_dict() if matrix_entry is not None else None,
+        "scenario_contract_evaluation": _contract_report_dict(contract_evaluation),
+        "baseline_drift": _baseline_report_dict(baseline_drift),
+        "first_divergence": _first_divergence_report_dict(first_divergence),
+        "explainability_summary": explainability_summary,
+        "subresults": [report_dict(item, matrix, scenario_contracts, baseline_dir_path) for item in result.subresults],
     }
+
+
+def write_report_json(
+    result: ConsoleResult,
+    path: Path,
+    action_matrix: GuiActionMatrix | None = None,
+    scenario_contracts: ScenarioContractCatalog | None = None,
+    baseline_dir_path: Path | None = None,
+) -> Path:
+    target = Path(path)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(
+        json.dumps(report_dict(result, action_matrix, scenario_contracts, baseline_dir_path), indent=2),
+        encoding="utf-8",
+    )
+    return target
 
 
 def _timestamp_for_filename(result: ConsoleResult) -> str:
@@ -50,21 +101,39 @@ def _timestamp_for_filename(result: ConsoleResult) -> str:
     return datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
 
 
-def export_result_json(result: ConsoleResult, export_dir: Path | None = None) -> Path:
+def export_result_json(
+    result: ConsoleResult,
+    export_dir: Path | None = None,
+    baseline_dir_path: Path | None = None,
+) -> Path:
     target_dir = Path(export_dir) if export_dir is not None else default_export_dir()
     target_dir.mkdir(parents=True, exist_ok=True)
     path = target_dir / f"{_timestamp_for_filename(result)}-{slugify(result.name)}.json"
-    path.write_text(json.dumps(report_dict(result), indent=2), encoding="utf-8")
-    return path
+    return write_report_json(result, path, baseline_dir_path=baseline_dir_path)
 
 
-def _format_text_lines(result: ConsoleResult, depth: int = 0) -> List[str]:
+def _format_text_lines(
+    result: ConsoleResult,
+    depth: int = 0,
+    action_matrix: GuiActionMatrix | None = None,
+    scenario_contracts: ScenarioContractCatalog | None = None,
+    baseline_dir_path: Path | None = None,
+) -> List[str]:
     prefix = "  " * depth
+    matrix = action_matrix if action_matrix is not None else _safe_load_action_matrix()
+    matrix_entry = _report_matrix_entry(matrix, result.name)
+    contract_evaluation = _report_contract_evaluation(result, matrix, scenario_contracts)
+    baseline_drift = _report_baseline_drift(result, matrix, scenario_contracts, baseline_dir_path)
+    first_divergence = _report_first_divergence(result, baseline_drift, baseline_dir_path)
+    explainability_summary = _extract_explainability_summary(result.details)
+    key_logs = _key_log_lines(result)
     lines = [
         f"{prefix}Name: {result.name}",
         f"{prefix}Status: {result.status.upper()}",
         f"{prefix}Summary: {result.summary}",
     ]
+    if result.original_status and result.original_status != result.status:
+        lines.append(f"{prefix}Original Status: {result.original_status.upper()}")
     if result.scenario_name:
         lines.append(f"{prefix}Scenario: {result.scenario_name}")
     if result.started_at:
@@ -73,6 +142,40 @@ def _format_text_lines(result: ConsoleResult, depth: int = 0) -> List[str]:
         lines.append(f"{prefix}Finished: {result.finished_at}")
     if result.duration_ms:
         lines.append(f"{prefix}Duration (ms): {result.duration_ms}")
+    if matrix_entry is not None:
+        lines.append(f"{prefix}GUI Action Id: {matrix_entry.action_id}")
+        lines.append(f"{prefix}Automation Level: {matrix_entry.automation_level}")
+        lines.append(f"{prefix}Expected Status: {matrix_entry.expected_status.upper()}")
+    if contract_evaluation is not None and contract_evaluation.matched:
+        lines.append(f"{prefix}Scenario Contract: {contract_evaluation.contract_scenario_name}")
+        lines.append(f"{prefix}Contract Status: {contract_evaluation.status.upper()}")
+        if contract_evaluation.payload_path:
+            lines.append(f"{prefix}Contract Payload: {contract_evaluation.payload_path}")
+        if contract_evaluation.known_issues:
+            lines.append(f"{prefix}Contract Known Issues: {', '.join(contract_evaluation.known_issues)}")
+        if contract_evaluation.notes:
+            lines.append(f"{prefix}Contract Notes: {contract_evaluation.notes}")
+        if contract_evaluation.issues:
+            lines.append(f"{prefix}Contract Issues:")
+            lines.extend(f"{prefix}- {issue}" for issue in contract_evaluation.issues)
+    if baseline_drift is not None:
+        drift_label = baseline_drift.status.upper() if baseline_drift.matched else "NOT FOUND"
+        lines.append(f"{prefix}Baseline Drift: {drift_label}")
+        if baseline_drift.baseline_path:
+            lines.append(f"{prefix}Baseline Path: {baseline_drift.baseline_path}")
+        if baseline_drift.saved_at:
+            lines.append(f"{prefix}Baseline Saved At: {baseline_drift.saved_at}")
+        if baseline_drift.findings:
+            lines.append(f"{prefix}Baseline Findings:")
+            lines.extend(f"{prefix}- {item.status.upper()}: {item.message}" for item in baseline_drift.findings)
+    if first_divergence is not None and first_divergence.comparable and not first_divergence.identical:
+        lines.append(f"{prefix}First Divergence: {first_divergence.message}")
+        if first_divergence.artifact_paths:
+            lines.append(f"{prefix}First Divergence Inputs: {' | '.join(first_divergence.artifact_paths)}")
+    if explainability_summary is not None:
+        lines.append(f"{prefix}Explainability:")
+        for label, value in _format_explainability_lines(explainability_summary):
+            lines.append(f"{prefix}- {label}: {value}")
     if result.artifact_paths:
         lines.append(f"{prefix}Artifacts:")
         lines.extend(f"{prefix}- {path}" for path in result.artifact_paths)
@@ -82,6 +185,18 @@ def _format_text_lines(result: ConsoleResult, depth: int = 0) -> List[str]:
         lines.append(f"{prefix}Executed Command: {' '.join(result.executed_command)}")
     if result.return_code is not None:
         lines.append(f"{prefix}Return Code: {result.return_code}")
+    if result.known_issue_matches:
+        lines.append(f"{prefix}Known Issues:")
+        for match in result.known_issue_matches:
+            line = f"{prefix}- {match.issue_id}: {match.title} [{match.status}]"
+            if match.expected_status_override:
+                line = f"{line} -> {match.expected_status_override.upper()}"
+            lines.append(line)
+            if match.notes:
+                lines.append(f"{prefix}- Notes: {match.notes}")
+    if key_logs:
+        lines.append(f"{prefix}Key Logs:")
+        lines.extend(f"{prefix}- {line}" for line in key_logs)
     if result.errors:
         lines.append(f"{prefix}Errors:")
         lines.extend(f"{prefix}- {error}" for error in result.errors)
@@ -91,13 +206,235 @@ def _format_text_lines(result: ConsoleResult, depth: int = 0) -> List[str]:
     if result.subresults:
         lines.append(f"{prefix}Subresults:")
         for item in result.subresults:
-            lines.extend(_format_text_lines(item, depth + 1))
+            lines.extend(_format_text_lines(item, depth + 1, matrix, scenario_contracts, baseline_dir_path))
     return lines
 
 
-def export_result_text(result: ConsoleResult, export_dir: Path | None = None) -> Path:
+def _safe_load_action_matrix() -> GuiActionMatrix | None:
+    try:
+        return load_gui_action_matrix()
+    except Exception:
+        return None
+
+
+def _safe_load_scenario_contracts() -> ScenarioContractCatalog | None:
+    try:
+        return load_scenario_contracts()
+    except Exception:
+        return None
+
+
+def _report_matrix_entry(action_matrix: GuiActionMatrix | None, label: str) -> GuiActionMatrixEntry | None:
+    if action_matrix is None:
+        return None
+    return action_matrix.get_by_label(label)
+
+
+def _report_contract_evaluation(
+    result: ConsoleResult,
+    action_matrix: GuiActionMatrix | None,
+    scenario_contracts: ScenarioContractCatalog | None,
+) -> ScenarioContractEvaluation | None:
+    contracts = scenario_contracts if scenario_contracts is not None else _safe_load_scenario_contracts()
+    return evaluate_result_contract(
+        result,
+        action_matrix=action_matrix,
+        contract_catalog=contracts,
+    )
+
+
+def _contract_report_dict(evaluation: ScenarioContractEvaluation | None) -> Dict[str, object] | None:
+    if evaluation is None:
+        return None
+    return {
+        "matched": evaluation.matched,
+        "scenario_name": evaluation.scenario_name,
+        "contract_scenario_name": evaluation.contract_scenario_name,
+        "status": evaluation.status,
+        "issues": list(evaluation.issues),
+        "known_issues": list(evaluation.known_issues),
+        "notes": evaluation.notes,
+        "payload_path": evaluation.payload_path,
+    }
+
+
+def _report_baseline_drift(
+    result: ConsoleResult,
+    action_matrix: GuiActionMatrix | None,
+    scenario_contracts: ScenarioContractCatalog | None,
+    baseline_dir_path: Path | None,
+) -> BaselineComparison | None:
+    try:
+        return compare_result_to_baseline(
+            result,
+            action_matrix=action_matrix,
+            scenario_contracts=scenario_contracts,
+            baseline_dir_path=baseline_dir_path,
+        )
+    except Exception:
+        return None
+
+
+def _baseline_report_dict(comparison: BaselineComparison | None) -> Dict[str, object] | None:
+    if comparison is None:
+        return None
+    return {
+        "matched": comparison.matched,
+        "baseline_key": comparison.baseline_key,
+        "status": comparison.status,
+        "baseline_path": comparison.baseline_path,
+        "saved_at": comparison.saved_at,
+        "findings": [
+            {
+                "metric": item.metric,
+                "status": item.status,
+                "message": item.message,
+                "baseline_value": item.baseline_value,
+                "current_value": item.current_value,
+            }
+            for item in comparison.findings
+        ],
+        "baseline_metrics": dict(comparison.baseline_metrics),
+        "current_metrics": dict(comparison.current_metrics),
+    }
+
+
+def _report_first_divergence(
+    result: ConsoleResult,
+    baseline_drift: BaselineComparison | None,
+    baseline_dir_path: Path | None,
+) -> FirstDivergence | None:
+    try:
+        if len(result.artifact_paths) >= 2:
+            divergence = find_first_divergence(result.artifact_paths[0], result.artifact_paths[1])
+            if divergence.comparable and not divergence.identical:
+                return divergence
+        if baseline_drift is not None and baseline_drift.matched and baseline_drift.status != "pass":
+            divergence = compare_result_to_baseline_divergence(result, baseline_dir_path=baseline_dir_path)
+            if divergence.comparable and not divergence.identical:
+                return divergence
+    except Exception:
+        return None
+    return None
+
+
+def _first_divergence_report_dict(divergence: FirstDivergence | None) -> Dict[str, object] | None:
+    if divergence is None:
+        return None
+    return divergence.to_report_dict()
+
+
+def _key_log_lines(result: ConsoleResult) -> List[str]:
+    priority_lines = [str(item or "").strip() for item in result.errors if str(item or "").strip()]
+    detail_lines = [str(item or "").strip() for item in result.details if str(item or "").strip()]
+    combined = [*priority_lines, *detail_lines[-20:]]
+    deduped: List[str] = []
+    for line in combined:
+        if line not in deduped:
+            deduped.append(line)
+    return deduped[:20]
+
+
+def _extract_explainability_summary(details: List[str]) -> Dict[str, object] | None:
+    summary: Dict[str, object] = {}
+    for line in list(details or []):
+        text = str(line or "").strip()
+        if not text:
+            continue
+        if text.startswith("CAMPAIGN STATUS: "):
+            summary.update(_parse_key_value_segments(text.partition(": ")[2]))
+        elif text.startswith("CAMPAIGN STATUS DETAIL: "):
+            summary.update(_parse_key_value_segments(text.partition(": ")[2]))
+        elif text.startswith("CAMPAIGN EXPLAIN: "):
+            summary["description"] = text.partition(": ")[2].strip()
+        elif text.startswith("CAMPAIGN NOTES: "):
+            summary["staff_notes"] = text.partition(": ")[2].strip()
+        elif text.startswith("CAMPAIGN ALERTS: "):
+            summary["alerts_text"] = text.partition(": ")[2].strip()
+            summary["alerts"] = _split_semicolon_items(summary["alerts_text"])
+        elif text.startswith("CAMPAIGN ORDERS: "):
+            summary["orders_text"] = text.partition(": ")[2].strip()
+            summary["orders"] = _split_semicolon_items(summary["orders_text"])
+        elif text.startswith("CAMPAIGN OBJECTIVES: "):
+            summary["objectives_text"] = text.partition(": ")[2].strip()
+            summary["objectives_list"] = _split_semicolon_items(summary["objectives_text"])
+    return summary or None
+
+
+def _parse_key_value_segments(payload: str) -> Dict[str, object]:
+    values: Dict[str, object] = {}
+    key_map = {
+        "scenario": "scenario",
+        "objective": "objective",
+        "front": "front_status",
+        "supply": "supply_status",
+        "main": "main_effort",
+        "turn": "turn",
+        "units": "unit_count",
+        "objectives": "objective_count",
+        "alerts": "alert_count",
+    }
+    for segment in str(payload or "").split("|"):
+        key, separator, value = segment.partition("=")
+        if not separator:
+            continue
+        normalized_key = key_map.get(key.strip().lower())
+        if not normalized_key:
+            continue
+        text = value.strip()
+        values[normalized_key] = int(text) if text.isdigit() else text
+    return values
+
+
+def _split_semicolon_items(value: str) -> List[str]:
+    items = [item.strip() for item in str(value or "").split(";") if item.strip()]
+    return items
+
+
+def _format_explainability_lines(summary: Dict[str, object]) -> List[tuple[str, str]]:
+    rows: List[tuple[str, str]] = []
+    ordered_fields = [
+        ("Scenario", "scenario"),
+        ("Objective", "objective"),
+        ("Front Status", "front_status"),
+        ("Supply Status", "supply_status"),
+        ("Main Effort", "main_effort"),
+        ("Turn", "turn"),
+        ("Unit Count", "unit_count"),
+        ("Objective Count", "objective_count"),
+        ("Alert Count", "alert_count"),
+        ("Description", "description"),
+        ("Staff Notes", "staff_notes"),
+        ("Objectives", "objectives_text"),
+        ("Alerts", "alerts_text"),
+        ("Orders", "orders_text"),
+    ]
+    for label, key in ordered_fields:
+        value = summary.get(key)
+        if value in {None, ""}:
+            continue
+        rows.append((label, str(value)))
+    return rows
+
+
+def export_result_text(
+    result: ConsoleResult,
+    export_dir: Path | None = None,
+    baseline_dir_path: Path | None = None,
+) -> Path:
     target_dir = Path(export_dir) if export_dir is not None else default_export_dir()
     target_dir.mkdir(parents=True, exist_ok=True)
     path = target_dir / f"{_timestamp_for_filename(result)}-{slugify(result.name)}.txt"
-    path.write_text("\n".join(_format_text_lines(result)) + "\n", encoding="utf-8")
+    path.write_text(
+        "\n".join(
+            _format_text_lines(
+                result,
+                action_matrix=_safe_load_action_matrix(),
+                scenario_contracts=_safe_load_scenario_contracts(),
+                baseline_dir_path=baseline_dir_path,
+            )
+        )
+        + "\n",
+        encoding="utf-8",
+    )
     return path

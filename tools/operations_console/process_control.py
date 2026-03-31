@@ -5,6 +5,8 @@ import os
 import socket
 import subprocess
 import threading
+import time
+from math import ceil
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Dict, List
@@ -33,12 +35,33 @@ def load_gui_action_matrix(path: Path | None = None) -> Dict[str, Any]:
     return payload
 
 
-def probe_bridge(uri: str) -> bool:
-    parsed = urlparse(str(uri or DEFAULT_BRIDGE_URI))
+@dataclass(frozen=True)
+class BridgeEndpoint:
+    uri: str
+    host: str
+    port: int
+    health_port: int
+
+
+def resolve_bridge_endpoint(uri: str = DEFAULT_BRIDGE_URI) -> BridgeEndpoint:
+    raw_uri = str(uri or DEFAULT_BRIDGE_URI).strip() or DEFAULT_BRIDGE_URI
+    normalized_uri = raw_uri if "://" in raw_uri else f"ws://{raw_uri}"
+    parsed = urlparse(normalized_uri)
     host = parsed.hostname or "127.0.0.1"
     port = int(parsed.port or 8766)
+    health_port = 8771 if port == 8766 else port + 5
+    return BridgeEndpoint(
+        uri=normalized_uri,
+        host=host,
+        port=port,
+        health_port=health_port,
+    )
+
+
+def probe_bridge(uri: str) -> bool:
+    endpoint = resolve_bridge_endpoint(uri)
     try:
-        with socket.create_connection((host, port), timeout=0.35):
+        with socket.create_connection((endpoint.host, endpoint.port), timeout=0.35):
             return True
     except OSError:
         return False
@@ -61,29 +84,36 @@ class ProcessControlResult:
     command: List[str] = field(default_factory=list)
 
 
-def resolve_bridge_launch_spec(repo_root_path: Path | None = None) -> ProcessLaunchSpec:
+def resolve_bridge_launch_spec(
+    repo_root_path: Path | None = None,
+    bridge_uri: str = DEFAULT_BRIDGE_URI,
+) -> ProcessLaunchSpec:
     root = Path(repo_root_path) if repo_root_path is not None else repo_root()
     bridge_path = root / "server" / "mwe_bridge_p8_ws15.py"
     if not bridge_path.exists():
         raise FileNotFoundError(f"Bridge entrypoint not found: {bridge_path}")
+    endpoint = resolve_bridge_endpoint(bridge_uri)
     return ProcessLaunchSpec(
         name="Bridge",
         command=[
             "python",
             str(bridge_path),
             "--host",
-            "127.0.0.1",
+            endpoint.host,
             "--port",
-            "8766",
+            str(endpoint.port),
             "--health-port",
-            "8771",
+            str(endpoint.health_port),
         ],
         cwd=str(root),
         env={"MWE_SCENARIO_DIR": str(root / "scenarios")},
     )
 
 
-def resolve_mwe_launch_spec(repo_root_path: Path | None = None) -> ProcessLaunchSpec:
+def resolve_mwe_launch_spec(
+    repo_root_path: Path | None = None,
+    bridge_uri: str = DEFAULT_BRIDGE_URI,
+) -> ProcessLaunchSpec:
     root = Path(repo_root_path) if repo_root_path is not None else repo_root()
     ui_dir = root / "ui"
     package_json_path = ui_dir / "package.json"
@@ -93,11 +123,21 @@ def resolve_mwe_launch_spec(repo_root_path: Path | None = None) -> ProcessLaunch
     scripts = payload.get("scripts")
     if not isinstance(scripts, dict) or not str(scripts.get("dev") or "").strip():
         raise RuntimeError("UI package.json does not expose a dev script.")
+    endpoint = resolve_bridge_endpoint(bridge_uri)
     return ProcessLaunchSpec(
         name="MWE",
         command=["npm", "run", "dev", "--", "--host", "127.0.0.1", "--port", "4175"],
         cwd=str(ui_dir),
+        env={
+            "VITE_BRIDGE_URL": endpoint.uri,
+            "VITE_BRIDGE_HOST": endpoint.host,
+            "VITE_BRIDGE_PORT": str(endpoint.port),
+        },
     )
+
+
+def resolve_mwe_ui_url() -> str:
+    return "http://127.0.0.1:4175"
 
 
 class ManagedProcessController:
@@ -109,12 +149,18 @@ class ManagedProcessController:
         popen_factory: Callable[..., Any] = subprocess.Popen,
         bridge_probe: Callable[[str], bool] = probe_bridge,
         stream_output: bool = True,
+        sleep_fn: Callable[[float], None] | None = None,
+        bridge_wait_timeout_s: float = 3.0,
+        bridge_wait_interval_s: float = 0.1,
     ) -> None:
         self.repo_root = Path(repo_root_path) if repo_root_path is not None else repo_root()
         self.log_sink = log_sink or (lambda _message: None)
         self.popen_factory = popen_factory
         self.bridge_probe = bridge_probe
         self.stream_output = bool(stream_output)
+        self.sleep_fn = sleep_fn or time.sleep
+        self.bridge_wait_timeout_s = max(0.0, float(bridge_wait_timeout_s))
+        self.bridge_wait_interval_s = max(0.01, float(bridge_wait_interval_s))
         self._managed: Dict[str, Any] = {}
 
     def managed_processes(self) -> Dict[str, Any]:
@@ -128,30 +174,65 @@ class ManagedProcessController:
         if self.bridge_probe(bridge_uri):
             return self._result("pass", "Bridge already running.", ["bridge already running"])
         try:
-            spec = resolve_bridge_launch_spec(self.repo_root)
+            spec = resolve_bridge_launch_spec(self.repo_root, bridge_uri)
         except Exception as exc:
             return self._result("error", "Unable to resolve bridge launch command.", [str(exc)])
-        return self._launch("bridge", spec, "launched bridge process")
+        logs = ["launching bridge process"]
+        result = self._launch("bridge", spec, "launched bridge process", extra_logs=logs)
+        if not result.ok:
+            return result
+        endpoint_uri = resolve_bridge_endpoint(bridge_uri).uri
+        if self._wait_for_bridge(bridge_uri, managed_key="bridge"):
+            self.log_sink(f"bridge reachable at {endpoint_uri}")
+            return result
+        logs = list(result.logs)
+        logs.append(f"bridge did not become reachable at {endpoint_uri}")
+        self.log_sink(logs[-1])
+        return ProcessControlResult(
+            ok=False,
+            status="fail",
+            summary="Bridge launched but did not become reachable.",
+            logs=logs,
+            command=list(result.command),
+        )
 
     def launch_mwe(self, bridge_uri: str = DEFAULT_BRIDGE_URI) -> ProcessControlResult:
         self._prune_finished()
         if self._is_running("mwe"):
             return self._result("pass", "MWE UI already running (managed).", ["mwe already running"])
-        if not self.bridge_probe(bridge_uri) and not self._is_running("bridge"):
-            bridge_result = self.launch_bridge(bridge_uri)
-            if not bridge_result.ok and not self.bridge_probe(bridge_uri):
-                return ProcessControlResult(
-                    ok=False,
-                    status="fail",
-                    summary="Bridge is required before launching MWE.",
-                    logs=list(bridge_result.logs),
-                    command=list(bridge_result.command),
+        endpoint = resolve_bridge_endpoint(bridge_uri)
+        if not self.bridge_probe(endpoint.uri):
+            if not self._is_running("bridge"):
+                bridge_result = self.launch_bridge(endpoint.uri)
+                if not bridge_result.ok and not self._is_running("bridge"):
+                    return self._result(
+                        "fail",
+                        "Bridge is required before launching MWE.",
+                        [
+                            f"bridge not reachable at {endpoint.uri}",
+                            "unable to start bridge automatically",
+                        ],
+                        bridge_result.command,
+                    )
+            if not self._wait_for_bridge(endpoint.uri, managed_key="bridge"):
+                return self._result(
+                    "fail",
+                    "Bridge is required before launching MWE.",
+                    [f"bridge not reachable at {endpoint.uri}"],
                 )
         try:
-            spec = resolve_mwe_launch_spec(self.repo_root)
+            spec = resolve_mwe_launch_spec(self.repo_root, endpoint.uri)
         except Exception as exc:
             return self._result("error", "Unable to resolve MWE launch command.", [str(exc)])
-        return self._launch("mwe", spec, "launched MWE UI process")
+        return self._launch(
+            "mwe",
+            spec,
+            "launched MWE UI process",
+            extra_logs=[
+                f"using bridge {endpoint.uri}",
+                f"ui url: {resolve_mwe_ui_url()}",
+            ],
+        )
 
     def stop_managed_processes(self) -> ProcessControlResult:
         self._prune_finished()
@@ -177,7 +258,14 @@ class ManagedProcessController:
                 self._managed.pop(key, None)
         return self._result("pass", "Stopped managed processes.", logs)
 
-    def _launch(self, key: str, spec: ProcessLaunchSpec, success_log: str) -> ProcessControlResult:
+    def _launch(
+        self,
+        key: str,
+        spec: ProcessLaunchSpec,
+        success_log: str,
+        *,
+        extra_logs: List[str] | None = None,
+    ) -> ProcessControlResult:
         try:
             proc = self.popen_factory(
                 spec.command,
@@ -194,7 +282,11 @@ class ManagedProcessController:
         self._managed[key] = proc
         if self.stream_output:
             self._start_stream_thread(spec.name, proc)
-        return self._result("pass", f"{spec.name} launched.", [success_log], spec.command)
+        logs = list(extra_logs or [])
+        logs.append(success_log)
+        logs.append(f"command: {' '.join(spec.command)}")
+        logs.append(f"cwd: {spec.cwd}")
+        return self._result("pass", f"{spec.name} launched.", logs, spec.command)
 
     def _start_stream_thread(self, label: str, proc: Any) -> None:
         stream = getattr(proc, "stdout", None)
@@ -224,6 +316,20 @@ class ManagedProcessController:
             return False
         poll_fn = getattr(proc, "poll", None)
         return not callable(poll_fn) or poll_fn() is None
+
+    def _wait_for_bridge(self, bridge_uri: str, *, managed_key: str | None = None) -> bool:
+        attempts = max(
+            1,
+            int(ceil(self.bridge_wait_timeout_s / self.bridge_wait_interval_s)) + 1,
+        )
+        for attempt in range(attempts):
+            if self.bridge_probe(bridge_uri):
+                return True
+            if managed_key and not self._is_running(managed_key):
+                return False
+            if attempt < attempts - 1:
+                self.sleep_fn(self.bridge_wait_interval_s)
+        return False
 
     def _result(
         self,

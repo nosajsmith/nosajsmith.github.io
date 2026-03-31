@@ -15,11 +15,27 @@ class ConsoleRunContext:
     category: str
     scenario_name: str = ""
     bridge_uri: str = ""
+    command_id: str = ""
     log: Callable[[str], None] = lambda _message: None
 
     @property
     def scenario_input(self) -> str:
         return self.scenario_name
+
+    @property
+    def selected_command_id(self) -> str:
+        return self.command_id
+
+
+@dataclass(frozen=True)
+class KnownIssueMatch:
+    issue_id: str
+    title: str
+    severity: str
+    category: str
+    status: str
+    expected_status_override: str = ""
+    notes: str = ""
 
 
 @dataclass(frozen=True)
@@ -38,6 +54,8 @@ class ConsoleResult:
     adapter_method: str = ""
     executed_command: List[str] = field(default_factory=list)
     return_code: int | None = None
+    original_status: str = ""
+    known_issue_matches: List[KnownIssueMatch] = field(default_factory=list)
 
 
 @dataclass(frozen=True)

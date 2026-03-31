@@ -1,0 +1,135 @@
+{
+  "created_at": "2026-03-31T02:25:44.222117+00:00",
+  "bundle_dir": "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle",
+  "selected_scenario": "inchon_mvp",
+  "checks": [
+    {
+      "check_id": "latest-orl-demo-readiness-report",
+      "label": "Latest ORL Demo Readiness Report",
+      "blocker_class": "support.pitch_support_bundle",
+      "status": "pass",
+      "summary": "Latest ORL Demo Readiness Report copied into the bundle.",
+      "artifacts": [
+        "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/reports/20260330201520-orl-demo-readiness.json",
+        "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/reports/20260330201520-orl-demo-readiness.txt"
+      ],
+      "logs": []
+    },
+    {
+      "check_id": "latest-core-validation-report",
+      "label": "Latest Core Validation Report",
+      "blocker_class": "support.pitch_support_bundle",
+      "status": "pass",
+      "summary": "Latest Core Validation Report copied into the bundle.",
+      "artifacts": [
+        "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/reports/20260330205104-orl-core-validation-suite.json"
+      ],
+      "logs": []
+    },
+    {
+      "check_id": "known-issues-summary",
+      "label": "Known Issues Summary",
+      "blocker_class": "support.pitch_support_bundle",
+      "status": "pass",
+      "summary": "2 known issue(s) summarized.",
+      "artifacts": [
+        "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/known_issues_summary.json",
+        "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/known_issues_summary.md"
+      ],
+      "logs": [
+        "source: /home/jason/dev/mwe/tools/operations_console/known_issues.yaml"
+      ]
+    },
+    {
+      "check_id": "scenario-fact-sheet",
+      "label": "Scenario Fact Sheet",
+      "blocker_class": "support.pitch_support_bundle",
+      "status": "pass",
+      "summary": "Scenario fact sheet generated for inchon_mvp.",
+      "artifacts": [
+        "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/scenario_fact_sheet.json",
+        "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/scenario_fact_sheet.md"
+      ],
+      "logs": [
+        "scenario_id: inchon_mvp"
+      ]
+    },
+    {
+      "check_id": "expected-outcomes-summary",
+      "label": "Expected Outcomes Summary",
+      "blocker_class": "support.pitch_support_bundle",
+      "status": "pass",
+      "summary": "8 expected outcome(s) captured.",
+      "artifacts": [
+        "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/expected_outcomes_summary.json",
+        "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/expected_outcomes_summary.md"
+      ],
+      "logs": [
+        "scenario: inchon_mvp"
+      ]
+    },
+    {
+      "check_id": "artifact-directory-summary",
+      "label": "Artifact Directory Summary",
+      "blocker_class": "support.pitch_support_bundle",
+      "status": "pass",
+      "summary": "6 artifact directory summaries written.",
+      "artifacts": [
+        "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/artifact_directory_summary.json",
+        "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/artifact_directory_summary.md"
+      ],
+      "logs": []
+    },
+    {
+      "check_id": "pitch-support-runbook",
+      "label": "Pitch Support Runbook",
+      "blocker_class": "support.pitch_support_bundle",
+      "status": "pass",
+      "summary": "Pitch support runbook copied into the bundle.",
+      "artifacts": [
+        "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/docs/README.md"
+      ],
+      "logs": [
+        "docs root: /home/jason/dev/mwe/docs/pitch_support"
+      ]
+    },
+    {
+      "check_id": "architecture-support-note",
+      "label": "Architecture Support Note",
+      "blocker_class": "support.pitch_support_bundle",
+      "status": "pass",
+      "summary": "Architecture/support note copied into the bundle.",
+      "artifacts": [
+        "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/docs/architecture_support_note.md"
+      ],
+      "logs": [
+        "docs root: /home/jason/dev/mwe/docs/pitch_support"
+      ]
+    }
+  ],
+  "source_reports": {
+    "demo_readiness": {
+      "json_path": "/home/jason/dev/mwe/artifacts/operations_console/20260330201520-orl-demo-readiness.json",
+      "text_path": "/home/jason/dev/mwe/artifacts/operations_console/20260330201520-orl-demo-readiness.txt"
+    },
+    "core_validation": {
+      "json_path": "/home/jason/dev/mwe/artifacts/operations_console/20260330205104-orl-core-validation-suite.json",
+      "text_path": ""
+    }
+  },
+  "artifacts": [
+    "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/reports/20260330201520-orl-demo-readiness.json",
+    "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/reports/20260330201520-orl-demo-readiness.txt",
+    "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/reports/20260330205104-orl-core-validation-suite.json",
+    "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/known_issues_summary.json",
+    "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/known_issues_summary.md",
+    "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/scenario_fact_sheet.json",
+    "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/scenario_fact_sheet.md",
+    "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/expected_outcomes_summary.json",
+    "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/expected_outcomes_summary.md",
+    "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/artifact_directory_summary.json",
+    "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/artifact_directory_summary.md",
+    "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/docs/README.md",
+    "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/docs/architecture_support_note.md"
+  ]
+}

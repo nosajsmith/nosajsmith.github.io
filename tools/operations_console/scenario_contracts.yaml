@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "contracts": [
+    {
+      "scenario_name": "inchon_mvp",
+      "expected_unit_count_range": [5, 8],
+      "expected_objectives": [
+        "Inchon Harbor",
+        "Kimpo Airfield",
+        "Yongdungpo Crossings",
+        "Seoul"
+      ],
+      "expected_status_fields": [
+        "grease_board.front_status",
+        "grease_board.supply_status"
+      ],
+      "expected_explain_fields": [
+        "description",
+        "grease_board.staff_notes"
+      ],
+      "known_issues": [
+        "KI-002"
+      ],
+      "mismatch_status": "fail",
+      "notes": "Publisher vertical-slice contract for the Inchon demo scenario."
+    }
+  ]
+}

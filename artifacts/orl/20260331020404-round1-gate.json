@@ -1,0 +1,221 @@
+{
+  "status": "pass",
+  "checks": [
+    {
+      "check_id": "rules.objective_contest",
+      "label": "Objective Contest Rules",
+      "blocker_class": "rules.objective_contest",
+      "status": "pass",
+      "summary": "Objective Contest Rules passed.",
+      "artifacts": [],
+      "logs": [
+        "stdout: .                                                                        [100%]",
+        "stdout: 1 passed in 0.04s"
+      ],
+      "executed_command": [
+        "pytest",
+        "-q",
+        "/home/jason/dev/mwe/tests/engine/test_round1_support.py::test_objective_contest_rules_hold_contested_locations_neutral"
+      ]
+    },
+    {
+      "check_id": "rules.movement_semantics",
+      "label": "Movement Semantics V1",
+      "blocker_class": "rules.movement_semantics",
+      "status": "pass",
+      "summary": "Movement Semantics V1 passed.",
+      "artifacts": [],
+      "logs": [
+        "stdout: .                                                                        [100%]",
+        "stdout: 1 passed in 0.04s"
+      ],
+      "executed_command": [
+        "pytest",
+        "-q",
+        "/home/jason/dev/mwe/tests/engine/test_round1_support.py::test_engine_api_move_action_uses_current_movement_semantics_v1"
+      ]
+    },
+    {
+      "check_id": "rules.objective_scoring",
+      "label": "Objective Control And Scoring",
+      "blocker_class": "rules.objective_control_scoring",
+      "status": "pass",
+      "summary": "Objective Control And Scoring passed.",
+      "artifacts": [],
+      "logs": [
+        "stdout: .                                                                        [100%]",
+        "stdout: 1 passed in 0.04s"
+      ],
+      "executed_command": [
+        "pytest",
+        "-q",
+        "/home/jason/dev/mwe/tests/engine/test_round1_support.py::test_objective_control_and_scoring_award_once_per_capture"
+      ]
+    },
+    {
+      "check_id": "ai.objective_reasoning",
+      "label": "AI Objective Reasoning Sanity",
+      "blocker_class": "ai.objective_reasoning",
+      "status": "pass",
+      "summary": "AI Objective Reasoning Sanity passed.",
+      "artifacts": [],
+      "logs": [
+        "stdout: .........                                                                [100%]",
+        "stdout: 9 passed in 0.08s"
+      ],
+      "executed_command": [
+        "pytest",
+        "-q",
+        "/home/jason/dev/mwe/tests/test_engine_bai_controller.py",
+        "/home/jason/dev/mwe/tests/test_engine_bai_operational.py",
+        "/home/jason/dev/mwe/tests/test_bai_first_playable.py"
+      ]
+    },
+    {
+      "check_id": "persistence.snapshot_replay_compare",
+      "label": "Save Load Replay Compare Stability",
+      "blocker_class": "persistence.snapshot_replay_compare",
+      "status": "pass",
+      "summary": "Snapshot and replay stability passed.",
+      "artifacts": [
+        "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331020403-inchon-mvp.json",
+        "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331020403-inchon-mvp-a.json",
+        "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331020403-inchon-mvp-b.json"
+      ],
+      "logs": [
+        "Resolved scenario: inchon_mvp.json",
+        "Loaded scenario id: inchon_mvp",
+        "Started scenario: Inchon Demo Vertical Slice",
+        "Snapshot saved: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331020403-inchon-mvp.json",
+        "Snapshot loaded: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331020403-inchon-mvp.json",
+        "Scenario restored: inchon_mvp",
+        "Units restored: 6",
+        "Snapshot smoke passed.",
+        "Resolved scenario: inchon_mvp.json",
+        "Loaded scenario id: inchon_mvp",
+        "Started scenario: Inchon Demo Vertical Slice",
+        "Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331020403-inchon-mvp-a.json",
+        "Resolved scenario: inchon_mvp.json",
+        "Loaded scenario id: inchon_mvp",
+        "Started scenario: Inchon Demo Vertical Slice",
+        "Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331020403-inchon-mvp-b.json",
+        "Replay A: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331020403-inchon-mvp-a.json",
+        "Replay B: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331020403-inchon-mvp-b.json",
+        "Replay compare identical=True",
+        "Replay validation passed."
+      ]
+    },
+    {
+      "check_id": "tooling.scenario_validator",
+      "label": "Scenario Validator",
+      "blocker_class": "tooling.scenario_validator",
+      "status": "pass",
+      "summary": "Scenario Validator passed.",
+      "artifacts": [
+        "/home/jason/dev/mwe/artifacts/orl/20260331020403-round1-scenario-validator.json"
+      ],
+      "logs": [
+        "inchon_mvp: PASS units=6 objectives=5",
+        "mini_gc_1942: PASS units=2 objectives=3",
+        "gc_1942_historical: PASS units=4 objectives=5",
+        "variants: PASS base/aggressive/cautious variants available",
+        "artifact: /home/jason/dev/mwe/artifacts/orl/20260331020403-round1-scenario-validator.json"
+      ],
+      "executed_command": []
+    },
+    {
+      "check_id": "tooling.scenario_matrix",
+      "label": "Scenario Matrix",
+      "blocker_class": "tooling.scenario_matrix",
+      "status": "pass",
+      "summary": "Scenario Matrix passed.",
+      "artifacts": [
+        "/home/jason/dev/mwe/artifacts/orl/20260331020403-round1-scenario-matrix.json"
+      ],
+      "logs": [
+        "inchon_mvp/base: PASS orders=3",
+        "inchon_mvp/aggressive: PASS orders=3",
+        "inchon_mvp/cautious: PASS orders=3",
+        "mini_gc_1942/base: PASS orders=1",
+        "mini_gc_1942/aggressive: PASS orders=1",
+        "mini_gc_1942/cautious: PASS orders=1",
+        "artifact: /home/jason/dev/mwe/artifacts/orl/20260331020403-round1-scenario-matrix.json"
+      ],
+      "executed_command": []
+    },
+    {
+      "check_id": "tooling.explainability_smoketest",
+      "label": "Explainability Smoketest",
+      "blocker_class": "tooling.explainability_smoketest",
+      "status": "pass",
+      "summary": "Explainability Smoketest passed.",
+      "artifacts": [
+        "/home/jason/dev/mwe/artifacts/orl/20260331020403-round1-explainability-smoke.json"
+      ],
+      "logs": [
+        "inchon_mvp: PASS objective=SEOUL",
+        "artifact: /home/jason/dev/mwe/artifacts/orl/20260331020403-round1-explainability-smoke.json"
+      ],
+      "executed_command": []
+    },
+    {
+      "check_id": "support.documentation",
+      "label": "Documentation And Support Guidance",
+      "blocker_class": "support.documentation",
+      "status": "pass",
+      "summary": "Round 1 documentation/support guidance is present.",
+      "artifacts": [
+        "/home/jason/dev/mwe/artifacts/orl/20260331020403-round1-documentation-support.json"
+      ],
+      "logs": [
+        "readme: /home/jason/dev/mwe/tools/orl/README.md",
+        "run tests: pytest -q tests/engine/test_testing_api.py tests/engine/test_round1_support.py tests/orl tests/operations_console",
+        "run tests: pytest -q tests/test_engine_api_bai_hook.py tests/test_bai_first_playable.py tests/test_engine_bai_controller.py tests/test_engine_bai_operational.py tests/test_bridge_live_path.py tests/test_inchon_scenario_stub.py",
+        "run tests: python -m tools.orl.round1_gate gate",
+        "inspect artifacts: artifacts/orl/*",
+        "inspect artifacts: artifacts/operations_console/*",
+        "inspect artifacts: artifacts/operations_console/incidents/*",
+        "bug reports: Attach the failing artifact JSON and any incident bundle from artifacts/operations_console/incidents to the Round 1 blocker report.",
+        "artifact: /home/jason/dev/mwe/artifacts/orl/20260331020403-round1-documentation-support.json"
+      ]
+    },
+    {
+      "check_id": "tooling.all_green",
+      "label": "All Green Runner",
+      "blocker_class": "tooling.all_green",
+      "status": "pass",
+      "summary": "All Green Runner passed.",
+      "artifacts": [],
+      "logs": [
+        "stdout: ........................................................................ [ 62%]",
+        "stdout: ............................................                             [100%]",
+        "stdout: 116 passed in 0.87s"
+      ],
+      "executed_command": [
+        "pytest",
+        "-q",
+        "/home/jason/dev/mwe/tests/engine/test_testing_api.py",
+        "/home/jason/dev/mwe/tests/engine/test_round1_support.py",
+        "/home/jason/dev/mwe/tests/orl",
+        "/home/jason/dev/mwe/tests/operations_console",
+        "/home/jason/dev/mwe/tests/test_engine_api_bai_hook.py",
+        "/home/jason/dev/mwe/tests/test_bai_first_playable.py",
+        "/home/jason/dev/mwe/tests/test_engine_bai_controller.py",
+        "/home/jason/dev/mwe/tests/test_engine_bai_operational.py",
+        "/home/jason/dev/mwe/tests/test_bridge_live_path.py",
+        "/home/jason/dev/mwe/tests/test_inchon_scenario_stub.py"
+      ]
+    }
+  ],
+  "bug_reports_to": "Attach the failing artifact JSON and any incident bundle from artifacts/operations_console/incidents to the Round 1 blocker report.",
+  "run_tests": [
+    "pytest -q tests/engine/test_testing_api.py tests/engine/test_round1_support.py tests/orl tests/operations_console",
+    "pytest -q tests/test_engine_api_bai_hook.py tests/test_bai_first_playable.py tests/test_engine_bai_controller.py tests/test_engine_bai_operational.py tests/test_bridge_live_path.py tests/test_inchon_scenario_stub.py",
+    "python -m tools.orl.round1_gate gate"
+  ],
+  "inspect_artifacts": [
+    "artifacts/orl/*",
+    "artifacts/operations_console/*",
+    "artifacts/operations_console/incidents/*"
+  ]
+}

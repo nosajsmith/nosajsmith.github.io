@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "id": "ANOM-001",
+      "title": "Empty scenario roster",
+      "applies_to_statuses": ["warn", "fail"],
+      "affects": ["Refresh Scenarios", "ORL / Connectivity", "ORL / Scenario Integrity", "ORL / Smoke Suite"],
+      "scenarios": [],
+      "check": "empty_scenario_list",
+      "symptom_match": [],
+      "notes": "The bridge responded, but no live scenarios were available."
+    },
+    {
+      "id": "ANOM-002",
+      "title": "Zero units loaded",
+      "applies_to_statuses": ["fail", "error"],
+      "affects": ["ORL / Scenario Integrity", "ORL / Smoke Suite"],
+      "scenarios": [],
+      "check": "zero_units_loaded",
+      "symptom_match": [],
+      "notes": "Loaded scenario content is structurally present but operationally empty."
+    },
+    {
+      "id": "ANOM-003",
+      "title": "Missing expected artifact",
+      "applies_to_statuses": ["warn", "fail", "error"],
+      "affects": [
+        "ORL / UI Build Check",
+        "ORL / Replay Validation",
+        "ORL / Snapshot Smoke",
+        "ORL / All-Green Check",
+        "ORL / Deterministic Demo Runner",
+        "ORL / Demo Artifact Validation",
+        "ORL / Latest Artifacts",
+        "ORL / Pitch Support Bundle",
+        "ORL / Demo Readiness",
+        "ORL / Core Validation Suite"
+      ],
+      "scenarios": [],
+      "check": "missing_expected_artifact",
+      "symptom_match": [],
+      "notes": "The action completed without producing the artifact type declared in the GUI action matrix."
+    }
+  ]
+}

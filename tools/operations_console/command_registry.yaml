@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "directories": [
+    {
+      "id": "repo_root",
+      "label": "Repo Root",
+      "path": "."
+    },
+    {
+      "id": "ui_dir",
+      "label": "UI Directory",
+      "path": "ui"
+    },
+    {
+      "id": "bridge_dir",
+      "label": "Bridge Directory",
+      "path": "server"
+    },
+    {
+      "id": "artifacts_dir",
+      "label": "Artifacts Directory",
+      "path": "artifacts/operations_console",
+      "create_if_missing": true
+    },
+    {
+      "id": "logs_dir",
+      "label": "Logs Directory",
+      "path": ""
+    }
+  ],
+  "commands": [
+    {
+      "id": "repo_terminal",
+      "label": "Open Repo Terminal",
+      "provider": "directory",
+      "directory": "repo_root",
+      "keep_open": true
+    },
+    {
+      "id": "ui_terminal",
+      "label": "Open UI Terminal",
+      "provider": "directory",
+      "directory": "ui_dir",
+      "keep_open": true
+    },
+    {
+      "id": "bridge_terminal",
+      "label": "Open Bridge Terminal",
+      "provider": "directory",
+      "directory": "bridge_dir",
+      "keep_open": true
+    },
+    {
+      "id": "artifacts_terminal",
+      "label": "Open Artifacts Terminal",
+      "provider": "directory",
+      "directory": "artifacts_dir",
+      "keep_open": true
+    },
+    {
+      "id": "bridge_launch",
+      "label": "Bridge Launch",
+      "provider": "bridge_launch",
+      "directory": "repo_root",
+      "keep_open": true
+    },
+    {
+      "id": "ui_launch",
+      "label": "UI Launch",
+      "provider": "ui_launch",
+      "directory": "ui_dir",
+      "keep_open": true
+    },
+    {
+      "id": "artifacts_list",
+      "label": "List Artifacts",
+      "provider": "argv",
+      "directory": "artifacts_dir",
+      "argv": ["ls", "-lah"],
+      "keep_open": true
+    },
+    {
+      "id": "tail_latest_logs",
+      "label": "Tail Latest Logs",
+      "provider": "tail_latest_logs",
+      "directory": "logs_dir",
+      "keep_open": true
+    }
+  ]
+}

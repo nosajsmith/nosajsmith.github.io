@@ -1,0 +1,23 @@
+{
+  "status": "pass",
+  "checks": [
+    {
+      "check_id": "explainability.inchon_mvp",
+      "label": "Explainability Smoke / inchon_mvp",
+      "blocker_class": "tooling.explainability_smoketest",
+      "status": "pass",
+      "summary": "Explainability smoke passed.",
+      "artifacts": [],
+      "logs": [
+        "CAMPAIGN STATUS: scenario=Inchon Demo Vertical Slice | objective=SEOUL | front=INCHON BEACHHEAD SECURE | supply=PORT OPEN / AXIS ADVANCE | main=INCHON / SEOUL AXIS",
+        "CAMPAIGN STATUS DETAIL: turn=TURN 1 \u2014 15 SEP 1950 | units=6 | objectives=5 | alerts=2",
+        "CAMPAIGN EXPLAIN: Curated Inchon-to-Seoul publisher vertical slice for Theater of Operations: Korea.",
+        "CAMPAIGN NOTES: Exploit the landing before the Seoul defensive ring stabilizes.",
+        "CAMPAIGN OBJECTIVES: Inchon Harbor; Kimpo Airfield; Yongdungpo Crossings (+2 more)",
+        "CAMPAIGN ALERTS: Kimpo corridor remains contested.; NKPA reserves are forming south of Seoul.",
+        "CAMPAIGN ORDERS: 1st Marines push east from Inchon toward Kimpo.; 7th Infantry secures the beachhead and port throughput. (+1 more)"
+      ]
+    }
+  ],
+  "failures": []
+}

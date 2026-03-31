@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "known_issues": [
+    {
+      "id": "KI-001",
+      "title": "UI build occasionally fails when local Node dependencies are stale",
+      "severity": "medium",
+      "category": "ORL",
+      "affects": ["ORL / UI Build Check"],
+      "scenarios": [],
+      "status": "known",
+      "expected_status_override": "",
+      "symptom_match": ["Build command exited", "build failed"],
+      "notes": "Refresh dependencies in ui/ and rerun when this reproduces on a clean branch."
+    },
+    {
+      "id": "KI-002",
+      "title": "Snapshot smoke may fail on inchon_mvp while persistence contract is in flux",
+      "severity": "high",
+      "category": "ORL",
+      "affects": ["ORL / Snapshot Smoke", "ORL / Core Validation Suite"],
+      "scenarios": ["inchon_mvp", "inchon_mvp.json"],
+      "status": "waived",
+      "expected_status_override": "warn",
+      "symptom_match": ["snapshot", "load"],
+      "notes": "Temporary waiver for operator visibility while the snapshot format stabilizes."
+    }
+  ]
+}

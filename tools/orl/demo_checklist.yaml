@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "label": "Current Demo Slice Checklist",
+  "default_scenario": "inchon_mvp",
+  "checklist": [
+    {
+      "id": "smoke_suite",
+      "label": "Smoke Suite",
+      "required": true,
+      "notes": "Bridge connectivity and live scenario integrity should pass for the selected demo scenario."
+    },
+    {
+      "id": "ui_build_check",
+      "label": "UI Build Check",
+      "required": true,
+      "notes": "The current UI build must complete and produce dist/index.html."
+    },
+    {
+      "id": "deterministic_demo_runner",
+      "label": "Deterministic Demo Runner",
+      "required": true,
+      "notes": "Replay compare should stay identical and snapshot smoke should succeed for the selected demo scenario."
+    },
+    {
+      "id": "artifact_output_validation",
+      "label": "Artifact Output Validation",
+      "required": true,
+      "notes": "Latest demo report, replay, snapshot, and compare output should all exist and be easy to inspect."
+    },
+    {
+      "id": "report_review",
+      "label": "Demo Report Review",
+      "required": true,
+      "notes": "Inspect the generated demo readiness report and attach it to blocker reports when anything fails."
+    }
+  ],
+  "inspect_artifacts": [
+    "artifacts/operations_console/*-orl-demo-readiness.json",
+    "artifacts/operations_console/engine_adapter/replays/*.json",
+    "artifacts/operations_console/engine_adapter/snapshots/*.json",
+    "artifacts/operations_console/engine_adapter/compares/*.json"
+  ],
+  "bug_reports_to": "Attach the latest ORL / Demo Readiness report and any incident bundle under artifacts/operations_console/incidents to the demo blocker report.",
+  "expected_outcomes": {
+    "inchon_mvp": [
+      "The bridge roster resolves the scenario without typing the exact filename every time.",
+      "The current UI build succeeds and the console can launch the UI against the selected bridge.",
+      "Replay compare stays deterministic and snapshot smoke remains stable for the current demo slice."
+    ]
+  }
+}

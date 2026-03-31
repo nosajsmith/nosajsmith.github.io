@@ -1,0 +1,94 @@
+{
+  "primary_scenarios": [
+    {
+      "id": "inchon_mvp",
+      "label": "Inchon Demo Vertical Slice",
+      "minimum_units": 5,
+      "minimum_objectives": 4,
+      "require_grease_board": true,
+      "ai_side": "AXIS",
+      "matrix_enabled": true,
+      "expected_outcomes": [
+        "Loads headlessly with authored objectives and grease board support.",
+        "Supports replay, snapshot, and explainability smoke paths.",
+        "Scenario focus remains the Seoul axis."
+      ],
+      "notes": "Primary Round 1 explainability and persistence scenario."
+    },
+    {
+      "id": "mini_gc_1942",
+      "label": "Mini Guadalcanal 1942",
+      "minimum_units": 2,
+      "minimum_objectives": 3,
+      "require_grease_board": false,
+      "ai_side": "AXIS",
+      "matrix_enabled": true,
+      "expected_outcomes": [
+        "Loads headlessly and produces at least one legal AI order per turn.",
+        "Supports base/aggressive/cautious matrix runs.",
+        "Remains the compact BAI first-playable sanity scenario."
+      ],
+      "notes": "Primary Round 1 AI sanity scenario."
+    },
+    {
+      "id": "gc_1942_historical",
+      "label": "Guadalcanal 1942 Historical Skeleton",
+      "minimum_units": 4,
+      "minimum_objectives": 5,
+      "require_grease_board": false,
+      "ai_side": "AXIS",
+      "matrix_enabled": false,
+      "expected_outcomes": [
+        "Loads from the server scenario directory fallback.",
+        "Provides a broader historical skeleton readiness sample."
+      ],
+      "notes": "Secondary engine-load readiness scenario."
+    }
+  ],
+  "variants": [
+    {
+      "id": "base",
+      "label": "Base",
+      "personality": "historical",
+      "ai_side": "AXIS",
+      "notes": "Baseline historical AI personality."
+    },
+    {
+      "id": "aggressive",
+      "label": "Aggressive",
+      "personality": "aggressive",
+      "ai_side": "AXIS",
+      "notes": "Commit-early personality bias."
+    },
+    {
+      "id": "cautious",
+      "label": "Cautious",
+      "personality": "cautious",
+      "ai_side": "AXIS",
+      "notes": "Force-preservation personality bias."
+    }
+  ],
+  "run_tests": [
+    "pytest -q tests/engine/test_testing_api.py tests/engine/test_round1_support.py tests/orl tests/operations_console",
+    "pytest -q tests/test_engine_api_bai_hook.py tests/test_bai_first_playable.py tests/test_engine_bai_controller.py tests/test_engine_bai_operational.py tests/test_bridge_live_path.py tests/test_inchon_scenario_stub.py",
+    "python -m tools.orl.round1_gate gate"
+  ],
+  "inspect_artifacts": [
+    "artifacts/orl/*",
+    "artifacts/operations_console/*",
+    "artifacts/operations_console/incidents/*"
+  ],
+  "bug_reports_to": "Attach the failing artifact JSON and any incident bundle from artifacts/operations_console/incidents to the Round 1 blocker report.",
+  "expected_outcomes": {
+    "inchon_mvp": [
+      "Explainability logs include campaign status and campaign notes.",
+      "Replay/snapshot support is stable enough for smoke validation."
+    ],
+    "mini_gc_1942": [
+      "BAI produces legal orders and a chosen operation in base/aggressive/cautious variants."
+    ],
+    "gc_1942_historical": [
+      "Scenario loads through the engine fallback path without missing-support exceptions."
+    ]
+  }
+}

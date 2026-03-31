@@ -5,7 +5,8 @@ from dataclasses import replace
 from time import perf_counter
 from typing import Callable, Iterable, List
 
-from .models import ALLOWED_STATUSES, ConsoleAction, ConsoleRegistryEntry, ConsoleResult, ConsoleRunContext, ConsoleStatus, ConsoleSuite
+from .known_issues import KnownIssuesCatalog, apply_known_issues
+from .models import ALLOWED_STATUSES, ConsoleAction, ConsoleRegistryEntry, ConsoleResult, ConsoleRunContext, ConsoleStatus, ConsoleSuite, KnownIssueMatch
 
 
 def utc_timestamp() -> str:
@@ -44,6 +45,8 @@ def make_result(
     adapter_method: str = "",
     executed_command: Iterable[object] | None = None,
     return_code: int | None = None,
+    original_status: str = "",
+    known_issue_matches: Iterable[KnownIssueMatch] | None = None,
 ) -> ConsoleResult:
     return ConsoleResult(
         name=str(name).strip() or "Unnamed Action",
@@ -60,6 +63,8 @@ def make_result(
         adapter_method=str(adapter_method or "").strip(),
         executed_command=normalize_lines(executed_command),
         return_code=int(return_code) if return_code is not None else None,
+        original_status=str(original_status or "").strip(),
+        known_issue_matches=list(known_issue_matches or []),
     )
 
 
@@ -90,7 +95,9 @@ def run_action(
     *,
     scenario_input: str = "",
     bridge_uri: str = "",
+    command_input: str = "",
     log_sink: Callable[[str], None] | None = None,
+    known_issues: KnownIssuesCatalog | None = None,
 ) -> ConsoleResult:
     start = perf_counter()
     started_at = utc_timestamp()
@@ -109,6 +116,7 @@ def run_action(
         category=action.category,
         scenario_name=str(scenario_input or "").strip(),
         bridge_uri=str(bridge_uri or "").strip(),
+        command_id=str(command_input or "").strip(),
         log=emit,
     )
     emit(f"[{action.category}] {action.name}")
@@ -123,16 +131,23 @@ def run_action(
         )
         if not finalized.details:
             finalized = replace(finalized, details=log_lines.copy())
-        return replace(
+        finalized = replace(
             finalized,
             started_at=finalized.started_at or started_at,
             finished_at=finalized.finished_at or utc_timestamp(),
             scenario_name=finalized.scenario_name or context.scenario_name,
         )
+        return apply_known_issues(
+            finalized,
+            known_issues,
+            entry_name=action.name,
+            scenario_name=context.scenario_name,
+            observed_lines=log_lines,
+        )
     except Exception as exc:  # pragma: no cover - exercised in tests via wrapper result
         duration_ms = int((perf_counter() - start) * 1000)
         emit(f"Unhandled error: {exc}")
-        return make_result(
+        result = make_result(
             name=action.name,
             status="error",
             summary="Action raised an unhandled exception.",
@@ -142,6 +157,13 @@ def run_action(
             started_at=started_at,
             finished_at=utc_timestamp(),
             scenario_name=context.scenario_name,
+        )
+        return apply_known_issues(
+            result,
+            known_issues,
+            entry_name=action.name,
+            scenario_name=context.scenario_name,
+            observed_lines=log_lines,
         )
 
 
@@ -162,7 +184,9 @@ def run_suite(
     entry_lookup: Callable[[str], ConsoleRegistryEntry | None],
     scenario_input: str = "",
     bridge_uri: str = "",
+    command_input: str = "",
     log_sink: Callable[[str], None] | None = None,
+    known_issues: KnownIssuesCatalog | None = None,
 ) -> ConsoleResult:
     start = perf_counter()
     started_at = utc_timestamp()
@@ -199,7 +223,9 @@ def run_suite(
                 entry_lookup=entry_lookup,
                 scenario_input=scenario_input,
                 bridge_uri=bridge_uri,
+                command_input=command_input,
                 log_sink=emit,
+                known_issues=known_issues,
             )
             emit(f"{result.status.upper()}: {result.summary}")
         step_results.append(result)
@@ -220,7 +246,7 @@ def run_suite(
         for result in step_results
         if result.adapter_method
     ]
-    return make_result(
+    result = make_result(
         name=suite.name,
         status=overall_status,
         summary=summary,
@@ -228,11 +254,18 @@ def run_suite(
         duration_ms=duration_ms,
         started_at=started_at,
         finished_at=utc_timestamp(),
-        scenario_name=scenario_input,
+        scenario_name=scenario_input or next((item.scenario_name for item in step_results if item.scenario_name), ""),
         subresults=step_results,
         artifact_paths=artifact_paths,
         adapter_method="suite",
         executed_command=adapter_methods,
+    )
+    return apply_known_issues(
+        result,
+        known_issues,
+        entry_name=suite.name,
+        scenario_name=scenario_input,
+        observed_lines=log_lines,
     )
 
 
@@ -242,7 +275,9 @@ def run_registry_entry(
     entry_lookup: Callable[[str], ConsoleRegistryEntry | None],
     scenario_input: str = "",
     bridge_uri: str = "",
+    command_input: str = "",
     log_sink: Callable[[str], None] | None = None,
+    known_issues: KnownIssuesCatalog | None = None,
 ) -> ConsoleResult:
     if isinstance(entry, ConsoleSuite):
         return run_suite(
@@ -250,11 +285,15 @@ def run_registry_entry(
             entry_lookup=entry_lookup,
             scenario_input=scenario_input,
             bridge_uri=bridge_uri,
+            command_input=command_input,
             log_sink=log_sink,
+            known_issues=known_issues,
         )
     return run_action(
         entry,
         scenario_input=scenario_input,
         bridge_uri=bridge_uri,
+        command_input=command_input,
         log_sink=log_sink,
+        known_issues=known_issues,
     )

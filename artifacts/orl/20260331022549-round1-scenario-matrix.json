@@ -1,0 +1,103 @@
+{
+  "status": "pass",
+  "rows": [
+    {
+      "scenario_id": "inchon_mvp",
+      "variant_id": "base",
+      "status": "pass",
+      "ai_side": "AXIS",
+      "chosen_operation": "Hold line at SEOUL",
+      "posture": "CONTAIN",
+      "main_objective": "SEOUL",
+      "reserve_level": "MEDIUM",
+      "last_orders": 3,
+      "logs": [
+        "ai enabled=True last_orders=3",
+        "chosen operation: Hold line at SEOUL",
+        "main objective: SEOUL"
+      ]
+    },
+    {
+      "scenario_id": "inchon_mvp",
+      "variant_id": "aggressive",
+      "status": "pass",
+      "ai_side": "AXIS",
+      "chosen_operation": "Hold line at SEOUL",
+      "posture": "OFFENSIVE",
+      "main_objective": "SEOUL",
+      "reserve_level": "LOW",
+      "last_orders": 3,
+      "logs": [
+        "ai enabled=True last_orders=3",
+        "chosen operation: Hold line at SEOUL",
+        "main objective: SEOUL"
+      ]
+    },
+    {
+      "scenario_id": "inchon_mvp",
+      "variant_id": "cautious",
+      "status": "pass",
+      "ai_side": "AXIS",
+      "chosen_operation": "Hold line at SEOUL",
+      "posture": "DEFENSIVE",
+      "main_objective": "SEOUL",
+      "reserve_level": "HIGH",
+      "last_orders": 3,
+      "logs": [
+        "ai enabled=True last_orders=3",
+        "chosen operation: Hold line at SEOUL",
+        "main objective: SEOUL"
+      ]
+    },
+    {
+      "scenario_id": "mini_gc_1942",
+      "variant_id": "base",
+      "status": "pass",
+      "ai_side": "AXIS",
+      "chosen_operation": "Hold line at TULAGI",
+      "posture": "CONTAIN",
+      "main_objective": "TULAGI",
+      "reserve_level": "MEDIUM",
+      "last_orders": 1,
+      "logs": [
+        "ai enabled=True last_orders=1",
+        "chosen operation: Hold line at TULAGI",
+        "main objective: TULAGI"
+      ]
+    },
+    {
+      "scenario_id": "mini_gc_1942",
+      "variant_id": "aggressive",
+      "status": "pass",
+      "ai_side": "AXIS",
+      "chosen_operation": "Hold line at TULAGI",
+      "posture": "OFFENSIVE",
+      "main_objective": "TULAGI",
+      "reserve_level": "LOW",
+      "last_orders": 1,
+      "logs": [
+        "ai enabled=True last_orders=1",
+        "chosen operation: Hold line at TULAGI",
+        "main objective: TULAGI"
+      ]
+    },
+    {
+      "scenario_id": "mini_gc_1942",
+      "variant_id": "cautious",
+      "status": "pass",
+      "ai_side": "AXIS",
+      "chosen_operation": "Hold line at LUNGA",
+      "posture": "DEFENSIVE",
+      "main_objective": "LUNGA",
+      "reserve_level": "HIGH",
+      "last_orders": 1,
+      "logs": [
+        "ai enabled=True last_orders=1",
+        "chosen operation: Hold line at LUNGA",
+        "main objective: LUNGA"
+      ]
+    }
+  ],
+  "failures": [],
+  "manifest_path": "/home/jason/dev/mwe/tools/orl/round1_manifest.yaml"
+}

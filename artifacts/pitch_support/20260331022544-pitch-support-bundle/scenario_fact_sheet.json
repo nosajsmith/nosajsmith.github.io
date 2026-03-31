@@ -1,0 +1,38 @@
+{
+  "scenario_id": "inchon_mvp",
+  "display_name": "Inchon Demo Vertical Slice",
+  "description": "Curated Inchon-to-Seoul publisher vertical slice for Theater of Operations: Korea.",
+  "unit_count": 6,
+  "objective_count": 5,
+  "turn": "TURN 1 \u2014 15 SEP 1950",
+  "objective_focus": "SEOUL",
+  "front_status": "INCHON BEACHHEAD SECURE",
+  "supply_status": "PORT OPEN / AXIS ADVANCE",
+  "main_effort": "INCHON / SEOUL AXIS",
+  "staff_notes": "Exploit the landing before the Seoul defensive ring stabilizes.",
+  "objectives": [
+    "Inchon Harbor",
+    "Kimpo Airfield",
+    "Yongdungpo Crossings",
+    "Seoul",
+    "Seoul Defensive Ring"
+  ],
+  "alerts": [
+    "Kimpo corridor remains contested.",
+    "NKPA reserves are forming south of Seoul."
+  ],
+  "orders": [
+    "1st Marines push east from Inchon toward Kimpo.",
+    "7th Infantry secures the beachhead and port throughput.",
+    "Axis garrison falls back onto the Seoul defensive ring."
+  ],
+  "sources": {
+    "bridge_listed": true,
+    "engine_loadable": true,
+    "payload_paths": [
+      "/home/jason/dev/mwe/scenarios/inchon_mvp.json",
+      "/home/jason/dev/mwe/server/rules/scenarios/inchon_mvp.json",
+      "/home/jason/dev/mwe/server/scenarios/inchon_mvp.json"
+    ]
+  }
+}

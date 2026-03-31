@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from tools.operations_console.known_issues import KnownIssue, KnownIssuesCatalog
 from tools.operations_console.models import ConsoleAction, ConsoleSuite
 from tools.operations_console.runner_utils import (
     finalize_result,
@@ -110,6 +111,41 @@ def test_run_action_wraps_unhandled_exceptions() -> None:
     assert "Unhandled error: boom" in result.details
 
 
+def test_run_action_attaches_known_issue_matches_without_hiding_failure() -> None:
+    action = ConsoleAction(
+        name="Utilities / Crash",
+        category="Utilities",
+        description="Crashing action",
+        runner=lambda context: context.log("Disk read failed") or make_result(
+            name="Utilities / Crash",
+            status="fail",
+            summary="Subsystem failed.",
+            errors=["disk read failed"],
+        ),
+    )
+    catalog = KnownIssuesCatalog(
+        issues=[
+            KnownIssue(
+                issue_id="KI-301",
+                title="Known disk read fault",
+                severity="medium",
+                category="Utilities",
+                affects=["Utilities / Crash"],
+                scenarios=[],
+                status="known",
+                symptom_match=["disk read failed"],
+                notes="Observed on developer workstations with stale fixtures.",
+            )
+        ]
+    )
+
+    result = run_action(action, known_issues=catalog)
+
+    assert result.status == "fail"
+    assert result.original_status == ""
+    assert [match.issue_id for match in result.known_issue_matches] == ["KI-301"]
+
+
 def test_roll_up_statuses_obeys_error_fail_warn_precedence() -> None:
     assert roll_up_statuses(["pass", "pass"]) == "pass"
     assert roll_up_statuses(["pass", "warn"]) == "warn"
@@ -165,6 +201,37 @@ def test_run_suite_executes_in_order_and_passes_shared_context() -> None:
     assert "[2/2] ORL / Scenario Integrity" in result.details
 
 
+def test_run_suite_inherits_first_step_scenario_name_when_input_is_blank() -> None:
+    actions = {
+        "ORL / Deterministic Demo Runner": ConsoleAction(
+            name="ORL / Deterministic Demo Runner",
+            category="ORL",
+            description="Demo",
+            runner=lambda _context: make_result(
+                name="ORL / Deterministic Demo Runner",
+                status="pass",
+                summary="demo ok",
+                scenario_name="inchon_mvp",
+            ),
+        )
+    }
+    suite = ConsoleSuite(
+        name="ORL / Demo Readiness",
+        category="ORL",
+        description="Demo suite",
+        action_names=["ORL / Deterministic Demo Runner"],
+    )
+
+    result = run_suite(
+        suite,
+        entry_lookup=actions.get,
+        scenario_input="",
+    )
+
+    assert result.status == "pass"
+    assert result.scenario_name == "inchon_mvp"
+
+
 def test_run_suite_rolls_up_warn_fail_and_error() -> None:
     statuses = {
         "warn-step": "warn",
@@ -190,6 +257,56 @@ def test_run_suite_rolls_up_warn_fail_and_error() -> None:
     assert run_suite(warn_suite, entry_lookup=lookup).status == "warn"
     assert run_suite(fail_suite, entry_lookup=lookup).status == "fail"
     assert run_suite(error_suite, entry_lookup=lookup).status == "error"
+
+
+def test_run_suite_rolls_waived_failure_up_to_warn() -> None:
+    actions = {
+        "ORL / Snapshot Smoke": ConsoleAction(
+            name="ORL / Snapshot Smoke",
+            category="ORL",
+            description="Snapshot",
+            runner=lambda _context: make_result(
+                name="ORL / Snapshot Smoke",
+                status="fail",
+                summary="Snapshot load failed.",
+                errors=["snapshot mismatch on load"],
+            ),
+        )
+    }
+    catalog = KnownIssuesCatalog(
+        issues=[
+            KnownIssue(
+                issue_id="KI-302",
+                title="Waived snapshot mismatch",
+                severity="high",
+                category="ORL",
+                affects=["ORL / Snapshot Smoke"],
+                scenarios=["inchon_mvp"],
+                status="waived",
+                expected_status_override="warn",
+                symptom_match=["snapshot mismatch"],
+                notes="Temporary waiver while snapshot contract settles.",
+            )
+        ]
+    )
+    suite = ConsoleSuite(
+        name="ORL / Snapshot Suite",
+        category="ORL",
+        description="Snapshot suite",
+        action_names=["ORL / Snapshot Smoke"],
+    )
+
+    result = run_suite(
+        suite,
+        entry_lookup=actions.get,
+        scenario_input="inchon_mvp",
+        known_issues=catalog,
+    )
+
+    assert result.status == "warn"
+    assert result.subresults[0].status == "warn"
+    assert result.subresults[0].original_status == "fail"
+    assert [match.issue_id for match in result.subresults[0].known_issue_matches] == ["KI-302"]
 
 
 def test_run_registry_entry_dispatches_suites() -> None:

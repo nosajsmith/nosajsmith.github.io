@@ -1,0 +1,52 @@
+{
+  "directories": [
+    {
+      "label": "operations_console",
+      "path": "/home/jason/dev/mwe/artifacts/operations_console",
+      "exists": true,
+      "file_count": 28,
+      "latest_file": "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331021544-inchon-mvp.json",
+      "latest_modified_at": "2026-03-31T02:15:44.189447+00:00"
+    },
+    {
+      "label": "orl",
+      "path": "/home/jason/dev/mwe/artifacts/orl",
+      "exists": true,
+      "file_count": 37,
+      "latest_file": "/home/jason/dev/mwe/artifacts/orl/20260331022520-round1-documentation-support.json",
+      "latest_modified_at": "2026-03-31T02:25:20.741758+00:00"
+    },
+    {
+      "label": "engine_adapter_replays",
+      "path": "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays",
+      "exists": true,
+      "file_count": 14,
+      "latest_file": "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331021544-inchon-mvp-b.json",
+      "latest_modified_at": "2026-03-31T02:15:44.189098+00:00"
+    },
+    {
+      "label": "engine_adapter_snapshots",
+      "path": "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots",
+      "exists": true,
+      "file_count": 7,
+      "latest_file": "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331021544-inchon-mvp.json",
+      "latest_modified_at": "2026-03-31T02:15:44.176254+00:00"
+    },
+    {
+      "label": "engine_adapter_compares",
+      "path": "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares",
+      "exists": true,
+      "file_count": 1,
+      "latest_file": "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331021544-inchon-mvp.json",
+      "latest_modified_at": "2026-03-31T02:15:44.189447+00:00"
+    },
+    {
+      "label": "pitch_support",
+      "path": "/home/jason/dev/mwe/artifacts/pitch_support",
+      "exists": true,
+      "file_count": 26,
+      "latest_file": "/home/jason/dev/mwe/artifacts/pitch_support/20260331022544-pitch-support-bundle/expected_outcomes_summary.md",
+      "latest_modified_at": "2026-03-31T02:25:44.219458+00:00"
+    }
+  ]
+}

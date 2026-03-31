@@ -1,0 +1,105 @@
+{
+  "status": "pass",
+  "failures": [],
+  "rows": [
+    {
+      "scenario_id": "inchon_mvp",
+      "label": "Inchon Demo Vertical Slice",
+      "status": "pass",
+      "bridge_listed": true,
+      "engine_ready": true,
+      "unit_count": 6,
+      "objective_count": 5,
+      "require_grease_board": true,
+      "sources": [
+        {
+          "source": "bridge_roster",
+          "path": "/home/jason/dev/mwe/scenarios/inchon_mvp.json",
+          "engine_ready": false,
+          "payload_name": "Inchon Demo Vertical Slice"
+        },
+        {
+          "source": "server_shared",
+          "path": "/home/jason/dev/mwe/server/scenarios/inchon_mvp.json",
+          "engine_ready": true,
+          "payload_name": "Inchon Demo Vertical Slice"
+        },
+        {
+          "source": "server_rules",
+          "path": "/home/jason/dev/mwe/server/rules/scenarios/inchon_mvp.json",
+          "engine_ready": true,
+          "payload_name": "Inchon Demo Vertical Slice"
+        }
+      ],
+      "expected_outcomes": [
+        "Loads headlessly with authored objectives and grease board support.",
+        "Supports replay, snapshot, and explainability smoke paths.",
+        "Scenario focus remains the Seoul axis."
+      ],
+      "notes": "Primary Round 1 explainability and persistence scenario.",
+      "logs": [
+        "expected outcomes: Loads headlessly with authored objectives and grease board support. | Supports replay, snapshot, and explainability smoke paths. | Scenario focus remains the Seoul axis."
+      ]
+    },
+    {
+      "scenario_id": "mini_gc_1942",
+      "label": "Mini Guadalcanal 1942",
+      "status": "pass",
+      "bridge_listed": false,
+      "engine_ready": true,
+      "unit_count": 2,
+      "objective_count": 3,
+      "require_grease_board": false,
+      "sources": [
+        {
+          "source": "server_shared",
+          "path": "/home/jason/dev/mwe/server/scenarios/mini_gc_1942.json",
+          "engine_ready": true,
+          "payload_name": "Mini Guadalcanal 1942"
+        },
+        {
+          "source": "server_rules",
+          "path": "/home/jason/dev/mwe/server/rules/scenarios/mini_gc_1942.json",
+          "engine_ready": true,
+          "payload_name": "Mini Guadalcanal 1942"
+        }
+      ],
+      "expected_outcomes": [
+        "Loads headlessly and produces at least one legal AI order per turn.",
+        "Supports base/aggressive/cautious matrix runs.",
+        "Remains the compact BAI first-playable sanity scenario."
+      ],
+      "notes": "Primary Round 1 AI sanity scenario.",
+      "logs": [
+        "expected outcomes: Loads headlessly and produces at least one legal AI order per turn. | Supports base/aggressive/cautious matrix runs. | Remains the compact BAI first-playable sanity scenario."
+      ]
+    },
+    {
+      "scenario_id": "gc_1942_historical",
+      "label": "Guadalcanal 1942 Historical Skeleton",
+      "status": "pass",
+      "bridge_listed": false,
+      "engine_ready": true,
+      "unit_count": 4,
+      "objective_count": 5,
+      "require_grease_board": false,
+      "sources": [
+        {
+          "source": "server_shared",
+          "path": "/home/jason/dev/mwe/server/scenarios/gc_1942_historical.json",
+          "engine_ready": true,
+          "payload_name": "Guadalcanal 1942 (Historical Skeleton)"
+        }
+      ],
+      "expected_outcomes": [
+        "Loads from the server scenario directory fallback.",
+        "Provides a broader historical skeleton readiness sample."
+      ],
+      "notes": "Secondary engine-load readiness scenario.",
+      "logs": [
+        "expected outcomes: Loads from the server scenario directory fallback. | Provides a broader historical skeleton readiness sample."
+      ]
+    }
+  ],
+  "manifest_path": "/home/jason/dev/mwe/tools/orl/round1_manifest.yaml"
+}
