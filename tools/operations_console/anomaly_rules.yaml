@@ -41,6 +41,27 @@
       "check": "missing_expected_artifact",
       "symptom_match": [],
       "notes": "The action completed without producing the artifact type declared in the GUI action matrix."
+    },
+    {
+      "id": "ANOM-004",
+      "title": "Unexpected empty campaign status or explain output",
+      "applies_to_statuses": ["warn", "fail", "error"],
+      "affects": [
+        "ORL / Campaign Status",
+        "ORL / Campaign Explain",
+        "ORL / Explainability Smoketest",
+        "ORL / Demo Readiness",
+        "ORL / Core Validation Suite"
+      ],
+      "scenarios": [],
+      "check": "symptom_match",
+      "symptom_match": [
+        "Scenario payload missing for campaign status.",
+        "Scenario payload missing for campaign explain.",
+        "CAMPAIGN STATUS ERROR:",
+        "CAMPAIGN EXPLAIN ERROR:"
+      ],
+      "notes": "Explainability support produced no usable status or explain payload and should be inspected."
     }
   ]
 }

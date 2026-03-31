@@ -55,6 +55,24 @@ class IncidentBundleResult:
     anomaly_matches: List[AnomalyMatch] = field(default_factory=list)
 
 
+def incident_metadata_lines(incident: IncidentBundleResult | None) -> List[str]:
+    if incident is None:
+        return []
+    lines: List[str] = []
+    if incident.anomaly_matches:
+        payload = "; ".join(f"{match.rule_id} | {match.title}" for match in incident.anomaly_matches)
+        if payload:
+            lines.append(f"INCIDENT ANOMALIES: {payload}")
+    if incident.logged:
+        if incident.bundle_dir:
+            lines.append(f"INCIDENT BUNDLE: {incident.bundle_dir}")
+        if incident.incident_json_path:
+            lines.append(f"INCIDENT MANIFEST: {incident.incident_json_path}")
+        if incident.run_report_json_path:
+            lines.append(f"INCIDENT RUN REPORT: {incident.run_report_json_path}")
+    return lines
+
+
 def repo_root() -> Path:
     return report_repo_root()
 

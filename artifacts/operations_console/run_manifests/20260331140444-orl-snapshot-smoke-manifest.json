@@ -1,0 +1,20 @@
+{
+  "created_at": "2026-03-31T14:04:44.343381+00:00",
+  "action_name": "ORL / Snapshot Smoke",
+  "status": "fail",
+  "original_status": "",
+  "summary": "Snapshot smoke failed.",
+  "scenario_name": "inchon_mvp",
+  "bridge_uri": "ws://127.0.0.1:8766",
+  "started_at": "2026-03-31T14:04:44.343381+00:00",
+  "finished_at": "2026-03-31T14:04:44.343381+00:00",
+  "duration_ms": 0,
+  "artifact_paths": [],
+  "executed_command": [],
+  "git": {
+    "branch": "integration/ops-console-hardening",
+    "commit": "2f288add697c7579ff65e3315e53a46427862a29",
+    "is_dirty": true,
+    "worktree_status": "dirty"
+  }
+}

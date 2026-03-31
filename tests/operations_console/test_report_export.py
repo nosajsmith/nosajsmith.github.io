@@ -17,6 +17,12 @@ def test_report_dict_includes_subresults_and_artifacts() -> None:
         adapter_method="suite",
         executed_command=["pytest", "-q", "tests/test_inchon_scenario_stub.py"],
         return_code=0,
+        details=[
+            "INCIDENT ANOMALIES: ANOM-003 | Missing expected artifact",
+            "INCIDENT BUNDLE: /tmp/incidents/abc",
+            "INCIDENT MANIFEST: /tmp/incidents/abc/incident.json",
+            "INCIDENT RUN REPORT: /tmp/incidents/abc/run_report.json",
+        ],
         known_issue_matches=[
             KnownIssueMatch(
                 issue_id="KI-401",
@@ -43,11 +49,19 @@ def test_report_dict_includes_subresults_and_artifacts() -> None:
     assert payload["scenario_name"] == "inchon_mvp"
     assert payload["original_status"] == "fail"
     assert payload["artifact_paths"] == ["/tmp/dist/index.html"]
-    assert payload["key_logs"] == []
+    assert payload["key_logs"] == [
+        "INCIDENT ANOMALIES: ANOM-003 | Missing expected artifact",
+        "INCIDENT BUNDLE: /tmp/incidents/abc",
+        "INCIDENT MANIFEST: /tmp/incidents/abc/incident.json",
+        "INCIDENT RUN REPORT: /tmp/incidents/abc/run_report.json",
+    ]
     assert payload["adapter_method"] == "suite"
     assert payload["executed_command"] == ["pytest", "-q", "tests/test_inchon_scenario_stub.py"]
     assert payload["return_code"] == 0
     assert payload["known_issue_matches"][0]["id"] == "KI-401"
+    assert payload["incident_metadata"]["logged"] is True
+    assert payload["incident_metadata"]["bundle_dir"] == "/tmp/incidents/abc"
+    assert payload["incident_metadata"]["anomaly_matches"][0]["id"] == "ANOM-003"
     assert payload["gui_action_matrix"]["id"] == "orl-scenario-integrity"
     assert payload["scenario_contract_evaluation"]["matched"] is True
     assert payload["scenario_contract_evaluation"]["contract_scenario_name"] == "inchon_mvp"
@@ -64,7 +78,14 @@ def test_export_result_json_and_text_create_files(tmp_path) -> None:
         started_at="2026-03-30T10:00:00+00:00",
         finished_at="2026-03-30T10:00:05+00:00",
         scenario_name="inchon_mvp",
-        details=["line 1", "line 2"],
+        details=[
+            "line 1",
+            "line 2",
+            "INCIDENT ANOMALIES: ANOM-003 | Missing expected artifact",
+            "INCIDENT BUNDLE: /tmp/incidents/demo",
+            "INCIDENT MANIFEST: /tmp/incidents/demo/incident.json",
+            "INCIDENT RUN REPORT: /tmp/incidents/demo/run_report.json",
+        ],
         errors=["warn detail"],
         artifact_paths=["/tmp/dist/index.html"],
         adapter_method="run_all_green",
@@ -103,10 +124,22 @@ def test_export_result_json_and_text_create_files(tmp_path) -> None:
     assert payload["original_status"] == "fail"
     assert payload["subresults"][0]["name"] == "ORL / Smoke Suite"
     assert payload["known_issue_matches"][0]["id"] == "KI-402"
+    assert payload["incident_metadata"]["logged"] is True
+    assert payload["incident_metadata"]["run_report_json_path"] == "/tmp/incidents/demo/run_report.json"
     assert payload["scenario_contract_evaluation"]["matched"] is True
     assert payload["scenario_contract_evaluation"]["contract_scenario_name"] == "inchon_mvp"
-    assert payload["key_logs"] == ["warn detail", "line 1", "line 2"]
+    assert payload["key_logs"] == [
+        "warn detail",
+        "line 1",
+        "line 2",
+        "INCIDENT ANOMALIES: ANOM-003 | Missing expected artifact",
+        "INCIDENT BUNDLE: /tmp/incidents/demo",
+        "INCIDENT MANIFEST: /tmp/incidents/demo/incident.json",
+        "INCIDENT RUN REPORT: /tmp/incidents/demo/run_report.json",
+    ]
     assert "Status: WARN" in text
+    assert "Incident Logged: YES" in text
+    assert "Incident Bundle: /tmp/incidents/demo" in text
     assert "Original Status: FAIL" in text
     assert "Scenario: inchon_mvp" in text
     assert "Scenario Contract: inchon_mvp" in text
@@ -118,5 +151,6 @@ def test_export_result_json_and_text_create_files(tmp_path) -> None:
     assert "Executed Command: pytest -q tests/test_inchon_scenario_stub.py" in text
     assert "Return Code: 1" in text
     assert "Known Issues:" in text
+    assert "Incident Anomalies:" in text
     assert "Key Logs:" in text
     assert "KI-402: Waived replay regression [waived] -> WARN" in text

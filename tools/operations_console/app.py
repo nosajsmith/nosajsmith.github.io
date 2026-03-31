@@ -15,14 +15,26 @@ if __package__ in {None, ""}:
         sys.path.insert(0, str(ROOT))
 
 from engine.testing_api import EngineTestingAPI
+from tools.operations_console.doctor import run_doctor_console_result
 from tools.operations_console.models import ConsoleAction, ConsoleRegistryEntry, ConsoleResult
 from tools.operations_console.baselines import BaselineComparison, compare_result_to_baseline, save_baseline
 from tools.operations_console.divergence_finder import FirstDivergence, compare_result_to_baseline_divergence, find_first_divergence
-from tools.operations_console.incident_log import AnomalyCatalog, IncidentBundleResult, load_anomaly_rules, log_incident_bundle
+from tools.operations_console.incident_log import (
+    AnomalyCatalog,
+    IncidentBundleResult,
+    incident_metadata_lines,
+    load_anomaly_rules,
+    log_incident_bundle,
+)
 from tools.operations_console.known_issues import KnownIssuesCatalog, load_known_issues
 from tools.operations_console.process_control import ManagedProcessController, ProcessControlResult
 from tools.operations_console.report_export import export_result_json, export_result_text
 from tools.operations_console.registry import DEFAULT_BRIDGE_URI, ActionRegistry, build_default_registry, list_live_scenarios
+from tools.operations_console.run_manifest import (
+    RunManifestCaptureResult,
+    capture_run_manifest,
+    manifest_metadata_lines,
+)
 from tools.operations_console.runner_utils import make_result, roll_up_statuses, run_registry_entry
 from tools.operations_console.scenario_contracts import (
     ScenarioContractCatalog,
@@ -155,6 +167,7 @@ class OperationsConsoleApp:
         self.bridge_button: ttk.Button
         self.mwe_button: ttk.Button
         self.stop_button: ttk.Button
+        self.doctor_button: ttk.Button
         self.status_badge: ttk.Label
 
         self._build()
@@ -173,6 +186,7 @@ class OperationsConsoleApp:
         self._append_output("Baseline drift support ready.")
         self._append_output("Explainability drilldown ready.")
         self._append_output("First-divergence finder ready.")
+        self._append_output("Doctor support ready.")
         self.root.after(75, self._poll_events)
 
     def _register_explainability_actions(self) -> None:
@@ -297,6 +311,8 @@ class OperationsConsoleApp:
         self.mwe_button.grid(row=1, column=1, sticky="w", padx=(8, 0), pady=(8, 0))
         self.stop_button = ttk.Button(controls, text="Stop Managed Processes", command=self._stop_managed_processes)
         self.stop_button.grid(row=1, column=2, sticky="w", padx=(8, 0), pady=(8, 0))
+        self.doctor_button = ttk.Button(controls, text="Run Doctor", command=self._run_doctor)
+        self.doctor_button.grid(row=1, column=3, sticky="w", padx=(8, 0), pady=(8, 0))
 
         output_frame = ttk.LabelFrame(right, text="Output", padding=8)
         output_frame.grid(row=2, column=0, sticky=NSEW)
@@ -416,6 +432,29 @@ class OperationsConsoleApp:
             runner=self.process_controller.stop_managed_processes,
         )
 
+    def _run_doctor(self) -> None:
+        if self._is_running():
+            return
+        bridge_uri = self.bridge_uri_var.get().strip() or DEFAULT_BRIDGE_URI
+        scenario_name = self.scenario_var.get().strip()
+        self._append_output("")
+        self._append_output("== mwe doctor ==")
+        self._set_status("running", "Running environment doctor...")
+        self._update_control_states(running_override=True)
+
+        def worker() -> None:
+            try:
+                result = run_doctor_console_result(
+                    bridge_uri=bridge_uri,
+                    scenario_name=scenario_name,
+                )
+                self.event_queue.put(("result", result))
+            except Exception as exc:
+                self.event_queue.put(("task_error", ("Utilities / mwe doctor", "mwe doctor failed.", str(exc))))
+
+        self.worker = threading.Thread(target=worker, name="operations-console-doctor", daemon=True)
+        self.worker.start()
+
     def _run_process_control(self, *, label: str, summary: str, runner) -> None:
         if self._is_running():
             return
@@ -457,10 +496,15 @@ class OperationsConsoleApp:
         result = self._attach_explainability_follow_up(result)
         result = self._maybe_auto_export_result(result)
         result = self._refresh_demo_artifact_validation(result)
-        self.last_result = result
-        self._append_contract_evaluation(contract_evaluation)
         drift = self._compare_result_against_baseline(result)
         divergence = self._find_result_divergence(result, drift)
+        manifest = self._capture_run_manifest(result)
+        result = self._attach_run_manifest_metadata(result, manifest)
+        incident = self._log_incident_bundle(result)
+        result = self._attach_incident_metadata(result, incident)
+        result = self._refresh_auto_export_after_support_metadata(result, manifest, incident)
+        self.last_result = result
+        self._append_contract_evaluation(contract_evaluation)
         if result.errors:
             for error in result.errors:
                 self._append_output(f"ERROR: {error}")
@@ -473,7 +517,7 @@ class OperationsConsoleApp:
                 )
         self._append_baseline_drift(drift)
         self._append_first_divergence(divergence)
-        self._emit_incident_breadcrumbs(self._log_incident_bundle(result))
+        self._emit_incident_breadcrumbs(incident)
         self._append_output(f"== {result.status.upper()} :: {result.summary} ({result.duration_ms} ms) ==")
         self._set_status(result.status, self._result_summary_text(result, drift))
         self._update_control_states()
@@ -501,8 +545,12 @@ class OperationsConsoleApp:
                 *([f"selected scenario: {self.scenario_var.get().strip()}"] if self.scenario_var.get().strip() else []),
             ],
         )
+        manifest = self._capture_run_manifest(pseudo_result)
+        pseudo_result = self._attach_run_manifest_metadata(pseudo_result, manifest)
+        incident = self._log_incident_bundle(pseudo_result)
+        pseudo_result = self._attach_incident_metadata(pseudo_result, incident)
         self.last_result = pseudo_result
-        self._emit_incident_breadcrumbs(self._log_incident_bundle(pseudo_result))
+        self._emit_incident_breadcrumbs(incident)
         self._set_status(status, summary)
         self._update_control_states()
 
@@ -516,8 +564,12 @@ class OperationsConsoleApp:
             details=result.logs,
             executed_command=result.command,
         )
+        manifest = self._capture_run_manifest(pseudo_result)
+        pseudo_result = self._attach_run_manifest_metadata(pseudo_result, manifest)
+        incident = self._log_incident_bundle(pseudo_result)
+        pseudo_result = self._attach_incident_metadata(pseudo_result, incident)
         self.last_result = pseudo_result
-        self._emit_incident_breadcrumbs(self._log_incident_bundle(pseudo_result))
+        self._emit_incident_breadcrumbs(incident)
         self._append_output(f"== {result.status.upper()} :: {result.summary} ==")
         self._set_status(result.status, result.summary)
         self._update_control_states()
@@ -532,9 +584,13 @@ class OperationsConsoleApp:
             errors=[error],
             details=[error],
         )
+        manifest = self._capture_run_manifest(pseudo_result)
+        pseudo_result = self._attach_run_manifest_metadata(pseudo_result, manifest)
+        incident = self._log_incident_bundle(pseudo_result)
+        pseudo_result = self._attach_incident_metadata(pseudo_result, incident)
         self.last_result = pseudo_result
         self._append_output(f"ERROR: {error}")
-        self._emit_incident_breadcrumbs(self._log_incident_bundle(pseudo_result))
+        self._emit_incident_breadcrumbs(incident)
         self._set_status("error", summary)
         self._update_control_states()
 
@@ -883,6 +939,79 @@ class OperationsConsoleApp:
         if incident.logged:
             self._append_output(f"INCIDENT LOGGED: {incident.bundle_dir}")
 
+    def _attach_incident_metadata(
+        self,
+        result: ConsoleResult,
+        incident: IncidentBundleResult | None,
+    ) -> ConsoleResult:
+        if incident is None:
+            return result
+        detail_lines = list(result.details)
+        for line in incident_metadata_lines(incident):
+            if line not in detail_lines:
+                detail_lines.append(line)
+        artifact_paths = list(result.artifact_paths)
+        for path in [incident.incident_json_path, incident.run_report_json_path]:
+            text = str(path or "").strip()
+            if text and text not in artifact_paths:
+                artifact_paths.append(text)
+        return replace(result, details=detail_lines, artifact_paths=artifact_paths)
+
+    def _capture_run_manifest(self, result: ConsoleResult) -> RunManifestCaptureResult | None:
+        try:
+            bridge_var = getattr(self, "bridge_uri_var", None)
+            bridge_uri = bridge_var.get().strip() if bridge_var is not None else DEFAULT_BRIDGE_URI
+            return capture_run_manifest(
+                result,
+                bridge_uri=bridge_uri or DEFAULT_BRIDGE_URI,
+            )
+        except Exception as exc:
+            self._append_output(f"ERROR: Run manifest capture failed: {exc}")
+            return None
+
+    def _attach_run_manifest_metadata(
+        self,
+        result: ConsoleResult,
+        manifest: RunManifestCaptureResult | None,
+    ) -> ConsoleResult:
+        if manifest is None or not manifest.written:
+            return result
+        detail_lines = list(result.details)
+        for line in manifest_metadata_lines(manifest):
+            if line not in detail_lines:
+                detail_lines.append(line)
+        artifact_paths = list(result.artifact_paths)
+        if manifest.manifest_path and manifest.manifest_path not in artifact_paths:
+            artifact_paths.append(manifest.manifest_path)
+        return replace(
+            result,
+            details=detail_lines,
+            artifact_paths=artifact_paths,
+            started_at=result.started_at or manifest.started_at,
+            finished_at=result.finished_at or manifest.finished_at,
+        )
+
+    def _refresh_auto_export_after_support_metadata(
+        self,
+        result: ConsoleResult,
+        manifest: RunManifestCaptureResult | None,
+        incident: IncidentBundleResult | None,
+    ) -> ConsoleResult:
+        has_manifest = bool(manifest is not None and manifest.written)
+        has_incident = bool(
+            incident is not None and (incident.logged or incident.anomaly_matches)
+        )
+        if not has_manifest and not has_incident:
+            return result
+        if result.name not in AUTO_EXPORT_REPORT_ACTION_NAMES:
+            return result
+        try:
+            export_result_json(result)
+            export_result_text(result)
+        except Exception as exc:
+            self._append_output(f"ERROR: Auto report refresh failed: {exc}")
+        return result
+
     def _is_running(self) -> bool:
         return self.worker is not None and self.worker.is_alive()
 
@@ -893,6 +1022,9 @@ class OperationsConsoleApp:
         self.bridge_button.configure(state=idle_state)
         self.mwe_button.configure(state=idle_state)
         self.stop_button.configure(state=idle_state)
+        doctor_button = getattr(self, "doctor_button", None)
+        if doctor_button is not None:
+            doctor_button.configure(state=idle_state)
         self.clear_button.configure(state=idle_state)
         self.export_button.configure(state="normal" if (not is_running and self.last_result is not None) else "disabled")
         self.save_baseline_button.configure(state="normal" if (not is_running and self.last_result is not None) else "disabled")

@@ -10,6 +10,7 @@ from .baselines import BaselineComparison, compare_result_to_baseline
 from .divergence_finder import FirstDivergence, compare_result_to_baseline_divergence, find_first_divergence
 from .gui_action_matrix import GuiActionMatrix, GuiActionMatrixEntry, load_gui_action_matrix
 from .models import ConsoleResult
+from .run_manifest import parse_run_manifest_metadata
 from .scenario_contracts import ScenarioContractCatalog, ScenarioContractEvaluation, evaluate_result_contract, load_scenario_contracts
 
 
@@ -38,6 +39,8 @@ def report_dict(
     baseline_drift = _report_baseline_drift(result, matrix, scenario_contracts, baseline_dir_path)
     first_divergence = _report_first_divergence(result, baseline_drift, baseline_dir_path)
     explainability_summary = _extract_explainability_summary(result.details)
+    incident_metadata = _extract_incident_metadata(result.details)
+    run_manifest = _report_run_manifest(result)
     key_logs = _key_log_lines(result)
     return {
         "name": result.name,
@@ -72,6 +75,8 @@ def report_dict(
         "baseline_drift": _baseline_report_dict(baseline_drift),
         "first_divergence": _first_divergence_report_dict(first_divergence),
         "explainability_summary": explainability_summary,
+        "incident_metadata": incident_metadata,
+        "run_manifest": run_manifest,
         "subresults": [report_dict(item, matrix, scenario_contracts, baseline_dir_path) for item in result.subresults],
     }
 
@@ -126,6 +131,8 @@ def _format_text_lines(
     baseline_drift = _report_baseline_drift(result, matrix, scenario_contracts, baseline_dir_path)
     first_divergence = _report_first_divergence(result, baseline_drift, baseline_dir_path)
     explainability_summary = _extract_explainability_summary(result.details)
+    incident_metadata = _extract_incident_metadata(result.details)
+    run_manifest = _report_run_manifest(result)
     key_logs = _key_log_lines(result)
     lines = [
         f"{prefix}Name: {result.name}",
@@ -176,6 +183,31 @@ def _format_text_lines(
         lines.append(f"{prefix}Explainability:")
         for label, value in _format_explainability_lines(explainability_summary):
             lines.append(f"{prefix}- {label}: {value}")
+    if incident_metadata is not None:
+        lines.append(f"{prefix}Incident Logged: {'YES' if incident_metadata.get('logged') else 'NO'}")
+        if incident_metadata.get("bundle_dir"):
+            lines.append(f"{prefix}Incident Bundle: {incident_metadata['bundle_dir']}")
+        if incident_metadata.get("incident_json_path"):
+            lines.append(f"{prefix}Incident Manifest: {incident_metadata['incident_json_path']}")
+        if incident_metadata.get("run_report_json_path"):
+            lines.append(f"{prefix}Incident Run Report: {incident_metadata['run_report_json_path']}")
+        anomaly_matches = list(incident_metadata.get("anomaly_matches") or [])
+        if anomaly_matches:
+            lines.append(f"{prefix}Incident Anomalies:")
+            for match in anomaly_matches:
+                anomaly_line = f"{prefix}- {match.get('id', '').strip()}: {match.get('title', '').strip()}".rstrip(": ")
+                lines.append(anomaly_line)
+    if run_manifest is not None:
+        if run_manifest.get("path"):
+            lines.append(f"{prefix}Run Manifest: {run_manifest['path']}")
+        if run_manifest.get("branch"):
+            lines.append(f"{prefix}Run Branch: {run_manifest['branch']}")
+        if run_manifest.get("commit"):
+            lines.append(f"{prefix}Run Commit: {run_manifest['commit']}")
+        if run_manifest.get("worktree_status"):
+            lines.append(f"{prefix}Run Worktree: {run_manifest['worktree_status']}")
+        if run_manifest.get("bridge_uri"):
+            lines.append(f"{prefix}Run Bridge URI: {run_manifest['bridge_uri']}")
     if result.artifact_paths:
         lines.append(f"{prefix}Artifacts:")
         lines.extend(f"{prefix}- {path}" for path in result.artifact_paths)
@@ -359,6 +391,65 @@ def _extract_explainability_summary(details: List[str]) -> Dict[str, object] | N
             summary["objectives_text"] = text.partition(": ")[2].strip()
             summary["objectives_list"] = _split_semicolon_items(summary["objectives_text"])
     return summary or None
+
+
+def _extract_incident_metadata(details: List[str]) -> Dict[str, object] | None:
+    metadata: Dict[str, object] = {
+        "logged": False,
+        "bundle_dir": "",
+        "incident_json_path": "",
+        "run_report_json_path": "",
+        "anomaly_matches": [],
+    }
+    anomaly_matches: List[Dict[str, str]] = []
+    for line in list(details or []):
+        text = str(line or "").strip()
+        if not text:
+            continue
+        if text.startswith("INCIDENT BUNDLE: "):
+            metadata["bundle_dir"] = text.partition(": ")[2].strip()
+            metadata["logged"] = True
+        elif text.startswith("INCIDENT MANIFEST: "):
+            metadata["incident_json_path"] = text.partition(": ")[2].strip()
+            metadata["logged"] = True
+        elif text.startswith("INCIDENT RUN REPORT: "):
+            metadata["run_report_json_path"] = text.partition(": ")[2].strip()
+            metadata["logged"] = True
+        elif text.startswith("INCIDENT ANOMALIES: "):
+            payload = text.partition(": ")[2].strip()
+            for segment in payload.split(";"):
+                item = segment.strip()
+                if not item:
+                    continue
+                issue_id, separator, title = item.partition("|")
+                anomaly_matches.append(
+                    {
+                        "id": issue_id.strip(),
+                        "title": title.strip() if separator else "",
+                    }
+                )
+    if anomaly_matches:
+        metadata["anomaly_matches"] = anomaly_matches
+    if not metadata["logged"] and not anomaly_matches:
+        return None
+    return metadata
+
+
+def _report_run_manifest(result: ConsoleResult) -> Dict[str, object] | None:
+    metadata = parse_run_manifest_metadata(result.details)
+    if metadata is None:
+        return None
+    return {
+        "path": metadata.get("path", ""),
+        "branch": metadata.get("branch", ""),
+        "commit": metadata.get("commit", ""),
+        "worktree_status": metadata.get("worktree_status", ""),
+        "bridge_uri": metadata.get("bridge_uri", ""),
+        "name": result.name,
+        "scenario_name": result.scenario_name,
+        "started_at": result.started_at,
+        "finished_at": result.finished_at,
+    }
 
 
 def _parse_key_value_segments(payload: str) -> Dict[str, object]:

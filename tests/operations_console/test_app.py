@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from tools.operations_console.app import OperationsConsoleApp
+from tools.operations_console.incident_log import AnomalyMatch, IncidentBundleResult
 from tools.operations_console.models import ConsoleAction, ConsoleResult, KnownIssueMatch
 from tools.operations_console.process_control import ProcessControlResult
 from tools.operations_console.runner_utils import make_result
@@ -277,6 +278,39 @@ def test_handle_process_result_stores_last_result_for_export() -> None:
     assert app.last_result.name == "Run Bridge"
     assert app.last_result.executed_command == ["python", "server/mwe_bridge_p8_ws15.py"]
     assert incident_calls == ["Run Bridge"]
+    assert "== PASS :: Bridge launched. ==" in output
+
+
+def test_handle_process_result_attaches_incident_metadata_to_last_result() -> None:
+    app, output = build_app_stub(scenario_value="inchon_mvp")
+    app._log_incident_bundle = lambda result: IncidentBundleResult(
+        logged=True,
+        bundle_dir="/tmp/incidents/bridge",
+        incident_json_path="/tmp/incidents/bridge/incident.json",
+        run_report_json_path="/tmp/incidents/bridge/run_report.json",
+        anomaly_matches=[AnomalyMatch(rule_id="ANOM-003", title="Missing expected artifact")],
+    )
+    app._emit_incident_breadcrumbs = lambda incident: None
+    app._update_control_states = lambda *args, **kwargs: None
+
+    app._handle_process_result(
+        (
+            "Run Bridge",
+            ProcessControlResult(
+                ok=True,
+                status="pass",
+                summary="Bridge launched.",
+                logs=["launched bridge process"],
+                command=["python", "server/mwe_bridge_p8_ws15.py"],
+            ),
+        )
+    )
+
+    assert app.last_result is not None
+    assert "INCIDENT ANOMALIES: ANOM-003 | Missing expected artifact" in app.last_result.details
+    assert "INCIDENT BUNDLE: /tmp/incidents/bridge" in app.last_result.details
+    assert "/tmp/incidents/bridge/incident.json" in app.last_result.artifact_paths
+    assert "/tmp/incidents/bridge/run_report.json" in app.last_result.artifact_paths
     assert "== PASS :: Bridge launched. ==" in output
 
 

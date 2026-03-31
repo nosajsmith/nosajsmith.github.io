@@ -42,6 +42,20 @@ def test_detect_anomalies_flags_missing_expected_artifact() -> None:
     assert [match.rule_id for match in matches] == ["ANOM-003"]
 
 
+def test_detect_anomalies_flags_empty_campaign_explain_output() -> None:
+    result = make_result(
+        name="ORL / Campaign Explain",
+        status="fail",
+        summary="Campaign explain failed.",
+        errors=["Scenario payload missing for campaign explain."],
+        details=["CAMPAIGN EXPLAIN ERROR: Scenario payload missing for campaign explain."],
+    )
+
+    matches = detect_anomalies(result)
+
+    assert [match.rule_id for match in matches] == ["ANOM-004"]
+
+
 def test_log_incident_bundle_writes_manifest_and_run_report(tmp_path, monkeypatch) -> None:
     def fake_run(args, cwd=None, capture_output=None, text=None, check=None):
         if args[1:] == ["rev-parse", "--abbrev-ref", "HEAD"]:
