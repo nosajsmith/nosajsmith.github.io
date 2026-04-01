@@ -1,0 +1,104 @@
+{
+  "status": "pass",
+  "checks": [
+    {
+      "check_id": "artifact.demo_report",
+      "label": "Latest Demo Report",
+      "blocker_class": "demo.artifact_output",
+      "status": "pass",
+      "summary": "Latest Demo Report found.",
+      "artifacts": [
+        "/home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json"
+      ],
+      "logs": [
+        "slot: demo_report",
+        "path: /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json",
+        "modified_at: 2026-03-31T15:43:32.586547+00:00",
+        "size_bytes: 62991"
+      ]
+    },
+    {
+      "check_id": "artifact.replay",
+      "label": "Latest Replay",
+      "blocker_class": "demo.artifact_output",
+      "status": "pass",
+      "summary": "Latest Replay found.",
+      "artifacts": [
+        "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json"
+      ],
+      "logs": [
+        "slot: replay",
+        "path: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+        "modified_at: 2026-03-31T15:43:32.485337+00:00",
+        "size_bytes: 5485"
+      ]
+    },
+    {
+      "check_id": "artifact.snapshot",
+      "label": "Latest Snapshot",
+      "blocker_class": "demo.artifact_output",
+      "status": "pass",
+      "summary": "Latest Snapshot found.",
+      "artifacts": [
+        "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json"
+      ],
+      "logs": [
+        "slot: snapshot",
+        "path: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json",
+        "modified_at: 2026-03-31T15:43:32.471997+00:00",
+        "size_bytes: 5355"
+      ]
+    },
+    {
+      "check_id": "artifact.compare_output",
+      "label": "Latest Compare Output",
+      "blocker_class": "demo.artifact_output",
+      "status": "pass",
+      "summary": "Latest Compare Output found.",
+      "artifacts": [
+        "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json"
+      ],
+      "logs": [
+        "slot: compare_output",
+        "path: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json",
+        "modified_at: 2026-03-31T15:43:32.485666+00:00",
+        "size_bytes: 267"
+      ]
+    }
+  ],
+  "missing": [],
+  "shelf": {
+    "demo_report": {
+      "slot_id": "demo_report",
+      "label": "Latest Demo Report",
+      "path": "/home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json",
+      "exists": true,
+      "size_bytes": 62991,
+      "modified_at": "2026-03-31T15:43:32.586547+00:00"
+    },
+    "replay": {
+      "slot_id": "replay",
+      "label": "Latest Replay",
+      "path": "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+      "exists": true,
+      "size_bytes": 5485,
+      "modified_at": "2026-03-31T15:43:32.485337+00:00"
+    },
+    "snapshot": {
+      "slot_id": "snapshot",
+      "label": "Latest Snapshot",
+      "path": "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json",
+      "exists": true,
+      "size_bytes": 5355,
+      "modified_at": "2026-03-31T15:43:32.471997+00:00"
+    },
+    "compare_output": {
+      "slot_id": "compare_output",
+      "label": "Latest Compare Output",
+      "path": "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json",
+      "exists": true,
+      "size_bytes": 267,
+      "modified_at": "2026-03-31T15:43:32.485666+00:00"
+    }
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "created_at": "2026-03-31T15:43:32.666318+00:00",
+  "action_name": "ORL / Demo Readiness",
+  "status": "fail",
+  "original_status": "",
+  "summary": "Suite completed with status FAIL. ORL / Smoke Suite=FAIL, ORL / UI Build Check=PASS, ORL / Deterministic Demo Runner=PASS, ORL / Demo Artifact Validation=PASS",
+  "scenario_name": "",
+  "known_issue_matches": [],
+  "anomaly_matches": [],
+  "key_errors": [],
+  "key_logs": [
+    "  Units restored: 6",
+    "  Snapshot smoke passed.",
+    "[demo.replay_compare] Replay Compare: PASS - Replay Compare passed.",
+    "  Resolved scenario: inchon_mvp.json",
+    "  Loaded scenario id: inchon_mvp",
+    "  Started scenario: Inchon Demo Vertical Slice",
+    "  Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json",
+    "  Resolved scenario: inchon_mvp.json",
+    "  Loaded scenario id: inchon_mvp",
+    "  Started scenario: Inchon Demo Vertical Slice",
+    "  Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+    "  Replay A: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json",
+    "  Replay B: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+    "  Replay compare identical=True",
+    "  Replay compare output: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json",
+    "  Replay validation passed.",
+    "expected outcome: The bridge roster resolves the scenario without typing the exact filename every time.",
+    "expected outcome: The current UI build succeeds and the console can launch the UI against the selected bridge.",
+    "expected outcome: Replay compare stays deterministic and snapshot smoke remains stable for the current demo slice.",
+    "bug reports: Attach the latest ORL / Demo Readiness report and any incident bundle under artifacts/operations_console/incidents to the demo blocker report.",
+    "artifact: /home/jason/dev/mwe/artifacts/orl/20260331154332-deterministic-demo-runner.json",
+    "PASS: Deterministic demo runner passed.",
+    "[4/4] ORL / Demo Artifact Validation",
+    "[ORL] ORL / Demo Artifact Validation",
+    "using adapter: demo_artifact_validation",
+    "demo_report: PASS /home/jason/dev/mwe/artifacts/operations_console/20260330201520-orl-demo-readiness.json",
+    "replay: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+    "snapshot: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json",
+    "compare_output: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json",
+    "artifact: /home/jason/dev/mwe/artifacts/orl/20260331154332-demo-artifact-shelf.json",
+    "PASS: Demo artifact validation passed.",
+    "AUTO REPORT JSON: /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json",
+    "AUTO REPORT TEXT: /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.txt",
+    "AUTO REFRESH: reran ORL / Demo Artifact Validation after demo report export.",
+    "demo_report: PASS /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json",
+    "RUN MANIFEST: /home/jason/dev/mwe/artifacts/operations_console/run_manifests/20260331154332-orl-demo-readiness-manifest.json",
+    "RUN BRANCH: integration/ops-console-hardening",
+    "RUN COMMIT: 000e9fc50906793b0a5d2ea634a1bdd4f0b7ca9b",
+    "RUN WORKTREE: dirty",
+    "RUN BRIDGE URI: ws://127.0.0.1:8766"
+  ],
+  "artifact_paths": [
+    "/home/jason/dev/mwe/ui/dist/index.html",
+    "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json",
+    "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json",
+    "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+    "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json",
+    "/home/jason/dev/mwe/artifacts/orl/20260331154332-deterministic-demo-runner.json",
+    "/home/jason/dev/mwe/artifacts/orl/20260331154332-demo-artifact-shelf.json",
+    "/home/jason/dev/mwe/artifacts/operations_console/20260330201520-orl-demo-readiness.json",
+    "/home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json",
+    "/home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.txt",
+    "/home/jason/dev/mwe/artifacts/operations_console/run_manifests/20260331154332-orl-demo-readiness-manifest.json"
+  ],
+  "copied_artifact_paths": [
+    "/home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/artifacts/01-1a66d114-index.html",
+    "/home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/artifacts/02-1969e47f-20260331154332-inchon-mvp.json",
+    "/home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/artifacts/03-c03f1b72-20260331154332-inchon-mvp-a.json",
+    "/home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/artifacts/04-0eafbe4e-20260331154332-inchon-mvp-b.json",
+    "/home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/artifacts/05-d71964a9-20260331154332-inchon-mvp.json",
+    "/home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/artifacts/06-66e655da-20260331154332-deterministic-demo-runner.json",
+    "/home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/artifacts/07-ad8df047-20260331154332-demo-artifact-shelf.json",
+    "/home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/artifacts/08-cd91f717-20260330201520-orl-demo-readiness.json",
+    "/home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/artifacts/09-9e6fc208-20260331154332-orl-demo-readiness.json",
+    "/home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/artifacts/10-94d50099-20260331154332-orl-demo-readiness.txt",
+    "/home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/artifacts/11-c29648cc-20260331154332-orl-demo-readiness-manifest.json"
+  ],
+  "executed_command": [
+    "suite",
+    "deterministic_demo_runner",
+    "demo_artifact_validation"
+  ],
+  "return_code": null,
+  "gui_action_matrix": {
+    "id": "orl-demo-readiness",
+    "label": "ORL / Demo Readiness",
+    "category": "ORL",
+    "inputs": [
+      "bridge_uri",
+      "scenario_name"
+    ],
+    "preconditions": [
+      "bridge reachable",
+      "demo checklist present"
+    ],
+    "runner": "runner_utils.run_suite",
+    "expected_status": "pass",
+    "expected_log_fragments": [
+      "ORL / Smoke Suite",
+      "ORL / Deterministic Demo Runner",
+      "ORL / Demo Artifact Validation"
+    ],
+    "artifact_types": [
+      "json",
+      "text",
+      "replay",
+      "snapshot",
+      "compare",
+      "build"
+    ],
+    "automation_level": "automated"
+  },
+  "git": {
+    "branch": "integration/ops-console-hardening",
+    "commit": "000e9fc50906793b0a5d2ea634a1bdd4f0b7ca9b",
+    "is_dirty": true,
+    "worktree_status": "dirty"
+  },
+  "run_report_json": "/home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/run_report.json"
+}

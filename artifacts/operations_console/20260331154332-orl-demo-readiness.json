@@ -1,0 +1,1480 @@
+{
+  "name": "ORL / Demo Readiness",
+  "status": "fail",
+  "original_status": "",
+  "summary": "Suite completed with status FAIL. ORL / Smoke Suite=FAIL, ORL / UI Build Check=PASS, ORL / Deterministic Demo Runner=PASS, ORL / Demo Artifact Validation=PASS",
+  "scenario_name": "",
+  "started_at": "2026-03-31T15:43:29.539177+00:00",
+  "finished_at": "2026-03-31T15:43:32.487212+00:00",
+  "duration_ms": 2948,
+  "details": [
+    "## ORL / Demo Readiness",
+    "[1/4] ORL / Smoke Suite",
+    "## ORL / Smoke Suite",
+    "[1/2] ORL / Connectivity",
+    "[ORL] ORL / Connectivity",
+    "Connecting to bridge at ws://127.0.0.1:8766",
+    "Ping OK: pong=True",
+    "Scenario roster received: 6 item(s)",
+    "  1. breakthrough.json",
+    "  2. breakthrough_roundtrip.json",
+    "  3. bridgehead.json",
+    "  4. inchon_mvp.json",
+    "  5. interdiction.json",
+    "  6. mini_gc_1942.json",
+    "PASS: Bridge reachable. 6 scenario(s) available.",
+    "[2/2] ORL / Scenario Integrity",
+    "[ORL] ORL / Scenario Integrity",
+    "Connecting to bridge at ws://127.0.0.1:8766",
+    "No scenario specified; defaulting to the first live roster entry.",
+    "load_scenario failed [bridge_error]: load_scenario failed.",
+    "FAIL: Scenario integrity check failed.",
+    "FAIL: Suite completed with status FAIL. ORL / Connectivity=PASS, ORL / Scenario Integrity=FAIL",
+    "[2/4] ORL / UI Build Check",
+    "[ORL] ORL / UI Build Check",
+    "Inspecting UI directory: /home/jason/dev/mwe/ui",
+    "package.json found",
+    "build script found",
+    "Running build command: npm run build",
+    "stdout: > ui@0.0.0 build",
+    "stdout: > vite build",
+    "stdout: vite v7.3.1 building client environment for production...",
+    "stdout: transforming...",
+    "stdout: \u2713 113 modules transformed.",
+    "stdout: rendering chunks...",
+    "stdout: computing gzip size...",
+    "stdout: dist/index.html                                  0.45 kB \u2502 gzip:   0.29 kB",
+    "stdout: dist/assets/lunga_point_underlay-DIXecpoO.svg    5.06 kB \u2502 gzip:   1.49 kB",
+    "stdout: dist/assets/index-3yHW4cfe.css                 230.85 kB \u2502 gzip:  35.40 kB",
+    "stdout: dist/assets/index-BigxHkVe.js                  701.92 kB \u2502 gzip: 190.58 kB",
+    "stdout: \u2713 built in 2.23s",
+    "stderr: (!) Some chunks are larger than 500 kB after minification. Consider:",
+    "stderr: - Using dynamic import() to code-split the application",
+    "stderr: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks",
+    "stderr: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.",
+    "UI build completed",
+    "Build artifact found: /home/jason/dev/mwe/ui/dist/index.html",
+    "PASS: UI build completed successfully.",
+    "[3/4] ORL / Deterministic Demo Runner",
+    "[ORL] ORL / Deterministic Demo Runner",
+    "using adapter: deterministic_demo_runner",
+    "Selected scenario: inchon_mvp",
+    "[demo.campaign_status] Campaign Status: PASS - Campaign Status passed.",
+    "  CAMPAIGN STATUS: scenario=Inchon Demo Vertical Slice | objective=SEOUL | front=INCHON BEACHHEAD SECURE | supply=PORT OPEN / AXIS ADVANCE | main=INCHON / SEOUL AXIS",
+    "  CAMPAIGN STATUS DETAIL: turn=TURN 1 \u2014 15 SEP 1950 | units=6 | objectives=5 | alerts=2",
+    "[demo.campaign_explain] Campaign Explain: PASS - Campaign Explain passed.",
+    "  CAMPAIGN EXPLAIN: Curated Inchon-to-Seoul publisher vertical slice for Theater of Operations: Korea.",
+    "  CAMPAIGN NOTES: Exploit the landing before the Seoul defensive ring stabilizes.",
+    "  CAMPAIGN OBJECTIVES: Inchon Harbor; Kimpo Airfield; Yongdungpo Crossings (+2 more)",
+    "  CAMPAIGN ALERTS: Kimpo corridor remains contested.; NKPA reserves are forming south of Seoul.",
+    "  CAMPAIGN ORDERS: 1st Marines push east from Inchon toward Kimpo.; 7th Infantry secures the beachhead and port throughput. (+1 more)",
+    "[demo.snapshot_smoke] Snapshot Smoke: PASS - Snapshot Smoke passed.",
+    "  Resolved scenario: inchon_mvp.json",
+    "  Loaded scenario id: inchon_mvp",
+    "  Started scenario: Inchon Demo Vertical Slice",
+    "  Snapshot saved: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json",
+    "  Snapshot loaded: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json",
+    "  Scenario restored: inchon_mvp",
+    "  Units restored: 6",
+    "  Snapshot smoke passed.",
+    "[demo.replay_compare] Replay Compare: PASS - Replay Compare passed.",
+    "  Resolved scenario: inchon_mvp.json",
+    "  Loaded scenario id: inchon_mvp",
+    "  Started scenario: Inchon Demo Vertical Slice",
+    "  Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json",
+    "  Resolved scenario: inchon_mvp.json",
+    "  Loaded scenario id: inchon_mvp",
+    "  Started scenario: Inchon Demo Vertical Slice",
+    "  Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+    "  Replay A: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json",
+    "  Replay B: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+    "  Replay compare identical=True",
+    "  Replay compare output: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json",
+    "  Replay validation passed.",
+    "expected outcome: The bridge roster resolves the scenario without typing the exact filename every time.",
+    "expected outcome: The current UI build succeeds and the console can launch the UI against the selected bridge.",
+    "expected outcome: Replay compare stays deterministic and snapshot smoke remains stable for the current demo slice.",
+    "bug reports: Attach the latest ORL / Demo Readiness report and any incident bundle under artifacts/operations_console/incidents to the demo blocker report.",
+    "artifact: /home/jason/dev/mwe/artifacts/orl/20260331154332-deterministic-demo-runner.json",
+    "PASS: Deterministic demo runner passed.",
+    "[4/4] ORL / Demo Artifact Validation",
+    "[ORL] ORL / Demo Artifact Validation",
+    "using adapter: demo_artifact_validation",
+    "demo_report: PASS /home/jason/dev/mwe/artifacts/operations_console/20260330201520-orl-demo-readiness.json",
+    "replay: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+    "snapshot: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json",
+    "compare_output: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json",
+    "artifact: /home/jason/dev/mwe/artifacts/orl/20260331154332-demo-artifact-shelf.json",
+    "PASS: Demo artifact validation passed.",
+    "AUTO REPORT JSON: /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json",
+    "AUTO REPORT TEXT: /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.txt",
+    "AUTO REFRESH: reran ORL / Demo Artifact Validation after demo report export.",
+    "demo_report: PASS /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json",
+    "RUN MANIFEST: /home/jason/dev/mwe/artifacts/operations_console/run_manifests/20260331154332-orl-demo-readiness-manifest.json",
+    "RUN BRANCH: integration/ops-console-hardening",
+    "RUN COMMIT: 000e9fc50906793b0a5d2ea634a1bdd4f0b7ca9b",
+    "RUN WORKTREE: dirty",
+    "RUN BRIDGE URI: ws://127.0.0.1:8766",
+    "INCIDENT BUNDLE: /home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness",
+    "INCIDENT MANIFEST: /home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/incident.json",
+    "INCIDENT RUN REPORT: /home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/run_report.json"
+  ],
+  "errors": [],
+  "artifact_paths": [
+    "/home/jason/dev/mwe/ui/dist/index.html",
+    "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json",
+    "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json",
+    "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+    "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json",
+    "/home/jason/dev/mwe/artifacts/orl/20260331154332-deterministic-demo-runner.json",
+    "/home/jason/dev/mwe/artifacts/orl/20260331154332-demo-artifact-shelf.json",
+    "/home/jason/dev/mwe/artifacts/operations_console/20260330201520-orl-demo-readiness.json",
+    "/home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json",
+    "/home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.txt",
+    "/home/jason/dev/mwe/artifacts/operations_console/run_manifests/20260331154332-orl-demo-readiness-manifest.json",
+    "/home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/incident.json",
+    "/home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/run_report.json"
+  ],
+  "key_logs": [
+    "[ORL] ORL / Demo Artifact Validation",
+    "using adapter: demo_artifact_validation",
+    "demo_report: PASS /home/jason/dev/mwe/artifacts/operations_console/20260330201520-orl-demo-readiness.json",
+    "replay: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+    "snapshot: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json",
+    "compare_output: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json",
+    "artifact: /home/jason/dev/mwe/artifacts/orl/20260331154332-demo-artifact-shelf.json",
+    "PASS: Demo artifact validation passed.",
+    "AUTO REPORT JSON: /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json",
+    "AUTO REPORT TEXT: /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.txt",
+    "AUTO REFRESH: reran ORL / Demo Artifact Validation after demo report export.",
+    "demo_report: PASS /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json",
+    "RUN MANIFEST: /home/jason/dev/mwe/artifacts/operations_console/run_manifests/20260331154332-orl-demo-readiness-manifest.json",
+    "RUN BRANCH: integration/ops-console-hardening",
+    "RUN COMMIT: 000e9fc50906793b0a5d2ea634a1bdd4f0b7ca9b",
+    "RUN WORKTREE: dirty",
+    "RUN BRIDGE URI: ws://127.0.0.1:8766",
+    "INCIDENT BUNDLE: /home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness",
+    "INCIDENT MANIFEST: /home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/incident.json",
+    "INCIDENT RUN REPORT: /home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/run_report.json"
+  ],
+  "adapter_method": "suite",
+  "executed_command": [
+    "suite",
+    "deterministic_demo_runner",
+    "demo_artifact_validation"
+  ],
+  "return_code": null,
+  "known_issue_matches": [],
+  "gui_action_matrix": {
+    "id": "orl-demo-readiness",
+    "label": "ORL / Demo Readiness",
+    "category": "ORL",
+    "inputs": [
+      "bridge_uri",
+      "scenario_name"
+    ],
+    "preconditions": [
+      "bridge reachable",
+      "demo checklist present"
+    ],
+    "runner": "runner_utils.run_suite",
+    "expected_status": "pass",
+    "expected_log_fragments": [
+      "ORL / Smoke Suite",
+      "ORL / Deterministic Demo Runner",
+      "ORL / Demo Artifact Validation"
+    ],
+    "artifact_types": [
+      "json",
+      "text",
+      "replay",
+      "snapshot",
+      "compare",
+      "build"
+    ],
+    "automation_level": "automated"
+  },
+  "scenario_contract_evaluation": null,
+  "baseline_drift": {
+    "matched": false,
+    "baseline_key": "orl-demo-readiness--default",
+    "status": "pass",
+    "baseline_path": "",
+    "saved_at": "",
+    "findings": [],
+    "baseline_metrics": {},
+    "current_metrics": {
+      "status": "fail",
+      "scenario_name": "",
+      "unit_count": 6,
+      "artifact_count": 13,
+      "artifact_presence": {
+        "any": true,
+        "json": true,
+        "text": true,
+        "replay": true,
+        "snapshot": true,
+        "compare": true,
+        "build": true
+      },
+      "selected_fields": {},
+      "observed_fields": {
+        "scenario_count": 6,
+        "selected_scenario": "inchon_mvp",
+        "unit_count": 6,
+        "replay_identical": true
+      },
+      "subresult_statuses": {
+        "ORL / Smoke Suite": "fail",
+        "ORL / UI Build Check": "pass",
+        "ORL / Deterministic Demo Runner": "pass",
+        "ORL / Demo Artifact Validation": "pass"
+      }
+    }
+  },
+  "first_divergence": null,
+  "explainability_summary": {
+    "scenario": "Inchon Demo Vertical Slice",
+    "objective": "SEOUL",
+    "front_status": "INCHON BEACHHEAD SECURE",
+    "supply_status": "PORT OPEN / AXIS ADVANCE",
+    "main_effort": "INCHON / SEOUL AXIS",
+    "turn": "TURN 1 \u2014 15 SEP 1950",
+    "unit_count": 6,
+    "objective_count": 5,
+    "alert_count": 2,
+    "description": "Curated Inchon-to-Seoul publisher vertical slice for Theater of Operations: Korea.",
+    "staff_notes": "Exploit the landing before the Seoul defensive ring stabilizes.",
+    "objectives_text": "Inchon Harbor; Kimpo Airfield; Yongdungpo Crossings (+2 more)",
+    "objectives_list": [
+      "Inchon Harbor",
+      "Kimpo Airfield",
+      "Yongdungpo Crossings (+2 more)"
+    ],
+    "alerts_text": "Kimpo corridor remains contested.; NKPA reserves are forming south of Seoul.",
+    "alerts": [
+      "Kimpo corridor remains contested.",
+      "NKPA reserves are forming south of Seoul."
+    ],
+    "orders_text": "1st Marines push east from Inchon toward Kimpo.; 7th Infantry secures the beachhead and port throughput. (+1 more)",
+    "orders": [
+      "1st Marines push east from Inchon toward Kimpo.",
+      "7th Infantry secures the beachhead and port throughput. (+1 more)"
+    ]
+  },
+  "incident_metadata": {
+    "logged": true,
+    "bundle_dir": "/home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness",
+    "incident_json_path": "/home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/incident.json",
+    "run_report_json_path": "/home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/run_report.json",
+    "anomaly_matches": []
+  },
+  "run_manifest": {
+    "path": "/home/jason/dev/mwe/artifacts/operations_console/run_manifests/20260331154332-orl-demo-readiness-manifest.json",
+    "branch": "integration/ops-console-hardening",
+    "commit": "000e9fc50906793b0a5d2ea634a1bdd4f0b7ca9b",
+    "worktree_status": "dirty",
+    "bridge_uri": "ws://127.0.0.1:8766",
+    "name": "ORL / Demo Readiness",
+    "scenario_name": "",
+    "started_at": "2026-03-31T15:43:29.539177+00:00",
+    "finished_at": "2026-03-31T15:43:32.487212+00:00"
+  },
+  "subresults": [
+    {
+      "name": "ORL / Smoke Suite",
+      "status": "fail",
+      "original_status": "",
+      "summary": "Suite completed with status FAIL. ORL / Connectivity=PASS, ORL / Scenario Integrity=FAIL",
+      "scenario_name": "",
+      "started_at": "2026-03-31T15:43:29.539217+00:00",
+      "finished_at": "2026-03-31T15:43:29.587313+00:00",
+      "duration_ms": 48,
+      "details": [
+        "## ORL / Smoke Suite",
+        "[1/2] ORL / Connectivity",
+        "[ORL] ORL / Connectivity",
+        "Connecting to bridge at ws://127.0.0.1:8766",
+        "Ping OK: pong=True",
+        "Scenario roster received: 6 item(s)",
+        "  1. breakthrough.json",
+        "  2. breakthrough_roundtrip.json",
+        "  3. bridgehead.json",
+        "  4. inchon_mvp.json",
+        "  5. interdiction.json",
+        "  6. mini_gc_1942.json",
+        "PASS: Bridge reachable. 6 scenario(s) available.",
+        "[2/2] ORL / Scenario Integrity",
+        "[ORL] ORL / Scenario Integrity",
+        "Connecting to bridge at ws://127.0.0.1:8766",
+        "No scenario specified; defaulting to the first live roster entry.",
+        "load_scenario failed [bridge_error]: load_scenario failed.",
+        "FAIL: Scenario integrity check failed."
+      ],
+      "errors": [],
+      "artifact_paths": [],
+      "key_logs": [
+        "## ORL / Smoke Suite",
+        "[1/2] ORL / Connectivity",
+        "[ORL] ORL / Connectivity",
+        "Connecting to bridge at ws://127.0.0.1:8766",
+        "Ping OK: pong=True",
+        "Scenario roster received: 6 item(s)",
+        "1. breakthrough.json",
+        "2. breakthrough_roundtrip.json",
+        "3. bridgehead.json",
+        "4. inchon_mvp.json",
+        "5. interdiction.json",
+        "6. mini_gc_1942.json",
+        "PASS: Bridge reachable. 6 scenario(s) available.",
+        "[2/2] ORL / Scenario Integrity",
+        "[ORL] ORL / Scenario Integrity",
+        "No scenario specified; defaulting to the first live roster entry.",
+        "load_scenario failed [bridge_error]: load_scenario failed.",
+        "FAIL: Scenario integrity check failed."
+      ],
+      "adapter_method": "suite",
+      "executed_command": [],
+      "return_code": null,
+      "known_issue_matches": [],
+      "gui_action_matrix": {
+        "id": "orl-smoke-suite",
+        "label": "ORL / Smoke Suite",
+        "category": "ORL",
+        "inputs": [
+          "bridge_uri",
+          "scenario_name"
+        ],
+        "preconditions": [
+          "bridge reachable"
+        ],
+        "runner": "runner_utils.run_suite",
+        "expected_status": "pass",
+        "expected_log_fragments": [
+          "ORL / Connectivity",
+          "ORL / Scenario Integrity"
+        ],
+        "artifact_types": [],
+        "automation_level": "automated"
+      },
+      "scenario_contract_evaluation": null,
+      "baseline_drift": {
+        "matched": false,
+        "baseline_key": "orl-smoke-suite--default",
+        "status": "pass",
+        "baseline_path": "",
+        "saved_at": "",
+        "findings": [],
+        "baseline_metrics": {},
+        "current_metrics": {
+          "status": "fail",
+          "scenario_name": "",
+          "unit_count": null,
+          "artifact_count": 0,
+          "artifact_presence": {
+            "any": false
+          },
+          "selected_fields": {},
+          "observed_fields": {
+            "scenario_count": 6
+          },
+          "subresult_statuses": {
+            "ORL / Connectivity": "pass",
+            "ORL / Scenario Integrity": "fail"
+          }
+        }
+      },
+      "first_divergence": null,
+      "explainability_summary": null,
+      "incident_metadata": null,
+      "run_manifest": null,
+      "subresults": [
+        {
+          "name": "ORL / Connectivity",
+          "status": "pass",
+          "original_status": "",
+          "summary": "Bridge reachable. 6 scenario(s) available.",
+          "scenario_name": "",
+          "started_at": "2026-03-31T15:43:29.539227+00:00",
+          "finished_at": "2026-03-31T15:43:29.581975+00:00",
+          "duration_ms": 42,
+          "details": [
+            "[ORL] ORL / Connectivity",
+            "Connecting to bridge at ws://127.0.0.1:8766",
+            "Ping OK: pong=True",
+            "Scenario roster received: 6 item(s)",
+            "  1. breakthrough.json",
+            "  2. breakthrough_roundtrip.json",
+            "  3. bridgehead.json",
+            "  4. inchon_mvp.json",
+            "  5. interdiction.json",
+            "  6. mini_gc_1942.json"
+          ],
+          "errors": [],
+          "artifact_paths": [],
+          "key_logs": [
+            "[ORL] ORL / Connectivity",
+            "Connecting to bridge at ws://127.0.0.1:8766",
+            "Ping OK: pong=True",
+            "Scenario roster received: 6 item(s)",
+            "1. breakthrough.json",
+            "2. breakthrough_roundtrip.json",
+            "3. bridgehead.json",
+            "4. inchon_mvp.json",
+            "5. interdiction.json",
+            "6. mini_gc_1942.json"
+          ],
+          "adapter_method": "",
+          "executed_command": [],
+          "return_code": null,
+          "known_issue_matches": [],
+          "gui_action_matrix": {
+            "id": "orl-connectivity",
+            "label": "ORL / Connectivity",
+            "category": "ORL",
+            "inputs": [
+              "bridge_uri"
+            ],
+            "preconditions": [
+              "bridge reachable"
+            ],
+            "runner": "registry.run_orl_connectivity",
+            "expected_status": "pass",
+            "expected_log_fragments": [
+              "Ping OK",
+              "Scenario roster received"
+            ],
+            "artifact_types": [],
+            "automation_level": "automated"
+          },
+          "scenario_contract_evaluation": null,
+          "baseline_drift": {
+            "matched": false,
+            "baseline_key": "orl-connectivity--default",
+            "status": "pass",
+            "baseline_path": "",
+            "saved_at": "",
+            "findings": [],
+            "baseline_metrics": {},
+            "current_metrics": {
+              "status": "pass",
+              "scenario_name": "",
+              "unit_count": null,
+              "artifact_count": 0,
+              "artifact_presence": {
+                "any": false
+              },
+              "selected_fields": {},
+              "observed_fields": {
+                "scenario_count": 6
+              },
+              "subresult_statuses": {}
+            }
+          },
+          "first_divergence": null,
+          "explainability_summary": null,
+          "incident_metadata": null,
+          "run_manifest": null,
+          "subresults": []
+        },
+        {
+          "name": "ORL / Scenario Integrity",
+          "status": "fail",
+          "original_status": "",
+          "summary": "Scenario integrity check failed.",
+          "scenario_name": "",
+          "started_at": "2026-03-31T15:43:29.582004+00:00",
+          "finished_at": "2026-03-31T15:43:29.586973+00:00",
+          "duration_ms": 4,
+          "details": [
+            "[ORL] ORL / Scenario Integrity",
+            "Connecting to bridge at ws://127.0.0.1:8766",
+            "No scenario specified; defaulting to the first live roster entry.",
+            "load_scenario failed [bridge_error]: load_scenario failed."
+          ],
+          "errors": [
+            "load_scenario failed [bridge_error]: load_scenario failed."
+          ],
+          "artifact_paths": [],
+          "key_logs": [
+            "load_scenario failed [bridge_error]: load_scenario failed.",
+            "[ORL] ORL / Scenario Integrity",
+            "Connecting to bridge at ws://127.0.0.1:8766",
+            "No scenario specified; defaulting to the first live roster entry."
+          ],
+          "adapter_method": "",
+          "executed_command": [],
+          "return_code": null,
+          "known_issue_matches": [],
+          "gui_action_matrix": {
+            "id": "orl-scenario-integrity",
+            "label": "ORL / Scenario Integrity",
+            "category": "ORL",
+            "inputs": [
+              "bridge_uri",
+              "scenario_name"
+            ],
+            "preconditions": [
+              "scenario available"
+            ],
+            "runner": "registry.run_orl_scenario_integrity",
+            "expected_status": "pass",
+            "expected_log_fragments": [
+              "Loaded scenario successfully",
+              "Validated units"
+            ],
+            "artifact_types": [],
+            "automation_level": "automated"
+          },
+          "scenario_contract_evaluation": null,
+          "baseline_drift": {
+            "matched": false,
+            "baseline_key": "orl-scenario-integrity--default",
+            "status": "pass",
+            "baseline_path": "",
+            "saved_at": "",
+            "findings": [],
+            "baseline_metrics": {},
+            "current_metrics": {
+              "status": "fail",
+              "scenario_name": "",
+              "unit_count": null,
+              "artifact_count": 0,
+              "artifact_presence": {
+                "any": false
+              },
+              "selected_fields": {},
+              "observed_fields": {},
+              "subresult_statuses": {}
+            }
+          },
+          "first_divergence": null,
+          "explainability_summary": null,
+          "incident_metadata": null,
+          "run_manifest": null,
+          "subresults": []
+        }
+      ]
+    },
+    {
+      "name": "ORL / UI Build Check",
+      "status": "pass",
+      "original_status": "",
+      "summary": "UI build completed successfully.",
+      "scenario_name": "",
+      "started_at": "2026-03-31T15:43:29.587378+00:00",
+      "finished_at": "2026-03-31T15:43:32.460691+00:00",
+      "duration_ms": 2873,
+      "details": [
+        "[ORL] ORL / UI Build Check",
+        "Inspecting UI directory: /home/jason/dev/mwe/ui",
+        "package.json found",
+        "build script found",
+        "Running build command: npm run build",
+        "stdout: > ui@0.0.0 build",
+        "stdout: > vite build",
+        "stdout: vite v7.3.1 building client environment for production...",
+        "stdout: transforming...",
+        "stdout: \u2713 113 modules transformed.",
+        "stdout: rendering chunks...",
+        "stdout: computing gzip size...",
+        "stdout: dist/index.html                                  0.45 kB \u2502 gzip:   0.29 kB",
+        "stdout: dist/assets/lunga_point_underlay-DIXecpoO.svg    5.06 kB \u2502 gzip:   1.49 kB",
+        "stdout: dist/assets/index-3yHW4cfe.css                 230.85 kB \u2502 gzip:  35.40 kB",
+        "stdout: dist/assets/index-BigxHkVe.js                  701.92 kB \u2502 gzip: 190.58 kB",
+        "stdout: \u2713 built in 2.23s",
+        "stderr: (!) Some chunks are larger than 500 kB after minification. Consider:",
+        "stderr: - Using dynamic import() to code-split the application",
+        "stderr: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks",
+        "stderr: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.",
+        "UI build completed",
+        "Build artifact found: /home/jason/dev/mwe/ui/dist/index.html"
+      ],
+      "errors": [],
+      "artifact_paths": [
+        "/home/jason/dev/mwe/ui/dist/index.html"
+      ],
+      "key_logs": [
+        "build script found",
+        "Running build command: npm run build",
+        "stdout: > ui@0.0.0 build",
+        "stdout: > vite build",
+        "stdout: vite v7.3.1 building client environment for production...",
+        "stdout: transforming...",
+        "stdout: \u2713 113 modules transformed.",
+        "stdout: rendering chunks...",
+        "stdout: computing gzip size...",
+        "stdout: dist/index.html                                  0.45 kB \u2502 gzip:   0.29 kB",
+        "stdout: dist/assets/lunga_point_underlay-DIXecpoO.svg    5.06 kB \u2502 gzip:   1.49 kB",
+        "stdout: dist/assets/index-3yHW4cfe.css                 230.85 kB \u2502 gzip:  35.40 kB",
+        "stdout: dist/assets/index-BigxHkVe.js                  701.92 kB \u2502 gzip: 190.58 kB",
+        "stdout: \u2713 built in 2.23s",
+        "stderr: (!) Some chunks are larger than 500 kB after minification. Consider:",
+        "stderr: - Using dynamic import() to code-split the application",
+        "stderr: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks",
+        "stderr: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.",
+        "UI build completed",
+        "Build artifact found: /home/jason/dev/mwe/ui/dist/index.html"
+      ],
+      "adapter_method": "",
+      "executed_command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "return_code": 0,
+      "known_issue_matches": [],
+      "gui_action_matrix": {
+        "id": "orl-ui-build-check",
+        "label": "ORL / UI Build Check",
+        "category": "ORL",
+        "inputs": [],
+        "preconditions": [
+          "ui package.json present"
+        ],
+        "runner": "registry.run_orl_ui_build_check",
+        "expected_status": "pass",
+        "expected_log_fragments": [
+          "package.json found",
+          "UI build completed"
+        ],
+        "artifact_types": [
+          "build"
+        ],
+        "automation_level": "automated"
+      },
+      "scenario_contract_evaluation": null,
+      "baseline_drift": {
+        "matched": false,
+        "baseline_key": "orl-ui-build-check--default",
+        "status": "pass",
+        "baseline_path": "",
+        "saved_at": "",
+        "findings": [],
+        "baseline_metrics": {},
+        "current_metrics": {
+          "status": "pass",
+          "scenario_name": "",
+          "unit_count": null,
+          "artifact_count": 1,
+          "artifact_presence": {
+            "any": true,
+            "build": true
+          },
+          "selected_fields": {},
+          "observed_fields": {},
+          "subresult_statuses": {}
+        }
+      },
+      "first_divergence": null,
+      "explainability_summary": null,
+      "incident_metadata": null,
+      "run_manifest": null,
+      "subresults": []
+    },
+    {
+      "name": "ORL / Deterministic Demo Runner",
+      "status": "pass",
+      "original_status": "",
+      "summary": "Deterministic demo runner passed.",
+      "scenario_name": "",
+      "started_at": "2026-03-31T15:43:32.460755+00:00",
+      "finished_at": "2026-03-31T15:43:32.486102+00:00",
+      "duration_ms": 25,
+      "details": [
+        "[ORL] ORL / Deterministic Demo Runner",
+        "using adapter: deterministic_demo_runner",
+        "Selected scenario: inchon_mvp",
+        "[demo.campaign_status] Campaign Status: PASS - Campaign Status passed.",
+        "  CAMPAIGN STATUS: scenario=Inchon Demo Vertical Slice | objective=SEOUL | front=INCHON BEACHHEAD SECURE | supply=PORT OPEN / AXIS ADVANCE | main=INCHON / SEOUL AXIS",
+        "  CAMPAIGN STATUS DETAIL: turn=TURN 1 \u2014 15 SEP 1950 | units=6 | objectives=5 | alerts=2",
+        "[demo.campaign_explain] Campaign Explain: PASS - Campaign Explain passed.",
+        "  CAMPAIGN EXPLAIN: Curated Inchon-to-Seoul publisher vertical slice for Theater of Operations: Korea.",
+        "  CAMPAIGN NOTES: Exploit the landing before the Seoul defensive ring stabilizes.",
+        "  CAMPAIGN OBJECTIVES: Inchon Harbor; Kimpo Airfield; Yongdungpo Crossings (+2 more)",
+        "  CAMPAIGN ALERTS: Kimpo corridor remains contested.; NKPA reserves are forming south of Seoul.",
+        "  CAMPAIGN ORDERS: 1st Marines push east from Inchon toward Kimpo.; 7th Infantry secures the beachhead and port throughput. (+1 more)",
+        "[demo.snapshot_smoke] Snapshot Smoke: PASS - Snapshot Smoke passed.",
+        "  Resolved scenario: inchon_mvp.json",
+        "  Loaded scenario id: inchon_mvp",
+        "  Started scenario: Inchon Demo Vertical Slice",
+        "  Snapshot saved: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json",
+        "  Snapshot loaded: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json",
+        "  Scenario restored: inchon_mvp",
+        "  Units restored: 6",
+        "  Snapshot smoke passed.",
+        "[demo.replay_compare] Replay Compare: PASS - Replay Compare passed.",
+        "  Resolved scenario: inchon_mvp.json",
+        "  Loaded scenario id: inchon_mvp",
+        "  Started scenario: Inchon Demo Vertical Slice",
+        "  Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json",
+        "  Resolved scenario: inchon_mvp.json",
+        "  Loaded scenario id: inchon_mvp",
+        "  Started scenario: Inchon Demo Vertical Slice",
+        "  Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+        "  Replay A: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json",
+        "  Replay B: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+        "  Replay compare identical=True",
+        "  Replay compare output: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json",
+        "  Replay validation passed.",
+        "expected outcome: The bridge roster resolves the scenario without typing the exact filename every time.",
+        "expected outcome: The current UI build succeeds and the console can launch the UI against the selected bridge.",
+        "expected outcome: Replay compare stays deterministic and snapshot smoke remains stable for the current demo slice.",
+        "bug reports: Attach the latest ORL / Demo Readiness report and any incident bundle under artifacts/operations_console/incidents to the demo blocker report.",
+        "artifact: /home/jason/dev/mwe/artifacts/orl/20260331154332-deterministic-demo-runner.json"
+      ],
+      "errors": [],
+      "artifact_paths": [
+        "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json",
+        "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json",
+        "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+        "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json",
+        "/home/jason/dev/mwe/artifacts/orl/20260331154332-deterministic-demo-runner.json"
+      ],
+      "key_logs": [
+        "Snapshot smoke passed.",
+        "[demo.replay_compare] Replay Compare: PASS - Replay Compare passed.",
+        "Resolved scenario: inchon_mvp.json",
+        "Loaded scenario id: inchon_mvp",
+        "Started scenario: Inchon Demo Vertical Slice",
+        "Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json",
+        "Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+        "Replay A: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json",
+        "Replay B: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+        "Replay compare identical=True",
+        "Replay compare output: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json",
+        "Replay validation passed.",
+        "expected outcome: The bridge roster resolves the scenario without typing the exact filename every time.",
+        "expected outcome: The current UI build succeeds and the console can launch the UI against the selected bridge.",
+        "expected outcome: Replay compare stays deterministic and snapshot smoke remains stable for the current demo slice.",
+        "bug reports: Attach the latest ORL / Demo Readiness report and any incident bundle under artifacts/operations_console/incidents to the demo blocker report.",
+        "artifact: /home/jason/dev/mwe/artifacts/orl/20260331154332-deterministic-demo-runner.json"
+      ],
+      "adapter_method": "deterministic_demo_runner",
+      "executed_command": [],
+      "return_code": null,
+      "known_issue_matches": [],
+      "gui_action_matrix": {
+        "id": "orl-deterministic-demo-runner",
+        "label": "ORL / Deterministic Demo Runner",
+        "category": "ORL",
+        "inputs": [
+          "scenario_name"
+        ],
+        "preconditions": [
+          "demo checklist present"
+        ],
+        "runner": "registry.run_orl_deterministic_demo_runner",
+        "expected_status": "pass",
+        "expected_log_fragments": [
+          "Campaign Status",
+          "Replay Compare",
+          "Snapshot Smoke"
+        ],
+        "artifact_types": [
+          "json",
+          "replay",
+          "snapshot",
+          "compare"
+        ],
+        "automation_level": "automated"
+      },
+      "scenario_contract_evaluation": null,
+      "baseline_drift": {
+        "matched": false,
+        "baseline_key": "orl-deterministic-demo-runner--default",
+        "status": "pass",
+        "baseline_path": "",
+        "saved_at": "",
+        "findings": [],
+        "baseline_metrics": {},
+        "current_metrics": {
+          "status": "pass",
+          "scenario_name": "",
+          "unit_count": 6,
+          "artifact_count": 5,
+          "artifact_presence": {
+            "any": true,
+            "json": true,
+            "replay": true,
+            "snapshot": true,
+            "compare": true
+          },
+          "selected_fields": {},
+          "observed_fields": {
+            "selected_scenario": "inchon_mvp",
+            "unit_count": 6,
+            "replay_identical": true
+          },
+          "subresult_statuses": {
+            "Campaign Status": "pass",
+            "Campaign Explain": "pass",
+            "Snapshot Smoke": "pass",
+            "Replay Compare": "pass"
+          }
+        }
+      },
+      "first_divergence": null,
+      "explainability_summary": {
+        "scenario": "Inchon Demo Vertical Slice",
+        "objective": "SEOUL",
+        "front_status": "INCHON BEACHHEAD SECURE",
+        "supply_status": "PORT OPEN / AXIS ADVANCE",
+        "main_effort": "INCHON / SEOUL AXIS",
+        "turn": "TURN 1 \u2014 15 SEP 1950",
+        "unit_count": 6,
+        "objective_count": 5,
+        "alert_count": 2,
+        "description": "Curated Inchon-to-Seoul publisher vertical slice for Theater of Operations: Korea.",
+        "staff_notes": "Exploit the landing before the Seoul defensive ring stabilizes.",
+        "objectives_text": "Inchon Harbor; Kimpo Airfield; Yongdungpo Crossings (+2 more)",
+        "objectives_list": [
+          "Inchon Harbor",
+          "Kimpo Airfield",
+          "Yongdungpo Crossings (+2 more)"
+        ],
+        "alerts_text": "Kimpo corridor remains contested.; NKPA reserves are forming south of Seoul.",
+        "alerts": [
+          "Kimpo corridor remains contested.",
+          "NKPA reserves are forming south of Seoul."
+        ],
+        "orders_text": "1st Marines push east from Inchon toward Kimpo.; 7th Infantry secures the beachhead and port throughput. (+1 more)",
+        "orders": [
+          "1st Marines push east from Inchon toward Kimpo.",
+          "7th Infantry secures the beachhead and port throughput. (+1 more)"
+        ]
+      },
+      "incident_metadata": null,
+      "run_manifest": null,
+      "subresults": [
+        {
+          "name": "Campaign Status",
+          "status": "pass",
+          "original_status": "",
+          "summary": "Campaign Status passed.",
+          "scenario_name": "",
+          "started_at": "",
+          "finished_at": "",
+          "duration_ms": 0,
+          "details": [
+            "BLOCKER CLASS: demo.campaign_status",
+            "CAMPAIGN STATUS: scenario=Inchon Demo Vertical Slice | objective=SEOUL | front=INCHON BEACHHEAD SECURE | supply=PORT OPEN / AXIS ADVANCE | main=INCHON / SEOUL AXIS",
+            "CAMPAIGN STATUS DETAIL: turn=TURN 1 \u2014 15 SEP 1950 | units=6 | objectives=5 | alerts=2"
+          ],
+          "errors": [],
+          "artifact_paths": [],
+          "key_logs": [
+            "BLOCKER CLASS: demo.campaign_status",
+            "CAMPAIGN STATUS: scenario=Inchon Demo Vertical Slice | objective=SEOUL | front=INCHON BEACHHEAD SECURE | supply=PORT OPEN / AXIS ADVANCE | main=INCHON / SEOUL AXIS",
+            "CAMPAIGN STATUS DETAIL: turn=TURN 1 \u2014 15 SEP 1950 | units=6 | objectives=5 | alerts=2"
+          ],
+          "adapter_method": "",
+          "executed_command": [],
+          "return_code": null,
+          "known_issue_matches": [],
+          "gui_action_matrix": null,
+          "scenario_contract_evaluation": null,
+          "baseline_drift": {
+            "matched": false,
+            "baseline_key": "campaign-status--default",
+            "status": "pass",
+            "baseline_path": "",
+            "saved_at": "",
+            "findings": [],
+            "baseline_metrics": {},
+            "current_metrics": {
+              "status": "pass",
+              "scenario_name": "",
+              "unit_count": null,
+              "artifact_count": 0,
+              "artifact_presence": {
+                "any": false
+              },
+              "selected_fields": {},
+              "observed_fields": {},
+              "subresult_statuses": {}
+            }
+          },
+          "first_divergence": null,
+          "explainability_summary": {
+            "scenario": "Inchon Demo Vertical Slice",
+            "objective": "SEOUL",
+            "front_status": "INCHON BEACHHEAD SECURE",
+            "supply_status": "PORT OPEN / AXIS ADVANCE",
+            "main_effort": "INCHON / SEOUL AXIS",
+            "turn": "TURN 1 \u2014 15 SEP 1950",
+            "unit_count": 6,
+            "objective_count": 5,
+            "alert_count": 2
+          },
+          "incident_metadata": null,
+          "run_manifest": null,
+          "subresults": []
+        },
+        {
+          "name": "Campaign Explain",
+          "status": "pass",
+          "original_status": "",
+          "summary": "Campaign Explain passed.",
+          "scenario_name": "",
+          "started_at": "",
+          "finished_at": "",
+          "duration_ms": 0,
+          "details": [
+            "BLOCKER CLASS: demo.campaign_explain",
+            "CAMPAIGN EXPLAIN: Curated Inchon-to-Seoul publisher vertical slice for Theater of Operations: Korea.",
+            "CAMPAIGN NOTES: Exploit the landing before the Seoul defensive ring stabilizes.",
+            "CAMPAIGN OBJECTIVES: Inchon Harbor; Kimpo Airfield; Yongdungpo Crossings (+2 more)",
+            "CAMPAIGN ALERTS: Kimpo corridor remains contested.; NKPA reserves are forming south of Seoul.",
+            "CAMPAIGN ORDERS: 1st Marines push east from Inchon toward Kimpo.; 7th Infantry secures the beachhead and port throughput. (+1 more)"
+          ],
+          "errors": [],
+          "artifact_paths": [],
+          "key_logs": [
+            "BLOCKER CLASS: demo.campaign_explain",
+            "CAMPAIGN EXPLAIN: Curated Inchon-to-Seoul publisher vertical slice for Theater of Operations: Korea.",
+            "CAMPAIGN NOTES: Exploit the landing before the Seoul defensive ring stabilizes.",
+            "CAMPAIGN OBJECTIVES: Inchon Harbor; Kimpo Airfield; Yongdungpo Crossings (+2 more)",
+            "CAMPAIGN ALERTS: Kimpo corridor remains contested.; NKPA reserves are forming south of Seoul.",
+            "CAMPAIGN ORDERS: 1st Marines push east from Inchon toward Kimpo.; 7th Infantry secures the beachhead and port throughput. (+1 more)"
+          ],
+          "adapter_method": "",
+          "executed_command": [],
+          "return_code": null,
+          "known_issue_matches": [],
+          "gui_action_matrix": null,
+          "scenario_contract_evaluation": null,
+          "baseline_drift": {
+            "matched": false,
+            "baseline_key": "campaign-explain--default",
+            "status": "pass",
+            "baseline_path": "",
+            "saved_at": "",
+            "findings": [],
+            "baseline_metrics": {},
+            "current_metrics": {
+              "status": "pass",
+              "scenario_name": "",
+              "unit_count": null,
+              "artifact_count": 0,
+              "artifact_presence": {
+                "any": false
+              },
+              "selected_fields": {},
+              "observed_fields": {},
+              "subresult_statuses": {}
+            }
+          },
+          "first_divergence": null,
+          "explainability_summary": {
+            "description": "Curated Inchon-to-Seoul publisher vertical slice for Theater of Operations: Korea.",
+            "staff_notes": "Exploit the landing before the Seoul defensive ring stabilizes.",
+            "objectives_text": "Inchon Harbor; Kimpo Airfield; Yongdungpo Crossings (+2 more)",
+            "objectives_list": [
+              "Inchon Harbor",
+              "Kimpo Airfield",
+              "Yongdungpo Crossings (+2 more)"
+            ],
+            "alerts_text": "Kimpo corridor remains contested.; NKPA reserves are forming south of Seoul.",
+            "alerts": [
+              "Kimpo corridor remains contested.",
+              "NKPA reserves are forming south of Seoul."
+            ],
+            "orders_text": "1st Marines push east from Inchon toward Kimpo.; 7th Infantry secures the beachhead and port throughput. (+1 more)",
+            "orders": [
+              "1st Marines push east from Inchon toward Kimpo.",
+              "7th Infantry secures the beachhead and port throughput. (+1 more)"
+            ]
+          },
+          "incident_metadata": null,
+          "run_manifest": null,
+          "subresults": []
+        },
+        {
+          "name": "Snapshot Smoke",
+          "status": "pass",
+          "original_status": "",
+          "summary": "Snapshot Smoke passed.",
+          "scenario_name": "",
+          "started_at": "",
+          "finished_at": "",
+          "duration_ms": 0,
+          "details": [
+            "BLOCKER CLASS: demo.snapshot_smoke",
+            "Resolved scenario: inchon_mvp.json",
+            "Loaded scenario id: inchon_mvp",
+            "Started scenario: Inchon Demo Vertical Slice",
+            "Snapshot saved: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json",
+            "Snapshot loaded: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json",
+            "Scenario restored: inchon_mvp",
+            "Units restored: 6",
+            "Snapshot smoke passed."
+          ],
+          "errors": [],
+          "artifact_paths": [
+            "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json"
+          ],
+          "key_logs": [
+            "BLOCKER CLASS: demo.snapshot_smoke",
+            "Resolved scenario: inchon_mvp.json",
+            "Loaded scenario id: inchon_mvp",
+            "Started scenario: Inchon Demo Vertical Slice",
+            "Snapshot saved: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json",
+            "Snapshot loaded: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json",
+            "Scenario restored: inchon_mvp",
+            "Units restored: 6",
+            "Snapshot smoke passed."
+          ],
+          "adapter_method": "",
+          "executed_command": [],
+          "return_code": null,
+          "known_issue_matches": [],
+          "gui_action_matrix": null,
+          "scenario_contract_evaluation": null,
+          "baseline_drift": {
+            "matched": false,
+            "baseline_key": "snapshot-smoke--default",
+            "status": "pass",
+            "baseline_path": "",
+            "saved_at": "",
+            "findings": [],
+            "baseline_metrics": {},
+            "current_metrics": {
+              "status": "pass",
+              "scenario_name": "",
+              "unit_count": 6,
+              "artifact_count": 1,
+              "artifact_presence": {
+                "any": true
+              },
+              "selected_fields": {},
+              "observed_fields": {
+                "unit_count": 6
+              },
+              "subresult_statuses": {}
+            }
+          },
+          "first_divergence": null,
+          "explainability_summary": null,
+          "incident_metadata": null,
+          "run_manifest": null,
+          "subresults": []
+        },
+        {
+          "name": "Replay Compare",
+          "status": "pass",
+          "original_status": "",
+          "summary": "Replay Compare passed.",
+          "scenario_name": "",
+          "started_at": "",
+          "finished_at": "",
+          "duration_ms": 0,
+          "details": [
+            "BLOCKER CLASS: demo.replay_compare",
+            "Resolved scenario: inchon_mvp.json",
+            "Loaded scenario id: inchon_mvp",
+            "Started scenario: Inchon Demo Vertical Slice",
+            "Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json",
+            "Resolved scenario: inchon_mvp.json",
+            "Loaded scenario id: inchon_mvp",
+            "Started scenario: Inchon Demo Vertical Slice",
+            "Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+            "Replay A: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json",
+            "Replay B: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+            "Replay compare identical=True",
+            "Replay compare output: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json",
+            "Replay validation passed."
+          ],
+          "errors": [],
+          "artifact_paths": [
+            "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json",
+            "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+            "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json"
+          ],
+          "key_logs": [
+            "BLOCKER CLASS: demo.replay_compare",
+            "Resolved scenario: inchon_mvp.json",
+            "Loaded scenario id: inchon_mvp",
+            "Started scenario: Inchon Demo Vertical Slice",
+            "Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json",
+            "Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+            "Replay A: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json",
+            "Replay B: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+            "Replay compare identical=True",
+            "Replay compare output: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json",
+            "Replay validation passed."
+          ],
+          "adapter_method": "",
+          "executed_command": [],
+          "return_code": null,
+          "known_issue_matches": [],
+          "gui_action_matrix": null,
+          "scenario_contract_evaluation": null,
+          "baseline_drift": {
+            "matched": false,
+            "baseline_key": "replay-compare--default",
+            "status": "pass",
+            "baseline_path": "",
+            "saved_at": "",
+            "findings": [],
+            "baseline_metrics": {},
+            "current_metrics": {
+              "status": "pass",
+              "scenario_name": "",
+              "unit_count": null,
+              "artifact_count": 3,
+              "artifact_presence": {
+                "any": true
+              },
+              "selected_fields": {},
+              "observed_fields": {
+                "replay_identical": true
+              },
+              "subresult_statuses": {}
+            }
+          },
+          "first_divergence": null,
+          "explainability_summary": null,
+          "incident_metadata": null,
+          "run_manifest": null,
+          "subresults": []
+        }
+      ]
+    },
+    {
+      "name": "ORL / Demo Artifact Validation",
+      "status": "pass",
+      "original_status": "",
+      "summary": "Demo artifact validation passed.",
+      "scenario_name": "",
+      "started_at": "2026-03-31T15:43:32.607152+00:00",
+      "finished_at": "2026-03-31T15:43:32.608156+00:00",
+      "duration_ms": 0,
+      "details": [
+        "[ORL] ORL / Demo Artifact Validation",
+        "using adapter: demo_artifact_validation",
+        "demo_report: PASS /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json",
+        "replay: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+        "snapshot: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json",
+        "compare_output: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json",
+        "artifact: /home/jason/dev/mwe/artifacts/orl/20260331154332-demo-artifact-shelf.json"
+      ],
+      "errors": [],
+      "artifact_paths": [
+        "/home/jason/dev/mwe/artifacts/orl/20260331154332-demo-artifact-shelf.json",
+        "/home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json",
+        "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+        "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json",
+        "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json"
+      ],
+      "key_logs": [
+        "[ORL] ORL / Demo Artifact Validation",
+        "using adapter: demo_artifact_validation",
+        "demo_report: PASS /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json",
+        "replay: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+        "snapshot: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json",
+        "compare_output: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json",
+        "artifact: /home/jason/dev/mwe/artifacts/orl/20260331154332-demo-artifact-shelf.json"
+      ],
+      "adapter_method": "demo_artifact_validation",
+      "executed_command": [],
+      "return_code": null,
+      "known_issue_matches": [],
+      "gui_action_matrix": {
+        "id": "orl-demo-artifact-validation",
+        "label": "ORL / Demo Artifact Validation",
+        "category": "ORL",
+        "inputs": [],
+        "preconditions": [
+          "demo artifacts previously generated"
+        ],
+        "runner": "registry.run_orl_demo_artifact_validation",
+        "expected_status": "pass",
+        "expected_log_fragments": [
+          "Latest Demo Report",
+          "Latest Replay",
+          "Latest Snapshot",
+          "Latest Compare Output"
+        ],
+        "artifact_types": [
+          "json"
+        ],
+        "automation_level": "automated"
+      },
+      "scenario_contract_evaluation": null,
+      "baseline_drift": {
+        "matched": false,
+        "baseline_key": "orl-demo-artifact-validation--default",
+        "status": "pass",
+        "baseline_path": "",
+        "saved_at": "",
+        "findings": [],
+        "baseline_metrics": {},
+        "current_metrics": {
+          "status": "pass",
+          "scenario_name": "",
+          "unit_count": null,
+          "artifact_count": 5,
+          "artifact_presence": {
+            "any": true,
+            "json": true
+          },
+          "selected_fields": {},
+          "observed_fields": {},
+          "subresult_statuses": {
+            "Latest Demo Report": "pass",
+            "Latest Replay": "pass",
+            "Latest Snapshot": "pass",
+            "Latest Compare Output": "pass"
+          }
+        }
+      },
+      "first_divergence": null,
+      "explainability_summary": null,
+      "incident_metadata": null,
+      "run_manifest": null,
+      "subresults": [
+        {
+          "name": "Latest Demo Report",
+          "status": "pass",
+          "original_status": "",
+          "summary": "Latest Demo Report found.",
+          "scenario_name": "",
+          "started_at": "",
+          "finished_at": "",
+          "duration_ms": 0,
+          "details": [
+            "BLOCKER CLASS: demo.artifact_output",
+            "slot: demo_report",
+            "path: /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json",
+            "modified_at: 2026-03-31T15:43:32.586547+00:00",
+            "size_bytes: 62991"
+          ],
+          "errors": [],
+          "artifact_paths": [
+            "/home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json"
+          ],
+          "key_logs": [
+            "BLOCKER CLASS: demo.artifact_output",
+            "slot: demo_report",
+            "path: /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json",
+            "modified_at: 2026-03-31T15:43:32.586547+00:00",
+            "size_bytes: 62991"
+          ],
+          "adapter_method": "",
+          "executed_command": [],
+          "return_code": null,
+          "known_issue_matches": [],
+          "gui_action_matrix": null,
+          "scenario_contract_evaluation": null,
+          "baseline_drift": {
+            "matched": false,
+            "baseline_key": "latest-demo-report--default",
+            "status": "pass",
+            "baseline_path": "",
+            "saved_at": "",
+            "findings": [],
+            "baseline_metrics": {},
+            "current_metrics": {
+              "status": "pass",
+              "scenario_name": "",
+              "unit_count": null,
+              "artifact_count": 1,
+              "artifact_presence": {
+                "any": true
+              },
+              "selected_fields": {},
+              "observed_fields": {},
+              "subresult_statuses": {}
+            }
+          },
+          "first_divergence": null,
+          "explainability_summary": null,
+          "incident_metadata": null,
+          "run_manifest": null,
+          "subresults": []
+        },
+        {
+          "name": "Latest Replay",
+          "status": "pass",
+          "original_status": "",
+          "summary": "Latest Replay found.",
+          "scenario_name": "",
+          "started_at": "",
+          "finished_at": "",
+          "duration_ms": 0,
+          "details": [
+            "BLOCKER CLASS: demo.artifact_output",
+            "slot: replay",
+            "path: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+            "modified_at: 2026-03-31T15:43:32.485337+00:00",
+            "size_bytes: 5485"
+          ],
+          "errors": [],
+          "artifact_paths": [
+            "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json"
+          ],
+          "key_logs": [
+            "BLOCKER CLASS: demo.artifact_output",
+            "slot: replay",
+            "path: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json",
+            "modified_at: 2026-03-31T15:43:32.485337+00:00",
+            "size_bytes: 5485"
+          ],
+          "adapter_method": "",
+          "executed_command": [],
+          "return_code": null,
+          "known_issue_matches": [],
+          "gui_action_matrix": null,
+          "scenario_contract_evaluation": null,
+          "baseline_drift": {
+            "matched": false,
+            "baseline_key": "latest-replay--default",
+            "status": "pass",
+            "baseline_path": "",
+            "saved_at": "",
+            "findings": [],
+            "baseline_metrics": {},
+            "current_metrics": {
+              "status": "pass",
+              "scenario_name": "",
+              "unit_count": null,
+              "artifact_count": 1,
+              "artifact_presence": {
+                "any": true
+              },
+              "selected_fields": {},
+              "observed_fields": {},
+              "subresult_statuses": {}
+            }
+          },
+          "first_divergence": null,
+          "explainability_summary": null,
+          "incident_metadata": null,
+          "run_manifest": null,
+          "subresults": []
+        },
+        {
+          "name": "Latest Snapshot",
+          "status": "pass",
+          "original_status": "",
+          "summary": "Latest Snapshot found.",
+          "scenario_name": "",
+          "started_at": "",
+          "finished_at": "",
+          "duration_ms": 0,
+          "details": [
+            "BLOCKER CLASS: demo.artifact_output",
+            "slot: snapshot",
+            "path: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json",
+            "modified_at: 2026-03-31T15:43:32.471997+00:00",
+            "size_bytes: 5355"
+          ],
+          "errors": [],
+          "artifact_paths": [
+            "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json"
+          ],
+          "key_logs": [
+            "BLOCKER CLASS: demo.artifact_output",
+            "slot: snapshot",
+            "path: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json",
+            "modified_at: 2026-03-31T15:43:32.471997+00:00",
+            "size_bytes: 5355"
+          ],
+          "adapter_method": "",
+          "executed_command": [],
+          "return_code": null,
+          "known_issue_matches": [],
+          "gui_action_matrix": null,
+          "scenario_contract_evaluation": null,
+          "baseline_drift": {
+            "matched": false,
+            "baseline_key": "latest-snapshot--default",
+            "status": "pass",
+            "baseline_path": "",
+            "saved_at": "",
+            "findings": [],
+            "baseline_metrics": {},
+            "current_metrics": {
+              "status": "pass",
+              "scenario_name": "",
+              "unit_count": null,
+              "artifact_count": 1,
+              "artifact_presence": {
+                "any": true
+              },
+              "selected_fields": {},
+              "observed_fields": {},
+              "subresult_statuses": {}
+            }
+          },
+          "first_divergence": null,
+          "explainability_summary": null,
+          "incident_metadata": null,
+          "run_manifest": null,
+          "subresults": []
+        },
+        {
+          "name": "Latest Compare Output",
+          "status": "pass",
+          "original_status": "",
+          "summary": "Latest Compare Output found.",
+          "scenario_name": "",
+          "started_at": "",
+          "finished_at": "",
+          "duration_ms": 0,
+          "details": [
+            "BLOCKER CLASS: demo.artifact_output",
+            "slot: compare_output",
+            "path: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json",
+            "modified_at: 2026-03-31T15:43:32.485666+00:00",
+            "size_bytes: 267"
+          ],
+          "errors": [],
+          "artifact_paths": [
+            "/home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json"
+          ],
+          "key_logs": [
+            "BLOCKER CLASS: demo.artifact_output",
+            "slot: compare_output",
+            "path: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json",
+            "modified_at: 2026-03-31T15:43:32.485666+00:00",
+            "size_bytes: 267"
+          ],
+          "adapter_method": "",
+          "executed_command": [],
+          "return_code": null,
+          "known_issue_matches": [],
+          "gui_action_matrix": null,
+          "scenario_contract_evaluation": null,
+          "baseline_drift": {
+            "matched": false,
+            "baseline_key": "latest-compare-output--default",
+            "status": "pass",
+            "baseline_path": "",
+            "saved_at": "",
+            "findings": [],
+            "baseline_metrics": {},
+            "current_metrics": {
+              "status": "pass",
+              "scenario_name": "",
+              "unit_count": null,
+              "artifact_count": 1,
+              "artifact_presence": {
+                "any": true
+              },
+              "selected_fields": {},
+              "observed_fields": {},
+              "subresult_statuses": {}
+            }
+          },
+          "first_divergence": null,
+          "explainability_summary": null,
+          "incident_metadata": null,
+          "run_manifest": null,
+          "subresults": []
+        }
+      ]
+    }
+  ]
+}

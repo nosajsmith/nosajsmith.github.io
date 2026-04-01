@@ -1,0 +1,651 @@
+Name: ORL / Demo Readiness
+Status: FAIL
+Summary: Suite completed with status FAIL. ORL / Smoke Suite=FAIL, ORL / UI Build Check=PASS, ORL / Deterministic Demo Runner=PASS, ORL / Demo Artifact Validation=PASS
+Started: 2026-03-31T15:43:29.539177+00:00
+Finished: 2026-03-31T15:43:32.487212+00:00
+Duration (ms): 2948
+GUI Action Id: orl-demo-readiness
+Automation Level: automated
+Expected Status: PASS
+Baseline Drift: NOT FOUND
+Explainability:
+- Scenario: Inchon Demo Vertical Slice
+- Objective: SEOUL
+- Front Status: INCHON BEACHHEAD SECURE
+- Supply Status: PORT OPEN / AXIS ADVANCE
+- Main Effort: INCHON / SEOUL AXIS
+- Turn: TURN 1 — 15 SEP 1950
+- Unit Count: 6
+- Objective Count: 5
+- Alert Count: 2
+- Description: Curated Inchon-to-Seoul publisher vertical slice for Theater of Operations: Korea.
+- Staff Notes: Exploit the landing before the Seoul defensive ring stabilizes.
+- Objectives: Inchon Harbor; Kimpo Airfield; Yongdungpo Crossings (+2 more)
+- Alerts: Kimpo corridor remains contested.; NKPA reserves are forming south of Seoul.
+- Orders: 1st Marines push east from Inchon toward Kimpo.; 7th Infantry secures the beachhead and port throughput. (+1 more)
+Incident Logged: YES
+Incident Bundle: /home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness
+Incident Manifest: /home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/incident.json
+Incident Run Report: /home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/run_report.json
+Run Manifest: /home/jason/dev/mwe/artifacts/operations_console/run_manifests/20260331154332-orl-demo-readiness-manifest.json
+Run Branch: integration/ops-console-hardening
+Run Commit: 000e9fc50906793b0a5d2ea634a1bdd4f0b7ca9b
+Run Worktree: dirty
+Run Bridge URI: ws://127.0.0.1:8766
+Artifacts:
+- /home/jason/dev/mwe/ui/dist/index.html
+- /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json
+- /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json
+- /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json
+- /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json
+- /home/jason/dev/mwe/artifacts/orl/20260331154332-deterministic-demo-runner.json
+- /home/jason/dev/mwe/artifacts/orl/20260331154332-demo-artifact-shelf.json
+- /home/jason/dev/mwe/artifacts/operations_console/20260330201520-orl-demo-readiness.json
+- /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json
+- /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.txt
+- /home/jason/dev/mwe/artifacts/operations_console/run_manifests/20260331154332-orl-demo-readiness-manifest.json
+- /home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/incident.json
+- /home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/run_report.json
+Adapter Method: suite
+Executed Command: suite deterministic_demo_runner demo_artifact_validation
+Key Logs:
+- [ORL] ORL / Demo Artifact Validation
+- using adapter: demo_artifact_validation
+- demo_report: PASS /home/jason/dev/mwe/artifacts/operations_console/20260330201520-orl-demo-readiness.json
+- replay: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json
+- snapshot: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json
+- compare_output: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json
+- artifact: /home/jason/dev/mwe/artifacts/orl/20260331154332-demo-artifact-shelf.json
+- PASS: Demo artifact validation passed.
+- AUTO REPORT JSON: /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json
+- AUTO REPORT TEXT: /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.txt
+- AUTO REFRESH: reran ORL / Demo Artifact Validation after demo report export.
+- demo_report: PASS /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json
+- RUN MANIFEST: /home/jason/dev/mwe/artifacts/operations_console/run_manifests/20260331154332-orl-demo-readiness-manifest.json
+- RUN BRANCH: integration/ops-console-hardening
+- RUN COMMIT: 000e9fc50906793b0a5d2ea634a1bdd4f0b7ca9b
+- RUN WORKTREE: dirty
+- RUN BRIDGE URI: ws://127.0.0.1:8766
+- INCIDENT BUNDLE: /home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness
+- INCIDENT MANIFEST: /home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/incident.json
+- INCIDENT RUN REPORT: /home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/run_report.json
+Details:
+- ## ORL / Demo Readiness
+- [1/4] ORL / Smoke Suite
+- ## ORL / Smoke Suite
+- [1/2] ORL / Connectivity
+- [ORL] ORL / Connectivity
+- Connecting to bridge at ws://127.0.0.1:8766
+- Ping OK: pong=True
+- Scenario roster received: 6 item(s)
+-   1. breakthrough.json
+-   2. breakthrough_roundtrip.json
+-   3. bridgehead.json
+-   4. inchon_mvp.json
+-   5. interdiction.json
+-   6. mini_gc_1942.json
+- PASS: Bridge reachable. 6 scenario(s) available.
+- [2/2] ORL / Scenario Integrity
+- [ORL] ORL / Scenario Integrity
+- Connecting to bridge at ws://127.0.0.1:8766
+- No scenario specified; defaulting to the first live roster entry.
+- load_scenario failed [bridge_error]: load_scenario failed.
+- FAIL: Scenario integrity check failed.
+- FAIL: Suite completed with status FAIL. ORL / Connectivity=PASS, ORL / Scenario Integrity=FAIL
+- [2/4] ORL / UI Build Check
+- [ORL] ORL / UI Build Check
+- Inspecting UI directory: /home/jason/dev/mwe/ui
+- package.json found
+- build script found
+- Running build command: npm run build
+- stdout: > ui@0.0.0 build
+- stdout: > vite build
+- stdout: vite v7.3.1 building client environment for production...
+- stdout: transforming...
+- stdout: ✓ 113 modules transformed.
+- stdout: rendering chunks...
+- stdout: computing gzip size...
+- stdout: dist/index.html                                  0.45 kB │ gzip:   0.29 kB
+- stdout: dist/assets/lunga_point_underlay-DIXecpoO.svg    5.06 kB │ gzip:   1.49 kB
+- stdout: dist/assets/index-3yHW4cfe.css                 230.85 kB │ gzip:  35.40 kB
+- stdout: dist/assets/index-BigxHkVe.js                  701.92 kB │ gzip: 190.58 kB
+- stdout: ✓ built in 2.23s
+- stderr: (!) Some chunks are larger than 500 kB after minification. Consider:
+- stderr: - Using dynamic import() to code-split the application
+- stderr: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- stderr: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+- UI build completed
+- Build artifact found: /home/jason/dev/mwe/ui/dist/index.html
+- PASS: UI build completed successfully.
+- [3/4] ORL / Deterministic Demo Runner
+- [ORL] ORL / Deterministic Demo Runner
+- using adapter: deterministic_demo_runner
+- Selected scenario: inchon_mvp
+- [demo.campaign_status] Campaign Status: PASS - Campaign Status passed.
+-   CAMPAIGN STATUS: scenario=Inchon Demo Vertical Slice | objective=SEOUL | front=INCHON BEACHHEAD SECURE | supply=PORT OPEN / AXIS ADVANCE | main=INCHON / SEOUL AXIS
+-   CAMPAIGN STATUS DETAIL: turn=TURN 1 — 15 SEP 1950 | units=6 | objectives=5 | alerts=2
+- [demo.campaign_explain] Campaign Explain: PASS - Campaign Explain passed.
+-   CAMPAIGN EXPLAIN: Curated Inchon-to-Seoul publisher vertical slice for Theater of Operations: Korea.
+-   CAMPAIGN NOTES: Exploit the landing before the Seoul defensive ring stabilizes.
+-   CAMPAIGN OBJECTIVES: Inchon Harbor; Kimpo Airfield; Yongdungpo Crossings (+2 more)
+-   CAMPAIGN ALERTS: Kimpo corridor remains contested.; NKPA reserves are forming south of Seoul.
+-   CAMPAIGN ORDERS: 1st Marines push east from Inchon toward Kimpo.; 7th Infantry secures the beachhead and port throughput. (+1 more)
+- [demo.snapshot_smoke] Snapshot Smoke: PASS - Snapshot Smoke passed.
+-   Resolved scenario: inchon_mvp.json
+-   Loaded scenario id: inchon_mvp
+-   Started scenario: Inchon Demo Vertical Slice
+-   Snapshot saved: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json
+-   Snapshot loaded: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json
+-   Scenario restored: inchon_mvp
+-   Units restored: 6
+-   Snapshot smoke passed.
+- [demo.replay_compare] Replay Compare: PASS - Replay Compare passed.
+-   Resolved scenario: inchon_mvp.json
+-   Loaded scenario id: inchon_mvp
+-   Started scenario: Inchon Demo Vertical Slice
+-   Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json
+-   Resolved scenario: inchon_mvp.json
+-   Loaded scenario id: inchon_mvp
+-   Started scenario: Inchon Demo Vertical Slice
+-   Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json
+-   Replay A: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json
+-   Replay B: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json
+-   Replay compare identical=True
+-   Replay compare output: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json
+-   Replay validation passed.
+- expected outcome: The bridge roster resolves the scenario without typing the exact filename every time.
+- expected outcome: The current UI build succeeds and the console can launch the UI against the selected bridge.
+- expected outcome: Replay compare stays deterministic and snapshot smoke remains stable for the current demo slice.
+- bug reports: Attach the latest ORL / Demo Readiness report and any incident bundle under artifacts/operations_console/incidents to the demo blocker report.
+- artifact: /home/jason/dev/mwe/artifacts/orl/20260331154332-deterministic-demo-runner.json
+- PASS: Deterministic demo runner passed.
+- [4/4] ORL / Demo Artifact Validation
+- [ORL] ORL / Demo Artifact Validation
+- using adapter: demo_artifact_validation
+- demo_report: PASS /home/jason/dev/mwe/artifacts/operations_console/20260330201520-orl-demo-readiness.json
+- replay: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json
+- snapshot: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json
+- compare_output: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json
+- artifact: /home/jason/dev/mwe/artifacts/orl/20260331154332-demo-artifact-shelf.json
+- PASS: Demo artifact validation passed.
+- AUTO REPORT JSON: /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json
+- AUTO REPORT TEXT: /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.txt
+- AUTO REFRESH: reran ORL / Demo Artifact Validation after demo report export.
+- demo_report: PASS /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json
+- RUN MANIFEST: /home/jason/dev/mwe/artifacts/operations_console/run_manifests/20260331154332-orl-demo-readiness-manifest.json
+- RUN BRANCH: integration/ops-console-hardening
+- RUN COMMIT: 000e9fc50906793b0a5d2ea634a1bdd4f0b7ca9b
+- RUN WORKTREE: dirty
+- RUN BRIDGE URI: ws://127.0.0.1:8766
+- INCIDENT BUNDLE: /home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness
+- INCIDENT MANIFEST: /home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/incident.json
+- INCIDENT RUN REPORT: /home/jason/dev/mwe/artifacts/operations_console/incidents/20260331154332623502-orl-demo-readiness/run_report.json
+Subresults:
+  Name: ORL / Smoke Suite
+  Status: FAIL
+  Summary: Suite completed with status FAIL. ORL / Connectivity=PASS, ORL / Scenario Integrity=FAIL
+  Started: 2026-03-31T15:43:29.539217+00:00
+  Finished: 2026-03-31T15:43:29.587313+00:00
+  Duration (ms): 48
+  GUI Action Id: orl-smoke-suite
+  Automation Level: automated
+  Expected Status: PASS
+  Baseline Drift: NOT FOUND
+  Adapter Method: suite
+  Key Logs:
+  - ## ORL / Smoke Suite
+  - [1/2] ORL / Connectivity
+  - [ORL] ORL / Connectivity
+  - Connecting to bridge at ws://127.0.0.1:8766
+  - Ping OK: pong=True
+  - Scenario roster received: 6 item(s)
+  - 1. breakthrough.json
+  - 2. breakthrough_roundtrip.json
+  - 3. bridgehead.json
+  - 4. inchon_mvp.json
+  - 5. interdiction.json
+  - 6. mini_gc_1942.json
+  - PASS: Bridge reachable. 6 scenario(s) available.
+  - [2/2] ORL / Scenario Integrity
+  - [ORL] ORL / Scenario Integrity
+  - No scenario specified; defaulting to the first live roster entry.
+  - load_scenario failed [bridge_error]: load_scenario failed.
+  - FAIL: Scenario integrity check failed.
+  Details:
+  - ## ORL / Smoke Suite
+  - [1/2] ORL / Connectivity
+  - [ORL] ORL / Connectivity
+  - Connecting to bridge at ws://127.0.0.1:8766
+  - Ping OK: pong=True
+  - Scenario roster received: 6 item(s)
+  -   1. breakthrough.json
+  -   2. breakthrough_roundtrip.json
+  -   3. bridgehead.json
+  -   4. inchon_mvp.json
+  -   5. interdiction.json
+  -   6. mini_gc_1942.json
+  - PASS: Bridge reachable. 6 scenario(s) available.
+  - [2/2] ORL / Scenario Integrity
+  - [ORL] ORL / Scenario Integrity
+  - Connecting to bridge at ws://127.0.0.1:8766
+  - No scenario specified; defaulting to the first live roster entry.
+  - load_scenario failed [bridge_error]: load_scenario failed.
+  - FAIL: Scenario integrity check failed.
+  Subresults:
+    Name: ORL / Connectivity
+    Status: PASS
+    Summary: Bridge reachable. 6 scenario(s) available.
+    Started: 2026-03-31T15:43:29.539227+00:00
+    Finished: 2026-03-31T15:43:29.581975+00:00
+    Duration (ms): 42
+    GUI Action Id: orl-connectivity
+    Automation Level: automated
+    Expected Status: PASS
+    Baseline Drift: NOT FOUND
+    Key Logs:
+    - [ORL] ORL / Connectivity
+    - Connecting to bridge at ws://127.0.0.1:8766
+    - Ping OK: pong=True
+    - Scenario roster received: 6 item(s)
+    - 1. breakthrough.json
+    - 2. breakthrough_roundtrip.json
+    - 3. bridgehead.json
+    - 4. inchon_mvp.json
+    - 5. interdiction.json
+    - 6. mini_gc_1942.json
+    Details:
+    - [ORL] ORL / Connectivity
+    - Connecting to bridge at ws://127.0.0.1:8766
+    - Ping OK: pong=True
+    - Scenario roster received: 6 item(s)
+    -   1. breakthrough.json
+    -   2. breakthrough_roundtrip.json
+    -   3. bridgehead.json
+    -   4. inchon_mvp.json
+    -   5. interdiction.json
+    -   6. mini_gc_1942.json
+    Name: ORL / Scenario Integrity
+    Status: FAIL
+    Summary: Scenario integrity check failed.
+    Started: 2026-03-31T15:43:29.582004+00:00
+    Finished: 2026-03-31T15:43:29.586973+00:00
+    Duration (ms): 4
+    GUI Action Id: orl-scenario-integrity
+    Automation Level: automated
+    Expected Status: PASS
+    Baseline Drift: NOT FOUND
+    Key Logs:
+    - load_scenario failed [bridge_error]: load_scenario failed.
+    - [ORL] ORL / Scenario Integrity
+    - Connecting to bridge at ws://127.0.0.1:8766
+    - No scenario specified; defaulting to the first live roster entry.
+    Errors:
+    - load_scenario failed [bridge_error]: load_scenario failed.
+    Details:
+    - [ORL] ORL / Scenario Integrity
+    - Connecting to bridge at ws://127.0.0.1:8766
+    - No scenario specified; defaulting to the first live roster entry.
+    - load_scenario failed [bridge_error]: load_scenario failed.
+  Name: ORL / UI Build Check
+  Status: PASS
+  Summary: UI build completed successfully.
+  Started: 2026-03-31T15:43:29.587378+00:00
+  Finished: 2026-03-31T15:43:32.460691+00:00
+  Duration (ms): 2873
+  GUI Action Id: orl-ui-build-check
+  Automation Level: automated
+  Expected Status: PASS
+  Baseline Drift: NOT FOUND
+  Artifacts:
+  - /home/jason/dev/mwe/ui/dist/index.html
+  Executed Command: npm run build
+  Return Code: 0
+  Key Logs:
+  - build script found
+  - Running build command: npm run build
+  - stdout: > ui@0.0.0 build
+  - stdout: > vite build
+  - stdout: vite v7.3.1 building client environment for production...
+  - stdout: transforming...
+  - stdout: ✓ 113 modules transformed.
+  - stdout: rendering chunks...
+  - stdout: computing gzip size...
+  - stdout: dist/index.html                                  0.45 kB │ gzip:   0.29 kB
+  - stdout: dist/assets/lunga_point_underlay-DIXecpoO.svg    5.06 kB │ gzip:   1.49 kB
+  - stdout: dist/assets/index-3yHW4cfe.css                 230.85 kB │ gzip:  35.40 kB
+  - stdout: dist/assets/index-BigxHkVe.js                  701.92 kB │ gzip: 190.58 kB
+  - stdout: ✓ built in 2.23s
+  - stderr: (!) Some chunks are larger than 500 kB after minification. Consider:
+  - stderr: - Using dynamic import() to code-split the application
+  - stderr: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+  - stderr: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+  - UI build completed
+  - Build artifact found: /home/jason/dev/mwe/ui/dist/index.html
+  Details:
+  - [ORL] ORL / UI Build Check
+  - Inspecting UI directory: /home/jason/dev/mwe/ui
+  - package.json found
+  - build script found
+  - Running build command: npm run build
+  - stdout: > ui@0.0.0 build
+  - stdout: > vite build
+  - stdout: vite v7.3.1 building client environment for production...
+  - stdout: transforming...
+  - stdout: ✓ 113 modules transformed.
+  - stdout: rendering chunks...
+  - stdout: computing gzip size...
+  - stdout: dist/index.html                                  0.45 kB │ gzip:   0.29 kB
+  - stdout: dist/assets/lunga_point_underlay-DIXecpoO.svg    5.06 kB │ gzip:   1.49 kB
+  - stdout: dist/assets/index-3yHW4cfe.css                 230.85 kB │ gzip:  35.40 kB
+  - stdout: dist/assets/index-BigxHkVe.js                  701.92 kB │ gzip: 190.58 kB
+  - stdout: ✓ built in 2.23s
+  - stderr: (!) Some chunks are larger than 500 kB after minification. Consider:
+  - stderr: - Using dynamic import() to code-split the application
+  - stderr: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+  - stderr: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+  - UI build completed
+  - Build artifact found: /home/jason/dev/mwe/ui/dist/index.html
+  Name: ORL / Deterministic Demo Runner
+  Status: PASS
+  Summary: Deterministic demo runner passed.
+  Started: 2026-03-31T15:43:32.460755+00:00
+  Finished: 2026-03-31T15:43:32.486102+00:00
+  Duration (ms): 25
+  GUI Action Id: orl-deterministic-demo-runner
+  Automation Level: automated
+  Expected Status: PASS
+  Baseline Drift: NOT FOUND
+  Explainability:
+  - Scenario: Inchon Demo Vertical Slice
+  - Objective: SEOUL
+  - Front Status: INCHON BEACHHEAD SECURE
+  - Supply Status: PORT OPEN / AXIS ADVANCE
+  - Main Effort: INCHON / SEOUL AXIS
+  - Turn: TURN 1 — 15 SEP 1950
+  - Unit Count: 6
+  - Objective Count: 5
+  - Alert Count: 2
+  - Description: Curated Inchon-to-Seoul publisher vertical slice for Theater of Operations: Korea.
+  - Staff Notes: Exploit the landing before the Seoul defensive ring stabilizes.
+  - Objectives: Inchon Harbor; Kimpo Airfield; Yongdungpo Crossings (+2 more)
+  - Alerts: Kimpo corridor remains contested.; NKPA reserves are forming south of Seoul.
+  - Orders: 1st Marines push east from Inchon toward Kimpo.; 7th Infantry secures the beachhead and port throughput. (+1 more)
+  Artifacts:
+  - /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json
+  - /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json
+  - /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json
+  - /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json
+  - /home/jason/dev/mwe/artifacts/orl/20260331154332-deterministic-demo-runner.json
+  Adapter Method: deterministic_demo_runner
+  Key Logs:
+  - Snapshot smoke passed.
+  - [demo.replay_compare] Replay Compare: PASS - Replay Compare passed.
+  - Resolved scenario: inchon_mvp.json
+  - Loaded scenario id: inchon_mvp
+  - Started scenario: Inchon Demo Vertical Slice
+  - Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json
+  - Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json
+  - Replay A: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json
+  - Replay B: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json
+  - Replay compare identical=True
+  - Replay compare output: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json
+  - Replay validation passed.
+  - expected outcome: The bridge roster resolves the scenario without typing the exact filename every time.
+  - expected outcome: The current UI build succeeds and the console can launch the UI against the selected bridge.
+  - expected outcome: Replay compare stays deterministic and snapshot smoke remains stable for the current demo slice.
+  - bug reports: Attach the latest ORL / Demo Readiness report and any incident bundle under artifacts/operations_console/incidents to the demo blocker report.
+  - artifact: /home/jason/dev/mwe/artifacts/orl/20260331154332-deterministic-demo-runner.json
+  Details:
+  - [ORL] ORL / Deterministic Demo Runner
+  - using adapter: deterministic_demo_runner
+  - Selected scenario: inchon_mvp
+  - [demo.campaign_status] Campaign Status: PASS - Campaign Status passed.
+  -   CAMPAIGN STATUS: scenario=Inchon Demo Vertical Slice | objective=SEOUL | front=INCHON BEACHHEAD SECURE | supply=PORT OPEN / AXIS ADVANCE | main=INCHON / SEOUL AXIS
+  -   CAMPAIGN STATUS DETAIL: turn=TURN 1 — 15 SEP 1950 | units=6 | objectives=5 | alerts=2
+  - [demo.campaign_explain] Campaign Explain: PASS - Campaign Explain passed.
+  -   CAMPAIGN EXPLAIN: Curated Inchon-to-Seoul publisher vertical slice for Theater of Operations: Korea.
+  -   CAMPAIGN NOTES: Exploit the landing before the Seoul defensive ring stabilizes.
+  -   CAMPAIGN OBJECTIVES: Inchon Harbor; Kimpo Airfield; Yongdungpo Crossings (+2 more)
+  -   CAMPAIGN ALERTS: Kimpo corridor remains contested.; NKPA reserves are forming south of Seoul.
+  -   CAMPAIGN ORDERS: 1st Marines push east from Inchon toward Kimpo.; 7th Infantry secures the beachhead and port throughput. (+1 more)
+  - [demo.snapshot_smoke] Snapshot Smoke: PASS - Snapshot Smoke passed.
+  -   Resolved scenario: inchon_mvp.json
+  -   Loaded scenario id: inchon_mvp
+  -   Started scenario: Inchon Demo Vertical Slice
+  -   Snapshot saved: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json
+  -   Snapshot loaded: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json
+  -   Scenario restored: inchon_mvp
+  -   Units restored: 6
+  -   Snapshot smoke passed.
+  - [demo.replay_compare] Replay Compare: PASS - Replay Compare passed.
+  -   Resolved scenario: inchon_mvp.json
+  -   Loaded scenario id: inchon_mvp
+  -   Started scenario: Inchon Demo Vertical Slice
+  -   Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json
+  -   Resolved scenario: inchon_mvp.json
+  -   Loaded scenario id: inchon_mvp
+  -   Started scenario: Inchon Demo Vertical Slice
+  -   Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json
+  -   Replay A: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json
+  -   Replay B: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json
+  -   Replay compare identical=True
+  -   Replay compare output: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json
+  -   Replay validation passed.
+  - expected outcome: The bridge roster resolves the scenario without typing the exact filename every time.
+  - expected outcome: The current UI build succeeds and the console can launch the UI against the selected bridge.
+  - expected outcome: Replay compare stays deterministic and snapshot smoke remains stable for the current demo slice.
+  - bug reports: Attach the latest ORL / Demo Readiness report and any incident bundle under artifacts/operations_console/incidents to the demo blocker report.
+  - artifact: /home/jason/dev/mwe/artifacts/orl/20260331154332-deterministic-demo-runner.json
+  Subresults:
+    Name: Campaign Status
+    Status: PASS
+    Summary: Campaign Status passed.
+    Baseline Drift: NOT FOUND
+    Explainability:
+    - Scenario: Inchon Demo Vertical Slice
+    - Objective: SEOUL
+    - Front Status: INCHON BEACHHEAD SECURE
+    - Supply Status: PORT OPEN / AXIS ADVANCE
+    - Main Effort: INCHON / SEOUL AXIS
+    - Turn: TURN 1 — 15 SEP 1950
+    - Unit Count: 6
+    - Objective Count: 5
+    - Alert Count: 2
+    Key Logs:
+    - BLOCKER CLASS: demo.campaign_status
+    - CAMPAIGN STATUS: scenario=Inchon Demo Vertical Slice | objective=SEOUL | front=INCHON BEACHHEAD SECURE | supply=PORT OPEN / AXIS ADVANCE | main=INCHON / SEOUL AXIS
+    - CAMPAIGN STATUS DETAIL: turn=TURN 1 — 15 SEP 1950 | units=6 | objectives=5 | alerts=2
+    Details:
+    - BLOCKER CLASS: demo.campaign_status
+    - CAMPAIGN STATUS: scenario=Inchon Demo Vertical Slice | objective=SEOUL | front=INCHON BEACHHEAD SECURE | supply=PORT OPEN / AXIS ADVANCE | main=INCHON / SEOUL AXIS
+    - CAMPAIGN STATUS DETAIL: turn=TURN 1 — 15 SEP 1950 | units=6 | objectives=5 | alerts=2
+    Name: Campaign Explain
+    Status: PASS
+    Summary: Campaign Explain passed.
+    Baseline Drift: NOT FOUND
+    Explainability:
+    - Description: Curated Inchon-to-Seoul publisher vertical slice for Theater of Operations: Korea.
+    - Staff Notes: Exploit the landing before the Seoul defensive ring stabilizes.
+    - Objectives: Inchon Harbor; Kimpo Airfield; Yongdungpo Crossings (+2 more)
+    - Alerts: Kimpo corridor remains contested.; NKPA reserves are forming south of Seoul.
+    - Orders: 1st Marines push east from Inchon toward Kimpo.; 7th Infantry secures the beachhead and port throughput. (+1 more)
+    Key Logs:
+    - BLOCKER CLASS: demo.campaign_explain
+    - CAMPAIGN EXPLAIN: Curated Inchon-to-Seoul publisher vertical slice for Theater of Operations: Korea.
+    - CAMPAIGN NOTES: Exploit the landing before the Seoul defensive ring stabilizes.
+    - CAMPAIGN OBJECTIVES: Inchon Harbor; Kimpo Airfield; Yongdungpo Crossings (+2 more)
+    - CAMPAIGN ALERTS: Kimpo corridor remains contested.; NKPA reserves are forming south of Seoul.
+    - CAMPAIGN ORDERS: 1st Marines push east from Inchon toward Kimpo.; 7th Infantry secures the beachhead and port throughput. (+1 more)
+    Details:
+    - BLOCKER CLASS: demo.campaign_explain
+    - CAMPAIGN EXPLAIN: Curated Inchon-to-Seoul publisher vertical slice for Theater of Operations: Korea.
+    - CAMPAIGN NOTES: Exploit the landing before the Seoul defensive ring stabilizes.
+    - CAMPAIGN OBJECTIVES: Inchon Harbor; Kimpo Airfield; Yongdungpo Crossings (+2 more)
+    - CAMPAIGN ALERTS: Kimpo corridor remains contested.; NKPA reserves are forming south of Seoul.
+    - CAMPAIGN ORDERS: 1st Marines push east from Inchon toward Kimpo.; 7th Infantry secures the beachhead and port throughput. (+1 more)
+    Name: Snapshot Smoke
+    Status: PASS
+    Summary: Snapshot Smoke passed.
+    Baseline Drift: NOT FOUND
+    Artifacts:
+    - /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json
+    Key Logs:
+    - BLOCKER CLASS: demo.snapshot_smoke
+    - Resolved scenario: inchon_mvp.json
+    - Loaded scenario id: inchon_mvp
+    - Started scenario: Inchon Demo Vertical Slice
+    - Snapshot saved: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json
+    - Snapshot loaded: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json
+    - Scenario restored: inchon_mvp
+    - Units restored: 6
+    - Snapshot smoke passed.
+    Details:
+    - BLOCKER CLASS: demo.snapshot_smoke
+    - Resolved scenario: inchon_mvp.json
+    - Loaded scenario id: inchon_mvp
+    - Started scenario: Inchon Demo Vertical Slice
+    - Snapshot saved: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json
+    - Snapshot loaded: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json
+    - Scenario restored: inchon_mvp
+    - Units restored: 6
+    - Snapshot smoke passed.
+    Name: Replay Compare
+    Status: PASS
+    Summary: Replay Compare passed.
+    Baseline Drift: NOT FOUND
+    Artifacts:
+    - /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json
+    - /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json
+    - /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json
+    Key Logs:
+    - BLOCKER CLASS: demo.replay_compare
+    - Resolved scenario: inchon_mvp.json
+    - Loaded scenario id: inchon_mvp
+    - Started scenario: Inchon Demo Vertical Slice
+    - Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json
+    - Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json
+    - Replay A: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json
+    - Replay B: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json
+    - Replay compare identical=True
+    - Replay compare output: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json
+    - Replay validation passed.
+    Details:
+    - BLOCKER CLASS: demo.replay_compare
+    - Resolved scenario: inchon_mvp.json
+    - Loaded scenario id: inchon_mvp
+    - Started scenario: Inchon Demo Vertical Slice
+    - Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json
+    - Resolved scenario: inchon_mvp.json
+    - Loaded scenario id: inchon_mvp
+    - Started scenario: Inchon Demo Vertical Slice
+    - Replay exported: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json
+    - Replay A: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-a.json
+    - Replay B: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json
+    - Replay compare identical=True
+    - Replay compare output: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json
+    - Replay validation passed.
+  Name: ORL / Demo Artifact Validation
+  Status: PASS
+  Summary: Demo artifact validation passed.
+  Started: 2026-03-31T15:43:32.607152+00:00
+  Finished: 2026-03-31T15:43:32.608156+00:00
+  GUI Action Id: orl-demo-artifact-validation
+  Automation Level: automated
+  Expected Status: PASS
+  Baseline Drift: NOT FOUND
+  Artifacts:
+  - /home/jason/dev/mwe/artifacts/orl/20260331154332-demo-artifact-shelf.json
+  - /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json
+  - /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json
+  - /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json
+  - /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json
+  Adapter Method: demo_artifact_validation
+  Key Logs:
+  - [ORL] ORL / Demo Artifact Validation
+  - using adapter: demo_artifact_validation
+  - demo_report: PASS /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json
+  - replay: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json
+  - snapshot: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json
+  - compare_output: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json
+  - artifact: /home/jason/dev/mwe/artifacts/orl/20260331154332-demo-artifact-shelf.json
+  Details:
+  - [ORL] ORL / Demo Artifact Validation
+  - using adapter: demo_artifact_validation
+  - demo_report: PASS /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json
+  - replay: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json
+  - snapshot: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json
+  - compare_output: PASS /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json
+  - artifact: /home/jason/dev/mwe/artifacts/orl/20260331154332-demo-artifact-shelf.json
+  Subresults:
+    Name: Latest Demo Report
+    Status: PASS
+    Summary: Latest Demo Report found.
+    Baseline Drift: NOT FOUND
+    Artifacts:
+    - /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json
+    Key Logs:
+    - BLOCKER CLASS: demo.artifact_output
+    - slot: demo_report
+    - path: /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json
+    - modified_at: 2026-03-31T15:43:32.586547+00:00
+    - size_bytes: 62991
+    Details:
+    - BLOCKER CLASS: demo.artifact_output
+    - slot: demo_report
+    - path: /home/jason/dev/mwe/artifacts/operations_console/20260331154332-orl-demo-readiness.json
+    - modified_at: 2026-03-31T15:43:32.586547+00:00
+    - size_bytes: 62991
+    Name: Latest Replay
+    Status: PASS
+    Summary: Latest Replay found.
+    Baseline Drift: NOT FOUND
+    Artifacts:
+    - /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json
+    Key Logs:
+    - BLOCKER CLASS: demo.artifact_output
+    - slot: replay
+    - path: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json
+    - modified_at: 2026-03-31T15:43:32.485337+00:00
+    - size_bytes: 5485
+    Details:
+    - BLOCKER CLASS: demo.artifact_output
+    - slot: replay
+    - path: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/replays/20260331154332-inchon-mvp-b.json
+    - modified_at: 2026-03-31T15:43:32.485337+00:00
+    - size_bytes: 5485
+    Name: Latest Snapshot
+    Status: PASS
+    Summary: Latest Snapshot found.
+    Baseline Drift: NOT FOUND
+    Artifacts:
+    - /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json
+    Key Logs:
+    - BLOCKER CLASS: demo.artifact_output
+    - slot: snapshot
+    - path: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json
+    - modified_at: 2026-03-31T15:43:32.471997+00:00
+    - size_bytes: 5355
+    Details:
+    - BLOCKER CLASS: demo.artifact_output
+    - slot: snapshot
+    - path: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/snapshots/20260331154332-inchon-mvp.json
+    - modified_at: 2026-03-31T15:43:32.471997+00:00
+    - size_bytes: 5355
+    Name: Latest Compare Output
+    Status: PASS
+    Summary: Latest Compare Output found.
+    Baseline Drift: NOT FOUND
+    Artifacts:
+    - /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json
+    Key Logs:
+    - BLOCKER CLASS: demo.artifact_output
+    - slot: compare_output
+    - path: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json
+    - modified_at: 2026-03-31T15:43:32.485666+00:00
+    - size_bytes: 267
+    Details:
+    - BLOCKER CLASS: demo.artifact_output
+    - slot: compare_output
+    - path: /home/jason/dev/mwe/artifacts/operations_console/engine_adapter/compares/20260331154332-inchon-mvp.json
+    - modified_at: 2026-03-31T15:43:32.485666+00:00
+    - size_bytes: 267
