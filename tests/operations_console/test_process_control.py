@@ -231,10 +231,14 @@ def test_stop_managed_processes_only_terminates_managed() -> None:
     result = controller.stop_managed_processes()
 
     assert result.status == "pass"
+    assert result.summary == "Stopped 2 managed processes."
     assert bridge_proc.terminated is True
     assert mwe_proc.terminated is True
     assert unrelated.terminated is False
     assert controller.managed_processes() == {}
+    assert result.logs[0] == "stopped 2 managed processes"
+    assert "stopped managed process: Bridge" in result.logs
+    assert "stopped managed process: MWE" in result.logs
 
 
 def test_load_gui_action_matrix_parses_seed_file() -> None:

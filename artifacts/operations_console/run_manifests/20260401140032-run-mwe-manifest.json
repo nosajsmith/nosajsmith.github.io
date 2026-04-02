@@ -1,0 +1,29 @@
+{
+  "created_at": "2026-04-01T14:00:32.319255+00:00",
+  "action_name": "Run MWE",
+  "status": "pass",
+  "original_status": "",
+  "summary": "MWE launched.",
+  "scenario_name": "breakthrough.json",
+  "bridge_uri": "ws://127.0.0.1:8766",
+  "started_at": "2026-04-01T14:00:32.319255+00:00",
+  "finished_at": "2026-04-01T14:00:32.319255+00:00",
+  "duration_ms": 0,
+  "artifact_paths": [],
+  "executed_command": [
+    "npm",
+    "run",
+    "dev",
+    "--",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "4175"
+  ],
+  "git": {
+    "branch": "integration/ops-console-hardening",
+    "commit": "b7843923f10651f5e455d5344104376a02087afb",
+    "is_dirty": true,
+    "worktree_status": "dirty"
+  }
+}

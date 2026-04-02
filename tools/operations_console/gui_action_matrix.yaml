@@ -225,7 +225,7 @@
       "preconditions": [],
       "runner": "process_control.stop_managed_processes",
       "expected_status": "pass",
-      "expected_log_fragments": ["stopped managed process", "no managed processes to stop"],
+      "expected_log_fragments": ["stopped 2 managed processes", "no managed processes to stop"],
       "artifact_types": [],
       "automation_level": "semi-automated"
     }

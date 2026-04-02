@@ -239,6 +239,8 @@ class ManagedProcessController:
         if not self._managed:
             return self._result("pass", "No managed processes were running.", ["no managed processes to stop"])
 
+        count = len(self._managed)
+        process_label = "process" if count == 1 else "processes"
         logs: List[str] = []
         for key, proc in list(self._managed.items()):
             label = "Bridge" if key == "bridge" else "MWE"
@@ -256,7 +258,8 @@ class ManagedProcessController:
                 logs.append(f"stopped managed process: {label}")
             finally:
                 self._managed.pop(key, None)
-        return self._result("pass", "Stopped managed processes.", logs)
+        logs.insert(0, f"stopped {count} managed {process_label}")
+        return self._result("pass", f"Stopped {count} managed {process_label}.", logs)
 
     def _launch(
         self,
