@@ -1,25 +1,532 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>nosajsmith.lol</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111315">
+  <meta
+    name="description"
+    content="Jason Smith's personal website: projects, ideas, and the things he is building."
+  >
+  <title>Jason Smith</title>
   <style>
-    html, body {
-      height: 100%;
-      margin: 0;
+    :root {
+      --bg: #101214;
+      --bg-elevated: #16191d;
+      --bg-soft: #1b2025;
+      --line: rgba(255, 255, 255, 0.08);
+      --line-strong: rgba(255, 255, 255, 0.14);
+      --text: #edf0f3;
+      --muted: #b7c0c8;
+      --muted-soft: #8f99a3;
+      --accent: #d4d9df;
+      --shadow: 0 18px 40px rgba(0, 0, 0, 0.24);
+      --radius: 22px;
+      --radius-sm: 16px;
+      --max-width: 960px;
     }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.035), transparent 34rem),
+        linear-gradient(180deg, #111315 0%, #0e1012 100%);
+      font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    :focus-visible {
+      outline: 2px solid rgba(255, 255, 255, 0.45);
+      outline-offset: 3px;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: 1rem;
+      top: -3rem;
+      padding: 0.7rem 1rem;
+      border-radius: 999px;
+      background: #f1f4f7;
+      color: #0d0f11;
+      text-decoration: none;
+      font-weight: 700;
+      z-index: 100;
+    }
+
+    .skip-link:focus {
+      top: 1rem;
+    }
+
+    .page {
+      width: min(calc(100% - 2rem), var(--max-width));
+      margin: 0 auto;
+      padding: 1.25rem 0 4rem;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      padding: 0.4rem 0 1.4rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.85rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(17, 19, 21, 0.8);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+    }
+
+    .brand {
+      font-size: 0.98rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 0.25rem;
+    }
+
+    .nav-links a {
+      padding: 0.55rem 0.85rem;
+      border-radius: 999px;
+      text-decoration: none;
+      color: var(--muted);
+      transition: background-color 0.16s ease, color 0.16s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+      outline: none;
+    }
+
+    main {
       display: grid;
-      place-items: center;
-      background: #111;
-      color: #fff;
-      font-family: system-ui, sans-serif;
-      font-size: clamp(4rem, 18vw, 10rem);
+      gap: 1.25rem;
+    }
+
+    .panel {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.012));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero,
+    .section {
+      padding: clamp(1.35rem, 2vw, 2rem);
+    }
+
+    .hero {
+      display: grid;
+      gap: 1.25rem;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 0.9rem;
+      color: var(--muted-soft);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      line-height: 1.14;
+      font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 8vw, 5.2rem);
+      text-wrap: balance;
+    }
+
+    h2 {
+      font-size: clamp(1.9rem, 4vw, 2.7rem);
+      text-wrap: balance;
+    }
+
+    h3 {
+      font-size: 1.18rem;
+    }
+
+    .subtitle {
+      margin: 0.95rem 0 0;
+      max-width: 36rem;
+      color: var(--accent);
+      font-size: clamp(1.15rem, 2.3vw, 1.45rem);
+      line-height: 1.45;
+      text-wrap: balance;
+    }
+
+    .intro {
+      max-width: 42rem;
+      margin: 1rem 0 0;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .hero-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1.3rem;
+    }
+
+    .pill-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.9rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--muted);
+      text-decoration: none;
+      transition:
+        background-color 0.16s ease,
+        border-color 0.16s ease,
+        color 0.16s ease,
+        transform 0.16s ease;
+    }
+
+    .pill-link:hover,
+    .pill-link:focus-visible {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: var(--line-strong);
+      color: var(--text);
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .section-header {
+      margin-bottom: 1.25rem;
+    }
+
+    .section-header p {
+      margin: 0.7rem 0 0;
+      max-width: 42rem;
+      color: var(--muted);
+    }
+
+    .prose {
+      max-width: 46rem;
+    }
+
+    .prose p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .prose p + p {
+      margin-top: 1rem;
+    }
+
+    .work-list,
+    .interest-list,
+    .contact-list {
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .work-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .work-item,
+    .interest-item,
+    .contact-item {
+      padding: 1.15rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .work-item p,
+    .interest-item p,
+    .contact-item p {
+      margin: 0.55rem 0 0;
+      color: var(--muted);
+    }
+
+    .interest-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .interest-item {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .contact-list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .contact-item a {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 0.7rem;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.16s ease, color 0.16s ease;
+    }
+
+    .contact-item a:hover,
+    .contact-item a:focus-visible {
+      color: var(--text);
+      border-color: rgba(255, 255, 255, 0.4);
+      outline: none;
+    }
+
+    .small-note {
+      margin-top: 1rem;
+      color: var(--muted-soft);
+      font-size: 0.9rem;
+    }
+
+    footer {
+      padding: 1.6rem 0 0;
+      color: var(--muted-soft);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        width: min(calc(100% - 1rem), var(--max-width));
+        padding-top: 0.75rem;
+      }
+
+      .nav {
+        flex-direction: column;
+        align-items: flex-start;
+        border-radius: 24px;
+      }
+
+      .nav-links {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .hero,
+      .section {
+        padding: 1.2rem;
+      }
+
+      .work-list,
+      .interest-list,
+      .contact-list {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  :)
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="page">
+    <header class="site-header">
+      <div class="nav">
+        <a class="brand" href="#top">Jason Smith</a>
+        <nav class="nav-links" aria-label="Primary">
+          <a href="#about">About</a>
+          <a href="#working-on">What I’m Working On</a>
+          <a href="#into">A Few Things I’m Into</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero panel" id="top" aria-labelledby="hero-title">
+        <div>
+          <div class="eyebrow">Jason Smith</div>
+          <h1 id="hero-title">Jason Smith</h1>
+          <p class="subtitle">A little corner of the web for my projects, ideas, and the things I’m building.</p>
+          <p class="intro">
+            I’ve spent a lot of time around systems, operations, and the kind of problem-solving that usually starts messy and gets clearer one step at a time. These days I’m mostly interested in practical software, simulation design, AI-assisted workflows, and building tools that feel thoughtful and useful.
+          </p>
+          <div class="hero-links" aria-label="Quick links">
+            <a class="pill-link" href="#working-on">See what I’m working on</a>
+            <a class="pill-link" href="#contact">Links and contact</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section panel" id="about" aria-labelledby="about-title">
+        <div class="section-header">
+          <h2 id="about-title">About</h2>
+        </div>
+        <div class="prose">
+          <p>
+            I come from a background shaped by systems, operations, and figuring out how to make complicated things a little more workable. A lot of what I enjoy is sitting with a problem long enough to understand its moving parts, then building something simple and durable around it.
+          </p>
+          <p>
+            Lately that has meant spending more time with AI-assisted workflows, simulation and wargame-adjacent design, practical tools, and software projects that are more about clarity than flash.
+          </p>
+          <p>
+            I’m drawn to work that feels grounded: useful interfaces, good process, better reporting, small improvements that add up, and projects that earn their keep over time.
+          </p>
+        </div>
+      </section>
+
+      <section class="section panel" id="working-on" aria-labelledby="working-on-title">
+        <div class="section-header">
+          <h2 id="working-on-title">What I’m Working On</h2>
+          <p>
+            Not a formal portfolio so much as a running set of things I keep coming back to.
+          </p>
+        </div>
+
+        <div class="work-list">
+          <article class="work-item">
+            <h3>MacArthur War Engine / Theater of Operations</h3>
+            <p>
+              The biggest and most serious project in the mix. It brings together simulation ideas, scenario design, operational tooling, and the kind of systems work that rewards patience.
+            </p>
+          </article>
+
+          <article class="work-item">
+            <h3>MWE tool stack</h3>
+            <p>
+              The supporting layer around the engine: utilities, workflow surfaces, reports, validation tools, and all the quieter pieces that make a project like that easier to run and understand.
+            </p>
+          </article>
+
+          <article class="work-item">
+            <h3>Fantasy baseball / fantasy manager tools</h3>
+            <p>
+              A more playful area, but still one I take seriously. I like the mix of decision-making, pattern spotting, and building small tools that help turn information into something more usable.
+            </p>
+          </article>
+
+          <article class="work-item">
+            <h3>AI workflow experiments</h3>
+            <p>
+              I’m interested in how AI can fit into real work without becoming noise. Mostly that means experimenting with workflows, prompts, and lightweight systems that help people get from idea to execution a little more cleanly.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section panel" id="into" aria-labelledby="into-title">
+        <div class="section-header">
+          <h2 id="into-title">A Few Things I’m Into</h2>
+        </div>
+
+        <div class="interest-list">
+          <article class="interest-item">
+            <h3>Simulation and wargame design</h3>
+            <p>
+              Systems with tradeoffs, consequences, and enough structure to reveal something interesting over time.
+            </p>
+          </article>
+
+          <article class="interest-item">
+            <h3>AI-assisted workflows</h3>
+            <p>
+              Not as spectacle, but as a practical way to reduce friction, clarify work, and make a process a little better.
+            </p>
+          </article>
+
+          <article class="interest-item">
+            <h3>Practical systems and process thinking</h3>
+            <p>
+              I like the part where vague problems become clearer through better structure, better tools, and a few steady iterations.
+            </p>
+          </article>
+
+          <article class="interest-item">
+            <h3>Fantasy baseball and sports analysis</h3>
+            <p>
+              The mix of numbers, intuition, and long-season pattern recognition has always felt satisfying to me.
+            </p>
+          </article>
+
+          <article class="interest-item">
+            <h3>Building things step by step</h3>
+            <p>
+              I trust gradual improvement more than grand reveals. Most of the good work I’ve seen comes together that way.
+            </p>
+          </article>
+
+          <article class="interest-item">
+            <h3>Thoughtful software projects</h3>
+            <p>
+              Tools with a point of view, some restraint, and enough care in the details that they feel good to live with.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section panel" id="contact" aria-labelledby="contact-title">
+        <div class="section-header">
+          <h2 id="contact-title">Contact / Links</h2>
+          <p>
+            Nothing formal here. Just a few places to find me when the live links are ready.
+          </p>
+        </div>
+
+        <div class="contact-list">
+          <article class="contact-item">
+            <h3>GitHub</h3>
+            <p>Code, experiments, and project history.</p>
+            <a href="#" aria-label="GitHub placeholder link">GitHub placeholder</a>
+          </article>
+
+          <article class="contact-item">
+            <h3>LinkedIn</h3>
+            <p>Background, work history, and the more conventional side of things.</p>
+            <a href="#" aria-label="LinkedIn placeholder link">LinkedIn placeholder</a>
+          </article>
+
+          <article class="contact-item">
+            <h3>Email</h3>
+            <p>A simple contact point to add later.</p>
+            <a href="#" aria-label="Email placeholder link">Email placeholder</a>
+          </article>
+        </div>
+
+        <p class="small-note">Each placeholder link currently points to <code>#</code> so the page stays clean until real destinations are added.</p>
+      </section>
+    </main>
+
+    <footer>
+      <p>Jason Smith</p>
+    </footer>
+  </div>
 </body>
 </html>
