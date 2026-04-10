@@ -1,0 +1,25 @@
+{
+  "created_at": "2026-04-02T15:05:07.669255+00:00",
+  "action_name": "ORL / Demo Readiness",
+  "status": "pass",
+  "original_status": "",
+  "summary": "Suite completed with status PASS. ORL / Smoke Suite=PASS, ORL / Demo Artifact Validation=PASS",
+  "scenario_name": "inchon_mvp",
+  "bridge_uri": "ws://127.0.0.1:8766",
+  "started_at": "2026-04-02T15:05:07.669255+00:00",
+  "finished_at": "2026-04-02T15:05:07.669255+00:00",
+  "duration_ms": 0,
+  "artifact_paths": [
+    "/tmp/replay.json",
+    "/tmp/pytest-of-jason/pytest-2/test_handle_result_refreshes_d0/20260330120000-orl-demo-readiness.json",
+    "/tmp/pytest-of-jason/pytest-2/test_handle_result_refreshes_d0/20260330120000-orl-demo-readiness.txt",
+    "/tmp/pytest-of-jason/pytest-2/test_handle_result_refreshes_d0/demo-artifact-shelf.json"
+  ],
+  "executed_command": [],
+  "git": {
+    "branch": "integration/ops-console-hardening",
+    "commit": "2d535f6d2282162a32cb386c698f1eb1b637716e",
+    "is_dirty": true,
+    "worktree_status": "dirty"
+  }
+}

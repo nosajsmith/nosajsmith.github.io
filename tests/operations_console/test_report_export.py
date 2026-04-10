@@ -59,6 +59,9 @@ def test_report_dict_includes_subresults_and_artifacts() -> None:
     assert payload["executed_command"] == ["pytest", "-q", "tests/test_inchon_scenario_stub.py"]
     assert payload["return_code"] == 0
     assert payload["known_issue_matches"][0]["id"] == "KI-401"
+    assert payload["known_issue_matches"][0]["severity"] == "high"
+    assert payload["known_issue_matches"][0]["waived"] is True
+    assert payload["known_issue_matches"][0]["downgrade_applied"] is True
     assert payload["incident_metadata"]["logged"] is True
     assert payload["incident_metadata"]["bundle_dir"] == "/tmp/incidents/abc"
     assert payload["incident_metadata"]["anomaly_matches"][0]["id"] == "ANOM-003"
@@ -153,4 +156,6 @@ def test_export_result_json_and_text_create_files(tmp_path) -> None:
     assert "Known Issues:" in text
     assert "Incident Anomalies:" in text
     assert "Key Logs:" in text
-    assert "KI-402: Waived replay regression [waived] -> WARN" in text
+    assert payload["known_issue_matches"][0]["waived"] is True
+    assert payload["known_issue_matches"][0]["downgrade_applied"] is True
+    assert "KI-402: Waived replay regression [severity=medium, status=waived] -> WARN (downgrade applied)" in text

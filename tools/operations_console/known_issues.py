@@ -22,6 +22,7 @@ STATUS_ORDER = {
 }
 MATCHABLE_STATUSES = {"warn", "fail", "error"}
 OVERRIDABLE_STATUSES = tuple(status for status in ALLOWED_STATUSES if status not in {"idle", "running"})
+KNOWN_ISSUE_STATUSES = ("known", "waived")
 
 
 @dataclass(frozen=True)
@@ -207,11 +208,17 @@ def _validate_issue_row(row: dict, *, index: int) -> KnownIssue:
     severity = _required_text(row.get("severity"), f"known_issues[{index}].severity")
     category = _required_text(row.get("category"), f"known_issues[{index}].category")
     status = _required_text(row.get("status"), f"known_issues[{index}].status").lower()
+    if status not in KNOWN_ISSUE_STATUSES:
+        raise RuntimeError(
+            f"known_issues[{index}].status must be one of {', '.join(KNOWN_ISSUE_STATUSES)}"
+        )
     expected_status_override = _optional_text(row.get("expected_status_override")).lower()
     if expected_status_override and expected_status_override not in OVERRIDABLE_STATUSES:
         raise RuntimeError(
             f"known_issues[{index}].expected_status_override must be one of {', '.join(OVERRIDABLE_STATUSES)}"
         )
+    if expected_status_override and status != "waived":
+        raise RuntimeError(f"known_issues[{index}].expected_status_override requires status waived")
     return KnownIssue(
         issue_id=issue_id,
         title=title,

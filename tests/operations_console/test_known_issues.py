@@ -43,6 +43,59 @@ def test_load_known_issues_validates_expected_status_override(tmp_path) -> None:
         load_known_issues(path)
 
 
+def test_load_known_issues_validates_status_and_waiver_override_pairing(tmp_path) -> None:
+    path = tmp_path / "known_issues.yaml"
+    path.write_text(
+        json.dumps(
+            {
+                "known_issues": [
+                    {
+                        "id": "KI-998",
+                        "title": "Bad status",
+                        "severity": "high",
+                        "category": "ORL",
+                        "affects": ["ORL / Connectivity"],
+                        "scenarios": [],
+                        "status": "tracking",
+                        "expected_status_override": "",
+                        "symptom_match": ["failed"],
+                        "notes": "",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(RuntimeError, match="status must be one of"):
+        load_known_issues(path)
+
+    path.write_text(
+        json.dumps(
+            {
+                "known_issues": [
+                    {
+                        "id": "KI-997",
+                        "title": "Override without waiver",
+                        "severity": "high",
+                        "category": "ORL",
+                        "affects": ["ORL / Connectivity"],
+                        "scenarios": [],
+                        "status": "known",
+                        "expected_status_override": "warn",
+                        "symptom_match": ["failed"],
+                        "notes": "",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(RuntimeError, match="requires status waived"):
+        load_known_issues(path)
+
+
 def test_apply_known_issues_matches_by_name_scenario_and_symptom(tmp_path) -> None:
     path = tmp_path / "known_issues.yaml"
     path.write_text(

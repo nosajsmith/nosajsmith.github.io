@@ -65,6 +65,13 @@ def report_dict(
                 "severity": match.severity,
                 "category": match.category,
                 "status": match.status,
+                "waived": str(match.status or "").strip().lower() == "waived",
+                "downgrade_applied": bool(
+                    match.expected_status_override
+                    and result.original_status
+                    and result.original_status != result.status
+                    and str(match.expected_status_override).strip().lower() == str(result.status or "").strip().lower()
+                ),
                 "expected_status_override": match.expected_status_override,
                 "notes": match.notes,
             }
@@ -220,9 +227,15 @@ def _format_text_lines(
     if result.known_issue_matches:
         lines.append(f"{prefix}Known Issues:")
         for match in result.known_issue_matches:
-            line = f"{prefix}- {match.issue_id}: {match.title} [{match.status}]"
+            line = f"{prefix}- {match.issue_id}: {match.title} [severity={match.severity}, status={match.status}]"
             if match.expected_status_override:
                 line = f"{line} -> {match.expected_status_override.upper()}"
+                if (
+                    result.original_status
+                    and result.original_status != result.status
+                    and str(match.expected_status_override).strip().lower() == str(result.status or "").strip().lower()
+                ):
+                    line = f"{line} (downgrade applied)"
             lines.append(line)
             if match.notes:
                 lines.append(f"{prefix}- Notes: {match.notes}")

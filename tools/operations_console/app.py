@@ -510,7 +510,15 @@ class OperationsConsoleApp:
                 self._append_output(f"ERROR: {error}")
         if result.known_issue_matches:
             for match in result.known_issue_matches:
-                self._append_output(f"KNOWN ISSUE: {match.issue_id} | {match.title}")
+                parts = [
+                    f"KNOWN ISSUE: {match.issue_id}",
+                    match.title,
+                    f"severity={match.severity}",
+                    f"status={match.status}",
+                ]
+                if match.expected_status_override:
+                    parts.append(f"override={match.expected_status_override.upper()}")
+                self._append_output(" | ".join(parts))
             if result.original_status and result.original_status != result.status:
                 self._append_output(
                     f"KNOWN ISSUE WAIVER APPLIED: {result.original_status.upper()} -> {result.status.upper()}"

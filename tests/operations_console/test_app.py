@@ -147,7 +147,7 @@ def test_handle_result_surfaces_known_issue_and_waiver() -> None:
 
     app._handle_result(result)
 
-    assert "KNOWN ISSUE: KI-777 | Waived snapshot mismatch" in output
+    assert "KNOWN ISSUE: KI-777 | Waived snapshot mismatch | severity=high | status=waived | override=WARN" in output
     assert "KNOWN ISSUE WAIVER APPLIED: FAIL -> WARN" in output
     assert app.status_var.get() == "WARN"
     assert "KNOWN ISSUE: KI-777" in app.summary_var.get()
