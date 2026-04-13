@@ -11,6 +11,7 @@ from .divergence_finder import FirstDivergence, compare_result_to_baseline_diver
 from .gui_action_matrix import GuiActionMatrix, GuiActionMatrixEntry, load_gui_action_matrix
 from .models import ConsoleResult
 from .run_manifest import parse_run_manifest_metadata
+from .runner_utils import iter_results
 from .scenario_contracts import ScenarioContractCatalog, ScenarioContractEvaluation, evaluate_result_contract, load_scenario_contracts
 
 
@@ -359,7 +360,11 @@ def _first_divergence_report_dict(divergence: FirstDivergence | None) -> Dict[st
 def _key_log_lines(result: ConsoleResult) -> List[str]:
     priority_lines = [str(item or "").strip() for item in result.errors if str(item or "").strip()]
     detail_lines = [str(item or "").strip() for item in result.details if str(item or "").strip()]
-    combined = [*priority_lines, *detail_lines[-20:]]
+    nested_lines: List[str] = []
+    for item in list(iter_results(result))[1:]:
+        nested_lines.extend(str(error or "").strip() for error in item.errors if str(error or "").strip())
+        nested_lines.extend(str(line or "").strip() for line in item.details if str(line or "").strip())
+    combined = [*priority_lines, *detail_lines[-20:], *nested_lines[-20:]]
     deduped: List[str] = []
     for line in combined:
         if line not in deduped:

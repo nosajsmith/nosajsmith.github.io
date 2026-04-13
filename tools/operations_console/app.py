@@ -22,7 +22,7 @@ from tools.operations_console.divergence_finder import FirstDivergence, compare_
 from tools.operations_console.incident_log import (
     AnomalyCatalog,
     IncidentBundleResult,
-    incident_metadata_lines,
+    attach_incident_metadata,
     load_anomaly_rules,
     log_incident_bundle,
 )
@@ -982,18 +982,7 @@ class OperationsConsoleApp:
         result: ConsoleResult,
         incident: IncidentBundleResult | None,
     ) -> ConsoleResult:
-        if incident is None:
-            return result
-        detail_lines = list(result.details)
-        for line in incident_metadata_lines(incident):
-            if line not in detail_lines:
-                detail_lines.append(line)
-        artifact_paths = list(result.artifact_paths)
-        for path in [incident.incident_json_path, incident.run_report_json_path]:
-            text = str(path or "").strip()
-            if text and text not in artifact_paths:
-                artifact_paths.append(text)
-        return replace(result, details=detail_lines, artifact_paths=artifact_paths)
+        return attach_incident_metadata(result, incident)
 
     def _capture_run_manifest(self, result: ConsoleResult) -> RunManifestCaptureResult | None:
         try:

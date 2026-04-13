@@ -4,7 +4,7 @@ import hashlib
 import json
 import shutil
 import subprocess
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import datetime, timezone
 from fnmatch import fnmatch
 from pathlib import Path
@@ -13,6 +13,7 @@ from typing import Dict, Iterable, List, Sequence
 from .gui_action_matrix import GuiActionMatrix, GuiActionMatrixEntry, load_gui_action_matrix
 from .models import ConsoleResult
 from .report_export import repo_root as report_repo_root, slugify, write_report_json
+from .runner_utils import iter_results
 
 try:  # pragma: no cover - optional dependency
     import yaml
@@ -71,6 +72,24 @@ def incident_metadata_lines(incident: IncidentBundleResult | None) -> List[str]:
         if incident.run_report_json_path:
             lines.append(f"INCIDENT RUN REPORT: {incident.run_report_json_path}")
     return lines
+
+
+def attach_incident_metadata(
+    result: ConsoleResult,
+    incident: IncidentBundleResult | None,
+) -> ConsoleResult:
+    if incident is None:
+        return result
+    detail_lines = list(result.details)
+    for line in incident_metadata_lines(incident):
+        if line not in detail_lines:
+            detail_lines.append(line)
+    artifact_paths = list(result.artifact_paths)
+    for path in [incident.incident_json_path, incident.run_report_json_path]:
+        text = str(path or "").strip()
+        if text and text not in artifact_paths:
+            artifact_paths.append(text)
+    return replace(result, details=detail_lines, artifact_paths=artifact_paths)
 
 
 def repo_root() -> Path:
@@ -155,18 +174,9 @@ def log_incident_bundle(
     bundle_dir.mkdir(parents=True, exist_ok=True)
 
     copied_artifact_paths = _copy_result_artifacts(result, bundle_dir)
-    report_path = write_report_json(result, bundle_dir / "run_report.json", action_matrix=matrix)
     incident_path = bundle_dir / "incident.json"
-    payload = _incident_payload(
-        result,
-        anomaly_matches=anomaly_matches,
-        report_path=report_path,
-        copied_artifact_paths=copied_artifact_paths,
-        matrix_entry=matrix.get_by_label(result.name) if matrix is not None else None,
-        repo_root_path=repo_root_path,
-    )
-    incident_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-    return IncidentBundleResult(
+    report_path = bundle_dir / "run_report.json"
+    incident = IncidentBundleResult(
         logged=True,
         bundle_dir=str(bundle_dir),
         incident_json_path=str(incident_path),
@@ -174,6 +184,19 @@ def log_incident_bundle(
         copied_artifact_paths=copied_artifact_paths,
         anomaly_matches=anomaly_matches,
     )
+    report_result = attach_incident_metadata(result, incident)
+    report_path = write_report_json(report_result, report_path, action_matrix=matrix)
+    payload = _incident_payload(
+        result,
+        anomaly_matches=anomaly_matches,
+        bundle_dir=bundle_dir,
+        report_path=report_path,
+        copied_artifact_paths=copied_artifact_paths,
+        matrix_entry=matrix.get_by_label(result.name) if matrix is not None else None,
+        repo_root_path=repo_root_path,
+    )
+    incident_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    return replace(incident, run_report_json_path=str(report_path))
 
 
 def _load_payload(path: Path) -> object:
@@ -322,6 +345,7 @@ def _incident_payload(
     result: ConsoleResult,
     *,
     anomaly_matches: Sequence[AnomalyMatch],
+    bundle_dir: Path,
     report_path: Path,
     copied_artifact_paths: Sequence[str],
     matrix_entry: GuiActionMatrixEntry | None,
@@ -329,6 +353,7 @@ def _incident_payload(
 ) -> Dict[str, object]:
     return {
         "created_at": datetime.now(timezone.utc).isoformat(),
+        "bundle_dir": str(bundle_dir),
         "action_name": result.name,
         "status": result.status,
         "original_status": result.original_status,
@@ -354,14 +379,15 @@ def _incident_payload(
             }
             for match in anomaly_matches
         ],
-        "key_errors": list(result.errors),
-        "key_logs": list(result.details[-40:]),
+        "key_errors": _key_error_lines(result),
+        "key_logs": _key_log_lines(result),
         "artifact_paths": list(result.artifact_paths),
         "copied_artifact_paths": list(copied_artifact_paths),
         "executed_command": list(result.executed_command),
         "return_code": result.return_code,
         "gui_action_matrix": matrix_entry.to_report_dict() if matrix_entry is not None else None,
         "git": _git_context(repo_root_path),
+        "result_json_path": str(report_path),
         "run_report_json": str(report_path),
     }
 
@@ -405,3 +431,23 @@ def _safe_load_action_matrix() -> GuiActionMatrix | None:
         return load_gui_action_matrix()
     except Exception:
         return None
+
+
+def _key_error_lines(result: ConsoleResult) -> List[str]:
+    errors: List[str] = []
+    for item in iter_results(result):
+        for error in item.errors:
+            text = str(error or "").strip()
+            if text and text not in errors:
+                errors.append(text)
+    return errors[:40]
+
+
+def _key_log_lines(result: ConsoleResult) -> List[str]:
+    lines: List[str] = []
+    for item in iter_results(result):
+        for line in item.details:
+            text = str(line or "").strip()
+            if text and text not in lines:
+                lines.append(text)
+    return lines[-40:]

@@ -68,6 +68,12 @@ def make_result(
     )
 
 
+def iter_results(result: ConsoleResult):
+    yield result
+    for item in result.subresults:
+        yield from iter_results(item)
+
+
 def finalize_result(
     result: ConsoleResult,
     *,

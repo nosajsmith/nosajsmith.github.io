@@ -164,3 +164,29 @@ def test_export_result_json_and_text_create_files(tmp_path) -> None:
     assert payload["known_issue_matches"][0]["downgrade_applied"] is True
     assert payload["known_issue_matches"][0]["scenario_name"] == "inchon_mvp"
     assert "KI-402: Waived replay regression [severity=medium, status=waived] -> WARN (downgrade applied)" in text
+
+
+def test_report_dict_promotes_nested_errors_into_key_logs() -> None:
+    result = ConsoleResult(
+        name="ORL / Demo Readiness",
+        status="fail",
+        summary="demo failed",
+        details=["suite started"],
+        subresults=[
+            ConsoleResult(
+                name="ORL / Demo Artifact Validation",
+                status="fail",
+                summary="artifact missing",
+                errors=["missing expected screenshot"],
+                details=["validation step failed"],
+            )
+        ],
+    )
+
+    payload = report_dict(result)
+
+    assert payload["key_logs"] == [
+        "suite started",
+        "missing expected screenshot",
+        "validation step failed",
+    ]

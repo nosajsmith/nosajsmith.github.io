@@ -92,8 +92,12 @@ def test_log_incident_bundle_writes_manifest_and_run_report(tmp_path, monkeypatc
     assert manifest["git"]["branch"] == "main"
     assert manifest["git"]["commit"] == "abc123"
     assert manifest["git"]["worktree_status"] == "dirty"
+    assert manifest["result_json_path"] == incident.run_report_json_path
     assert manifest["anomaly_matches"][0]["id"] == "ANOM-003"
     assert report["name"] == "ORL / UI Build Check"
+    assert report["incident_metadata"]["logged"] is True
+    assert report["incident_metadata"]["bundle_dir"] == incident.bundle_dir
+    assert report["incident_metadata"]["run_report_json_path"] == incident.run_report_json_path
 
 
 def test_log_incident_bundle_copies_existing_artifacts_into_bundle(tmp_path, monkeypatch) -> None:
