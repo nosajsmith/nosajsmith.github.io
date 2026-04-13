@@ -21,6 +21,7 @@ from tools.operations_console.registry import (
     run_open_bridge_konsole,
     run_open_repo_konsole,
     run_open_ui_konsole,
+    run_mwe_doctor,
     run_orl_all_green_check,
     run_orl_explainability_smoketest,
     run_selected_command_in_konsole,
@@ -161,6 +162,7 @@ def test_default_registry_exposes_expected_categories_and_connectivity_action() 
     assert registry.get("Utilities / Open Artifacts Konsole") is not None
     assert registry.get("Utilities / Tail Latest Logs in Konsole") is not None
     assert registry.get("Utilities / Run Selected Command in Konsole") is not None
+    assert registry.get("Utilities / mwe doctor") is not None
     assert {
         "repo_terminal",
         "ui_terminal",
@@ -678,6 +680,30 @@ def test_konsole_actions_use_allowlisted_launchers(monkeypatch: pytest.MonkeyPat
         ("artifacts_dir", "Artifacts"),
     ]
     assert command_calls == [("bridge_launch", "Run Selected Command in Konsole")]
+
+
+def test_run_mwe_doctor_delegates_to_doctor_module(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(
+        "tools.operations_console.doctor.run_doctor_console_result",
+        lambda **kwargs: make_result(
+            name="Utilities / mwe doctor",
+            status="pass",
+            summary=f"doctor ran for {kwargs['scenario_name']}",
+            scenario_name=kwargs["scenario_name"],
+        ),
+    )
+
+    result = run_mwe_doctor(
+        ConsoleRunContext(
+            action_name="Utilities / mwe doctor",
+            category="Utilities",
+            scenario_name="inchon_mvp",
+            bridge_uri="ws://127.0.0.1:8766",
+        )
+    )
+
+    assert result.status == "pass"
+    assert result.summary == "doctor ran for inchon_mvp"
 
 
 def test_run_selected_command_in_konsole_warns_when_no_command_is_selected() -> None:

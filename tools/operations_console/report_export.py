@@ -205,6 +205,10 @@ def _format_text_lines(
             lines.append(f"{prefix}Run Commit: {run_manifest['commit']}")
         if run_manifest.get("worktree_status"):
             lines.append(f"{prefix}Run Worktree: {run_manifest['worktree_status']}")
+        if run_manifest.get("working_directory"):
+            lines.append(f"{prefix}Run Working Directory: {run_manifest['working_directory']}")
+        if run_manifest.get("duration_ms"):
+            lines.append(f"{prefix}Run Manifest Duration (ms): {run_manifest['duration_ms']}")
         if run_manifest.get("bridge_uri"):
             lines.append(f"{prefix}Run Bridge URI: {run_manifest['bridge_uri']}")
     if result.artifact_paths:
@@ -478,6 +482,8 @@ def _report_run_manifest(result: ConsoleResult) -> Dict[str, object] | None:
         "branch": metadata.get("branch", ""),
         "commit": metadata.get("commit", ""),
         "worktree_status": metadata.get("worktree_status", ""),
+        "working_directory": metadata.get("working_directory", ""),
+        "duration_ms": metadata.get("duration_ms", 0),
         "bridge_uri": metadata.get("bridge_uri", ""),
         "name": result.name,
         "scenario_name": result.scenario_name,

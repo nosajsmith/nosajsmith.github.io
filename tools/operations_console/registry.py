@@ -230,6 +230,15 @@ def run_open_artifacts_konsole(context: ConsoleRunContext):
     return _console_result_from_konsole(context, result)
 
 
+def run_mwe_doctor(context: ConsoleRunContext):
+    from .doctor import run_doctor_console_result
+
+    return run_doctor_console_result(
+        bridge_uri=context.bridge_uri or DEFAULT_BRIDGE_URI,
+        scenario_name=context.scenario_name,
+    )
+
+
 def run_tail_latest_logs_in_konsole(context: ConsoleRunContext):
     result = launch_konsole_command(
         "tail_latest_logs",
@@ -717,6 +726,14 @@ def build_default_registry(action_matrix: GuiActionMatrix | None = None) -> Acti
             category="Utilities",
             description="Launch the selected allowlisted support command in Konsole.",
             runner=run_selected_command_in_konsole,
+        )
+    )
+    registry.register(
+        ConsoleAction(
+            name="Utilities / mwe doctor",
+            category="Utilities",
+            description="Run a lightweight environment sanity check for bridge, tooling, paths, and console support dependencies.",
+            runner=run_mwe_doctor,
         )
     )
     registry.register(

@@ -1,13 +1,15 @@
 from __future__ import annotations
 
 import argparse
+import importlib
 import shutil
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable, Iterable, List
 
+from .konsole_integration import command_registry_path, load_command_registry, resolve_working_directory
 from .models import ConsoleResult
-from .process_control import probe_bridge
+from .process_control import probe_bridge, resolve_bridge_endpoint
 from .runner_utils import make_result, roll_up_statuses
 
 
@@ -46,18 +48,29 @@ def run_doctor(
     repo_root_path: Path | None = None,
     which_fn: Callable[[str], str | None] = shutil.which,
     bridge_probe: Callable[[str], bool] = probe_bridge,
+    import_fn: Callable[[str], object] = importlib.import_module,
 ) -> DoctorResult:
     root = Path(repo_root_path) if repo_root_path is not None else repo_root()
     checks = [
-        _bridge_reachability_check(bridge_uri, bridge_probe=bridge_probe),
+        _bridge_uri_format_check(bridge_uri),
         _required_paths_check(root),
         _artifact_directory_check(default_artifacts_dir(root)),
-        _basic_commands_check(which_fn),
+        _bridge_reachability_check(bridge_uri, bridge_probe=bridge_probe),
+        _tooling_commands_check(which_fn),
+        _konsole_check(which_fn),
+        _command_registry_check(root),
+        _python_modules_check(import_fn),
     ]
     logs: List[str] = []
     for check in checks:
-        logs.append(f"{check.label}: {check.status.upper()} - {check.summary}")
+        verb = "passed" if check.status == "pass" else ("warned" if check.status == "warn" else "failed")
+        logs.append(f"doctor check {verb}: {check.label}")
+        logs.append(f"{check.label}: {check.summary}")
         logs.extend(check.details)
+    pass_count = sum(1 for check in checks if check.status == "pass")
+    warn_count = sum(1 for check in checks if check.status == "warn")
+    fail_count = sum(1 for check in checks if check.status in {"fail", "error"})
+    logs.append(f"doctor summary: {pass_count} pass, {warn_count} warn, {fail_count} fail")
     status = roll_up_statuses(check.status for check in checks)
     summary = f"mwe doctor completed with status {status.upper()}."
     return DoctorResult(status=status, summary=summary, checks=checks, logs=logs)
@@ -70,12 +83,14 @@ def run_doctor_console_result(
     repo_root_path: Path | None = None,
     which_fn: Callable[[str], str | None] = shutil.which,
     bridge_probe: Callable[[str], bool] = probe_bridge,
+    import_fn: Callable[[str], object] = importlib.import_module,
 ) -> ConsoleResult:
     result = run_doctor(
         bridge_uri=bridge_uri,
         repo_root_path=repo_root_path,
         which_fn=which_fn,
         bridge_probe=bridge_probe,
+        import_fn=import_fn,
     )
     subresults = [
         make_result(
@@ -103,7 +118,30 @@ def format_doctor_text(result: DoctorResult) -> str:
     for check in result.checks:
         lines.append(f"- {check.label}: {check.status.upper()} - {check.summary}")
         lines.extend(f"  {line}" for line in check.details)
+    summary_line = next((line for line in result.logs if line.startswith("doctor summary: ")), "")
+    if summary_line:
+        lines.append(summary_line)
     return "\n".join(lines)
+
+
+def _bridge_uri_format_check(bridge_uri: str) -> DoctorCheckResult:
+    raw_uri = str(bridge_uri or DEFAULT_BRIDGE_URI).strip() or DEFAULT_BRIDGE_URI
+    try:
+        endpoint = resolve_bridge_endpoint(raw_uri)
+    except Exception as exc:
+        return DoctorCheckResult(
+            check_id="bridge_uri_format",
+            label="Bridge URI",
+            status="fail",
+            summary=f"Bridge URI is invalid: {raw_uri}",
+            details=[str(exc)],
+        )
+    return DoctorCheckResult(
+        check_id="bridge_uri_format",
+        label="Bridge URI",
+        status="pass",
+        summary=f"Bridge URI parsed successfully: {endpoint.uri}",
+    )
 
 
 def _bridge_reachability_check(
@@ -156,54 +194,172 @@ def _required_paths_check(root: Path) -> DoctorCheckResult:
 
 
 def _artifact_directory_check(artifacts_dir: Path) -> DoctorCheckResult:
-    if artifacts_dir.exists() and artifacts_dir.is_dir():
+    existed_before = artifacts_dir.exists() and artifacts_dir.is_dir()
+    try:
+        artifacts_dir.mkdir(parents=True, exist_ok=True)
+        probe_path = artifacts_dir / ".doctor-write-check"
+        probe_path.write_text("ok\n", encoding="utf-8")
+        probe_path.unlink()
+    except OSError as exc:
         return DoctorCheckResult(
             check_id="artifact_directory",
             label="Artifact Directory",
-            status="pass",
-            summary=f"Artifact directory exists: {artifacts_dir}",
+            status="fail",
+            summary=f"Artifact directory is not writable: {artifacts_dir}",
+            details=[str(exc)],
         )
     return DoctorCheckResult(
         check_id="artifact_directory",
         label="Artifact Directory",
-        status="warn",
-        summary=f"Artifact directory is missing: {artifacts_dir}",
-        details=["The directory will be created automatically on the next report, incident, or manifest export."],
+        status="pass",
+        summary=f"Artifact directory writable: {artifacts_dir}",
+        details=[] if existed_before else [f"created artifact directory: {artifacts_dir}"],
     )
 
 
-def _basic_commands_check(which_fn: Callable[[str], str | None]) -> DoctorCheckResult:
+def _tooling_commands_check(which_fn: Callable[[str], str | None]) -> DoctorCheckResult:
     required = ["git", "python", "pytest", "node", "npm"]
-    optional = ["konsole"]
     missing_required = [name for name in required if not which_fn(name)]
-    missing_optional = [name for name in optional if not which_fn(name)]
-    available = [name for name in [*required, *optional] if which_fn(name)]
-    details = [f"available: {', '.join(available)}"] if available else []
+    details = [f"available command: {name} -> {which_fn(name)}" for name in required if which_fn(name)]
     if missing_required:
         details.extend(f"missing required command: {name}" for name in missing_required)
-        if missing_optional:
-            details.extend(f"missing optional command: {name}" for name in missing_optional)
         return DoctorCheckResult(
-            check_id="basic_commands",
-            label="Basic Commands",
+            check_id="tooling_commands",
+            label="Tooling Commands",
             status="fail",
             summary="Required commands are missing from PATH.",
             details=details,
         )
-    if missing_optional:
-        details.extend(f"missing optional command: {name}" for name in missing_optional)
+    return DoctorCheckResult(
+        check_id="tooling_commands",
+        label="Tooling Commands",
+        status="pass",
+        summary="Required commands are available on PATH.",
+        details=details,
+    )
+
+
+def _konsole_check(which_fn: Callable[[str], str | None]) -> DoctorCheckResult:
+    konsole_path = which_fn("konsole")
+    if konsole_path:
         return DoctorCheckResult(
-            check_id="basic_commands",
-            label="Basic Commands",
+            check_id="konsole_availability",
+            label="Konsole Availability",
+            status="pass",
+            summary=f"Konsole available on PATH: {konsole_path}",
+        )
+    return DoctorCheckResult(
+        check_id="konsole_availability",
+        label="Konsole Availability",
+        status="warn",
+        summary="Konsole is not available on PATH.",
+        details=["Konsole-backed utility actions will be unavailable until konsole is installed."],
+    )
+
+
+def _command_registry_check(root: Path) -> DoctorCheckResult:
+    source_path = command_registry_path(root)
+    details: List[str] = []
+    try:
+        catalog = load_command_registry(source_path)
+    except Exception as exc:
+        return DoctorCheckResult(
+            check_id="command_registry",
+            label="Command Registry",
+            status="fail",
+            summary="Command registry could not be loaded.",
+            details=[str(exc)],
+        )
+
+    details.append(f"loaded command registry: {source_path}")
+    details.append(f"allowlisted commands: {len(catalog.commands)}")
+    missing_required: List[str] = []
+    for directory_id in ["repo_root", "ui_dir", "bridge_dir", "artifacts_dir"]:
+        try:
+            resolved = resolve_working_directory(directory_id, catalog=catalog, repo_root_path=root)
+            details.append(f"resolved directory: {directory_id} -> {resolved}")
+        except Exception as exc:
+            missing_required.append(f"{directory_id}: {exc}")
+
+    optional_gaps: List[str] = []
+    if catalog.get_directory("logs_dir") is not None:
+        try:
+            resolved = resolve_working_directory("logs_dir", catalog=catalog, repo_root_path=root)
+            details.append(f"resolved directory: logs_dir -> {resolved}")
+        except Exception as exc:
+            optional_gaps.append(f"logs_dir: {exc}")
+
+    if missing_required:
+        details.extend(missing_required)
+        details.extend(optional_gaps)
+        return DoctorCheckResult(
+            check_id="command_registry",
+            label="Command Registry",
+            status="fail",
+            summary="Required command registry directories did not resolve.",
+            details=details,
+        )
+    if optional_gaps:
+        details.extend(optional_gaps)
+        return DoctorCheckResult(
+            check_id="command_registry",
+            label="Command Registry",
             status="warn",
-            summary="Required commands are available, but optional commands are missing.",
+            summary="Command registry resolved with optional gaps.",
             details=details,
         )
     return DoctorCheckResult(
-        check_id="basic_commands",
-        label="Basic Commands",
+        check_id="command_registry",
+        label="Command Registry",
         status="pass",
-        summary="Required commands are available on PATH.",
+        summary="Command registry entries resolved.",
+        details=details,
+    )
+
+
+def _python_modules_check(import_fn: Callable[[str], object]) -> DoctorCheckResult:
+    required = ["json", "tkinter"]
+    optional = ["websockets"]
+    details: List[str] = []
+    missing_required: List[str] = []
+    missing_optional: List[str] = []
+    for module_name in required:
+        try:
+            import_fn(module_name)
+        except Exception as exc:
+            missing_required.append(module_name)
+            details.append(f"missing required module: {module_name} ({exc})")
+        else:
+            details.append(f"imported module: {module_name}")
+    for module_name in optional:
+        try:
+            import_fn(module_name)
+        except Exception as exc:
+            missing_optional.append(module_name)
+            details.append(f"missing optional module: {module_name} ({exc})")
+        else:
+            details.append(f"imported module: {module_name}")
+    if missing_required:
+        return DoctorCheckResult(
+            check_id="python_modules",
+            label="Python Modules",
+            status="fail",
+            summary="Required Python modules are unavailable.",
+            details=details,
+        )
+    if missing_optional:
+        return DoctorCheckResult(
+            check_id="python_modules",
+            label="Python Modules",
+            status="warn",
+            summary="Required Python modules are available, but optional modules are missing.",
+            details=details,
+        )
+    return DoctorCheckResult(
+        check_id="python_modules",
+        label="Python Modules",
+        status="pass",
+        summary="Required Python modules are available.",
         details=details,
     )
 

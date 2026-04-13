@@ -442,6 +442,7 @@ class OperationsConsoleApp:
         scenario_name = self.scenario_var.get().strip()
         self._append_output("")
         self._append_output("== mwe doctor ==")
+        self._log_action_metadata("Utilities / mwe doctor")
         self._set_status("running", "Running environment doctor...")
         self._update_control_states(running_override=True)
 
@@ -506,6 +507,8 @@ class OperationsConsoleApp:
         result = self._attach_run_manifest_metadata(result, manifest)
         incident = self._log_incident_bundle(result)
         result = self._attach_incident_metadata(result, incident)
+        manifest = self._refresh_run_manifest_after_incident_metadata(result, manifest, incident)
+        result = self._attach_run_manifest_metadata(result, manifest)
         result = self._refresh_auto_export_after_support_metadata(result, manifest, incident)
         self.last_result = result
         self._append_contract_evaluation(contract_evaluation)
@@ -547,6 +550,8 @@ class OperationsConsoleApp:
         pseudo_result = self._attach_run_manifest_metadata(pseudo_result, manifest)
         incident = self._log_incident_bundle(pseudo_result)
         pseudo_result = self._attach_incident_metadata(pseudo_result, incident)
+        manifest = self._refresh_run_manifest_after_incident_metadata(pseudo_result, manifest, incident)
+        pseudo_result = self._attach_run_manifest_metadata(pseudo_result, manifest)
         self.last_result = pseudo_result
         self._emit_incident_breadcrumbs(incident)
         self._set_status(status, summary)
@@ -566,6 +571,8 @@ class OperationsConsoleApp:
         pseudo_result = self._attach_run_manifest_metadata(pseudo_result, manifest)
         incident = self._log_incident_bundle(pseudo_result)
         pseudo_result = self._attach_incident_metadata(pseudo_result, incident)
+        manifest = self._refresh_run_manifest_after_incident_metadata(pseudo_result, manifest, incident)
+        pseudo_result = self._attach_run_manifest_metadata(pseudo_result, manifest)
         self.last_result = pseudo_result
         self._emit_incident_breadcrumbs(incident)
         self._append_output(f"== {result.status.upper()} :: {result.summary} ==")
@@ -586,6 +593,8 @@ class OperationsConsoleApp:
         pseudo_result = self._attach_run_manifest_metadata(pseudo_result, manifest)
         incident = self._log_incident_bundle(pseudo_result)
         pseudo_result = self._attach_incident_metadata(pseudo_result, incident)
+        manifest = self._refresh_run_manifest_after_incident_metadata(pseudo_result, manifest, incident)
+        pseudo_result = self._attach_run_manifest_metadata(pseudo_result, manifest)
         self.last_result = pseudo_result
         self._append_output(f"ERROR: {error}")
         self._emit_incident_breadcrumbs(incident)
@@ -1007,14 +1016,22 @@ class OperationsConsoleApp:
     ) -> ConsoleResult:
         return attach_incident_metadata(result, incident)
 
-    def _capture_run_manifest(self, result: ConsoleResult) -> RunManifestCaptureResult | None:
+    def _capture_run_manifest(
+        self,
+        result: ConsoleResult,
+        *,
+        emit_output: bool = True,
+    ) -> RunManifestCaptureResult | None:
         try:
             bridge_var = getattr(self, "bridge_uri_var", None)
             bridge_uri = bridge_var.get().strip() if bridge_var is not None else DEFAULT_BRIDGE_URI
-            return capture_run_manifest(
+            manifest = capture_run_manifest(
                 result,
                 bridge_uri=bridge_uri or DEFAULT_BRIDGE_URI,
             )
+            if manifest.written and emit_output:
+                self._append_output(f"wrote run manifest: {manifest.manifest_path}")
+            return manifest
         except Exception as exc:
             self._append_output(f"ERROR: Run manifest capture failed: {exc}")
             return None
@@ -1040,6 +1057,19 @@ class OperationsConsoleApp:
             started_at=result.started_at or manifest.started_at,
             finished_at=result.finished_at or manifest.finished_at,
         )
+
+    def _refresh_run_manifest_after_incident_metadata(
+        self,
+        result: ConsoleResult,
+        manifest: RunManifestCaptureResult | None,
+        incident: IncidentBundleResult | None,
+    ) -> RunManifestCaptureResult | None:
+        if manifest is None or not manifest.written:
+            return manifest
+        if incident is None or not incident.logged:
+            return manifest
+        refreshed = self._capture_run_manifest(result, emit_output=False)
+        return refreshed or manifest
 
     def _refresh_auto_export_after_support_metadata(
         self,
