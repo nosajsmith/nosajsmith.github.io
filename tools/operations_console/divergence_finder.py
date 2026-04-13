@@ -156,6 +156,34 @@ def compare_result_to_baseline_divergence(
     )
 
 
+def find_first_divergence_in_artifact_paths(
+    artifact_paths: Sequence[str | Path],
+) -> FirstDivergence | None:
+    candidates = [
+        str(path or "").strip()
+        for path in list(artifact_paths or [])
+        if str(path or "").strip()
+    ]
+    if len(candidates) < 2:
+        return None
+
+    first_identical: FirstDivergence | None = None
+    for left_index in range(len(candidates)):
+        for right_index in range(left_index + 1, len(candidates)):
+            try:
+                divergence = find_first_divergence(candidates[left_index], candidates[right_index])
+            except Exception:
+                continue
+            if not divergence.comparable:
+                continue
+            if divergence.identical:
+                if first_identical is None:
+                    first_identical = divergence
+                continue
+            return divergence
+    return first_identical
+
+
 def _normalize_source(source: object) -> ComparableSource:
     if isinstance(source, ComparableSource):
         return source

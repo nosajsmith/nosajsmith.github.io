@@ -2,11 +2,36 @@ from __future__ import annotations
 
 from tools.operations_console.baselines import (
     compare_result_to_baseline,
+    default_baseline_dir,
     load_baseline_for_result,
     save_baseline,
 )
 from tools.operations_console.report_export import export_result_text, report_dict
 from tools.operations_console.runner_utils import make_result
+
+
+def test_default_baseline_dir_uses_artifacts_path() -> None:
+    path = default_baseline_dir()
+
+    assert str(path).endswith("artifacts/operations_console/baselines")
+
+
+def test_save_baseline_uses_default_artifacts_dir_when_repo_root_is_overridden(tmp_path) -> None:
+    result = make_result(
+        name="ORL / Scenario Integrity",
+        status="pass",
+        summary="Scenario integrity passed for inchon_mvp with 6 unit(s).",
+        scenario_name="inchon_mvp",
+        details=["Validated units: 6 total, 6 with basic identity/location fields"],
+    )
+
+    path = save_baseline(result, repo_root_path=tmp_path)
+    record = load_baseline_for_result(result, repo_root_path=tmp_path)
+
+    assert path == tmp_path / "artifacts" / "operations_console" / "baselines" / "orl-scenario-integrity--inchon-mvp.json"
+    assert path.exists()
+    assert record is not None
+    assert record.source_path == str(path)
 
 
 def test_save_baseline_and_load_matching_record(tmp_path) -> None:
@@ -110,5 +135,7 @@ def test_report_export_includes_baseline_drift(tmp_path) -> None:
 
     assert payload["baseline_drift"]["matched"] is True
     assert payload["baseline_drift"]["status"] == "fail"
+    assert payload["baseline_drift"]["baseline_path"]
     assert any(item["metric"] == "unit_count" for item in payload["baseline_drift"]["findings"])
     assert "Baseline Drift: FAIL" in text
+    assert "Baseline Path:" in text

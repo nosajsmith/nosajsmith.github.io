@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import queue
+import json
 import sys
 import threading
 from dataclasses import replace
@@ -16,10 +17,19 @@ if __package__ in {None, ""}:
 
 from engine.testing_api import EngineTestingAPI
 from tools.operations_console.doctor import run_doctor_console_result
+from tools.operations_console.expansion_registry import (
+    ExpansionRegistry,
+    load_expansion_registry,
+    write_expansion_registry_snapshot,
+)
 from tools.operations_console.gui_action_matrix import GuiActionMatrixEntry
 from tools.operations_console.models import ConsoleAction, ConsoleRegistryEntry, ConsoleResult
 from tools.operations_console.baselines import BaselineComparison, compare_result_to_baseline, save_baseline
-from tools.operations_console.divergence_finder import FirstDivergence, compare_result_to_baseline_divergence, find_first_divergence
+from tools.operations_console.divergence_finder import (
+    FirstDivergence,
+    compare_result_to_baseline_divergence,
+    find_first_divergence_in_artifact_paths,
+)
 from tools.operations_console.incident_log import (
     AnomalyCatalog,
     IncidentBundleResult,
@@ -104,6 +114,8 @@ def _adapter_result_to_console_result(
 def run_orl_campaign_status(context) -> ConsoleResult:
     adapter = EngineTestingAPI()
     result = adapter.campaign_status(scenario_name=context.scenario_name)
+    if result.ok:
+        context.log("campaign status retrieved")
     return _adapter_result_to_console_result(
         context,
         adapter_result=result,
@@ -115,6 +127,8 @@ def run_orl_campaign_status(context) -> ConsoleResult:
 def run_orl_campaign_explain(context) -> ConsoleResult:
     adapter = EngineTestingAPI()
     result = adapter.campaign_explain(scenario_name=context.scenario_name)
+    if result.ok:
+        context.log("campaign explain retrieved")
     return _adapter_result_to_console_result(
         context,
         adapter_result=result,
@@ -131,10 +145,14 @@ class OperationsConsoleApp:
         known_issues: KnownIssuesCatalog | None = None,
         anomaly_catalog: AnomalyCatalog | None = None,
         scenario_contracts: ScenarioContractCatalog | None = None,
+        expansion_registry: ExpansionRegistry | None = None,
     ):
         self.root = root
         self.registry = registry or build_default_registry()
         self._register_explainability_actions()
+        self._register_divergence_action()
+        self.expansion_registry = expansion_registry or load_expansion_registry()
+        self._register_expansion_registry_action()
         self.gui_action_matrix = self.registry.action_matrix()
         self.command_registry = getattr(self.registry, "command_registry", lambda: None)()
         self.known_issues = known_issues or load_known_issues()
@@ -181,12 +199,14 @@ class OperationsConsoleApp:
         self._append_output(f"Loaded {len(self.known_issues.issues)} known issue definitions.")
         self._append_output(f"Loaded {len(self.anomaly_catalog.rules)} anomaly rules.")
         self._append_output(f"Loaded {len(self.scenario_contracts.contracts)} scenario contracts.")
+        self._append_output(f"Loaded {len(self.expansion_registry.entries)} expansion registry entries.")
         self._append_output(
             f"Loaded {len(getattr(self.command_registry, 'commands', []))} allowlisted Konsole commands."
         )
         self._append_output("Baseline drift support ready.")
         self._append_output("Explainability drilldown ready.")
         self._append_output("First-divergence finder ready.")
+        self._append_output("Expansion registry ready.")
         self._append_output("Doctor support ready.")
         self.root.after(75, self._poll_events)
 
@@ -207,6 +227,28 @@ class OperationsConsoleApp:
                     category="ORL",
                     description="Capture concise scenario explanation, staff notes, alerts, and orders.",
                     runner=run_orl_campaign_explain,
+                )
+            )
+
+    def _register_divergence_action(self) -> None:
+        if self.registry.get("Utilities / First Divergence Finder") is None:
+            self.registry.register(
+                ConsoleAction(
+                    name="Utilities / First Divergence Finder",
+                    category="Utilities",
+                    description="Compare the last result against its saved baseline or the first comparable artifact pair and report the earliest meaningful difference.",
+                    runner=self._run_first_divergence_finder_action,
+                )
+            )
+
+    def _register_expansion_registry_action(self) -> None:
+        if self.registry.get("Planning / Expansion Registry") is None:
+            self.registry.register(
+                ConsoleAction(
+                    name="Planning / Expansion Registry",
+                    category="Planning",
+                    description="Summarize future theater and capability ideas with support-gate blockers and export a JSON planning snapshot.",
+                    runner=self._run_expansion_registry_action,
                 )
             )
 
@@ -636,7 +678,7 @@ class OperationsConsoleApp:
             self._append_output(f"ERROR: Baseline save failed: {exc}")
             self._set_status("error", "Baseline save failed.")
             return
-        self._append_output(f"BASELINE SAVED: {path}")
+        self._append_output(f"baseline saved: {path}")
         self.summary_var.set(f"Baseline saved: {path.name}")
         self._update_control_states()
 
@@ -795,9 +837,10 @@ class OperationsConsoleApp:
 
     def _apply_scenario_contracts(self, result: ConsoleResult) -> tuple[ConsoleResult, ScenarioContractEvaluation | None]:
         try:
+            scenario_name = self.scenario_var.get().strip() if self._should_apply_scenario_contracts(result.name) else ""
             return apply_scenario_contracts(
                 result,
-                scenario_name=self.scenario_var.get().strip(),
+                scenario_name=scenario_name,
                 contract_catalog=getattr(self, "scenario_contracts", None),
                 action_matrix=getattr(self, "gui_action_matrix", None),
             )
@@ -805,16 +848,23 @@ class OperationsConsoleApp:
             self._append_output(f"ERROR: Scenario contract evaluation failed: {exc}")
             return result, None
 
+    def _should_apply_scenario_contracts(self, label: str) -> bool:
+        matrix_entry = self._matrix_entry_for_label(label)
+        if matrix_entry is not None:
+            return "scenario_name" in matrix_entry.inputs
+        return str(label or "").startswith("ORL /")
+
     def _append_contract_evaluation(self, evaluation: ScenarioContractEvaluation | None) -> None:
         if evaluation is None or not evaluation.matched:
             return
-        if evaluation.status == "pass":
-            return
+        self._append_output(f"loaded scenario contract: {evaluation.contract_scenario_name}")
         self._append_output(
             f"SCENARIO CONTRACT: {evaluation.contract_scenario_name} [{evaluation.status.upper()}]"
         )
+        for check in evaluation.passed_checks:
+            self._append_output(f"contract check passed: {check}")
         for issue in evaluation.issues:
-            self._append_output(f"CONTRACT MISMATCH: {issue}")
+            self._append_output(f"contract mismatch: {issue}")
 
     def _attach_explainability_follow_up(self, result: ConsoleResult) -> ConsoleResult:
         scenario_name = str(result.scenario_name or self.scenario_var.get() or "").strip()
@@ -840,6 +890,7 @@ class OperationsConsoleApp:
 
         if status_result.logs or explain_result.logs or status_result.error or explain_result.error:
             lines.append("FOLLOW-UP EXPLAINABILITY:")
+            lines.append("explainability attached to incident/report")
         lines.extend(status_result.logs)
         if status_result.error:
             lines.append(f"CAMPAIGN STATUS ERROR: {status_result.error}")
@@ -955,9 +1006,18 @@ class OperationsConsoleApp:
     def _append_baseline_drift(self, drift: BaselineComparison | None) -> None:
         if drift is None or not drift.matched:
             return
-        self._append_output(f"BASELINE DRIFT: {drift.status.upper()}")
+        if drift.baseline_path:
+            self._append_output(f"baseline compared: {drift.baseline_path}")
+        if drift.status == "pass" or not drift.findings:
+            self._append_output("drift check passed")
+            return
         for finding in drift.findings:
-            self._append_output(f"DRIFT {finding.status.upper()}: {finding.message}")
+            prefix = {
+                "warn": "drift warning",
+                "fail": "drift failure",
+                "error": "drift error",
+            }.get(finding.status, "drift notice")
+            self._append_output(f"{prefix}: {finding.message}")
 
     def _find_result_divergence(
         self,
@@ -966,11 +1026,11 @@ class OperationsConsoleApp:
     ) -> FirstDivergence | None:
         if result.status in {"warn", "fail", "error"} and len(result.artifact_paths) >= 2:
             try:
-                divergence = find_first_divergence(result.artifact_paths[0], result.artifact_paths[1])
+                divergence = find_first_divergence_in_artifact_paths(result.artifact_paths)
             except Exception as exc:
                 self._append_output(f"ERROR: Divergence compare failed: {exc}")
             else:
-                if divergence.comparable and not divergence.identical:
+                if divergence is not None and divergence.comparable and not divergence.identical:
                     return divergence
         if drift is None or not drift.matched or drift.status == "pass":
             return None
@@ -987,8 +1047,177 @@ class OperationsConsoleApp:
         if divergence is None or not divergence.comparable or divergence.identical:
             return
         self._append_output(f"FIRST DIVERGENCE: {divergence.message}")
+        if divergence.field_path:
+            self._append_output(f"first divergence at field: {divergence.field_path}")
+        if divergence.step:
+            self._append_output(f"step: {divergence.step}")
+        if divergence.tick is not None:
+            self._append_output(f"tick: {divergence.tick}")
+        if divergence.phase:
+            self._append_output(f"phase: {divergence.phase}")
+        if divergence.scenario_name:
+            self._append_output(f"scenario: {divergence.scenario_name}")
+        left_label, right_label = self._divergence_value_labels(divergence)
+        self._append_output(f"{left_label}: {self._format_divergence_value(divergence.left_value)}")
+        self._append_output(f"{right_label}: {self._format_divergence_value(divergence.right_value)}")
         if divergence.artifact_paths:
             self._append_output(f"DIVERGENCE INPUTS: {' | '.join(divergence.artifact_paths)}")
+
+    def _run_first_divergence_finder_action(self, context) -> ConsoleResult:
+        source_result = self.last_result
+        if source_result is None:
+            context.log("no completed run available for divergence compare")
+            return make_result(
+                name=context.action_name,
+                status="warn",
+                summary="No completed run is available for first divergence compare.",
+            )
+
+        divergence, source_kind = self._resolve_manual_divergence(source_result)
+        if divergence is None:
+            context.log("first divergence compare unavailable because no comparable baseline or artifact pair was found")
+            return make_result(
+                name=context.action_name,
+                status="warn",
+                summary="No comparable baseline or artifact pair is available for first divergence compare.",
+            )
+
+        if source_kind == "baseline":
+            context.log("comparing current result against saved baseline")
+        elif source_kind == "artifacts":
+            context.log("comparing comparable artifacts from the last result")
+
+        if divergence.artifact_paths:
+            context.log(f"compared artifact paths: {' | '.join(divergence.artifact_paths)}")
+        if divergence.scenario_name:
+            context.log(f"scenario: {divergence.scenario_name}")
+
+        if not divergence.comparable:
+            context.log(divergence.message)
+            return make_result(
+                name=context.action_name,
+                status="warn",
+                summary="First divergence compare unavailable.",
+                scenario_name=source_result.scenario_name,
+                adapter_method="first_divergence_finder",
+            )
+
+        if divergence.identical:
+            context.log("no divergence found")
+            return make_result(
+                name=context.action_name,
+                status="pass",
+                summary="No divergence found.",
+                scenario_name=source_result.scenario_name or divergence.scenario_name,
+                adapter_method="first_divergence_finder",
+            )
+
+        context.log(f"first divergence at field: {divergence.field_path}")
+        if divergence.step:
+            context.log(f"step: {divergence.step}")
+        if divergence.tick is not None:
+            context.log(f"tick: {divergence.tick}")
+        if divergence.phase:
+            context.log(f"phase: {divergence.phase}")
+        left_label, right_label = self._divergence_value_labels(divergence)
+        context.log(f"{left_label}: {self._format_divergence_value(divergence.left_value)}")
+        context.log(f"{right_label}: {self._format_divergence_value(divergence.right_value)}")
+
+        return make_result(
+            name=context.action_name,
+            status="warn",
+            summary=f"First divergence found at {divergence.field_path}.",
+            scenario_name=source_result.scenario_name or divergence.scenario_name,
+            adapter_method="first_divergence_finder",
+        )
+
+    def _resolve_manual_divergence(self, result: ConsoleResult) -> tuple[FirstDivergence | None, str]:
+        baseline_divergence = compare_result_to_baseline_divergence(result)
+        if baseline_divergence.comparable:
+            return baseline_divergence, "baseline"
+        artifact_divergence = find_first_divergence_in_artifact_paths(result.artifact_paths)
+        if artifact_divergence is not None:
+            return artifact_divergence, "artifacts"
+        return baseline_divergence, "baseline"
+
+    def _divergence_value_labels(self, divergence: FirstDivergence) -> tuple[str, str]:
+        if divergence.comparison_kind == "baseline_metrics":
+            return ("baseline", "current")
+        return ("left", "right")
+
+    def _format_divergence_value(self, value: object) -> str:
+        if isinstance(value, str):
+            return value
+        if isinstance(value, (int, float, bool)) or value is None:
+            return str(value)
+        if isinstance(value, dict):
+            return "{...}"
+        if isinstance(value, list):
+            return "[...]"
+        try:
+            return json.dumps(value, sort_keys=True)
+        except TypeError:
+            return str(value)
+
+    def _get_expansion_registry(self) -> ExpansionRegistry:
+        registry = getattr(self, "expansion_registry", None)
+        if registry is None:
+            registry = load_expansion_registry()
+            self.expansion_registry = registry
+        return registry
+
+    def _run_expansion_registry_action(self, context) -> ConsoleResult:
+        registry = self._get_expansion_registry()
+        snapshot_path = write_expansion_registry_snapshot(registry)
+        planning_counts = registry.counts_by_planning_state()
+        status_counts = registry.counts_by_status()
+        category_counts = registry.counts_by_category()
+
+        context.log(f"EXPANSION REGISTRY JSON: {snapshot_path}")
+        context.log(
+            "EXPANSION REGISTRY COUNTS: "
+            f"total={len(registry.entries)} | "
+            f"support_ready={planning_counts.get('support_ready', 0)} | "
+            f"blocked_by_support={planning_counts.get('blocked_by_support', 0)} | "
+            f"needs_foundation={planning_counts.get('needs_foundation', 0)}"
+        )
+        context.log(f"EXPANSION REGISTRY STATUS COUNTS: {self._format_count_segments(status_counts)}")
+        context.log(f"EXPANSION REGISTRY CATEGORY COUNTS: {self._format_count_segments(category_counts)}")
+
+        grouped = registry.entries_by_planning_state()
+        for planning_state in registry.planning_states():
+            entries = grouped.get(planning_state, [])
+            if not entries:
+                continue
+            context.log(f"PLANNING STATE: {planning_state} ({len(entries)})")
+            for entry in entries:
+                context.log(
+                    f"- {entry.name} [status={entry.status}, maturity={entry.maturity}, "
+                    f"category={entry.category}, theater={entry.theater}, risk={entry.risk_level}]"
+                )
+                if entry.missing_support_gates:
+                    context.log(f"  support blockers: {', '.join(entry.missing_support_gates)}")
+                else:
+                    context.log(f"  support gates ready: {', '.join(entry.ready_support_gates)}")
+                if entry.capabilities:
+                    context.log(f"  capabilities: {', '.join(entry.capabilities)}")
+                if entry.next_step:
+                    context.log(f"  next step: {entry.next_step}")
+
+        return make_result(
+            name=context.action_name,
+            status="pass",
+            summary=f"Expansion registry loaded: {len(registry.entries)} entries.",
+            artifact_paths=[str(snapshot_path)],
+            adapter_method="expansion_registry",
+        )
+
+    def _format_count_segments(self, counts: dict[str, int]) -> str:
+        segments = [
+            f"{key}={counts[key]}"
+            for key in counts
+        ]
+        return " | ".join(segments)
 
     def _log_incident_bundle(self, result: ConsoleResult) -> IncidentBundleResult | None:
         try:

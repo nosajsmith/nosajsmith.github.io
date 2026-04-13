@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from pathlib import Path
+
+from tools.operations_console.baselines import BaselineComparison, DriftFinding
 from tools.operations_console.app import OperationsConsoleApp
 from tools.operations_console.gui_action_matrix import load_gui_action_matrix
 from tools.operations_console.incident_log import AnomalyMatch, IncidentBundleResult
@@ -375,3 +378,55 @@ def test_handle_task_error_converts_aux_failure_into_console_result() -> None:
     assert "ERROR: connection refused" in output
     assert app.summary_var.get() == "Scenario refresh failed."
     assert app.status_var.get() == "ERROR"
+
+
+def test_save_baseline_logs_readable_path(monkeypatch) -> None:
+    app, output = build_app_stub(scenario_value="inchon_mvp")
+    app.last_result = make_result(
+        name="ORL / Scenario Integrity",
+        status="pass",
+        summary="Scenario integrity passed.",
+        scenario_name="inchon_mvp",
+    )
+    app._update_control_states = lambda *args, **kwargs: None
+    baseline_path = Path("/tmp/baselines/orl-scenario-integrity--inchon-mvp.json")
+    monkeypatch.setattr("tools.operations_console.app.save_baseline", lambda *args, **kwargs: baseline_path)
+
+    app._save_baseline()
+
+    assert f"baseline saved: {baseline_path}" in output
+    assert app.summary_var.get() == f"Baseline saved: {baseline_path.name}"
+
+
+def test_append_baseline_drift_emits_pass_and_warning_breadcrumbs() -> None:
+    app, output = build_app_stub(scenario_value="inchon_mvp")
+
+    app._append_baseline_drift(
+        BaselineComparison(
+            matched=True,
+            baseline_key="orl-smoke-suite--inchon-mvp",
+            status="pass",
+            baseline_path="/tmp/baselines/orl-smoke-suite--inchon-mvp.json",
+        )
+    )
+    app._append_baseline_drift(
+        BaselineComparison(
+            matched=True,
+            baseline_key="orl-smoke-suite--inchon-mvp",
+            status="warn",
+            baseline_path="/tmp/baselines/orl-smoke-suite--inchon-mvp.json",
+            findings=[
+                DriftFinding(
+                    metric="unit_count",
+                    status="warn",
+                    message="Unit count changed from 14 to 12.",
+                    baseline_value=14,
+                    current_value=12,
+                )
+            ],
+        )
+    )
+
+    assert "baseline compared: /tmp/baselines/orl-smoke-suite--inchon-mvp.json" in output
+    assert "drift check passed" in output
+    assert "drift warning: Unit count changed from 14 to 12." in output

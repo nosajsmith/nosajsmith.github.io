@@ -141,6 +141,15 @@ def test_default_registry_exposes_expected_categories_and_connectivity_action() 
     assert connectivity_matrix.runner == "registry.run_orl_connectivity"
     assert connectivity_matrix.category == "ORL"
     assert connectivity_matrix.enabled is True
+    assert "scenario_name" not in connectivity_matrix.inputs
+
+    integrity_matrix = registry.matrix_entry_for_label("ORL / Scenario Integrity")
+    assert integrity_matrix is not None
+    assert "scenario_name" in integrity_matrix.inputs
+
+    smoke_matrix = registry.matrix_entry_for_label("ORL / Smoke Suite")
+    assert smoke_matrix is not None
+    assert "scenario_name" in smoke_matrix.inputs
 
     process_control_matrix = registry.matrix_entry_for_id("run-bridge")
     assert process_control_matrix is not None
@@ -155,6 +164,7 @@ def test_default_registry_exposes_expected_categories_and_connectivity_action() 
     core_validation = registry.matrix_entry_for_label("ORL / Core Validation Suite")
     assert core_validation is not None
     assert core_validation.runner == "runner_utils.run_suite"
+    assert "scenario_name" in core_validation.inputs
 
     assert registry.get("Utilities / Open Repo Konsole") is not None
     assert registry.get("Utilities / Open UI Konsole") is not None

@@ -23,6 +23,12 @@
       ],
       "mismatch_status": "fail",
       "notes": "Publisher vertical-slice contract for the Inchon demo scenario."
+    },
+    {
+      "scenario_name": "breakthrough",
+      "expected_unit_count_range": [5, 5],
+      "mismatch_status": "warn",
+      "notes": "Lightweight regression fixture used for basic ORL scenario loading coverage."
     }
   ]
 }

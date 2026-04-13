@@ -7,7 +7,11 @@ from pathlib import Path
 from typing import Dict, List
 
 from .baselines import BaselineComparison, compare_result_to_baseline
-from .divergence_finder import FirstDivergence, compare_result_to_baseline_divergence, find_first_divergence
+from .divergence_finder import (
+    FirstDivergence,
+    compare_result_to_baseline_divergence,
+    find_first_divergence_in_artifact_paths,
+)
 from .gui_action_matrix import GuiActionMatrix, GuiActionMatrixEntry, load_gui_action_matrix
 from .models import ConsoleResult
 from .run_manifest import parse_run_manifest_metadata
@@ -40,6 +44,7 @@ def report_dict(
     baseline_drift = _report_baseline_drift(result, matrix, scenario_contracts, baseline_dir_path)
     first_divergence = _report_first_divergence(result, baseline_drift, baseline_dir_path)
     explainability_summary = _extract_explainability_summary(result.details)
+    expansion_registry = _extract_expansion_registry_summary(result.details)
     incident_metadata = _extract_incident_metadata(result.details)
     run_manifest = _report_run_manifest(result)
     key_logs = _key_log_lines(result)
@@ -68,6 +73,7 @@ def report_dict(
         "baseline_drift": _baseline_report_dict(baseline_drift),
         "first_divergence": _first_divergence_report_dict(first_divergence),
         "explainability_summary": explainability_summary,
+        "expansion_registry": expansion_registry,
         "incident_metadata": incident_metadata,
         "run_manifest": run_manifest,
         "subresults": [report_dict(item, matrix, scenario_contracts, baseline_dir_path) for item in result.subresults],
@@ -102,12 +108,20 @@ def _timestamp_for_filename(result: ConsoleResult) -> str:
 def export_result_json(
     result: ConsoleResult,
     export_dir: Path | None = None,
+    action_matrix: GuiActionMatrix | None = None,
+    scenario_contracts: ScenarioContractCatalog | None = None,
     baseline_dir_path: Path | None = None,
 ) -> Path:
     target_dir = Path(export_dir) if export_dir is not None else default_export_dir()
     target_dir.mkdir(parents=True, exist_ok=True)
     path = target_dir / f"{_timestamp_for_filename(result)}-{slugify(result.name)}.json"
-    return write_report_json(result, path, baseline_dir_path=baseline_dir_path)
+    return write_report_json(
+        result,
+        path,
+        action_matrix=action_matrix,
+        scenario_contracts=scenario_contracts,
+        baseline_dir_path=baseline_dir_path,
+    )
 
 
 def _format_text_lines(
@@ -124,6 +138,7 @@ def _format_text_lines(
     baseline_drift = _report_baseline_drift(result, matrix, scenario_contracts, baseline_dir_path)
     first_divergence = _report_first_divergence(result, baseline_drift, baseline_dir_path)
     explainability_summary = _extract_explainability_summary(result.details)
+    expansion_registry = _extract_expansion_registry_summary(result.details)
     incident_metadata = _extract_incident_metadata(result.details)
     run_manifest = _report_run_manifest(result)
     key_logs = _key_log_lines(result)
@@ -157,10 +172,15 @@ def _format_text_lines(
         lines.append(f"{prefix}Contract Status: {contract_evaluation.status.upper()}")
         if contract_evaluation.payload_path:
             lines.append(f"{prefix}Contract Payload: {contract_evaluation.payload_path}")
+        if contract_evaluation.expected_artifacts:
+            lines.append(f"{prefix}Contract Expected Artifacts: {', '.join(contract_evaluation.expected_artifacts)}")
         if contract_evaluation.known_issues:
             lines.append(f"{prefix}Contract Known Issues: {', '.join(contract_evaluation.known_issues)}")
         if contract_evaluation.notes:
             lines.append(f"{prefix}Contract Notes: {contract_evaluation.notes}")
+        if contract_evaluation.passed_checks:
+            lines.append(f"{prefix}Contract Checks:")
+            lines.extend(f"{prefix}- {check}" for check in contract_evaluation.passed_checks)
         if contract_evaluation.issues:
             lines.append(f"{prefix}Contract Issues:")
             lines.extend(f"{prefix}- {issue}" for issue in contract_evaluation.issues)
@@ -176,12 +196,41 @@ def _format_text_lines(
             lines.extend(f"{prefix}- {item.status.upper()}: {item.message}" for item in baseline_drift.findings)
     if first_divergence is not None and first_divergence.comparable and not first_divergence.identical:
         lines.append(f"{prefix}First Divergence: {first_divergence.message}")
+        if first_divergence.field_path:
+            lines.append(f"{prefix}First Divergence Field: {first_divergence.field_path}")
+        if first_divergence.step:
+            lines.append(f"{prefix}First Divergence Step: {first_divergence.step}")
+        if first_divergence.tick is not None:
+            lines.append(f"{prefix}First Divergence Tick: {first_divergence.tick}")
+        if first_divergence.phase:
+            lines.append(f"{prefix}First Divergence Phase: {first_divergence.phase}")
+        left_label, right_label = _divergence_value_labels(first_divergence)
+        lines.append(f"{prefix}{left_label}: {_format_divergence_value(first_divergence.left_value)}")
+        lines.append(f"{prefix}{right_label}: {_format_divergence_value(first_divergence.right_value)}")
         if first_divergence.artifact_paths:
             lines.append(f"{prefix}First Divergence Inputs: {' | '.join(first_divergence.artifact_paths)}")
     if explainability_summary is not None:
         lines.append(f"{prefix}Explainability:")
         for label, value in _format_explainability_lines(explainability_summary):
             lines.append(f"{prefix}- {label}: {value}")
+    if expansion_registry is not None:
+        lines.append(f"{prefix}Expansion Registry:")
+        if expansion_registry.get("json_path"):
+            lines.append(f"{prefix}- JSON: {expansion_registry['json_path']}")
+        counts = expansion_registry.get("counts")
+        if isinstance(counts, dict):
+            lines.append(
+                f"{prefix}- Counts: total={counts.get('total', 0)}, "
+                f"support_ready={counts.get('support_ready', 0)}, "
+                f"blocked_by_support={counts.get('blocked_by_support', 0)}, "
+                f"needs_foundation={counts.get('needs_foundation', 0)}"
+            )
+        status_counts = expansion_registry.get("status_counts")
+        if isinstance(status_counts, dict) and status_counts:
+            lines.append(f"{prefix}- Status Counts: {_format_mapping_segments(status_counts)}")
+        category_counts = expansion_registry.get("category_counts")
+        if isinstance(category_counts, dict) and category_counts:
+            lines.append(f"{prefix}- Category Counts: {_format_mapping_segments(category_counts)}")
     if incident_metadata is not None:
         lines.append(f"{prefix}Incident Logged: {'YES' if incident_metadata.get('logged') else 'NO'}")
         if incident_metadata.get("bundle_dir"):
@@ -295,7 +344,9 @@ def _contract_report_dict(evaluation: ScenarioContractEvaluation | None) -> Dict
         "contract_scenario_name": evaluation.contract_scenario_name,
         "status": evaluation.status,
         "issues": list(evaluation.issues),
+        "passed_checks": list(evaluation.passed_checks),
         "known_issues": list(evaluation.known_issues),
+        "expected_artifacts": list(evaluation.expected_artifacts),
         "notes": evaluation.notes,
         "payload_path": evaluation.payload_path,
     }
@@ -349,8 +400,8 @@ def _report_first_divergence(
 ) -> FirstDivergence | None:
     try:
         if len(result.artifact_paths) >= 2:
-            divergence = find_first_divergence(result.artifact_paths[0], result.artifact_paths[1])
-            if divergence.comparable and not divergence.identical:
+            divergence = find_first_divergence_in_artifact_paths(result.artifact_paths)
+            if divergence is not None and divergence.comparable and not divergence.identical:
                 return divergence
         if baseline_drift is not None and baseline_drift.matched and baseline_drift.status != "pass":
             divergence = compare_result_to_baseline_divergence(result, baseline_dir_path=baseline_dir_path)
@@ -428,6 +479,8 @@ def _extract_explainability_summary(details: List[str]) -> Dict[str, object] | N
         elif text.startswith("CAMPAIGN OBJECTIVES: "):
             summary["objectives_text"] = text.partition(": ")[2].strip()
             summary["objectives_list"] = _split_semicolon_items(summary["objectives_text"])
+        elif text == "explainability attached to incident/report":
+            summary["attached_to"] = "incident/report"
     return summary or None
 
 
@@ -469,6 +522,30 @@ def _extract_incident_metadata(details: List[str]) -> Dict[str, object] | None:
     if anomaly_matches:
         metadata["anomaly_matches"] = anomaly_matches
     if not metadata["logged"] and not anomaly_matches:
+        return None
+    return metadata
+
+
+def _extract_expansion_registry_summary(details: List[str]) -> Dict[str, object] | None:
+    metadata: Dict[str, object] = {
+        "json_path": "",
+        "counts": {},
+        "status_counts": {},
+        "category_counts": {},
+    }
+    for line in list(details or []):
+        text = str(line or "").strip()
+        if not text:
+            continue
+        if text.startswith("EXPANSION REGISTRY JSON: "):
+            metadata["json_path"] = text.partition(": ")[2].strip()
+        elif text.startswith("EXPANSION REGISTRY COUNTS: "):
+            metadata["counts"] = _parse_count_segments(text.partition(": ")[2].strip())
+        elif text.startswith("EXPANSION REGISTRY STATUS COUNTS: "):
+            metadata["status_counts"] = _parse_count_segments(text.partition(": ")[2].strip())
+        elif text.startswith("EXPANSION REGISTRY CATEGORY COUNTS: "):
+            metadata["category_counts"] = _parse_count_segments(text.partition(": ")[2].strip())
+    if not metadata["json_path"] and not metadata["counts"] and not metadata["status_counts"] and not metadata["category_counts"]:
         return None
     return metadata
 
@@ -522,9 +599,24 @@ def _split_semicolon_items(value: str) -> List[str]:
     return items
 
 
+def _parse_count_segments(payload: str) -> Dict[str, int]:
+    values: Dict[str, int] = {}
+    for segment in str(payload or "").split("|"):
+        key, separator, value = segment.partition("=")
+        if not separator:
+            continue
+        key_text = key.strip()
+        value_text = value.strip()
+        if not key_text or not value_text.isdigit():
+            continue
+        values[key_text] = int(value_text)
+    return values
+
+
 def _format_explainability_lines(summary: Dict[str, object]) -> List[tuple[str, str]]:
     rows: List[tuple[str, str]] = []
     ordered_fields = [
+        ("Attached", "attached_to"),
         ("Scenario", "scenario"),
         ("Objective", "objective"),
         ("Front Status", "front_status"),
@@ -548,9 +640,37 @@ def _format_explainability_lines(summary: Dict[str, object]) -> List[tuple[str, 
     return rows
 
 
+def _format_mapping_segments(values: Dict[str, object]) -> str:
+    segments = [
+        f"{key}={values[key]}"
+        for key in values
+    ]
+    return ", ".join(segments)
+
+
+def _divergence_value_labels(divergence: FirstDivergence) -> tuple[str, str]:
+    if divergence.comparison_kind == "baseline_metrics":
+        return ("Baseline", "Current")
+    return ("Left", "Right")
+
+
+def _format_divergence_value(value: object) -> str:
+    if isinstance(value, str):
+        return value
+    if isinstance(value, (int, float, bool)) or value is None:
+        return str(value)
+    if isinstance(value, list):
+        return "[...]"
+    if isinstance(value, dict):
+        return "{...}"
+    return str(value)
+
+
 def export_result_text(
     result: ConsoleResult,
     export_dir: Path | None = None,
+    action_matrix: GuiActionMatrix | None = None,
+    scenario_contracts: ScenarioContractCatalog | None = None,
     baseline_dir_path: Path | None = None,
 ) -> Path:
     target_dir = Path(export_dir) if export_dir is not None else default_export_dir()
@@ -560,8 +680,8 @@ def export_result_text(
         "\n".join(
             _format_text_lines(
                 result,
-                action_matrix=_safe_load_action_matrix(),
-                scenario_contracts=_safe_load_scenario_contracts(),
+                action_matrix=action_matrix if action_matrix is not None else _safe_load_action_matrix(),
+                scenario_contracts=scenario_contracts if scenario_contracts is not None else _safe_load_scenario_contracts(),
                 baseline_dir_path=baseline_dir_path,
             )
         )

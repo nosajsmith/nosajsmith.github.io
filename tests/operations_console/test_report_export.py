@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import json
 
+from tools.operations_console.baselines import save_baseline
 from tools.operations_console.models import ConsoleResult, KnownIssueMatch
 from tools.operations_console.report_export import export_result_json, export_result_text, report_dict
+from tools.operations_console.scenario_contracts import ScenarioContract, ScenarioContractCatalog
 
 
 def test_report_dict_includes_subresults_and_artifacts() -> None:
@@ -74,6 +76,7 @@ def test_report_dict_includes_subresults_and_artifacts() -> None:
     assert payload["scenario_contract_evaluation"]["matched"] is True
     assert payload["scenario_contract_evaluation"]["contract_scenario_name"] == "inchon_mvp"
     assert payload["scenario_contract_evaluation"]["status"] == "pass"
+    assert payload["scenario_contract_evaluation"]["passed_checks"]
     assert payload["subresults"][0]["name"] == "ORL / Smoke Suite"
 
 
@@ -136,6 +139,7 @@ def test_export_result_json_and_text_create_files(tmp_path) -> None:
     assert payload["incident_metadata"]["run_report_json_path"] == "/tmp/incidents/demo/run_report.json"
     assert payload["scenario_contract_evaluation"]["matched"] is True
     assert payload["scenario_contract_evaluation"]["contract_scenario_name"] == "inchon_mvp"
+    assert payload["scenario_contract_evaluation"]["passed_checks"]
     assert payload["key_logs"] == [
         "warn detail",
         "line 1",
@@ -170,6 +174,34 @@ def test_export_result_json_and_text_create_files(tmp_path) -> None:
     assert "KI-402: Waived replay regression [severity=medium, status=waived] -> WARN (downgrade applied)" in text
 
 
+def test_report_dict_includes_expected_contract_artifacts_when_custom_catalog_is_supplied(tmp_path) -> None:
+    result = ConsoleResult(
+        name="ORL / Replay Validation",
+        status="pass",
+        summary="Replay validation passed.",
+        scenario_name="inchon_mvp",
+        artifact_paths=["/tmp/inchon/replay.json"],
+    )
+    catalog = ScenarioContractCatalog(
+        contracts=[
+            ScenarioContract(
+                scenario_name="inchon_mvp",
+                expected_unit_count_range=(5, 8),
+                expected_artifacts=["replay.json"],
+                notes="custom artifact-aware contract",
+            )
+        ]
+    )
+
+    payload = report_dict(result, scenario_contracts=catalog)
+    text_path = export_result_text(result, export_dir=tmp_path, scenario_contracts=catalog)
+    text = text_path.read_text(encoding="utf-8")
+
+    assert payload["scenario_contract_evaluation"]["expected_artifacts"] == ["replay.json"]
+    assert "expected artifacts present: replay.json" in payload["scenario_contract_evaluation"]["passed_checks"]
+    assert "Contract Expected Artifacts: replay.json" in text
+
+
 def test_report_dict_promotes_nested_errors_into_key_logs() -> None:
     result = ConsoleResult(
         name="ORL / Demo Readiness",
@@ -194,3 +226,54 @@ def test_report_dict_promotes_nested_errors_into_key_logs() -> None:
         "missing expected screenshot",
         "validation step failed",
     ]
+
+
+def test_report_dict_includes_baseline_drift_metadata(tmp_path) -> None:
+    baseline = ConsoleResult(
+        name="Synthetic / Drift Demo",
+        status="pass",
+        summary="Scenario integrity passed for demo with 6 unit(s).",
+        details=["Validated units: 6 total, 6 with basic identity/location fields"],
+    )
+    current = ConsoleResult(
+        name="Synthetic / Drift Demo",
+        status="pass",
+        summary="Scenario integrity passed for demo with 8 unit(s).",
+        details=["Validated units: 8 total, 8 with basic identity/location fields"],
+    )
+    save_baseline(baseline, baseline_dir_path=tmp_path / "baselines")
+
+    payload = report_dict(current, baseline_dir_path=tmp_path / "baselines")
+
+    assert payload["baseline_drift"]["matched"] is True
+    assert payload["baseline_drift"]["status"] == "fail"
+    assert payload["baseline_drift"]["baseline_path"].endswith("synthetic-drift-demo--default.json")
+    assert any(item["metric"] == "unit_count" for item in payload["baseline_drift"]["findings"])
+
+
+def test_report_dict_includes_expansion_registry_metadata(tmp_path) -> None:
+    result = ConsoleResult(
+        name="Planning / Expansion Registry",
+        status="pass",
+        summary="Expansion registry loaded: 6 entries.",
+        details=[
+            "EXPANSION REGISTRY JSON: /tmp/expansion-registry.json",
+            "EXPANSION REGISTRY COUNTS: total=6 | support_ready=1 | blocked_by_support=3 | needs_foundation=2",
+            "EXPANSION REGISTRY STATUS COUNTS: active=1 | concept=4 | planned=1",
+            "EXPANSION REGISTRY CATEGORY COUNTS: theater-slice=2 | capability=4",
+        ],
+        artifact_paths=["/tmp/expansion-registry.json"],
+        adapter_method="expansion_registry",
+    )
+
+    payload = report_dict(result)
+    text_path = export_result_text(result, tmp_path)
+    text = text_path.read_text(encoding="utf-8")
+
+    assert payload["expansion_registry"]["json_path"] == "/tmp/expansion-registry.json"
+    assert payload["expansion_registry"]["counts"]["total"] == 6
+    assert payload["expansion_registry"]["counts"]["blocked_by_support"] == 3
+    assert payload["expansion_registry"]["status_counts"]["concept"] == 4
+    assert payload["expansion_registry"]["category_counts"]["capability"] == 4
+    assert "Expansion Registry:" in text
+    assert "Counts: total=6, support_ready=1, blocked_by_support=3, needs_foundation=2" in text

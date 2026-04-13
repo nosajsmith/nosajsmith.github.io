@@ -1,0 +1,269 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T18:54:58.029377+00:00",
+  "entry_count": 6,
+  "planning_state_counts": {
+    "support_ready": 1,
+    "blocked_by_support": 3,
+    "needs_foundation": 2
+  },
+  "status_counts": {
+    "active": 1,
+    "concept": 4,
+    "planned": 1
+  },
+  "category_counts": {
+    "theater-slice": 2,
+    "capability": 4
+  },
+  "entries": [
+    {
+      "id": "korea-operational-slice",
+      "name": "Korea Operational Slice",
+      "category": "theater-slice",
+      "theater": "Korea",
+      "era": "1950-1951",
+      "summary": "Current polished operational slice covering the Korea validation/demo path.",
+      "status": "active",
+      "maturity": "polished",
+      "capabilities": [
+        "scenario integrity",
+        "baseline compare",
+        "divergence finder",
+        "explainability"
+      ],
+      "dependencies": [
+        "ORL / Core Validation Suite",
+        "ORL / Demo Readiness"
+      ],
+      "support_gates": {
+        "core_validation_green": true,
+        "known_issues_under_control": true,
+        "scenario_contracts_present": true,
+        "baseline_compare_available": true,
+        "divergence_support_available": true,
+        "explainability_available": true
+      },
+      "risk_level": "low",
+      "notes": "This is the current support-complete reference slice for future planning.",
+      "next_step": "Hold the core slice stable while using it as the support benchmark for follow-on ideas.",
+      "planning_state": "support_ready",
+      "ready_support_gates": [
+        "core_validation_green",
+        "known_issues_under_control",
+        "scenario_contracts_present",
+        "baseline_compare_available",
+        "divergence_support_available",
+        "explainability_available"
+      ],
+      "missing_support_gates": []
+    },
+    {
+      "id": "modern-korea-concept",
+      "name": "Modern Korea Concept",
+      "category": "theater-slice",
+      "theater": "Korea",
+      "era": "modern",
+      "summary": "Planning entry for a modernized Korea theater once support surfaces are proven reusable.",
+      "status": "concept",
+      "maturity": "exploratory",
+      "capabilities": [
+        "modern order of battle",
+        "precision fires",
+        "ISR"
+      ],
+      "dependencies": [
+        "scenario contracts",
+        "baseline compare",
+        "divergence finder"
+      ],
+      "support_gates": {
+        "core_validation_green": true,
+        "known_issues_under_control": true,
+        "scenario_contracts_present": false,
+        "baseline_compare_available": true,
+        "divergence_support_available": true,
+        "explainability_available": true
+      },
+      "risk_level": "medium",
+      "notes": "Promising planning direction, but scenario truth for the new era is not defined yet.",
+      "next_step": "Define scenario-contract expectations and a representative validation scenario set for the modern slice.",
+      "planning_state": "blocked_by_support",
+      "ready_support_gates": [
+        "core_validation_green",
+        "known_issues_under_control",
+        "baseline_compare_available",
+        "divergence_support_available",
+        "explainability_available"
+      ],
+      "missing_support_gates": [
+        "scenario_contracts_present"
+      ]
+    },
+    {
+      "id": "isr-satellites-capability",
+      "name": "ISR / Satellites Capability",
+      "category": "capability",
+      "theater": "cross-theater",
+      "era": "modern",
+      "summary": "Concept for reconnaissance, surveillance, and satellite-fed awareness overlays.",
+      "status": "concept",
+      "maturity": "exploratory",
+      "capabilities": [
+        "reconnaissance overlays",
+        "sensor fusion",
+        "targeting support"
+      ],
+      "dependencies": [
+        "explainability",
+        "divergence finder"
+      ],
+      "support_gates": {
+        "core_validation_green": true,
+        "known_issues_under_control": true,
+        "scenario_contracts_present": false,
+        "baseline_compare_available": false,
+        "divergence_support_available": true,
+        "explainability_available": true
+      },
+      "risk_level": "medium",
+      "notes": "Support story is partly present, but there is no artifact or contract layer specific to ISR truth yet.",
+      "next_step": "Define the minimum observable truth that ISR outputs would need for contracts, baselines, and explainability.",
+      "planning_state": "blocked_by_support",
+      "ready_support_gates": [
+        "core_validation_green",
+        "known_issues_under_control",
+        "divergence_support_available",
+        "explainability_available"
+      ],
+      "missing_support_gates": [
+        "scenario_contracts_present",
+        "baseline_compare_available"
+      ]
+    },
+    {
+      "id": "precision-fires-capability",
+      "name": "Long-Range Missile / Precision Fires",
+      "category": "capability",
+      "theater": "cross-theater",
+      "era": "modern",
+      "summary": "Planning placeholder for long-range fires, standoff strike, and precision engagement mechanics.",
+      "status": "concept",
+      "maturity": "concept",
+      "capabilities": [
+        "standoff strike",
+        "deep fires",
+        "counterforce"
+      ],
+      "dependencies": [
+        "new scenario contracts",
+        "baseline compare",
+        "divergence finder",
+        "explainability"
+      ],
+      "support_gates": {
+        "core_validation_green": false,
+        "known_issues_under_control": false,
+        "scenario_contracts_present": false,
+        "baseline_compare_available": false,
+        "divergence_support_available": false,
+        "explainability_available": false
+      },
+      "risk_level": "high",
+      "notes": "Requires foundational support definitions before it should move beyond planning.",
+      "next_step": "Write a minimal support checklist for fires truth, artifacts, and explainability before considering implementation.",
+      "planning_state": "needs_foundation",
+      "ready_support_gates": [],
+      "missing_support_gates": [
+        "core_validation_green",
+        "known_issues_under_control",
+        "scenario_contracts_present",
+        "baseline_compare_available",
+        "divergence_support_available",
+        "explainability_available"
+      ]
+    },
+    {
+      "id": "ew-jamming-capability",
+      "name": "EW / Jamming Capability",
+      "category": "capability",
+      "theater": "cross-theater",
+      "era": "modern",
+      "summary": "Planning placeholder for electronic attack, jamming, and contested-network effects.",
+      "status": "concept",
+      "maturity": "concept",
+      "capabilities": [
+        "jamming",
+        "deception",
+        "sensor denial"
+      ],
+      "dependencies": [
+        "explainability",
+        "support gates"
+      ],
+      "support_gates": {
+        "core_validation_green": false,
+        "known_issues_under_control": false,
+        "scenario_contracts_present": false,
+        "baseline_compare_available": false,
+        "divergence_support_available": false,
+        "explainability_available": false
+      },
+      "risk_level": "high",
+      "notes": "This concept is intentionally parked until a clearer support surface exists.",
+      "next_step": "Define what operator-visible truth and artifact comparisons EW outcomes would need.",
+      "planning_state": "needs_foundation",
+      "ready_support_gates": [],
+      "missing_support_gates": [
+        "core_validation_green",
+        "known_issues_under_control",
+        "scenario_contracts_present",
+        "baseline_compare_available",
+        "divergence_support_available",
+        "explainability_available"
+      ]
+    },
+    {
+      "id": "air-defense-strike-interaction",
+      "name": "Air-Defense / Strike Interaction",
+      "category": "capability",
+      "theater": "cross-theater",
+      "era": "modern",
+      "summary": "Planning entry for interception, strike packages, and air-defense interaction loops.",
+      "status": "planned",
+      "maturity": "prototype-planning",
+      "capabilities": [
+        "interception",
+        "strike routing",
+        "SEAD-style interaction"
+      ],
+      "dependencies": [
+        "baseline compare",
+        "divergence finder",
+        "explainability"
+      ],
+      "support_gates": {
+        "core_validation_green": true,
+        "known_issues_under_control": true,
+        "scenario_contracts_present": false,
+        "baseline_compare_available": true,
+        "divergence_support_available": true,
+        "explainability_available": true
+      },
+      "risk_level": "medium",
+      "notes": "This is closer to being supportable than fires/EW, but still blocked on scenario-truth definition.",
+      "next_step": "Draft the smallest scenario contract set needed to prove air-defense interaction outputs are inspectable and comparable.",
+      "planning_state": "blocked_by_support",
+      "ready_support_gates": [
+        "core_validation_green",
+        "known_issues_under_control",
+        "baseline_compare_available",
+        "divergence_support_available",
+        "explainability_available"
+      ],
+      "missing_support_gates": [
+        "scenario_contracts_present"
+      ]
+    }
+  ]
+}

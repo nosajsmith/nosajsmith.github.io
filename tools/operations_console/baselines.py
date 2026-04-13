@@ -66,7 +66,7 @@ def repo_root() -> Path:
 
 def default_baseline_dir(repo_root_path: Path | None = None) -> Path:
     root = Path(repo_root_path) if repo_root_path is not None else repo_root()
-    return root / "tools" / "operations_console" / "baselines"
+    return root / "artifacts" / "operations_console" / "baselines"
 
 
 def ensure_baseline_dir(path: Path | None = None, *, repo_root_path: Path | None = None) -> Path:
@@ -397,7 +397,7 @@ def _compare_unit_count(
         DriftFinding(
             metric="unit_count",
             status=finding_status,
-            message=f"Unit count drifted from {baseline_value} to {current_value}.",
+            message=f"Unit count changed from {baseline_value} to {current_value}.",
             baseline_value=baseline_value,
             current_value=current_value,
         )

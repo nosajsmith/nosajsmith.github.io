@@ -80,9 +80,11 @@ def test_app_registers_campaign_actions_and_runners_work(monkeypatch) -> None:
 
     assert status_result.status == "pass"
     assert status_result.adapter_method == "campaign_status"
+    assert "campaign status retrieved" in status_result.details
     assert any("CAMPAIGN STATUS:" in line for line in status_result.details)
     assert explain_result.status == "pass"
     assert explain_result.adapter_method == "campaign_explain"
+    assert "campaign explain retrieved" in explain_result.details
     assert any("CAMPAIGN EXPLAIN:" in line for line in explain_result.details)
 
 
@@ -142,8 +144,10 @@ def test_handle_result_attaches_explainability_follow_up(monkeypatch) -> None:
 
     assert app.last_result is not None
     assert any("FOLLOW-UP EXPLAINABILITY:" == line for line in output)
+    assert "explainability attached to incident/report" in output
     assert any(line.startswith("CAMPAIGN STATUS:") for line in output)
     assert any(line.startswith("CAMPAIGN NOTES:") for line in output)
+    assert "explainability attached to incident/report" in app.last_result.details
     assert any(line.startswith("CAMPAIGN STATUS:") for line in app.last_result.details)
 
 
@@ -154,6 +158,7 @@ def test_report_export_includes_explainability_summary(tmp_path) -> None:
         summary="Campaign status captured.",
         scenario_name="inchon_mvp",
         details=[
+            "explainability attached to incident/report",
             "CAMPAIGN STATUS: scenario=Inchon Demo Vertical Slice | objective=SEOUL | front=INCHON BEACHHEAD SECURE | supply=PORT OPEN / AXIS ADVANCE | main=INCHON / SEOUL AXIS",
             "CAMPAIGN STATUS DETAIL: turn=TURN 1 | units=6 | objectives=5 | alerts=2",
             "CAMPAIGN EXPLAIN: Curated Inchon demo.",
@@ -169,6 +174,8 @@ def test_report_export_includes_explainability_summary(tmp_path) -> None:
     assert payload["explainability_summary"]["objective"] == "SEOUL"
     assert payload["explainability_summary"]["unit_count"] == 6
     assert payload["explainability_summary"]["staff_notes"] == "Exploit the landing before Seoul stabilizes."
+    assert payload["explainability_summary"]["attached_to"] == "incident/report"
     assert "Explainability:" in text
+    assert "Attached: incident/report" in text
     assert "Objective: SEOUL" in text
     assert "Front Status: INCHON BEACHHEAD SECURE" in text

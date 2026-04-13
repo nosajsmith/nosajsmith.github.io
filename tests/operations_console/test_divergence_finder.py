@@ -2,9 +2,16 @@ from __future__ import annotations
 
 import json
 
-from tools.operations_console.divergence_finder import compare_result_to_baseline_divergence, find_first_divergence
+from tools.operations_console.app import OperationsConsoleApp
+from tools.operations_console.divergence_finder import (
+    FirstDivergence,
+    compare_result_to_baseline_divergence,
+    find_first_divergence,
+    find_first_divergence_in_artifact_paths,
+)
+from tools.operations_console.registry import build_default_registry
 from tools.operations_console.report_export import export_result_text, report_dict
-from tools.operations_console.runner_utils import make_result
+from tools.operations_console.runner_utils import make_result, run_registry_entry
 from tools.operations_console.baselines import save_baseline
 
 
@@ -143,6 +150,101 @@ def test_compare_result_to_baseline_divergence_returns_first_metric_difference(t
     assert baseline_path.as_posix() in divergence.artifact_paths
 
 
+def test_find_first_divergence_in_artifact_paths_skips_incomparable_pairs(tmp_path) -> None:
+    report_a = tmp_path / "report-a.json"
+    replay = tmp_path / "replay.json"
+    report_b = tmp_path / "report-b.json"
+    report_a.write_text(
+        json.dumps(
+            {
+                "name": "ORL / Smoke Suite",
+                "status": "pass",
+                "summary": "smoke ok",
+                "scenario_name": "inchon_mvp",
+                "subresults": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    replay.write_text(
+        json.dumps(
+            {
+                "initial_game": {"scenario": "inchon_mvp"},
+                "final_game": {"scenario": "inchon_mvp", "time": {"day": 1, "phase": "DAY"}},
+                "initial_units": [],
+                "final_units": [],
+                "logs": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    report_b.write_text(
+        json.dumps(
+            {
+                "name": "ORL / Smoke Suite",
+                "status": "fail",
+                "summary": "smoke bad",
+                "scenario_name": "inchon_mvp",
+                "subresults": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    divergence = find_first_divergence_in_artifact_paths([report_a, replay, report_b])
+
+    assert divergence is not None
+    assert divergence.comparable is True
+    assert divergence.identical is False
+    assert divergence.comparison_kind == "report"
+    assert divergence.field_path == "status"
+    assert divergence.artifact_paths == [str(report_a), str(report_b)]
+
+
+def test_app_registers_first_divergence_finder_action_and_reports_values(monkeypatch) -> None:
+    app = OperationsConsoleApp.__new__(OperationsConsoleApp)
+    app.registry = build_default_registry()
+    app.last_result = make_result(
+        name="ORL / Core Validation Suite",
+        status="pass",
+        summary="core ok",
+        scenario_name="inchon_mvp",
+    )
+
+    app._register_divergence_action()
+    action = app.registry.get_action("Utilities / First Divergence Finder")
+
+    assert action is not None
+
+    monkeypatch.setattr(
+        "tools.operations_console.app.compare_result_to_baseline_divergence",
+        lambda result: FirstDivergence(
+            comparable=True,
+            identical=False,
+            comparison_kind="baseline_metrics",
+            scenario_name="inchon_mvp",
+            field_path="unit_count",
+            artifact_paths=["/tmp/baselines/core.json", "/tmp/current/report.json"],
+            left_value=14,
+            right_value=12,
+            message="unit_count diverged (scenario=inchon_mvp): 14 -> 12",
+        ),
+    )
+
+    result = run_registry_entry(
+        action,
+        entry_lookup=app.registry.get,
+    )
+
+    assert result.status == "warn"
+    assert result.adapter_method == "first_divergence_finder"
+    assert result.summary == "First divergence found at unit_count."
+    assert "comparing current result against saved baseline" in result.details
+    assert "first divergence at field: unit_count" in result.details
+    assert "baseline: 14" in result.details
+    assert "current: 12" in result.details
+
+
 def test_report_export_includes_first_divergence(tmp_path) -> None:
     baseline = make_result(
         name="Synthetic / Drift Demo",
@@ -168,4 +270,6 @@ def test_report_export_includes_first_divergence(tmp_path) -> None:
     assert payload["first_divergence"]["field_path"] == "unit_count"
     assert payload["first_divergence"]["comparison_kind"] == "baseline_metrics"
     assert "First Divergence:" in text
-    assert "unit_count diverged" in text
+    assert "First Divergence Field: unit_count" in text
+    assert "Baseline: 8" in text
+    assert "Current: 10" in text

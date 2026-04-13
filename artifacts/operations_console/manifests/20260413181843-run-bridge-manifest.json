@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "created_at": "2026-04-13T18:18:43.098869+00:00",
+  "action_name": "Run Bridge",
+  "status": "pass",
+  "original_status": "",
+  "summary": "Bridge launched.",
+  "scenario_name": "inchon_mvp",
+  "bridge_uri": "ws://127.0.0.1:8766",
+  "started_at": "2026-04-13T18:18:43.090514+00:00",
+  "finished_at": "2026-04-13T18:18:43.090514+00:00",
+  "duration_ms": 0,
+  "working_directory": "/home/jason/dev/mwe",
+  "artifact_paths": [
+    "/home/jason/dev/mwe/artifacts/operations_console/manifests/20260413181843-run-bridge-manifest.json",
+    "/tmp/incidents/bridge/incident.json",
+    "/tmp/incidents/bridge/run_report.json"
+  ],
+  "executed_command": [
+    "python",
+    "server/mwe_bridge_p8_ws15.py"
+  ],
+  "return_code": null,
+  "adapter_method": "",
+  "known_issue_matches": [],
+  "incident_metadata": {
+    "bundle_dir": "/tmp/incidents/bridge",
+    "incident_json_path": "/tmp/incidents/bridge/incident.json",
+    "run_report_json_path": "/tmp/incidents/bridge/run_report.json"
+  },
+  "git": {
+    "branch": "integration/ops-console-hardening",
+    "commit": "19a66ce48787a16b446e6572cb4a34c77501d62d",
+    "is_dirty": true,
+    "worktree_status": "dirty"
+  }
+}

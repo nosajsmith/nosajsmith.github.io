@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "created_at": "2026-04-13T18:54:58.066783+00:00",
+  "action_name": "Planning / Expansion Registry",
+  "status": "pass",
+  "original_status": "",
+  "summary": "Expansion registry loaded: 6 entries.",
+  "scenario_name": "",
+  "bridge_uri": "ws://127.0.0.1:8766",
+  "started_at": "2026-04-13T18:54:58.029020+00:00",
+  "finished_at": "2026-04-13T18:54:58.029797+00:00",
+  "duration_ms": 0,
+  "working_directory": "/home/jason/dev/mwe",
+  "artifact_paths": [
+    "/home/jason/dev/mwe/artifacts/operations_console/expansion_registry/20260413185458-expansion-registry.json"
+  ],
+  "executed_command": [],
+  "return_code": null,
+  "adapter_method": "expansion_registry",
+  "known_issue_matches": [],
+  "incident_metadata": null,
+  "git": {
+    "branch": "integration/ops-console-hardening",
+    "commit": "19a66ce48787a16b446e6572cb4a34c77501d62d",
+    "is_dirty": true,
+    "worktree_status": "dirty"
+  }
+}
