@@ -1,0 +1,85 @@
+{
+  "created_at": "2026-04-13T17:01:00.783484+00:00",
+  "bundle_dir": "/home/jason/dev/mwe/artifacts/operations_console/incidents/20260413170100775278-orl-smoke-suite",
+  "action_name": "ORL / Smoke Suite",
+  "status": "fail",
+  "original_status": "",
+  "summary": "Suite completed with status FAIL. ORL / Connectivity=PASS, ORL / Scenario Integrity=FAIL",
+  "scenario_name": "interdiction.json",
+  "known_issue_matches": [],
+  "anomaly_matches": [],
+  "key_errors": [
+    "load_scenario failed [bridge_error]: load_scenario failed."
+  ],
+  "key_logs": [
+    "## ORL / Smoke Suite",
+    "[1/2] ORL / Connectivity",
+    "[ORL] ORL / Connectivity",
+    "Connecting to bridge at ws://127.0.0.1:8766",
+    "Ping OK: pong=True",
+    "Scenario roster received: 6 item(s)",
+    "1. breakthrough.json",
+    "2. breakthrough_roundtrip.json",
+    "3. bridgehead.json",
+    "4. inchon_mvp.json",
+    "5. interdiction.json",
+    "6. mini_gc_1942.json",
+    "PASS: Bridge reachable. 6 scenario(s) available.",
+    "[2/2] ORL / Scenario Integrity",
+    "[ORL] ORL / Scenario Integrity",
+    "Requested scenario: interdiction.json",
+    "load_scenario failed [bridge_error]: load_scenario failed.",
+    "FAIL: Scenario integrity check failed.",
+    "FOLLOW-UP EXPLAINABILITY:",
+    "CAMPAIGN STATUS: scenario=Inchon Demo Vertical Slice | objective=SEOUL | front=INCHON BEACHHEAD SECURE | supply=PORT OPEN / AXIS ADVANCE | main=INCHON / SEOUL AXIS",
+    "CAMPAIGN STATUS DETAIL: turn=TURN 1 \u2014 15 SEP 1950 | units=6 | objectives=5 | alerts=2",
+    "CAMPAIGN EXPLAIN: Curated Inchon-to-Seoul publisher vertical slice for Theater of Operations: Korea.",
+    "CAMPAIGN NOTES: Exploit the landing before the Seoul defensive ring stabilizes.",
+    "CAMPAIGN OBJECTIVES: Inchon Harbor; Kimpo Airfield; Yongdungpo Crossings (+2 more)",
+    "CAMPAIGN ALERTS: Kimpo corridor remains contested.; NKPA reserves are forming south of Seoul.",
+    "CAMPAIGN ORDERS: 1st Marines push east from Inchon toward Kimpo.; 7th Infantry secures the beachhead and port throughput. (+1 more)",
+    "RUN MANIFEST: /home/jason/dev/mwe/artifacts/operations_console/run_manifests/20260413170100-orl-smoke-suite-manifest.json",
+    "RUN BRANCH: integration/ops-console-hardening",
+    "RUN COMMIT: 2b9cb3d16c74de3c033693f66fba1c65f627f1be",
+    "RUN WORKTREE: dirty",
+    "RUN BRIDGE URI: ws://127.0.0.1:8766"
+  ],
+  "artifact_paths": [
+    "/home/jason/dev/mwe/artifacts/operations_console/run_manifests/20260413170100-orl-smoke-suite-manifest.json"
+  ],
+  "copied_artifact_paths": [
+    "/home/jason/dev/mwe/artifacts/operations_console/incidents/20260413170100775278-orl-smoke-suite/artifacts/01-6ad60e59-20260413170100-orl-smoke-suite-manifest.json"
+  ],
+  "executed_command": [],
+  "return_code": null,
+  "gui_action_matrix": {
+    "id": "orl-smoke-suite",
+    "label": "ORL / Smoke Suite",
+    "category": "ORL",
+    "description": "Run the ordered smoke bundle for connectivity and scenario integrity.",
+    "inputs": [
+      "bridge_uri",
+      "scenario_name"
+    ],
+    "preconditions": [
+      "bridge reachable"
+    ],
+    "runner": "runner_utils.run_suite",
+    "expected_status": "pass",
+    "expected_log_fragments": [
+      "ORL / Connectivity",
+      "ORL / Scenario Integrity"
+    ],
+    "artifact_types": [],
+    "automation_level": "automated",
+    "enabled": true
+  },
+  "git": {
+    "branch": "integration/ops-console-hardening",
+    "commit": "2b9cb3d16c74de3c033693f66fba1c65f627f1be",
+    "is_dirty": true,
+    "worktree_status": "dirty"
+  },
+  "result_json_path": "/home/jason/dev/mwe/artifacts/operations_console/incidents/20260413170100775278-orl-smoke-suite/run_report.json",
+  "run_report_json": "/home/jason/dev/mwe/artifacts/operations_console/incidents/20260413170100775278-orl-smoke-suite/run_report.json"
+}

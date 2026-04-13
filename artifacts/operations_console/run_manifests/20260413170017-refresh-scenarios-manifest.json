@@ -1,0 +1,20 @@
+{
+  "created_at": "2026-04-13T17:00:17.806898+00:00",
+  "action_name": "Refresh Scenarios",
+  "status": "pass",
+  "original_status": "",
+  "summary": "Refreshed 6 scenarios. Selected breakthrough.json.",
+  "scenario_name": "breakthrough.json",
+  "bridge_uri": "ws://127.0.0.1:8766",
+  "started_at": "2026-04-13T17:00:17.806898+00:00",
+  "finished_at": "2026-04-13T17:00:17.806898+00:00",
+  "duration_ms": 0,
+  "artifact_paths": [],
+  "executed_command": [],
+  "git": {
+    "branch": "integration/ops-console-hardening",
+    "commit": "2b9cb3d16c74de3c033693f66fba1c65f627f1be",
+    "is_dirty": true,
+    "worktree_status": "dirty"
+  }
+}

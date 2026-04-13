@@ -16,6 +16,7 @@ class GuiActionMatrixEntry:
     action_id: str
     label: str
     category: str
+    description: str = ""
     inputs: List[str] = field(default_factory=list)
     preconditions: List[str] = field(default_factory=list)
     runner: str = ""
@@ -23,12 +24,14 @@ class GuiActionMatrixEntry:
     expected_log_fragments: List[str] = field(default_factory=list)
     artifact_types: List[str] = field(default_factory=list)
     automation_level: str = ""
+    enabled: bool = True
 
     def to_report_dict(self) -> Dict[str, object]:
         return {
             "id": self.action_id,
             "label": self.label,
             "category": self.category,
+            "description": self.description,
             "inputs": list(self.inputs),
             "preconditions": list(self.preconditions),
             "runner": self.runner,
@@ -36,6 +39,7 @@ class GuiActionMatrixEntry:
             "expected_log_fragments": list(self.expected_log_fragments),
             "artifact_types": list(self.artifact_types),
             "automation_level": self.automation_level,
+            "enabled": self.enabled,
         }
 
 
@@ -57,6 +61,9 @@ class GuiActionMatrix:
         for entry in self.entries:
             grouped.setdefault(entry.category, []).append(entry)
         return grouped
+
+    def enabled_entries(self) -> List[GuiActionMatrixEntry]:
+        return [entry for entry in self.entries if entry.enabled]
 
     def get_by_id(self, action_id: str) -> GuiActionMatrixEntry | None:
         target = str(action_id or "").strip()
@@ -128,6 +135,7 @@ def _validate_entry(row: dict, *, index: int) -> GuiActionMatrixEntry:
         action_id=_required_text(row.get("id"), f"actions[{index}].id"),
         label=_required_text(row.get("label"), f"actions[{index}].label"),
         category=_required_text(row.get("category"), f"actions[{index}].category"),
+        description=_required_text(row.get("description"), f"actions[{index}].description"),
         inputs=_text_list(row.get("inputs"), field_name=f"actions[{index}].inputs"),
         preconditions=_text_list(row.get("preconditions"), field_name=f"actions[{index}].preconditions"),
         runner=_required_text(row.get("runner"), f"actions[{index}].runner"),
@@ -138,6 +146,7 @@ def _validate_entry(row: dict, *, index: int) -> GuiActionMatrixEntry:
         ),
         artifact_types=_text_list(row.get("artifact_types"), field_name=f"actions[{index}].artifact_types"),
         automation_level=_required_text(row.get("automation_level"), f"actions[{index}].automation_level"),
+        enabled=_bool_value(row.get("enabled", True), field_name=f"actions[{index}].enabled"),
     )
 
 
@@ -160,3 +169,9 @@ def _text_list(value: object, *, field_name: str) -> List[str]:
             raise RuntimeError(f"{field_name}[{index}] must be a non-empty string.")
         items.append(text)
     return items
+
+
+def _bool_value(value: object, *, field_name: str) -> bool:
+    if isinstance(value, bool):
+        return value
+    raise RuntimeError(f"{field_name} must be a boolean.")

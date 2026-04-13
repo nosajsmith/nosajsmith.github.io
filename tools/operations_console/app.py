@@ -16,6 +16,7 @@ if __package__ in {None, ""}:
 
 from engine.testing_api import EngineTestingAPI
 from tools.operations_console.doctor import run_doctor_console_result
+from tools.operations_console.gui_action_matrix import GuiActionMatrixEntry
 from tools.operations_console.models import ConsoleAction, ConsoleRegistryEntry, ConsoleResult
 from tools.operations_console.baselines import BaselineComparison, compare_result_to_baseline, save_baseline
 from tools.operations_console.divergence_finder import FirstDivergence, compare_result_to_baseline_divergence, find_first_divergence
@@ -374,6 +375,7 @@ class OperationsConsoleApp:
         command_input = self.command_var.get().strip()
         self._append_output("")
         self._append_output(f"== Running {entry.name} ==")
+        self._log_action_metadata(entry.name)
         self._set_status("running", f"Running {entry.name}...")
         self._update_control_states(running_override=True)
 
@@ -398,6 +400,7 @@ class OperationsConsoleApp:
         uri = self.bridge_uri_var.get().strip() or DEFAULT_BRIDGE_URI
         self._append_output("")
         self._append_output("== Refreshing Scenarios ==")
+        self._log_action_metadata("Refresh Scenarios")
         self._set_status("running", "Refreshing scenarios...")
         self._update_control_states(running_override=True)
 
@@ -460,6 +463,7 @@ class OperationsConsoleApp:
             return
         self._append_output("")
         self._append_output(f"== {label} ==")
+        self._log_action_metadata(label)
         self._set_status("running", summary)
         self._update_control_states(running_override=True)
 
@@ -676,9 +680,8 @@ class OperationsConsoleApp:
         self.status_badge.configure(foreground=color)
 
     def _entry_description(self, entry: ConsoleRegistryEntry) -> str:
-        parts = [entry.description]
-        lookup = getattr(self.registry, "matrix_entry_for_label", None)
-        matrix_entry = lookup(entry.name) if callable(lookup) else None
+        matrix_entry = self._matrix_entry_for_label(entry.name)
+        parts = [matrix_entry.description if matrix_entry is not None and matrix_entry.description else entry.description]
         if matrix_entry is None:
             return parts[0]
         if matrix_entry.automation_level:
@@ -700,6 +703,26 @@ class OperationsConsoleApp:
             if command_ids:
                 parts.append(f"Allowlisted Commands: {', '.join(command_ids)}")
         return "\n\n".join(part for part in parts if part)
+
+    def _matrix_entry_for_label(self, label: str) -> GuiActionMatrixEntry | None:
+        lookup = getattr(self.registry, "matrix_entry_for_label", None)
+        if callable(lookup):
+            try:
+                entry = lookup(label)
+            except Exception:
+                entry = None
+            if entry is not None:
+                return entry
+        matrix = getattr(self, "gui_action_matrix", None)
+        if matrix is None:
+            return None
+        return matrix.get_by_label(label)
+
+    def _log_action_metadata(self, label: str) -> None:
+        matrix_entry = self._matrix_entry_for_label(label)
+        if matrix_entry is None:
+            return
+        self._append_output(f"using action metadata for {label}")
 
     def _result_summary_text(
         self,

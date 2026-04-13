@@ -69,6 +69,8 @@ def test_report_dict_includes_subresults_and_artifacts() -> None:
     assert payload["incident_metadata"]["bundle_dir"] == "/tmp/incidents/abc"
     assert payload["incident_metadata"]["anomaly_matches"][0]["id"] == "ANOM-003"
     assert payload["gui_action_matrix"]["id"] == "orl-scenario-integrity"
+    assert payload["gui_action_matrix"]["description"]
+    assert payload["gui_action_matrix"]["enabled"] is True
     assert payload["scenario_contract_evaluation"]["matched"] is True
     assert payload["scenario_contract_evaluation"]["contract_scenario_name"] == "inchon_mvp"
     assert payload["scenario_contract_evaluation"]["status"] == "pass"
@@ -149,6 +151,8 @@ def test_export_result_json_and_text_create_files(tmp_path) -> None:
     assert "Original Status: FAIL" in text
     assert "Scenario: inchon_mvp" in text
     assert "Scenario Contract: inchon_mvp" in text
+    assert "Expected Logs: ORL / Smoke Suite, ORL / Deterministic Demo Runner, ORL / Demo Artifact Validation" in text
+    assert "Expected Artifacts: json, text, replay, snapshot, compare, build" in text
     assert "Artifacts:" in text
     assert payload["adapter_method"] == "run_all_green"
     assert payload["executed_command"] == ["pytest", "-q", "tests/test_inchon_scenario_stub.py"]

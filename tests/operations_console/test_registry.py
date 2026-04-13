@@ -136,13 +136,24 @@ def test_default_registry_exposes_expected_categories_and_connectivity_action() 
 
     connectivity_matrix = registry.matrix_entry_for_label("ORL / Connectivity")
     assert connectivity_matrix is not None
+    assert connectivity_matrix.description
     assert connectivity_matrix.runner == "registry.run_orl_connectivity"
     assert connectivity_matrix.category == "ORL"
+    assert connectivity_matrix.enabled is True
 
     process_control_matrix = registry.matrix_entry_for_id("run-bridge")
     assert process_control_matrix is not None
     assert process_control_matrix.label == "Run Bridge"
     assert process_control_matrix.category == "Process Control"
+    assert process_control_matrix.description
+
+    replay_validation = registry.matrix_entry_for_label("ORL / Replay Validation")
+    assert replay_validation is not None
+    assert replay_validation.runner == "registry.run_orl_replay_validation"
+
+    core_validation = registry.matrix_entry_for_label("ORL / Core Validation Suite")
+    assert core_validation is not None
+    assert core_validation.runner == "runner_utils.run_suite"
 
     assert registry.get("Utilities / Open Repo Konsole") is not None
     assert registry.get("Utilities / Open UI Konsole") is not None

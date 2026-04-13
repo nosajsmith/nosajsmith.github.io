@@ -146,6 +146,12 @@ def _format_text_lines(
         lines.append(f"{prefix}GUI Action Id: {matrix_entry.action_id}")
         lines.append(f"{prefix}Automation Level: {matrix_entry.automation_level}")
         lines.append(f"{prefix}Expected Status: {matrix_entry.expected_status.upper()}")
+        if matrix_entry.expected_log_fragments:
+            lines.append(f"{prefix}Expected Logs: {', '.join(matrix_entry.expected_log_fragments)}")
+        if matrix_entry.artifact_types:
+            lines.append(f"{prefix}Expected Artifacts: {', '.join(matrix_entry.artifact_types)}")
+        if not matrix_entry.enabled:
+            lines.append(f"{prefix}Matrix Enabled: NO")
     if contract_evaluation is not None and contract_evaluation.matched:
         lines.append(f"{prefix}Scenario Contract: {contract_evaluation.contract_scenario_name}")
         lines.append(f"{prefix}Contract Status: {contract_evaluation.status.upper()}")

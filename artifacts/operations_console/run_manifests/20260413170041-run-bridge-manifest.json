@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-04-13T17:00:41.912188+00:00",
+  "action_name": "Run Bridge",
+  "status": "pass",
+  "original_status": "",
+  "summary": "Bridge launched.",
+  "scenario_name": "inchon_mvp",
+  "bridge_uri": "ws://127.0.0.1:8766",
+  "started_at": "2026-04-13T17:00:41.912188+00:00",
+  "finished_at": "2026-04-13T17:00:41.912188+00:00",
+  "duration_ms": 0,
+  "artifact_paths": [],
+  "executed_command": [
+    "python",
+    "server/mwe_bridge_p8_ws15.py"
+  ],
+  "git": {
+    "branch": "integration/ops-console-hardening",
+    "commit": "2b9cb3d16c74de3c033693f66fba1c65f627f1be",
+    "is_dirty": true,
+    "worktree_status": "dirty"
+  }
+}

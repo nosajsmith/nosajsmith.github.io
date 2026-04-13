@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from tools.operations_console.app import OperationsConsoleApp
+from tools.operations_console.gui_action_matrix import load_gui_action_matrix
 from tools.operations_console.incident_log import AnomalyMatch, IncidentBundleResult
 from tools.operations_console.models import ConsoleAction, ConsoleResult, KnownIssueMatch
 from tools.operations_console.process_control import ProcessControlResult
@@ -119,6 +120,15 @@ def test_handle_scenario_roster_logs_and_updates_status() -> None:
     assert "selected scenario: inchon_mvp.json" in output
     assert app.summary_var.get() == "Refreshed 2 scenarios. Selected inchon_mvp.json."
     assert app.status_var.get() == "PASS"
+
+
+def test_log_action_metadata_emits_matrix_breadcrumb() -> None:
+    app, output = build_app_stub(scenario_value="")
+    app.gui_action_matrix = load_gui_action_matrix()
+
+    app._log_action_metadata("ORL / Connectivity")
+
+    assert output == ["using action metadata for ORL / Connectivity"]
 
 
 def test_handle_result_surfaces_known_issue_and_waiver() -> None:
