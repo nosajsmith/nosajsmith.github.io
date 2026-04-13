@@ -21,17 +21,27 @@ RESULTS_CSV_COLUMNS = [
     "tuning",
     "seed",
     "variant_label",
+    "variant_id",
+    "variant_name",
     "ai_side",
     "result",
     "scenario_outcome",
     "winning_side",
     "vp_margin",
+    "final_score_allied",
+    "final_score_axis",
+    "final_score_margin",
+    "pressure_peak_score",
+    "final_pressure_score",
+    "objective_change_count",
+    "objectives_secured",
     "allied_casualties",
     "axis_casualties",
     "casualty_ratio",
     "objective_hold_duration",
     "line_collapse_rate",
     "low_supply_turns",
+    "manifest_path",
     "failure_flag",
     "failure_message",
     "ok",
@@ -254,6 +264,13 @@ def run_result_to_row(run_result: Any) -> Dict[str, Any]:
     outcome = _metric_block(run_result, "outcome")
     behavior = _metric_block(run_result, "behavior")
     logistics = _metric_block(run_result, "logistics")
+    score_visibility = _metric_block(run_result, "score_visibility")
+    pressure_visibility = _metric_block(run_result, "pressure_visibility")
+    objective_visibility = _metric_block(run_result, "objective_visibility")
+    score_final = dict(score_visibility.get("final") or {})
+    pressure_peak = dict(pressure_visibility.get("peak") or {})
+    pressure_final = dict(pressure_visibility.get("final") or {})
+    objective_final = dict(objective_visibility.get("final") or {})
     row = {
         "command": getattr(run_result, "command", "run"),
         "scenario": getattr(run_result, "scenario", ""),
@@ -263,17 +280,27 @@ def run_result_to_row(run_result: Any) -> Dict[str, Any]:
         "tuning": getattr(run_result, "tuning", ""),
         "seed": getattr(run_result, "seed", ""),
         "variant_label": getattr(run_result, "variant_label", ""),
+        "variant_id": getattr(run_result, "variant_id", "") or dict(getattr(run_result, "resolved_profile", {}) or {}).get("variant_id", ""),
+        "variant_name": getattr(run_result, "variant_name", "") or dict(getattr(run_result, "resolved_profile", {}) or {}).get("variant_name", ""),
         "ai_side": side,
         "result": _result_value(run_result, side),
         "scenario_outcome": summary.get("scenario_outcome") or outcome.get("scenario_outcome") or "",
         "winning_side": summary.get("winning_side") or outcome.get("winning_side") or "",
         "vp_margin": _perspective_metric(outcome, "vp_margin", side),
+        "final_score_allied": score_final.get("score_allied"),
+        "final_score_axis": score_final.get("score_axis"),
+        "final_score_margin": score_final.get("score_margin_allied"),
+        "pressure_peak_score": pressure_peak.get("pressure_score"),
+        "final_pressure_score": pressure_final.get("pressure_score"),
+        "objective_change_count": len(list(objective_visibility.get("changes") or [])),
+        "objectives_secured": objective_final.get("allied_controlled") if side == "ALLIED" else objective_final.get("axis_controlled"),
         "allied_casualties": behavior.get("allied_casualties"),
         "axis_casualties": behavior.get("axis_casualties"),
         "casualty_ratio": _perspective_metric(behavior, "casualty_ratio", side),
         "objective_hold_duration": _perspective_metric(behavior, "objective_hold_turns", side),
         "line_collapse_rate": _perspective_metric(behavior, "line_collapse_rate", side),
         "low_supply_turns": _perspective_metric(logistics, "low_supply_turns", side),
+        "manifest_path": getattr(run_result, "manifest_path", ""),
         "failure_flag": not bool(getattr(run_result, "ok", False)),
         "failure_message": _failure_message(run_result),
         "ok": bool(getattr(run_result, "ok", False)),
@@ -285,6 +312,7 @@ def run_result_to_row(run_result: Any) -> Dict[str, Any]:
     row.update(flatten_mapping(summary, "summary"))
     row.update(flatten_mapping(dict(getattr(run_result, "metrics", {}) or {}), "metrics"))
     row.update(flatten_mapping(dict(getattr(run_result, "ai_report", {}) or {}), "ai_report"))
+    row.update(flatten_mapping(dict(getattr(run_result, "resolved_profile", {}) or {}), "resolved_profile"))
     return row
 
 

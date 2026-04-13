@@ -8,14 +8,52 @@ from typing import Any, Dict, Iterable, List, Tuple
 
 from .. import PROJECT_ROOT
 from ..ai_report_adapter import empty_ai_report, normalize_ai_report
+from ..config_merge import apply_profile_overrides
 from ..config_loader import ConfigLoader
 from ..engine_adapter import apply_ai_config_policy, inject_engine_config
-from ..metrics import compute_behavior_metrics, compute_logistics_metrics, compute_outcome_metrics
+from ..metrics import (
+    compute_behavior_metrics,
+    compute_logistics_metrics,
+    compute_outcome_metrics,
+    compute_visibility_metrics,
+)
 from ..models import RunRequest, RunResult
 
 
 DEFAULT_MAX_STEPS = 12
 DEFAULT_DT_HOURS = 24
+
+
+def _resolved_variant_id(request: RunRequest) -> str:
+    candidate = str(request.variant_id or request.variant_label or "").strip()
+    if candidate:
+        return candidate
+    return f"{request.doctrine}__{request.personality}__{request.tuning}"
+
+
+def _resolved_variant_name(request: RunRequest) -> str:
+    candidate = str(request.variant_name or request.variant_label or "").strip()
+    return candidate or _resolved_variant_id(request)
+
+
+def _resolved_profile_metadata(request: RunRequest, resolved: Any) -> Dict[str, Any]:
+    return {
+        "variant_id": _resolved_variant_id(request),
+        "variant_name": _resolved_variant_name(request),
+        "doctrine": request.doctrine,
+        "personality": request.personality,
+        "tuning": request.tuning,
+        "doctrine_source": str(getattr(getattr(resolved, "doctrine", None), "source_path", "") or ""),
+        "personality_source": str(getattr(getattr(resolved, "personality", None), "source_path", "") or ""),
+        "tuning_source": str(getattr(getattr(resolved, "tuning", None), "source_path", "") or ""),
+        "config_provenance": {
+            "doctrine": str(getattr(getattr(resolved, "doctrine", None), "source_path", "") or ""),
+            "personality": str(getattr(getattr(resolved, "personality", None), "source_path", "") or ""),
+            "tuning": str(getattr(getattr(resolved, "tuning", None), "source_path", "") or ""),
+            "axis_overrides": dict(request.axis_overrides or {}),
+            "run_overrides": dict(request.run_overrides or {}),
+        },
+    }
 
 
 def _resolved_max_steps(request: RunRequest, merged_run: Dict[str, Any]) -> int:
@@ -45,6 +83,7 @@ def _failure_result(
     applied_axis: Dict[str, Any] | None = None,
     run_options: Dict[str, Any] | None = None,
     ai_report: Dict[str, Any] | None = None,
+    resolved_profile: Dict[str, Any] | None = None,
 ) -> RunResult:
     return RunResult(
         ok=False,
@@ -58,6 +97,8 @@ def _failure_result(
         max_steps=int(max_steps),
         dt_hours=int(dt_hours),
         variant_label=request.variant_label,
+        variant_id=_resolved_variant_id(request),
+        variant_name=_resolved_variant_name(request),
         error=error,
         warnings=list(warnings),
         applied_axis=dict(applied_axis or {}),
@@ -80,6 +121,7 @@ def _failure_result(
             }
         },
         ai_report=dict(ai_report or empty_ai_report()),
+        resolved_profile=dict(resolved_profile or {}),
     )
 
 
@@ -517,6 +559,11 @@ def _scenario_outcome(state: Dict[str, Any], terminal_status: str | None) -> Tup
 def execute_single_run(request: RunRequest, loader: ConfigLoader) -> RunResult:
     try:
         resolved = loader.resolve_profiles(request.doctrine, request.personality, request.tuning)
+        resolved = apply_profile_overrides(
+            resolved,
+            axis_overrides=request.axis_overrides,
+            run_overrides=request.run_overrides,
+        )
     except Exception as exc:
         return _failure_result(
             request=request,
@@ -528,6 +575,7 @@ def execute_single_run(request: RunRequest, loader: ConfigLoader) -> RunResult:
         )
 
     warnings = list(resolved.warnings)
+    resolved_profile = _resolved_profile_metadata(request, resolved)
     ai_report = normalize_ai_report(
         resolved.merged_run.get("bai_report"),
         resolved.merged_run.get("ai_report"),
@@ -551,6 +599,13 @@ def execute_single_run(request: RunRequest, loader: ConfigLoader) -> RunResult:
             "stop_on_terminal": bool(request.stop_on_terminal),
             "execution_mode": "headless_single_run",
             "seed_used": int(request.seed),
+            "variant_id": resolved_profile["variant_id"],
+            "variant_name": resolved_profile["variant_name"],
+            "resolved_profile": resolved_profile,
+            "config_overrides": {
+                "axis": dict(request.axis_overrides or {}),
+                "run": dict(request.run_overrides or {}),
+            },
         }
     )
 
@@ -569,6 +624,7 @@ def execute_single_run(request: RunRequest, loader: ConfigLoader) -> RunResult:
             applied_axis=resolved.merged_axis,
             run_options=run_options,
             ai_report=ai_report,
+            resolved_profile=resolved_profile,
         )
 
     rng = random.Random(int(request.seed))
@@ -646,6 +702,7 @@ def execute_single_run(request: RunRequest, loader: ConfigLoader) -> RunResult:
             applied_axis=resolved.merged_axis,
             run_options=run_options,
             ai_report=ai_report,
+            resolved_profile=resolved_profile,
         )
 
     final_counts = _unit_count_by_side(state["units"])
@@ -671,14 +728,18 @@ def execute_single_run(request: RunRequest, loader: ConfigLoader) -> RunResult:
         "ai_report": ai_report,
         "ai_side": engine_config.get("ai_side"),
         "battle_history": state["battle_history"],
+        "dt_hours": dt_hours,
         "final_strength": final_strength,
         "final_units": final_units,
         "initial_strength": initial_strength,
         "initial_units": initial_units,
         "max_steps_exhausted": max_steps_exhausted,
         "objectives": state["objectives"],
+        "objective_events": state["objective_events"],
         "scenario_outcome": scenario_outcome,
+        "scenario_payload": scenario_payload,
         "snapshots": snapshots,
+        "start_day": start_day,
         "steps_completed": steps_completed,
         "vp": state["vp"],
         "winning_side": winning_side,
@@ -686,6 +747,7 @@ def execute_single_run(request: RunRequest, loader: ConfigLoader) -> RunResult:
     outcome_metrics = compute_outcome_metrics(metric_context)
     behavior_metrics = compute_behavior_metrics(metric_context)
     logistics_metrics = compute_logistics_metrics(metric_context)
+    visibility_metrics = compute_visibility_metrics(metric_context)
 
     return RunResult(
         ok=True,
@@ -699,6 +761,8 @@ def execute_single_run(request: RunRequest, loader: ConfigLoader) -> RunResult:
         max_steps=max_steps,
         dt_hours=dt_hours,
         variant_label=request.variant_label,
+        variant_id=resolved_profile["variant_id"],
+        variant_name=resolved_profile["variant_name"],
         warnings=warnings,
         applied_axis=dict(resolved.merged_axis),
         run_options=run_options,
@@ -720,6 +784,10 @@ def execute_single_run(request: RunRequest, loader: ConfigLoader) -> RunResult:
             "scenario_outcome": scenario_outcome,
             "winning_side": winning_side,
             "ai_side": engine_config.get("ai_side"),
+            "variant_id": resolved_profile["variant_id"],
+            "variant_name": resolved_profile["variant_name"],
+            "final_score_margin": dict(visibility_metrics.get("score_visibility", {}).get("final") or {}).get("score_margin_allied"),
+            "final_pressure_score": dict(visibility_metrics.get("pressure_visibility", {}).get("final") or {}).get("pressure_score"),
         },
         metrics={
             "outcome": {
@@ -750,8 +818,10 @@ def execute_single_run(request: RunRequest, loader: ConfigLoader) -> RunResult:
                 "log_count": len(logs),
                 "snapshot_count": len(snapshots),
             },
+            **visibility_metrics,
         },
         ai_report=ai_report,
+        resolved_profile=resolved_profile,
     )
 
 

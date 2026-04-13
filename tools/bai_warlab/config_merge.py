@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
+from dataclasses import replace
 from typing import Any, Dict, List, Tuple
 
 from .models import ResolvedProfiles
@@ -54,6 +55,32 @@ def _deep_merge(base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any
         else:
             merged[key] = deepcopy(value)
     return merged
+
+
+def apply_profile_overrides(
+    resolved: ResolvedProfiles,
+    *,
+    axis_overrides: Dict[str, Any] | None = None,
+    run_overrides: Dict[str, Any] | None = None,
+) -> ResolvedProfiles:
+    # Merge precedence is explicit and stable: doctrine -> personality -> tuning -> runtime overrides.
+    axis_patch = dict(axis_overrides or {})
+    run_patch = dict(run_overrides or {})
+    if not axis_patch and not run_patch:
+        return resolved
+
+    warnings = list(getattr(resolved, "warnings", []) or [])
+    if axis_patch:
+        warnings.append("Applied runtime axis overrides.")
+    if run_patch:
+        warnings.append("Applied runtime run overrides.")
+
+    return replace(
+        resolved,
+        merged_axis=_deep_merge(dict(resolved.merged_axis or {}), axis_patch),
+        merged_run=_deep_merge(dict(resolved.merged_run or {}), run_patch),
+        warnings=warnings,
+    )
 
 
 def _normalize_side(value: Any) -> str:
@@ -123,4 +150,4 @@ def merge_ai_config(resolved: ResolvedProfiles, *, side: str | None = None) -> D
     }
 
 
-__all__ = ["DEFAULT_AXIS_CONFIG", "DEFAULT_RUN_CONFIG", "infer_ai_side", "merge_ai_config"]
+__all__ = ["DEFAULT_AXIS_CONFIG", "DEFAULT_RUN_CONFIG", "apply_profile_overrides", "infer_ai_side", "merge_ai_config"]

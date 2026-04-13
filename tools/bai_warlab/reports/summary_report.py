@@ -3,7 +3,8 @@ from __future__ import annotations
 from typing import Any, Dict, List
 
 from ..report_io import run_result_to_row, summarize_core_metric_rows, summarize_outcome_rows
-from .comparison_report import render_comparison_report
+from .batch_dashboard import render_batch_dashboard_markdown
+from .comparison_report import render_comparison_report, render_variant_comparison_report
 
 
 def _lines_for_metrics(metrics: Dict[str, Dict[str, Any]]) -> List[str]:
@@ -11,7 +12,12 @@ def _lines_for_metrics(metrics: Dict[str, Dict[str, Any]]) -> List[str]:
     for category, payload in metrics.items():
         lines.append(f"[{category}]")
         for key, value in payload.items():
-            lines.append(f"  {key}: {value}")
+            if isinstance(value, list):
+                preview = ", ".join(str(item) for item in value[:2])
+                suffix = f" ({preview})" if preview else ""
+                lines.append(f"  {key}: {len(value)} entries{suffix}")
+            else:
+                lines.append(f"  {key}: {value}")
     return lines
 
 
@@ -67,20 +73,48 @@ def render_report(result: Any) -> str:
         return _render_batch(result)
     if command == "compare":
         return _render_compare(result)
+    if command == "variant_compare":
+        return _render_variant_compare(result)
+    if command == "sweep":
+        return _render_sweep(result)
+    if command == "pressure_sweep":
+        return _render_pressure_sweep(result)
     if command == "suite":
         return _render_suite(result)
     return f"BAI War Lab report unavailable for command: {command}"
 
 
+def _visibility_section(title: str, payload: Dict[str, Any], final_fields: List[tuple[str, str]]) -> List[str]:
+    block = dict(payload or {})
+    if not block.get("available"):
+        return []
+    lines = [f"[{title}]"]
+    final = dict(block.get("final") or {})
+    for key, label in final_fields:
+        if key in final:
+            lines.append(f"{label}: {final.get(key)}")
+    if block.get("peak"):
+        peak = dict(block.get("peak") or {})
+        lines.append(
+            f"Peak: day={peak.get('day')} tick={peak.get('tick')} score={peak.get('pressure_score')}"
+        )
+    for item in list(block.get("summary_lines") or [])[:3]:
+        lines.append(str(item))
+    return lines
+
+
 def _render_run(result: Any) -> str:
     summary = result.summary or {}
     ai_report = getattr(result, "ai_report", {}) or {}
+    resolved_profile = dict(getattr(result, "resolved_profile", {}) or {})
+    visibility = dict(getattr(result, "metrics", {}) or {})
     lines = [
         "BAI War Lab — Run Report",
         f"Scenario: {result.scenario}",
         f"Doctrine: {result.doctrine}",
         f"Personality: {result.personality}",
         f"Tuning: {result.tuning}",
+        f"Variant: {resolved_profile.get('variant_name') or getattr(result, 'variant_name', '') or getattr(result, 'variant_label', '') or '-'}",
         f"Seed: {result.seed}",
         f"Execution Status: {summary.get('execution_status', 'unknown')}",
         f"Terminal Status: {summary.get('terminal_status', 'unknown')}",
@@ -98,6 +132,36 @@ def _render_run(result: Any) -> str:
                 "",
             ]
         )
+    score_lines = _visibility_section(
+        "score_visibility",
+        visibility.get("score_visibility") or {},
+        [
+            ("score_allied", "Final Allied Score"),
+            ("score_axis", "Final Axis Score"),
+            ("score_margin_allied", "Final Score Margin"),
+        ],
+    )
+    pressure_lines = _visibility_section(
+        "pressure_visibility",
+        visibility.get("pressure_visibility") or {},
+        [
+            ("pressure_score", "Final Pressure Score"),
+            ("battle_count", "Final Battles"),
+            ("contested_objectives", "Final Contested Objectives"),
+        ],
+    )
+    objective_lines = _visibility_section(
+        "objective_visibility",
+        visibility.get("objective_visibility") or {},
+        [
+            ("allied_controlled", "Final Allied-Controlled Objectives"),
+            ("axis_controlled", "Final Axis-Controlled Objectives"),
+            ("contested", "Final Contested Objectives"),
+        ],
+    )
+    for section in (score_lines, pressure_lines, objective_lines):
+        if section:
+            lines.extend(section + [""])
     if result.metrics:
         lines.extend(_lines_for_metrics(result.metrics))
     if ai_report.get("available"):
@@ -196,6 +260,54 @@ def _render_batch(result: Any) -> str:
 
 def _render_compare(result: Any) -> str:
     return render_comparison_report(result)
+
+
+def _render_variant_compare(result: Any) -> str:
+    return render_variant_comparison_report(result)
+
+
+def _render_sweep(result: Any) -> str:
+    lines = [
+        "BAI War Lab — Sweep Report",
+        f"Scenarios: {', '.join(getattr(result, 'scenarios', []) or [])}",
+        f"Variants: {', '.join((item.label or item.variant_id) for item in list(getattr(result, 'variants', []) or []))}",
+        "",
+        f"Total runs: {dict(getattr(result, 'aggregate', {}) or {}).get('total_runs', 0)}",
+        f"OK runs: {dict(getattr(result, 'aggregate', {}) or {}).get('ok_runs', 0)}",
+        f"Failed runs: {dict(getattr(result, 'aggregate', {}) or {}).get('failed_runs', 0)}",
+        "",
+        render_batch_dashboard_markdown(dict(getattr(result, 'dashboard', {}) or {})),
+    ]
+    if getattr(result, "warnings", None):
+        lines.extend(["", "[warnings]"])
+        lines.extend(f"  - {warning}" for warning in list(getattr(result, "warnings", []) or []))
+    return "\n".join(lines)
+
+
+def _render_pressure_sweep(result: Any) -> str:
+    comparison = dict(getattr(result, "comparison", {}) or {})
+    lines = [
+        "BAI War Lab — Pressure Sweep Report",
+        f"Scenario: {getattr(result, 'scenario', '')}",
+        f"Parameter: {getattr(result, 'parameter', '')}",
+        f"Values: {', '.join(str(value) for value in getattr(result, 'values', []) or [])}",
+        "",
+    ]
+    for point in list(comparison.get("points") or []):
+        lines.append(
+            f"{comparison.get('parameter')}={point.get('value')}: "
+            f"score={point.get('score_margin_allied')} "
+            f"pressure_peak={point.get('pressure_peak_score')} "
+            f"objective_changes={point.get('objective_change_count')}"
+        )
+    if comparison.get("best_score"):
+        lines.extend(["", f"best score: {comparison['best_score']}"])
+    if comparison.get("largest_pressure_delta"):
+        lines.append(f"largest pressure delta: {comparison['largest_pressure_delta']}")
+    if getattr(result, "warnings", None):
+        lines.extend(["", "[warnings]"])
+        lines.extend(f"  - {warning}" for warning in list(getattr(result, "warnings", []) or []))
+    return "\n".join(lines)
 
 
 def _render_suite(result: Any) -> str:

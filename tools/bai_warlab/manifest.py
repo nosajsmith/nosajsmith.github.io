@@ -76,6 +76,44 @@ def _iter_runs(result: Any) -> Iterable[Any]:
             yield run
 
 
+def _resolved_profile_records(result: Any) -> Any:
+    if hasattr(result, "resolved_profile") and dict(getattr(result, "resolved_profile", {}) or {}):
+        return dict(getattr(result, "resolved_profile", {}) or {})
+
+    records: Dict[str, Any] = {}
+    for index, run in enumerate(_iter_runs(result), start=1):
+        profile = dict(getattr(run, "resolved_profile", {}) or {})
+        if not profile:
+            continue
+        key = (
+            str(profile.get("variant_id") or "").strip()
+            or str(getattr(run, "variant_id", "") or getattr(run, "variant_label", "") or f"run_{index}")
+        )
+        records[key] = profile
+    return records or {}
+
+
+def _artifact_records(result: Any, output_dir: Path) -> Dict[str, Any]:
+    standard = {
+        "summary_json": str((output_dir / "summary.json").resolve()),
+        "report_txt": str((output_dir / "report.txt").resolve()),
+        "results_csv": str((output_dir / "results.csv").resolve()),
+        "manifest_json": str((output_dir / "manifest.json").resolve()),
+    }
+    manifest_refs = [str(getattr(run, "manifest_path", "")).strip() for run in _iter_runs(result)]
+    manifest_refs = [item for item in manifest_refs if item]
+    artifact_paths = []
+    if hasattr(result, "artifacts"):
+        artifact_paths.extend(str(item) for item in list(getattr(result, "artifacts", []) or []) if str(item).strip())
+    for run in _iter_runs(result):
+        artifact_paths.extend(str(item) for item in list(getattr(run, "artifacts", []) or []) if str(item).strip())
+    return {
+        "bundle": standard,
+        "run_manifest_refs": manifest_refs,
+        "artifact_paths": sorted(dict.fromkeys(artifact_paths)),
+    }
+
+
 def _scenario_records(result: Any, scenario: Any) -> List[Dict[str, Any]]:
     records: List[Dict[str, Any]] = []
     seen: set[tuple[str, str]] = set()
@@ -156,6 +194,8 @@ def build_manifest_record(
                 "personality": _profile_records(loader, "personality", personality),
                 "tuning": _profile_records(loader, "tuning", tuning),
             },
+            "resolved_profile": _resolved_profile_records(result),
+            "artifacts": _artifact_records(result, resolved_output_dir),
         },
     )
 

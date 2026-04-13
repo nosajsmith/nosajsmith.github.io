@@ -55,6 +55,10 @@ class RunRequest:
     dt_hours: int | None = None
     stop_on_terminal: bool = True
     variant_label: str = ""
+    variant_id: str = ""
+    variant_name: str = ""
+    axis_overrides: Dict[str, Any] = field(default_factory=dict)
+    run_overrides: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -70,6 +74,8 @@ class RunResult:
     max_steps: int
     dt_hours: int
     variant_label: str = ""
+    variant_id: str = ""
+    variant_name: str = ""
     error: str | None = None
     warnings: List[str] = field(default_factory=list)
     applied_axis: Dict[str, Any] = field(default_factory=dict)
@@ -77,6 +83,9 @@ class RunResult:
     summary: Dict[str, Any] = field(default_factory=dict)
     metrics: Dict[str, Dict[str, Any]] = field(default_factory=dict)
     ai_report: Dict[str, Any] = field(default_factory=dict)
+    resolved_profile: Dict[str, Any] = field(default_factory=dict)
+    artifacts: List[str] = field(default_factory=list)
+    manifest_path: str = ""
     output_dir: str = ""
 
 
@@ -132,6 +141,62 @@ class CompareResult:
     right_label: str
     left_runs: List[RunResult] = field(default_factory=list)
     right_runs: List[RunResult] = field(default_factory=list)
+    comparison: Dict[str, Any] = field(default_factory=dict)
+    warnings: List[str] = field(default_factory=list)
+    output_dir: str = ""
+
+
+@dataclass
+class VariantSpec:
+    variant_id: str
+    label: str = ""
+    doctrine: str = ""
+    personality: str = ""
+    tuning: str = ""
+    axis_overrides: Dict[str, Any] = field(default_factory=dict)
+    run_overrides: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class VariantCompareResult:
+    ok: bool
+    command: str
+    scenario: str
+    scenario_dir: str
+    variants: List[VariantSpec] = field(default_factory=list)
+    runs: List[RunResult] = field(default_factory=list)
+    comparison: Dict[str, Any] = field(default_factory=dict)
+    warnings: List[str] = field(default_factory=list)
+    output_dir: str = ""
+
+
+@dataclass
+class SweepResult:
+    ok: bool
+    command: str
+    scenario_dir: str
+    scenarios: List[str] = field(default_factory=list)
+    variants: List[VariantSpec] = field(default_factory=list)
+    runs: List[RunResult] = field(default_factory=list)
+    matrix: List[Dict[str, Any]] = field(default_factory=list)
+    aggregate: Dict[str, Any] = field(default_factory=dict)
+    dashboard: Dict[str, Any] = field(default_factory=dict)
+    warnings: List[str] = field(default_factory=list)
+    output_dir: str = ""
+
+
+@dataclass
+class PressureSweepResult:
+    ok: bool
+    command: str
+    scenario: str
+    scenario_dir: str
+    parameter: str
+    values: List[Any] = field(default_factory=list)
+    doctrine: str = ""
+    personality: str = ""
+    tuning: str = ""
+    runs: List[RunResult] = field(default_factory=list)
     comparison: Dict[str, Any] = field(default_factory=dict)
     warnings: List[str] = field(default_factory=list)
     output_dir: str = ""

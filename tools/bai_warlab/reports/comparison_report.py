@@ -179,5 +179,34 @@ def render_comparison_report(result: Any) -> str:
         lines.extend(f"  - {warning}" for warning in list(getattr(result, "warnings", []) or []))
     return "\n".join(lines)
 
+def render_variant_comparison_report(result: Any) -> str:
+    comparison = dict(getattr(result, "comparison", {}) or {})
+    variants = list(comparison.get("variants") or [])
+    lines = [
+        "BAI War Lab — Variant Comparison Report",
+        f"Scenario: {getattr(result, 'scenario', '')}",
+        f"Compared {len(variants)} variants on scenario {getattr(result, 'scenario', '')}.",
+        "",
+        "[variants]",
+    ]
+    for variant in variants:
+        lines.append(
+            "  "
+            f"{variant.get('variant_name') or variant.get('variant_id')}: "
+            f"score={dict(variant.get('final_score') or {}).get('margin_allied')} "
+            f"pressure_peak={dict(variant.get('pressure_summary') or {}).get('peak')} "
+            f"objectives_secured={dict(variant.get('objective_summary') or {}).get('secured')}"
+        )
+    if comparison.get("best_score"):
+        lines.extend(["", f"best score: {comparison.get('best_score')}"])
+    if comparison.get("largest_pressure_delta"):
+        lines.append(f"largest pressure delta: {comparison.get('largest_pressure_delta')}")
+    if comparison.get("first_objective_divergence"):
+        lines.append(f"first objective divergence: {comparison.get('first_objective_divergence')}")
+    if getattr(result, "warnings", None):
+        lines.extend(["", "[warnings]"])
+        lines.extend(f"  - {warning}" for warning in list(getattr(result, "warnings", []) or []))
+    return "\n".join(lines)
 
-__all__ = ["render_comparison_report"]
+
+__all__ = ["render_comparison_report", "render_variant_comparison_report"]
