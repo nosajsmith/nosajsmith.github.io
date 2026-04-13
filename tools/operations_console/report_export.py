@@ -59,22 +59,7 @@ def report_dict(
         "executed_command": list(result.executed_command),
         "return_code": result.return_code,
         "known_issue_matches": [
-            {
-                "id": match.issue_id,
-                "title": match.title,
-                "severity": match.severity,
-                "category": match.category,
-                "status": match.status,
-                "waived": str(match.status or "").strip().lower() == "waived",
-                "downgrade_applied": bool(
-                    match.expected_status_override
-                    and result.original_status
-                    and result.original_status != result.status
-                    and str(match.expected_status_override).strip().lower() == str(result.status or "").strip().lower()
-                ),
-                "expected_status_override": match.expected_status_override,
-                "notes": match.notes,
-            }
+            _known_issue_report_dict(result, match)
             for match in result.known_issue_matches
         ],
         "gui_action_matrix": matrix_entry.to_report_dict() if matrix_entry is not None else None,
@@ -226,6 +211,8 @@ def _format_text_lines(
         lines.append(f"{prefix}Return Code: {result.return_code}")
     if result.known_issue_matches:
         lines.append(f"{prefix}Known Issues:")
+        if result.scenario_name:
+            lines.append(f"{prefix}Known Issue Scenario: {result.scenario_name}")
         for match in result.known_issue_matches:
             line = f"{prefix}- {match.issue_id}: {match.title} [severity={match.severity}, status={match.status}]"
             if match.expected_status_override:
@@ -378,6 +365,29 @@ def _key_log_lines(result: ConsoleResult) -> List[str]:
         if line not in deduped:
             deduped.append(line)
     return deduped[:20]
+
+
+def _known_issue_report_dict(result: ConsoleResult, match) -> Dict[str, object]:
+    downgrade_applied = bool(
+        match.expected_status_override
+        and result.original_status
+        and result.original_status != result.status
+        and str(match.expected_status_override).strip().lower() == str(result.status or "").strip().lower()
+    )
+    return {
+        "id": match.issue_id,
+        "title": match.title,
+        "severity": match.severity,
+        "category": match.category,
+        "status": match.status,
+        "waived": str(match.status or "").strip().lower() == "waived",
+        "downgrade_applied": downgrade_applied,
+        "expected_status_override": match.expected_status_override,
+        "downgraded_to": result.status if downgrade_applied else "",
+        "scenario_name": result.scenario_name,
+        "result_name": result.name,
+        "notes": match.notes,
+    }
 
 
 def _extract_explainability_summary(details: List[str]) -> Dict[str, object] | None:

@@ -508,21 +508,7 @@ class OperationsConsoleApp:
         if result.errors:
             for error in result.errors:
                 self._append_output(f"ERROR: {error}")
-        if result.known_issue_matches:
-            for match in result.known_issue_matches:
-                parts = [
-                    f"KNOWN ISSUE: {match.issue_id}",
-                    match.title,
-                    f"severity={match.severity}",
-                    f"status={match.status}",
-                ]
-                if match.expected_status_override:
-                    parts.append(f"override={match.expected_status_override.upper()}")
-                self._append_output(" | ".join(parts))
-            if result.original_status and result.original_status != result.status:
-                self._append_output(
-                    f"KNOWN ISSUE WAIVER APPLIED: {result.original_status.upper()} -> {result.status.upper()}"
-                )
+        self._append_known_issue_annotations(result)
         self._append_baseline_drift(drift)
         self._append_first_divergence(divergence)
         self._emit_incident_breadcrumbs(incident)
@@ -721,8 +707,8 @@ class OperationsConsoleApp:
         baseline_drift: BaselineComparison | None = None,
     ) -> str:
         summary = result.summary
-        if result.known_issue_matches:
-            issue_ids = ", ".join(match.issue_id for match in result.known_issue_matches)
+        issue_ids = ", ".join(self._known_issue_ids(result))
+        if issue_ids:
             if result.original_status and result.original_status != result.status:
                 summary = f"{summary} [KNOWN ISSUE: {issue_ids}; waived from {result.original_status.upper()}]"
             else:
@@ -730,6 +716,50 @@ class OperationsConsoleApp:
         if baseline_drift is not None and baseline_drift.matched:
             summary = f"{summary} [DRIFT: {baseline_drift.status.upper()}]"
         return summary
+
+    def _iter_results(self, result: ConsoleResult):
+        yield result
+        for item in result.subresults:
+            yield from self._iter_results(item)
+
+    def _known_issue_ids(self, result: ConsoleResult) -> list[str]:
+        seen: set[str] = set()
+        issue_ids: list[str] = []
+        for item in self._iter_results(result):
+            for match in item.known_issue_matches:
+                if match.issue_id in seen:
+                    continue
+                seen.add(match.issue_id)
+                issue_ids.append(match.issue_id)
+        return issue_ids
+
+    def _append_known_issue_annotations(self, result: ConsoleResult) -> None:
+        for item in self._iter_results(result):
+            if not item.known_issue_matches:
+                continue
+            if item is not result:
+                self._append_output(f"KNOWN ISSUE RESULT: {item.name}")
+                if item.scenario_name:
+                    self._append_output(f"KNOWN ISSUE SCENARIO: {item.scenario_name}")
+            for match in item.known_issue_matches:
+                parts = [
+                    f"KNOWN ISSUE: {match.issue_id}",
+                    match.title,
+                    f"severity={match.severity}",
+                    f"status={match.status}",
+                ]
+                if match.expected_status_override:
+                    parts.append(f"override={match.expected_status_override.upper()}")
+                self._append_output(" | ".join(parts))
+            if item.original_status and item.original_status != item.status:
+                if item is result:
+                    self._append_output(
+                        f"KNOWN ISSUE WAIVER APPLIED: {item.original_status.upper()} -> {item.status.upper()}"
+                    )
+                else:
+                    self._append_output(
+                        f"KNOWN ISSUE WAIVER APPLIED [{item.name}]: {item.original_status.upper()} -> {item.status.upper()}"
+                    )
 
     def _apply_scenario_contracts(self, result: ConsoleResult) -> tuple[ConsoleResult, ScenarioContractEvaluation | None]:
         try:

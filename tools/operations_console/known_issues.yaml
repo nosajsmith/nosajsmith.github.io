@@ -1,29 +1,51 @@
-{
-  "version": 1,
-  "known_issues": [
-    {
-      "id": "KI-001",
-      "title": "UI build occasionally fails when local Node dependencies are stale",
-      "severity": "medium",
-      "category": "ORL",
-      "affects": ["ORL / UI Build Check"],
-      "scenarios": [],
-      "status": "known",
-      "expected_status_override": "",
-      "symptom_match": ["Build command exited", "build failed"],
-      "notes": "Refresh dependencies in ui/ and rerun when this reproduces on a clean branch."
-    },
-    {
-      "id": "KI-002",
-      "title": "Snapshot smoke may fail on inchon_mvp while persistence contract is in flux",
-      "severity": "high",
-      "category": "ORL",
-      "affects": ["ORL / Snapshot Smoke", "ORL / Core Validation Suite"],
-      "scenarios": ["inchon_mvp", "inchon_mvp.json"],
-      "status": "waived",
-      "expected_status_override": "warn",
-      "symptom_match": ["snapshot", "load"],
-      "notes": "Temporary waiver for operator visibility while the snapshot format stabilizes."
-    }
-  ]
-}
+# Examples only. Edit or remove entries as the current support picture changes.
+version: 1
+known_issues:
+  - id: KI-001
+    title: UI build can fail when local Node modules are stale
+    severity: medium
+    category: ORL
+    affects:
+      - ORL / UI Build Check
+    scenarios: []
+    status: known
+    expected_status_override: ""
+    symptom_match:
+      - Build command exited
+      - build failed
+      - npm ci
+    notes: Refresh `ui/` dependencies and rerun on a clean branch before escalating.
+
+  - id: KI-002
+    title: Snapshot smoke on inchon_mvp can trip the temporary persistence waiver
+    severity: high
+    category: ORL
+    affects:
+      - ORL / Snapshot Smoke
+      - ORL / Core Validation Suite
+    scenarios:
+      - inchon_mvp
+      - inchon_mvp.json
+    status: waived
+    expected_status_override: warn
+    symptom_match:
+      - snapshot mismatch
+      - failed to load snapshot
+      - persistence contract
+    notes: Illustrative waiver. Keep visible as WARN until the snapshot contract is stable, then remove the override.
+
+  - id: KI-003
+    title: Latest-report handoff can be incomplete before auto-export refresh finishes
+    severity: medium
+    category: Support
+    affects:
+      - ORL / Latest Artifacts
+      - ORL / Pitch Support Bundle
+    scenarios: []
+    status: known
+    expected_status_override: ""
+    symptom_match:
+      - "Latest Demo Report: missing"
+      - "Latest Core Validation Report: missing"
+      - latest artifacts incomplete
+    notes: Illustrative tooling issue for support flows. Re-export Demo Readiness and Core Validation reports, then rerun the bundle step.

@@ -153,6 +153,40 @@ def test_handle_result_surfaces_known_issue_and_waiver() -> None:
     assert "KNOWN ISSUE: KI-777" in app.summary_var.get()
 
 
+def test_result_summary_text_includes_nested_known_issue_ids() -> None:
+    app, _output = build_app_stub(scenario_value="inchon_mvp")
+    result = ConsoleResult(
+        name="ORL / Demo Checklist",
+        status="fail",
+        summary="Checklist failed.",
+        scenario_name="inchon_mvp",
+        subresults=[
+            ConsoleResult(
+                name="Replay Compare",
+                status="warn",
+                original_status="fail",
+                summary="Replay compare mismatch.",
+                scenario_name="inchon_mvp",
+                known_issue_matches=[
+                    KnownIssueMatch(
+                        issue_id="KI-778",
+                        title="Waived replay mismatch",
+                        severity="high",
+                        category="ORL",
+                        status="waived",
+                        expected_status_override="warn",
+                        notes="Temporary waiver.",
+                    )
+                ],
+            )
+        ],
+    )
+
+    summary = app._result_summary_text(result)
+
+    assert summary == "Checklist failed. [KNOWN ISSUE: KI-778]"
+
+
 def test_handle_result_auto_exports_demo_readiness_report(tmp_path, monkeypatch) -> None:
     app, output = build_app_stub(scenario_value="inchon_mvp")
     app._log_incident_bundle = lambda result: None

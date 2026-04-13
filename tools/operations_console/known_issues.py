@@ -6,7 +6,7 @@ from fnmatch import fnmatch
 from pathlib import Path
 from typing import Iterable, List, Sequence
 
-from .models import ALLOWED_STATUSES, ConsoleResult, KnownIssueMatch
+from .models import ConsoleResult, KnownIssueMatch
 
 try:  # pragma: no cover - optional dependency
     import yaml
@@ -21,8 +21,9 @@ STATUS_ORDER = {
     "error": 3,
 }
 MATCHABLE_STATUSES = {"warn", "fail", "error"}
-OVERRIDABLE_STATUSES = tuple(status for status in ALLOWED_STATUSES if status not in {"idle", "running"})
 KNOWN_ISSUE_STATUSES = ("known", "waived")
+WAIVER_OVERRIDE_STATUS = "warn"
+WAIVABLE_RESULT_STATUS = "fail"
 
 
 @dataclass(frozen=True)
@@ -139,8 +140,9 @@ def apply_known_issues(
 ) -> ConsoleResult:
     if known_issues is None:
         return result
-    return known_issues.annotate_result(
+    return _annotate_result_tree(
         result,
+        known_issues,
         entry_name=entry_name,
         scenario_name=scenario_name,
         observed_lines=observed_lines,
@@ -212,10 +214,23 @@ def _validate_issue_row(row: dict, *, index: int) -> KnownIssue:
         raise RuntimeError(
             f"known_issues[{index}].status must be one of {', '.join(KNOWN_ISSUE_STATUSES)}"
         )
-    expected_status_override = _optional_text(row.get("expected_status_override")).lower()
-    if expected_status_override and expected_status_override not in OVERRIDABLE_STATUSES:
+    affects = _text_list(row.get("affects"), field_name=f"known_issues[{index}].affects")
+    scenarios = _text_list(row.get("scenarios"), field_name=f"known_issues[{index}].scenarios")
+    symptom_match = _text_list(
+        row.get("symptom_match"),
+        field_name=f"known_issues[{index}].symptom_match",
+    )
+    if not affects and not scenarios and not symptom_match:
         raise RuntimeError(
-            f"known_issues[{index}].expected_status_override must be one of {', '.join(OVERRIDABLE_STATUSES)}"
+            f"known_issues[{index}] must define at least one of affects, scenarios, or symptom_match."
+        )
+    expected_status_override = _optional_text(
+        row.get("expected_status_override"),
+        field_name=f"known_issues[{index}].expected_status_override",
+    ).lower()
+    if expected_status_override and expected_status_override != WAIVER_OVERRIDE_STATUS:
+        raise RuntimeError(
+            f"known_issues[{index}].expected_status_override must be '{WAIVER_OVERRIDE_STATUS}'."
         )
     if expected_status_override and status != "waived":
         raise RuntimeError(f"known_issues[{index}].expected_status_override requires status waived")
@@ -224,24 +239,32 @@ def _validate_issue_row(row: dict, *, index: int) -> KnownIssue:
         title=title,
         severity=severity,
         category=category,
-        affects=_text_list(row.get("affects"), field_name=f"known_issues[{index}].affects"),
-        scenarios=_text_list(row.get("scenarios"), field_name=f"known_issues[{index}].scenarios"),
+        affects=affects,
+        scenarios=scenarios,
         status=status,
         expected_status_override=expected_status_override,
-        symptom_match=_text_list(row.get("symptom_match"), field_name=f"known_issues[{index}].symptom_match"),
-        notes=_optional_text(row.get("notes")),
+        symptom_match=symptom_match,
+        notes=_optional_text(row.get("notes"), field_name=f"known_issues[{index}].notes"),
     )
 
 
 def _required_text(value: object, field_name: str) -> str:
-    text = str(value or "").strip()
+    if value is None:
+        raise RuntimeError(f"{field_name} is required.")
+    if not isinstance(value, str):
+        raise RuntimeError(f"{field_name} must be a string.")
+    text = value.strip()
     if not text:
         raise RuntimeError(f"{field_name} is required.")
     return text
 
 
-def _optional_text(value: object) -> str:
-    return str(value or "").strip()
+def _optional_text(value: object, *, field_name: str) -> str:
+    if value is None:
+        return ""
+    if not isinstance(value, str):
+        raise RuntimeError(f"{field_name} must be a string.")
+    return value.strip()
 
 
 def _text_list(value: object, *, field_name: str) -> List[str]:
@@ -254,11 +277,40 @@ def _text_list(value: object, *, field_name: str) -> List[str]:
         raise RuntimeError(f"{field_name} must be a string or list of strings.")
     items: List[str] = []
     for index, item in enumerate(value, start=1):
-        text = str(item or "").strip()
+        if not isinstance(item, str):
+            raise RuntimeError(f"{field_name}[{index}] must be a non-empty string.")
+        text = item.strip()
         if not text:
             raise RuntimeError(f"{field_name}[{index}] must be a non-empty string.")
         items.append(text)
     return items
+
+
+def _annotate_result_tree(
+    result: ConsoleResult,
+    known_issues: KnownIssuesCatalog,
+    *,
+    entry_name: str = "",
+    scenario_name: str = "",
+    observed_lines: Sequence[str] | None = None,
+) -> ConsoleResult:
+    resolved_scenario_name = str(scenario_name or result.scenario_name or "").strip()
+    annotated_subresults = [
+        _annotate_result_tree(
+            item,
+            known_issues,
+            entry_name=item.name,
+            scenario_name=item.scenario_name or resolved_scenario_name,
+        )
+        for item in result.subresults
+    ]
+    annotated = replace(result, subresults=annotated_subresults)
+    return known_issues.annotate_result(
+        annotated,
+        entry_name=entry_name or annotated.name,
+        scenario_name=resolved_scenario_name,
+        observed_lines=observed_lines,
+    )
 
 
 def _result_text_fragments(result: ConsoleResult, *, observed_lines: Sequence[str] | None = None) -> List[str]:
@@ -324,9 +376,11 @@ def _resolved_override(current_status: str, matches: Sequence[KnownIssueMatch]) 
         return ""
     normalized = [str(status).strip().lower() for status in overrides]
     current = str(current_status or "").strip().lower()
-    if current not in STATUS_ORDER:
+    if current != WAIVABLE_RESULT_STATUS:
         return ""
     target = max(normalized, key=lambda status: STATUS_ORDER.get(status, -1))
+    if target != WAIVER_OVERRIDE_STATUS:
+        return ""
     if STATUS_ORDER.get(target, -1) >= STATUS_ORDER[current]:
         return ""
     return target

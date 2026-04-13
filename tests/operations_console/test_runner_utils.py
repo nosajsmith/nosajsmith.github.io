@@ -146,6 +146,51 @@ def test_run_action_attaches_known_issue_matches_without_hiding_failure() -> Non
     assert [match.issue_id for match in result.known_issue_matches] == ["KI-301"]
 
 
+def test_run_action_applies_known_issues_to_nested_subresults() -> None:
+    action = ConsoleAction(
+        name="ORL / Demo Checklist",
+        category="ORL",
+        description="Checklist action",
+        runner=lambda _context: make_result(
+            name="ORL / Demo Checklist",
+            status="fail",
+            summary="Checklist failed.",
+            subresults=[
+                make_result(
+                    name="Replay Compare",
+                    status="fail",
+                    summary="Replay compare failed.",
+                    errors=["snapshot mismatch on load"],
+                )
+            ],
+        ),
+    )
+    catalog = KnownIssuesCatalog(
+        issues=[
+            KnownIssue(
+                issue_id="KI-304",
+                title="Waived replay snapshot mismatch",
+                severity="high",
+                category="ORL",
+                affects=["Replay Compare"],
+                scenarios=["inchon_mvp"],
+                status="waived",
+                expected_status_override="warn",
+                symptom_match=["snapshot mismatch"],
+                notes="Temporary waiver for replay compare drift.",
+            )
+        ]
+    )
+
+    result = run_action(action, scenario_input="inchon_mvp", known_issues=catalog)
+
+    assert result.status == "fail"
+    assert result.original_status == ""
+    assert result.subresults[0].status == "warn"
+    assert result.subresults[0].original_status == "fail"
+    assert [match.issue_id for match in result.subresults[0].known_issue_matches] == ["KI-304"]
+
+
 def test_roll_up_statuses_obeys_error_fail_warn_precedence() -> None:
     assert roll_up_statuses(["pass", "pass"]) == "pass"
     assert roll_up_statuses(["pass", "warn"]) == "warn"

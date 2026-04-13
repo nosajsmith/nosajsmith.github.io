@@ -62,6 +62,9 @@ def test_report_dict_includes_subresults_and_artifacts() -> None:
     assert payload["known_issue_matches"][0]["severity"] == "high"
     assert payload["known_issue_matches"][0]["waived"] is True
     assert payload["known_issue_matches"][0]["downgrade_applied"] is True
+    assert payload["known_issue_matches"][0]["downgraded_to"] == "warn"
+    assert payload["known_issue_matches"][0]["scenario_name"] == "inchon_mvp"
+    assert payload["known_issue_matches"][0]["result_name"] == "ORL / Scenario Integrity"
     assert payload["incident_metadata"]["logged"] is True
     assert payload["incident_metadata"]["bundle_dir"] == "/tmp/incidents/abc"
     assert payload["incident_metadata"]["anomaly_matches"][0]["id"] == "ANOM-003"
@@ -154,8 +157,10 @@ def test_export_result_json_and_text_create_files(tmp_path) -> None:
     assert "Executed Command: pytest -q tests/test_inchon_scenario_stub.py" in text
     assert "Return Code: 1" in text
     assert "Known Issues:" in text
+    assert "Known Issue Scenario: inchon_mvp" in text
     assert "Incident Anomalies:" in text
     assert "Key Logs:" in text
     assert payload["known_issue_matches"][0]["waived"] is True
     assert payload["known_issue_matches"][0]["downgrade_applied"] is True
+    assert payload["known_issue_matches"][0]["scenario_name"] == "inchon_mvp"
     assert "KI-402: Waived replay regression [severity=medium, status=waived] -> WARN (downgrade applied)" in text

@@ -96,6 +96,62 @@ def test_load_known_issues_validates_status_and_waiver_override_pairing(tmp_path
         load_known_issues(path)
 
 
+def test_load_known_issues_requires_at_least_one_matcher(tmp_path) -> None:
+    path = tmp_path / "known_issues.yaml"
+    path.write_text(
+        json.dumps(
+            {
+                "known_issues": [
+                    {
+                        "id": "KI-996",
+                        "title": "No matcher",
+                        "severity": "medium",
+                        "category": "ORL",
+                        "affects": [],
+                        "scenarios": [],
+                        "status": "known",
+                        "expected_status_override": "",
+                        "symptom_match": [],
+                        "notes": "",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(RuntimeError, match="must define at least one of affects, scenarios, or symptom_match"):
+        load_known_issues(path)
+
+
+def test_load_known_issues_rejects_non_string_optional_fields(tmp_path) -> None:
+    path = tmp_path / "known_issues.yaml"
+    path.write_text(
+        json.dumps(
+            {
+                "known_issues": [
+                    {
+                        "id": "KI-995",
+                        "title": "Bad notes",
+                        "severity": "medium",
+                        "category": "ORL",
+                        "affects": ["ORL / Connectivity"],
+                        "scenarios": [],
+                        "status": "known",
+                        "expected_status_override": "",
+                        "symptom_match": ["bridge unavailable"],
+                        "notes": ["not", "a", "string"],
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(RuntimeError, match=r"known_issues\[1\]\.notes must be a string"):
+        load_known_issues(path)
+
+
 def test_apply_known_issues_matches_by_name_scenario_and_symptom(tmp_path) -> None:
     path = tmp_path / "known_issues.yaml"
     path.write_text(
@@ -184,3 +240,42 @@ def test_apply_known_issues_uses_explicit_waiver_only_when_all_matches_override(
     assert annotated.status == "fail"
     assert annotated.original_status == ""
     assert [match.issue_id for match in annotated.known_issue_matches] == ["KI-201", "KI-202"]
+
+
+def test_apply_known_issues_only_downgrades_fail_to_warn(tmp_path) -> None:
+    path = tmp_path / "known_issues.yaml"
+    path.write_text(
+        json.dumps(
+            {
+                "known_issues": [
+                    {
+                        "id": "KI-301",
+                        "title": "Waived exception",
+                        "severity": "high",
+                        "category": "ORL",
+                        "affects": ["ORL / Snapshot Smoke"],
+                        "scenarios": ["inchon_mvp"],
+                        "status": "waived",
+                        "expected_status_override": "warn",
+                        "symptom_match": ["snapshot mismatch"],
+                        "notes": "",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    catalog = load_known_issues(path)
+    result = make_result(
+        name="ORL / Snapshot Smoke",
+        status="error",
+        summary="Snapshot crashed.",
+        errors=["snapshot mismatch raised an exception"],
+        scenario_name="inchon_mvp",
+    )
+
+    annotated = apply_known_issues(result, catalog)
+
+    assert annotated.status == "error"
+    assert annotated.original_status == ""
+    assert [match.issue_id for match in annotated.known_issue_matches] == ["KI-301"]
