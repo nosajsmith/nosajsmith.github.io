@@ -17,7 +17,10 @@ from tools.operations_console.registry import (
     run_orl_latest_artifacts,
     run_orl_pitch_support_bundle,
     run_orl_round1_gate,
+    run_open_artifacts_konsole,
+    run_open_bridge_konsole,
     run_open_repo_konsole,
+    run_open_ui_konsole,
     run_orl_all_green_check,
     run_orl_explainability_smoketest,
     run_selected_command_in_konsole,
@@ -599,14 +602,44 @@ def test_konsole_actions_use_allowlisted_launchers(monkeypatch: pytest.MonkeyPat
             self.workdir = "/tmp"
             self.command_id = command_id
 
+    directory_calls: list[tuple[str, str]] = []
+    command_calls: list[tuple[str, str]] = []
+
+    def fake_launch_directory(directory_id: str, *, label: str, **kwargs):
+        directory_calls.append((directory_id, label))
+        return FakeResult(f"opened {label.lower()} terminal")
+
     monkeypatch.setattr(
-        "tools.operations_console.registry.launch_konsole_command",
-        lambda command_id, **kwargs: FakeResult(f"ran {command_id}", command_id=command_id),
+        "tools.operations_console.registry.launch_konsole_directory",
+        fake_launch_directory,
     )
+    def fake_launch_command(command_id: str, **kwargs):
+        command_calls.append((command_id, str(kwargs.get("label") or "")))
+        return FakeResult(f"ran {command_id}", command_id=command_id)
+
+    monkeypatch.setattr("tools.operations_console.registry.launch_konsole_command", fake_launch_command)
 
     repo_result = run_open_repo_konsole(
         ConsoleRunContext(
             action_name="Utilities / Open Repo Konsole",
+            category="Utilities",
+        )
+    )
+    ui_result = run_open_ui_konsole(
+        ConsoleRunContext(
+            action_name="Utilities / Open UI Konsole",
+            category="Utilities",
+        )
+    )
+    bridge_result = run_open_bridge_konsole(
+        ConsoleRunContext(
+            action_name="Utilities / Open Bridge Konsole",
+            category="Utilities",
+        )
+    )
+    artifacts_result = run_open_artifacts_konsole(
+        ConsoleRunContext(
+            action_name="Utilities / Open Artifacts Konsole",
             category="Utilities",
         )
     )
@@ -621,9 +654,19 @@ def test_konsole_actions_use_allowlisted_launchers(monkeypatch: pytest.MonkeyPat
     assert repo_result.status == "pass"
     assert repo_result.adapter_method == "konsole"
     assert repo_result.executed_command == ["konsole", "--workdir", "/tmp"]
-    assert repo_result.summary == "ran repo_terminal"
+    assert repo_result.summary == "opened repo terminal"
+    assert ui_result.summary == "opened ui terminal"
+    assert bridge_result.summary == "opened bridge terminal"
+    assert artifacts_result.summary == "opened artifacts terminal"
     assert selected_result.status == "pass"
     assert selected_result.summary == "ran bridge_launch"
+    assert directory_calls == [
+        ("repo_root", "Repo"),
+        ("ui_dir", "UI"),
+        ("bridge_dir", "Bridge"),
+        ("artifacts_dir", "Artifacts"),
+    ]
+    assert command_calls == [("bridge_launch", "Run Selected Command in Konsole")]
 
 
 def test_run_selected_command_in_konsole_warns_when_no_command_is_selected() -> None:

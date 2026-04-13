@@ -14,6 +14,7 @@ from .konsole_integration import (
     CommandRegistryCatalog,
     command_options,
     launch_konsole_command,
+    launch_konsole_directory,
     load_command_registry,
 )
 from .models import ConsoleAction, ConsoleRegistryEntry, ConsoleRunContext, ConsoleSuite
@@ -210,22 +211,22 @@ def resolve_ui_directory() -> Path:
 
 
 def run_open_repo_konsole(context: ConsoleRunContext):
-    result = launch_konsole_command("repo_terminal", label="Open Repo Terminal")
+    result = launch_konsole_directory("repo_root", label="Repo")
     return _console_result_from_konsole(context, result)
 
 
 def run_open_ui_konsole(context: ConsoleRunContext):
-    result = launch_konsole_command("ui_terminal", label="Open UI Terminal")
+    result = launch_konsole_directory("ui_dir", label="UI")
     return _console_result_from_konsole(context, result)
 
 
 def run_open_bridge_konsole(context: ConsoleRunContext):
-    result = launch_konsole_command("bridge_terminal", label="Open Bridge Terminal")
+    result = launch_konsole_directory("bridge_dir", label="Bridge")
     return _console_result_from_konsole(context, result)
 
 
 def run_open_artifacts_konsole(context: ConsoleRunContext):
-    result = launch_konsole_command("artifacts_terminal", label="Open Artifacts Terminal")
+    result = launch_konsole_directory("artifacts_dir", label="Artifacts")
     return _console_result_from_konsole(context, result)
 
 
