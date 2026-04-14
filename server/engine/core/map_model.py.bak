@@ -16,7 +16,6 @@ class Terrain(str, Enum):
     DESERT = "DESERT"
     WATER = "WATER"
     COAST = WATER  # legacy compatibility alias
-    OCEAN = WATER  # legacy compatibility alias
 
     @staticmethod
     def coerce(value: str) -> "Terrain":
@@ -44,7 +43,7 @@ class Terrain(str, Enum):
             return Terrain.CLEAR
 
 
-@dataclass
+@dataclass(frozen=True)
 class MapTile:
     """
     The canonical tile model for MWE.
@@ -76,9 +75,6 @@ class GameMap:
 
     def get_tile(self, tile_id: str) -> Optional[MapTile]:
         return self._tiles.get(tile_id)
-
-    def get(self, tile_id: str, default: Optional[MapTile] = None) -> Optional[MapTile]:
-        return self._tiles.get(tile_id, default)
 
     def tiles(self) -> Iterable[MapTile]:
         return self._tiles.values()

@@ -19,3 +19,6 @@ class GameTime:
 
     def to_dict(self) -> Dict[str, Any]:
         return {"day": self.day, "phase": self.phase, "weather": self.weather}
+
+# Compatibility alias for legacy imports
+TimeSystem = GameTime

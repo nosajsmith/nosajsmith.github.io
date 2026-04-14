@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "created_at": "2026-04-14T02:28:58.834965+00:00",
+  "action_name": "Refresh Scenarios",
+  "status": "error",
+  "original_status": "",
+  "summary": "Scenario refresh failed.",
+  "scenario_name": "inchon_mvp",
+  "bridge_uri": "ws://127.0.0.1:8766",
+  "started_at": "2026-04-14T02:28:58.834965+00:00",
+  "finished_at": "2026-04-14T02:28:58.834965+00:00",
+  "duration_ms": 0,
+  "working_directory": "/home/jason/dev/mwe",
+  "artifact_paths": [],
+  "executed_command": [],
+  "return_code": null,
+  "adapter_method": "",
+  "known_issue_matches": [],
+  "incident_metadata": null,
+  "git": {
+    "branch": "integration/ops-console-hardening",
+    "commit": "9d5e011a890cc95457be6443645d9e58dda70723",
+    "is_dirty": true,
+    "worktree_status": "dirty"
+  }
+}
