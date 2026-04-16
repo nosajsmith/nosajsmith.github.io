@@ -1,70 +1,71 @@
-# engine/core/map_model.py
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from enum import Enum
-from typing import Dict, Iterable, Optional
+from typing import Any, Dict, Iterable, Optional
 
 
 class Terrain(str, Enum):
-    CLEAR = "CLEAR"
-    PLAINS = CLEAR  # legacy compatibility alias
+    PLAINS = "PLAINS"
+    CLEAR = PLAINS  # legacy compatibility alias
     JUNGLE = "JUNGLE"
     MOUNTAIN = "MOUNTAIN"
     URBAN = "URBAN"
     SWAMP = "SWAMP"
     DESERT = "DESERT"
-    WATER = "WATER"
-    COAST = WATER  # legacy compatibility alias
-    OCEAN = WATER  # legacy compatibility alias
+    COAST = "COAST"
+    OCEAN = "OCEAN"
+    WATER = OCEAN  # broad-water compatibility alias
 
     @staticmethod
-    def coerce(value: str) -> "Terrain":
-        """Coerce scenario strings into canonical Terrain values."""
+    def coerce(value: str | None) -> "Terrain":
+        """Best-effort terrain coercion for mixed scenario authoring vocabularies."""
         if value is None:
-            return Terrain.CLEAR
-        v = str(value).strip().upper()
+            return Terrain.PLAINS
 
-        # Common aliases / legacy names
+        normalized = str(value).strip().upper()
         aliases = {
-            "PLAINS": "CLEAR",
-            "PLAIN": "CLEAR",
-            "OPEN": "CLEAR",
+            "CLEAR": "PLAINS",
+            "PLAIN": "PLAINS",
+            "OPEN": "PLAINS",
+            "FIELD": "PLAINS",
             "FOREST": "JUNGLE",
             "WOODS": "JUNGLE",
             "CITY": "URBAN",
             "TOWN": "URBAN",
+            "WATER": "OCEAN",
+            "SEA": "OCEAN",
         }
-        v = aliases.get(v, v)
+        normalized = aliases.get(normalized, normalized)
 
         try:
-            return Terrain(v)
+            return Terrain(normalized)
         except ValueError:
-            # Fail-soft: default to CLEAR rather than blowing up a load
-            return Terrain.CLEAR
+            return Terrain.PLAINS
 
 
 @dataclass
 class MapTile:
     """
-    The canonical tile model for MWE.
+    Canonical map tile model shared by engine and server import paths.
 
-    IMPORTANT:
-    - The first positional argument is tile_id.
-    - scenario_loader should pass tile_id positionally to avoid "multiple values" errors.
+    Keep this mutable because older tests and helpers patch flags such as
+    ``is_port`` after construction.
     """
-    tile_id: str
-    name: str
-    terrain: Terrain = Terrain.CLEAR
 
-    # Basic movement / combat / supply knobs (safe defaults)
+    tile_id: str
+    name: str = ""
+    terrain: Terrain = Terrain.PLAINS
     base_move_cost: int = 1
     defense_bonus: int = 0
     supply_bonus: int = 0
-
-    # Feature flags
     is_port: bool = False
     is_airfield: bool = False
+
+    def to_dict(self) -> Dict[str, Any]:
+        data = asdict(self)
+        data["terrain"] = self.terrain.value
+        return data
 
 
 class GameMap:
@@ -86,17 +87,8 @@ class GameMap:
     def tile_ids(self) -> Iterable[str]:
         return self._tiles.keys()
 
-    def to_dict(self) -> Dict[str, Dict]:
-        return {
-            tid: {
-                "tile_id": t.tile_id,
-                "name": t.name,
-                "terrain": t.terrain.value,
-                "base_move_cost": t.base_move_cost,
-                "defense_bonus": t.defense_bonus,
-                "supply_bonus": t.supply_bonus,
-                "is_port": t.is_port,
-                "is_airfield": t.is_airfield,
-            }
-            for tid, t in self._tiles.items()
-        }
+    def to_dict(self) -> Dict[str, Dict[str, Any]]:
+        return {tile_id: tile.to_dict() for tile_id, tile in self._tiles.items()}
+
+
+__all__ = ["Terrain", "MapTile", "GameMap"]

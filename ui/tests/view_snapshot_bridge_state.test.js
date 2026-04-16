@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { bootstrapDemoScenario, fetchViewSnapshot, launchScenario, normalizeSnapshot, stepHours } from "../src/lib/view_snapshot.ts";
+import { bootstrapDemoScenario, fetchViewSnapshot, launchScenario, listScenarios, normalizeSnapshot, stepHours } from "../src/lib/view_snapshot.ts";
 
 test("normalizeSnapshot adapts engine-style live bridge state into shell-friendly snapshot data", () => {
   const snapshot = normalizeSnapshot({
@@ -97,6 +97,23 @@ test("normalizeSnapshot preserves grease board payloads when the bridge exposes 
   assert.equal(snapshot.grease_board?.main_effort, "SEOUL AXIS");
   assert.equal(snapshot.grease_board?.orders[0], "1st Marines advancing toward Seoul");
   assert.equal(snapshot.grease_board?.staff_notes, "Secure the causeway before dawn.");
+});
+
+test("normalizeSnapshot maps engine clock payloads into the launcher time shape", () => {
+  const snapshot = normalizeSnapshot({
+    scenario: { id: "inchon_mvp", name: "Inchon MVP" },
+    engine: {
+      clock: {
+        turn_number: 4,
+        phase: "night",
+      },
+    },
+    units: [],
+    objectives: [],
+  });
+
+  assert.equal(snapshot.time.turn, 4);
+  assert.equal(snapshot.time.phase, "night");
 });
 
 test("normalizeSnapshot preserves authored map presentation metadata for live demo boards", () => {
@@ -250,6 +267,26 @@ test("fetchViewSnapshot accepts the older status/data bridge envelope", async ()
   assert.equal(snapshot.scenario.name, "Inchon MVP");
   assert.equal(snapshot.time.turn, 3);
   assert.equal(snapshot.time.phase, "night");
+});
+
+test("listScenarios falls back to the current snapshot when the bridge returns a snapshot envelope", async () => {
+  const rpc = {
+    rpc: async (cmd) => {
+      assert.equal(cmd, "list_scenarios");
+      return {
+        type: "snapshot",
+        data: {
+          scenario: { id: "inchon_mvp", name: "Inchon MVP" },
+          engine: { clock: { turn_number: 3, phase: "night" } },
+          units: [],
+          objectives: [],
+        },
+      };
+    },
+  };
+
+  const scenarios = await listScenarios(rpc);
+  assert.deepEqual(scenarios, ["inchon_mvp"]);
 });
 
 test("stepHours falls back to process_turn when end_turn is unavailable", async () => {

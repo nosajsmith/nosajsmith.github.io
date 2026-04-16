@@ -1,4 +1,4 @@
-import { humanizeScenarioLabel } from "./view_snapshot.js";
+import { humanizeScenarioLabel, humanizeToken } from "./view_snapshot.js";
 import { pickPreferredPitchScenario, scenarioKeysMatch } from "./scenario_adapter.js";
 
 export const LAUNCHER_SESSION_KEY = "too.inchon.launcher.dismissed";
@@ -74,6 +74,31 @@ export function selectLauncherScenario(currentScenario, scenarios) {
     return currentScenario;
   }
   return pickPreferredPitchScenario(roster) ?? "";
+}
+
+export function summarizeLauncherBridgeState({ connected, snapshot, phase }) {
+  const bridgeConnected = Boolean(connected || snapshot);
+  return {
+    bridgeConnected,
+    bridgeStatus: bridgeConnected ? "Connected" : "Offline",
+    scenarioStatus: snapshot
+      ? "Live operational picture ready"
+      : bridgeConnected
+        ? "Bridge connected, awaiting launch state"
+        : phase === "bridge_error"
+          ? "Bridge offline"
+          : "Awaiting launch state",
+    currentTurn: snapshot?.time?.turn != null
+      ? `Turn ${snapshot.time.turn}`
+      : bridgeConnected
+        ? "Turn pending"
+        : "Turn unavailable",
+    currentPhase: snapshot?.time?.phase
+      ? humanizeToken(snapshot.time.phase)
+      : bridgeConnected
+        ? "Phase pending"
+        : "Phase unavailable",
+  };
 }
 
 export async function loadLauncherScenarioRoster({ connect, listScenarios }) {

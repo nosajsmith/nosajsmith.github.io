@@ -48,6 +48,7 @@ import {
   loadLauncherScenarioRoster,
   normalizeLauncherMusicVolume,
   selectLauncherScenario,
+  summarizeLauncherBridgeState,
   shouldStartInShell,
 } from "./lib/launcher.js";
 import {
@@ -606,6 +607,10 @@ export default function App() {
       playing: launcherMusicPlaying,
     }),
     [launcherMusicAvailable, launcherMusicEnabled, launcherMusicPlaying],
+  );
+  const launcherBridgeState = useMemo(
+    () => summarizeLauncherBridgeState({ connected, snapshot, phase }),
+    [connected, snapshot, phase],
   );
 
   const updateOperationPlanner = (updater: (current: OperationPlannerState) => OperationPlannerState) => {
@@ -1493,7 +1498,7 @@ export default function App() {
         activeBranch={activeBranch}
         layerEntries={phase === "ready" && snapshot ? toolbarLayerEntries : []}
         activeLayerCount={phase === "ready" && snapshot ? activeLayerCount : 0}
-        connected={connected}
+        connected={launcherBridgeState.bridgeConnected}
         refreshing={refreshing}
         scenarios={scenarios}
         scenariosLoading={scenariosLoading}
@@ -1546,10 +1551,10 @@ export default function App() {
           scenarioName={launcherPresentation.scenarioLabel}
           scenarioStatus={launcherScenarioMismatch
             ? `Runtime mismatch: ${humanizeScenarioLabel(snapshotScenarioValue(snapshot))} is active`
-            : snapshot ? "Live operational picture ready" : phase === "bridge_error" ? "Bridge offline" : "Awaiting launch state"}
-          bridgeStatus={connected ? "Connected" : "Offline"}
-          currentTurn={snapshot?.time.turn != null ? `Turn ${snapshot.time.turn}` : "Turn unavailable"}
-          currentPhase={snapshot?.time.phase ? humanizeToken(snapshot.time.phase) : "Phase unavailable"}
+            : launcherBridgeState.scenarioStatus}
+          bridgeStatus={launcherBridgeState.bridgeStatus}
+          currentTurn={launcherBridgeState.currentTurn}
+          currentPhase={launcherBridgeState.currentPhase}
           objective={launcherObjective}
           mainEffort={launcherMainEffort}
           selectedScenario={selectedScenario}

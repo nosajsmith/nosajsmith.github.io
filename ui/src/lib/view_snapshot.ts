@@ -1,6 +1,6 @@
 import type { ViewSnapshot } from "../types/viewSnapshot";
 import { canonicalScenarioKey, pickPreferredPitchScenario } from "./scenario_adapter.js";
-import { containsLegacySouthPacificText, isKoreaScenarioContext } from "./view_snapshot.js";
+import { containsLegacySouthPacificText, inferScenarioPresentation, isKoreaScenarioContext } from "./view_snapshot.js";
 
 const DEFAULT_WS_HOST = "127.0.0.1";
 const DEFAULT_WS_PORT = "8766";
@@ -624,10 +624,75 @@ function normalizeMapLabelAnchor(value: unknown): "start" | "middle" | "end" | n
     : null;
 }
 
+function unwrapBridgeEnvelope(value: unknown): unknown {
+  let current = value;
+
+  for (let depth = 0; depth < 4; depth += 1) {
+    const row = toObject(current);
+    if (!Object.keys(row).length) {
+      return current;
+    }
+
+    if (row.ok && Object.prototype.hasOwnProperty.call(row, "payload")) {
+      current = row.payload;
+      continue;
+    }
+    if (row.status === "ok" && Object.prototype.hasOwnProperty.call(row, "data")) {
+      current = row.data;
+      continue;
+    }
+    if (typeof row.type === "string" && row.type.toLowerCase() !== "error" && Object.prototype.hasOwnProperty.call(row, "data")) {
+      current = row.data;
+      continue;
+    }
+
+    return current;
+  }
+
+  return current;
+}
+
+function inferScenarioRoster(payload: unknown): string[] {
+  const resolved = unwrapBridgeEnvelope(payload);
+  if (Array.isArray(resolved)) {
+    return resolved.map((item) => String(item));
+  }
+
+  const root = toObject(resolved);
+  const explicitRoster = Array.isArray(root.scenarios)
+    ? root.scenarios
+    : Array.isArray(root.files)
+      ? root.files
+      : null;
+  if (explicitRoster) {
+    return explicitRoster.map((item) => String(item));
+  }
+
+  const scenario = toObject(root.scenario);
+  const game = toObject(root.game);
+  const candidates = [
+    toNonEmptyString(scenario.id),
+    toNonEmptyString(root.scenario_id),
+    toNonEmptyString(game.scenario_id),
+    toNonEmptyString(scenario.name),
+    typeof root.scenario === "string" ? toNonEmptyString(root.scenario) : null,
+    toNonEmptyString(game.scenario),
+  ].filter((value): value is string => Boolean(value));
+  if (candidates.length) {
+    return [candidates[0]];
+  }
+
+  const inferred = inferScenarioPresentation(root);
+  const inferredLabel = toNonEmptyString(inferred?.scenarioLabel);
+  return inferredLabel ? [inferredLabel] : [];
+}
+
 export function normalizeSnapshot(payload: unknown): ViewSnapshot {
-  const root = toObject(payload);
+  const root = toObject(unwrapBridgeEnvelope(payload));
   const game = toObject(root.game);
   const scenario = toObject(root.scenario);
+  const engine = toObject(root.engine);
+  const engineClock = toObject(engine.clock);
   const time = toObject(root.time);
   const gameTime = toObject(game.time);
   const weather = toObject(root.weather);
@@ -661,9 +726,19 @@ export function normalizeSnapshot(payload: unknown): ViewSnapshot {
       ? meta.objectives
       : [];
   const recent = Array.isArray(reports.recent) ? reports.recent : [];
-  const dayValue = toFiniteNumber(time.day ?? gameTime.day);
-  const currentHours = toFiniteNumber(time.current_hours) ?? (dayValue != null ? Math.max(0, (dayValue - 1) * 24) : null);
-  const turnValue = toFiniteNumber(time.turn ?? gameTime.turn ?? time.day ?? gameTime.day);
+  const dayValue = toFiniteNumber(time.day ?? gameTime.day ?? engineClock.day);
+  const currentHours = toFiniteNumber(time.current_hours)
+    ?? toFiniteNumber(engineClock.current_hours)
+    ?? (dayValue != null ? Math.max(0, (dayValue - 1) * 24) : null);
+  const turnValue = toFiniteNumber(
+    time.turn
+    ?? gameTime.turn
+    ?? engineClock.turn
+    ?? engineClock.turn_number
+    ?? time.day
+    ?? gameTime.day
+    ?? engineClock.day,
+  );
   const syntheticBaiReport = buildSyntheticBaiReport(baiReport, currentHours);
   const normalizedBaiReport = normalizeSnapshotBaiReport(baiReport);
   const scoreBySide = Object.keys(toStringMap(campaign.score_by_side)).length
@@ -694,10 +769,14 @@ export function normalizeSnapshot(payload: unknown): ViewSnapshot {
       : null;
   const normalizedScenarioId = String(
     scenario.id
+    ?? root.scenario_id
+    ?? game.scenario_id
     ?? slugifyScenarioId(scenario.name ?? root.scenario ?? game.scenario ?? "scenario"),
   );
   const normalizedScenarioName = String(
     scenario.name
+    ?? root.scenario_name
+    ?? game.scenario_name
     ?? root.scenario
     ?? game.scenario
     ?? "Scenario",
@@ -752,11 +831,9 @@ export function normalizeSnapshot(payload: unknown): ViewSnapshot {
     time: {
       current_hours: currentHours,
       turn: turnValue,
-      phase: typeof time.phase === "string"
-        ? time.phase
-        : typeof gameTime.phase === "string"
-          ? gameTime.phase
-          : null,
+      phase: toNonEmptyString(time.phase)
+        ?? toNonEmptyString(gameTime.phase)
+        ?? toNonEmptyString(engineClock.phase),
       time_remaining_hours: typeof time.time_remaining_hours === "number" ? time.time_remaining_hours : null,
       deadline_hours: typeof time.deadline_hours === "number" ? time.deadline_hours : null,
     },
@@ -1093,15 +1170,23 @@ function scenarioLaunchAttempts(name: string): ScenarioLaunchAttempt[] {
 }
 
 async function rpcPayload<T>(rpc: RpcLike, cmd: string, payload: Record<string, unknown> = {}): Promise<T> {
-  const response = await rpc.rpc(cmd, payload);
-  if (response?.ok) {
-    return response.payload as T;
+  const response: any = await rpc.rpc(cmd, payload);
+
+  if (response?.status === "error" || response?.type === "error") {
+    const legacyError = toObject(response?.data);
+    const error = toObject(response?.error) as RpcErrorShape;
+    throw new BridgeRpcError(
+      toNonEmptyString(error.message ?? legacyError.message) || `${cmd} failed`,
+      toNonEmptyString(error.code ?? legacyError.code),
+    );
   }
-  if (response?.status === "ok") {
-    return response.data as T;
+
+  if (response?.ok || response?.status === "ok" || (response?.type && "data" in response)) {
+    return unwrapBridgeEnvelope(response) as T;
   }
+
   const error = toObject(response?.error) as RpcErrorShape;
-  throw new BridgeRpcError(error.message || `${cmd} failed`, error.code || null);
+  throw new BridgeRpcError(toNonEmptyString(error.message) || `${cmd} failed`, toNonEmptyString(error.code));
 }
 
 export async function fetchViewSnapshot(rpc: RpcLike): Promise<ViewSnapshot> {
@@ -1110,8 +1195,8 @@ export async function fetchViewSnapshot(rpc: RpcLike): Promise<ViewSnapshot> {
 }
 
 export async function listScenarios(rpc: RpcLike): Promise<string[]> {
-  const payload = await rpcPayload<{ scenarios?: string[] }>(rpc, "list_scenarios", {});
-  return Array.isArray(payload?.scenarios) ? payload.scenarios.map((item) => String(item)) : [];
+  const payload = await rpcPayload<unknown>(rpc, "list_scenarios", {});
+  return inferScenarioRoster(payload);
 }
 
 export async function launchScenario(rpc: RpcLike, name: string): Promise<void> {

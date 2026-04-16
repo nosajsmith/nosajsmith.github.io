@@ -7,6 +7,7 @@ import {
   describeLauncherMusicState,
   loadLauncherScenarioRoster,
   selectLauncherScenario,
+  summarizeLauncherBridgeState,
   shouldStartInShell,
 } from "../src/lib/launcher.js";
 
@@ -89,4 +90,38 @@ test("launcher roster loader preserves reachable-bridge populated-roster behavio
   assert.deepEqual(roster, ["gc_1942_historical.json", "inchon_mvp.json"]);
   assert.equal(selectLauncherScenario("", roster), "inchon_mvp.json");
   assert.equal(selectLauncherScenario("gc_1942_historical.json", roster), "gc_1942_historical.json");
+});
+
+test("launcher bridge summary stays truthful when snapshot data is present", () => {
+  assert.deepEqual(
+    summarizeLauncherBridgeState({
+      connected: false,
+      phase: "bridge_error",
+      snapshot: {
+        time: { turn: 4, phase: "night" },
+      },
+    }),
+    {
+      bridgeConnected: true,
+      bridgeStatus: "Connected",
+      scenarioStatus: "Live operational picture ready",
+      currentTurn: "Turn 4",
+      currentPhase: "Night",
+    },
+  );
+
+  assert.deepEqual(
+    summarizeLauncherBridgeState({
+      connected: true,
+      phase: "not_ready",
+      snapshot: null,
+    }),
+    {
+      bridgeConnected: true,
+      bridgeStatus: "Connected",
+      scenarioStatus: "Bridge connected, awaiting launch state",
+      currentTurn: "Turn pending",
+      currentPhase: "Phase pending",
+    },
+  );
 });
