@@ -1,0 +1,7 @@
+{"ts": 1776295230.0390081, "type": "client_connect", "data": {"remote": "local"}}
+{"ts": 1776296756.886092, "type": "client_disconnect", "data": {"remote": "local"}}
+{"ts": 1776296761.3330245, "type": "client_connect", "data": {"remote": "local"}}
+{"ts": 1776296775.9110556, "type": "client_disconnect", "data": {"remote": "local"}}
+{"ts": 1776296820.0354836, "type": "client_connect", "data": {"remote": "local"}}
+{"ts": 1776298643.4286115, "type": "client_disconnect", "data": {"remote": "local"}}
+{"ts": 1776298648.2544725, "type": "client_connect", "data": {"remote": "local"}}
