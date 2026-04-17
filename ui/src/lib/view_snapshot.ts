@@ -1172,21 +1172,18 @@ function scenarioLaunchAttempts(name: string): ScenarioLaunchAttempt[] {
 async function rpcPayload<T>(rpc: RpcLike, cmd: string, payload: Record<string, unknown> = {}): Promise<T> {
   const response: any = await rpc.rpc(cmd, payload);
 
-  if (response?.status === "error" || response?.type === "error") {
-    const legacyError = toObject(response?.data);
-    const error = toObject(response?.error) as RpcErrorShape;
-    throw new BridgeRpcError(
-      toNonEmptyString(error.message ?? legacyError.message) || `${cmd} failed`,
-      toNonEmptyString(error.code ?? legacyError.code),
-    );
+  if (response?.ok) {
+    return response.payload as T;
   }
-
-  if (response?.ok || response?.status === "ok" || (response?.type && "data" in response)) {
-    return unwrapBridgeEnvelope(response) as T;
+  if (response?.status === "ok") {
+    return response.data as T;
+  }
+  if (response?.type && "data" in response) {
+    return response.data as T;
   }
 
   const error = toObject(response?.error) as RpcErrorShape;
-  throw new BridgeRpcError(toNonEmptyString(error.message) || `${cmd} failed`, toNonEmptyString(error.code));
+  throw new BridgeRpcError(error.message || `${cmd} failed`, error.code || null);
 }
 
 export async function fetchViewSnapshot(rpc: RpcLike): Promise<ViewSnapshot> {
@@ -1195,8 +1192,18 @@ export async function fetchViewSnapshot(rpc: RpcLike): Promise<ViewSnapshot> {
 }
 
 export async function listScenarios(rpc: RpcLike): Promise<string[]> {
-  const payload = await rpcPayload<unknown>(rpc, "list_scenarios", {});
-  return inferScenarioRoster(payload);
+  const payload: any = await rpcPayload<any>(rpc, "list_scenarios", {});
+
+  if (Array.isArray(payload?.scenarios)) {
+    return payload.scenarios.map((item: unknown) => String(item));
+  }
+
+  const inferred = inferScenarioPresentation(payload);
+  if (inferred?.scenarioLabel) {
+    return [String(inferred.scenarioLabel)];
+  }
+
+  return [];
 }
 
 export async function launchScenario(rpc: RpcLike, name: string): Promise<void> {
