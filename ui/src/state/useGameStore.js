@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { makeBridge } from "../lib/bridge";
 import { inferScenarioPresentation } from "../lib/view_snapshot.js";
 
+// Legacy experimental hook. The live UI path mounts `App.tsx` from `main.jsx`
+// and normalizes bridge payloads in `lib/view_snapshot.ts`.
 function unwrapBridgePayload(response) {
   let current = response;
 

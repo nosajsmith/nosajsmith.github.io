@@ -1193,17 +1193,7 @@ export async function fetchViewSnapshot(rpc: RpcLike): Promise<ViewSnapshot> {
 
 export async function listScenarios(rpc: RpcLike): Promise<string[]> {
   const payload: any = await rpcPayload<any>(rpc, "list_scenarios", {});
-
-  if (Array.isArray(payload?.scenarios)) {
-    return payload.scenarios.map((item: unknown) => String(item));
-  }
-
-  const inferred = inferScenarioPresentation(payload);
-  if (inferred?.scenarioLabel) {
-    return [String(inferred.scenarioLabel)];
-  }
-
-  return [];
+  return inferScenarioRoster(payload);
 }
 
 export async function launchScenario(rpc: RpcLike, name: string): Promise<void> {
