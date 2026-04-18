@@ -1,3 +1,15 @@
+from __future__ import annotations
+
+import sys
+
+if "pytest" in sys.modules:  # pragma: no cover - legacy manual driver only
+    import pytest
+
+    pytest.skip(
+        "server/test_drive_engine.py is a legacy manual drive script, not an automated pytest target.",
+        allow_module_level=True,
+    )
+
 from engine.core.time_system import TimeSystem
 from engine.core.unit_model import Side, Posture
 from engine.scenario_loader import load_scenario

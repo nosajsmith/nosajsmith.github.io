@@ -5,11 +5,13 @@ import sys
 
 
 def _add_repo_root_to_path() -> None:
-    # tools\ -> server\
+    # tools/ -> server/ -> repo root
     here = os.path.dirname(os.path.abspath(__file__))
-    repo_root = os.path.dirname(here)
-    if repo_root not in sys.path:
-        sys.path.insert(0, repo_root)
+    server_root = os.path.dirname(here)
+    repo_root = os.path.dirname(server_root)
+    for path in (repo_root, server_root):
+        if path not in sys.path:
+            sys.path.insert(0, path)
 
 
 def main() -> int:
