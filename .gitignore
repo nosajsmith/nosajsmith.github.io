@@ -11,3 +11,5 @@ artifacts/orl/
 
 .venv/
 .codex/
+
+.codex
