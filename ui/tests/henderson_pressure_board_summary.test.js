@@ -256,10 +256,10 @@ test("henderson pressure board summarizes perimeter pressure from local objectiv
   assert.equal(summary.airSupport.sortiePosture, "Sortie posture not exposed");
   assert.match(summary.airSupport.constraint, /Humid Overcast/);
   assert.match(summary.airSupport.supportingFormation, /No locally based air formation/i);
-  assert.equal(summary.navalSupport.availability, "Not exposed");
-  assert.equal(summary.navalSupport.supportPosture, "Support posture not exposed");
+  assert.equal(summary.navalSupport.availability, "Context exposed");
+  assert.equal(summary.navalSupport.supportPosture, "Port anchor only");
   assert.match(summary.navalSupport.note, /Lunga Point/);
-  assert.match(summary.navalSupport.constraint, /No local naval support window is exposed/i);
+  assert.match(summary.navalSupport.constraint, /Lunga Point is the only currently exposed shore-support anchor/i);
   assert.deepEqual(summary.recentContacts.map((row) => row.id), ["r1", "r2"]);
 });
 
@@ -304,4 +304,59 @@ test("henderson pressure board stays truthful when the local perimeter picture i
   assert.equal(summary.navalSupport.availability, "Unavailable");
   assert.match(summary.navalSupport.note, /does not expose the inchon \/ seoul axis picture/i);
   assert.deepEqual(summary.pressureAxes, []);
+});
+
+test("henderson pressure board uses snapshot objective truth and by-objective pressure when local reasons are quiet", () => {
+  const summary = summarizeHendersonPressureBoard({
+    scenario: { id: "00_lunga_point_slice_1942", name: "Lunga Point 1942 (Vertical Slice)" },
+    time: { turn: 4, current_hours: 12 },
+    weather: { condition: "Humid Overcast" },
+    local_pressure_areas: [
+      {
+        id: "bloody-ridge",
+        label: "Bloody Ridge",
+        kind: "objective",
+        location_id: "BLOODY_RIDGE",
+        objective_id: "o1",
+        pressure_reasons: [],
+      },
+    ],
+    units: [],
+    objectives: [
+      {
+        id: "o1",
+        name: "Bloody Ridge",
+        side: "ALLIED",
+        state: "held_allied",
+        value: 60,
+        objective_truth_key: "ALLIED:BLOODY_RIDGE",
+      },
+    ],
+    objective_truth: {
+      "ALLIED:BLOODY_RIDGE": { status: "contested", controller_side: "AXIS" },
+    },
+    pressure: {
+      reasons: [],
+      by_objective: {
+        "ALLIED:BLOODY_RIDGE": {
+          location_id: "BLOODY_RIDGE",
+          objective_status: "contested",
+          pressure_state: "degraded",
+          pressure_score: 35,
+        },
+      },
+      total_pressure_score: 35,
+    },
+    reports: { recent: [] },
+  });
+
+  assert.equal(summary.available, true);
+  assert.equal(summary.perimeterStatus[0].value, "At Risk");
+  assert.equal(summary.perimeterStatus[1].value, "Bloody Ridge At Risk");
+  assert.equal(summary.pressureAxes[0].label, "Bloody Ridge");
+  assert.equal(summary.pressureAxes[0].status, "At Risk");
+  assert.match(summary.pressureAxes[0].detail, /Objective pressure degraded/i);
+  assert.equal(summary.engagementSummary.hotspots[0].label, "Bloody Ridge");
+  assert.equal(summary.engagementSummary.hotspots[0].status, "At Risk");
+  assert.match(summary.engagementSummary.hotspots[0].detail, /score 35/i);
 });

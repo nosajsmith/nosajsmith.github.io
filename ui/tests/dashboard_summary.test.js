@@ -5,6 +5,7 @@ import {
   orderRecentReports,
   summarizeCampaign,
   summarizeObjectives,
+  summarizePressure,
   summarizeReports,
   summarizeScore,
 } from "../src/components/shell/dashboard_summary.js";
@@ -60,6 +61,81 @@ test("dashboard summary humanizes campaign, score, and recent report status cons
       severity: "WARNING",
     },
   });
+});
+
+test("dashboard summary prefers view.snapshot score, objective truth, pressure, and read-first fields", () => {
+  const snapshot = {
+    campaign: { status: "ongoing", score_by_side: { ALLIED: 12, AXIS: 9 }, win_score: 100 },
+    score: { score_by_side: { ALLIED: 72, AXIS: 31 }, win_score: 140 },
+    time: { turn: 5, time_remaining_hours: 30 },
+    read_first: {
+      pressure_summary: "Hill 101 pressure is degraded.",
+    },
+    objectives: [
+      {
+        id: "o1",
+        name: "Hill 101",
+        side: "ALLIED",
+        state: "held_allied",
+        objective_truth_key: "ALLIED:HILL",
+      },
+      {
+        id: "o2",
+        name: "Bridge",
+        side: "ALLIED",
+        state: "unheld",
+        objective_truth_key: "ALLIED:BRIDGE",
+      },
+    ],
+    objective_truth: {
+      "ALLIED:HILL": { status: "contested", controller_side: "AXIS" },
+      "ALLIED:BRIDGE": { status: "held", controller_side: "ALLIED" },
+    },
+    pressure: {
+      summary: "Legacy pressure summary.",
+      reasons: [],
+      by_objective: {
+        "ALLIED:HILL": {
+          location_id: "HILL",
+          pressure_state: "degraded",
+          pressure_score: 35,
+        },
+      },
+      total_pressure_score: 35,
+    },
+  };
+
+  assert.deepEqual(summarizeCampaign(snapshot), {
+    status: "Ongoing",
+    turn: 5,
+    timeRemaining: 30,
+    winTarget: 140,
+  });
+  assert.deepEqual(summarizeScore(snapshot), [
+    { side: "ALLIED", label: "Allied", value: 72 },
+    { side: "AXIS", label: "Axis", value: 31 },
+  ]);
+
+  const objectives = summarizeObjectives(snapshot.objectives, snapshot);
+  assert.deepEqual(objectives.byState, [
+    { state: "Contested", count: 1 },
+    { state: "Held Allied", count: 1 },
+  ]);
+  assert.equal(objectives.key[0].state, "Contested");
+  assert.equal(objectives.key[1].state, "Held Allied");
+
+  const pressure = summarizePressure(snapshot);
+  assert.equal(pressure.active, true);
+  assert.equal(pressure.summary, "Hill 101 pressure is degraded.");
+  assert.deepEqual(pressure.objectiveRows, [
+    {
+      key: "ALLIED:HILL",
+      state: "degraded",
+      score: 35,
+      locationId: "HILL",
+      objectiveStatus: "",
+    },
+  ]);
 });
 
 test("dashboard summary selects the newest recent report entry deterministically", () => {

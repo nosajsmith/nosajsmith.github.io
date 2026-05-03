@@ -21,6 +21,8 @@ except Exception:  # pragma: no cover - fail-soft import path for older tools
 
 
 LEGAL_POSTURES = {"HOLD", "MOVE", "ATTACK", "DEFEND", "REST", "REFIT"}
+MOVEMENT_SEMANTICS_VERSION = "movement_semantics_v1"
+MOVE_DESTINATION_FIELD = "target"
 
 
 class EngineAPI:
@@ -69,6 +71,55 @@ class EngineAPI:
     def _ensure_ready(self) -> None:
         if self.time is None or self.game_map is None or self.units is None or self.meta is None:
             raise RuntimeError("EngineAPI not initialized. Call load_scenario() first.")
+
+    def _known_location_ids(self) -> List[str]:
+        if self.game_map is None:
+            return []
+        return [str(location_id) for location_id in self.game_map.tile_ids()]
+
+    def _movement_error(
+        self,
+        code: str,
+        message: str,
+        *,
+        action_type: str,
+        unit_id: str = "",
+        raw_target: Any = "",
+        from_location_id: str | None = None,
+    ) -> Dict[str, Any]:
+        return {
+            "status": "error",
+            "code": code,
+            "error": message,
+            "movement": {
+                "semantics": MOVEMENT_SEMANTICS_VERSION,
+                "resolved": False,
+                "action_type": action_type,
+                "unit_id": unit_id,
+                "from_location_id": from_location_id,
+                "destination": {
+                    "field": MOVE_DESTINATION_FIELD,
+                    "raw": "" if raw_target is None else str(raw_target).strip(),
+                },
+            },
+        }
+
+    def _resolve_move_destination(self, raw_target: Any) -> Optional[str]:
+        target = "" if raw_target is None else str(raw_target).strip()
+        if not target:
+            return None
+
+        known_locations = self._known_location_ids()
+        for location_id in known_locations:
+            if target == location_id:
+                return location_id
+
+        normalized = target.upper()
+        for location_id in known_locations:
+            if normalized == location_id.upper():
+                return location_id
+
+        return None
 
     def _time_to_dict(self) -> Dict[str, Any]:
         self._ensure_ready()
@@ -136,38 +187,99 @@ class EngineAPI:
         self._ensure_ready()
         assert self.units is not None
 
-        if action.get("type") != "move":
-            return {"status": "error", "error": "Unsupported action type"}
+        action_type = str(action.get("type", "") or "").strip().lower()
+        raw_target = action.get(MOVE_DESTINATION_FIELD)
+        if action_type != "move":
+            return self._movement_error(
+                "unsupported_action_type",
+                "Unsupported action type",
+                action_type=action_type,
+                raw_target=raw_target,
+            )
 
         unit_id = str(action.get("unit_id", "")).strip()
-        target = str(action.get("target", "")).strip()
         posture_raw = str(action.get("posture", "HOLD")).upper().strip()
 
         if not unit_id:
-            return {"status": "error", "error": "Missing unit_id"}
-        if not target:
-            return {"status": "error", "error": "Missing target"}
+            return self._movement_error(
+                "missing_unit_id",
+                "Missing unit_id",
+                action_type=action_type,
+                raw_target=raw_target,
+            )
 
         unit = self.units.get(unit_id)
         if unit is None:
-            return {"status": "error", "error": f"Unknown unit {unit_id}"}
-
-        if self.game_map is not None and target not in set(self.game_map.tile_ids()):
-            return {"status": "error", "error": f"Unknown target {target}"}
+            return self._movement_error(
+                "unknown_unit",
+                f"Unknown unit {unit_id}",
+                action_type=action_type,
+                unit_id=unit_id,
+                raw_target=raw_target,
+            )
 
         before = unit.location_id
+
+        target = self._resolve_move_destination(raw_target)
+        if target is None:
+            code = (
+                "missing_target"
+                if raw_target is None or str(raw_target).strip() == ""
+                else "unknown_target"
+            )
+            message = (
+                "Missing target"
+                if code == "missing_target"
+                else f"Unknown target {str(raw_target).strip()}"
+            )
+            return self._movement_error(
+                code,
+                message,
+                action_type=action_type,
+                unit_id=unit_id,
+                raw_target=raw_target,
+                from_location_id=before,
+            )
+
+        if posture_raw not in LEGAL_POSTURES:
+            return self._movement_error(
+                "invalid_posture",
+                f"Invalid posture {posture_raw}",
+                action_type=action_type,
+                unit_id=unit_id,
+                raw_target=raw_target,
+                from_location_id=before,
+            )
+
         unit.location_id = target
-        if posture_raw in LEGAL_POSTURES:
-            try:
-                unit.posture = Posture(posture_raw)
-            except Exception:
-                unit.posture = Posture.HOLD
+        unit.posture = Posture(posture_raw)
 
         order_record = dict(action)
+        order_record.update(
+            {"type": "move", "unit_id": unit_id, "target": target, "posture": unit.posture.value}
+        )
         order_record.setdefault("source", source)
         self._orders.append(order_record)
         self._log(source, "orders", f"Order: {unit_id} {before}->{target}, posture={unit.posture.value}")
-        return {"status": "ok"}
+        return {
+            "status": "ok",
+            "movement": {
+                "semantics": MOVEMENT_SEMANTICS_VERSION,
+                "resolved": True,
+                "action_type": "move",
+                "unit_id": unit_id,
+                "from_location_id": before,
+                "to_location_id": target,
+                "destination": {
+                    "field": MOVE_DESTINATION_FIELD,
+                    "raw": "" if raw_target is None else str(raw_target).strip(),
+                    "location_id": target,
+                },
+                "posture": unit.posture.value,
+                "moved": before != target,
+                "source": source,
+            },
+        }
 
     def _determine_control(self, location_id: str) -> Optional[Side]:
         assert self.units is not None

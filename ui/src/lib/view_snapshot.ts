@@ -48,6 +48,114 @@ function toStringMap(value: unknown): Record<string, number> {
   return out;
 }
 
+function toBooleanMap(value: unknown): Record<string, boolean> {
+  const obj = toObject(value);
+  return Object.fromEntries(
+    Object.entries(obj).filter(([, raw]) => typeof raw === "boolean"),
+  ) as Record<string, boolean>;
+}
+
+function normalizeObjectiveTruth(value: unknown): ViewSnapshot["objective_truth"] {
+  const obj = toObject(value);
+  const out: ViewSnapshot["objective_truth"] = {};
+  for (const [key, raw] of Object.entries(obj)) {
+    const row = toObject(raw);
+    if (!Object.keys(row).length) {
+      continue;
+    }
+    out[key] = {
+      ...row,
+      status: toNonEmptyString(row.status),
+      controller_side: toNonEmptyString(row.controller_side),
+    };
+  }
+  return out;
+}
+
+function normalizeObjectivePressureRows(value: unknown): ViewSnapshot["pressure"]["by_objective"] {
+  const obj = toObject(value);
+  const out: ViewSnapshot["pressure"]["by_objective"] = {};
+  for (const [key, raw] of Object.entries(obj)) {
+    const row = toObject(raw);
+    if (!Object.keys(row).length) {
+      continue;
+    }
+    out[key] = {
+      ...row,
+      side: toNonEmptyString(row.side),
+      location_id: toNonEmptyString(row.location_id),
+      objective_status: toNonEmptyString(row.objective_status),
+      controller_side: toNonEmptyString(row.controller_side),
+      pressure_state: toNonEmptyString(row.pressure_state),
+      pressure_score: toFiniteNumber(row.pressure_score),
+      nearby_unit_count: toFiniteNumber(row.nearby_unit_count),
+      contributing_unit_count: toFiniteNumber(row.contributing_unit_count),
+      low_supply_unit_count: toFiniteNumber(row.low_supply_unit_count),
+      suppressed_unit_count: toFiniteNumber(row.suppressed_unit_count),
+    };
+  }
+  return out;
+}
+
+function normalizeObjectivePressure(
+  value: unknown,
+  fallbackByObjective: unknown,
+): ViewSnapshot["pressure"]["objective_pressure"] {
+  const payload = toObject(value);
+  const explicitByObjective = normalizeObjectivePressureRows(payload.by_objective);
+  const fallbackRows = normalizeObjectivePressureRows(fallbackByObjective);
+  const byObjective = Object.keys(explicitByObjective).length ? explicitByObjective : fallbackRows;
+  if (!Object.keys(payload).length && !Object.keys(byObjective).length) {
+    return null;
+  }
+  return {
+    semantics: toNonEmptyString(payload.semantics),
+    radius: toFiniteNumber(payload.radius),
+    supply_thresholds: toObject(payload.supply_thresholds),
+    affects_scoring: typeof payload.affects_scoring === "boolean" ? payload.affects_scoring : null,
+    by_objective: byObjective,
+    total_pressure_score: toFiniteNumber(payload.total_pressure_score),
+    reasons: toStringList(payload.reasons),
+  };
+}
+
+function summarizeObjectivePressure(
+  byObjective: ViewSnapshot["pressure"]["by_objective"],
+  totalPressureScore: number | null,
+): string | null {
+  const activeRows = Object.entries(byObjective).filter(([, row]) => {
+    const state = String(row.pressure_state ?? "").trim().toLowerCase();
+    const score = toFiniteNumber(row.pressure_score);
+    return (state !== "" && state !== "none") || Boolean(score && score > 0);
+  });
+  if (!activeRows.length) {
+    return totalPressureScore && totalPressureScore > 0 ? "Supply-aware objective pressure is active." : null;
+  }
+  if (activeRows.length === 1) {
+    const [key, row] = activeRows[0];
+    const label = toNonEmptyString(row.location_id) ?? key;
+    const state = toNonEmptyString(row.pressure_state) ?? "active";
+    return `${label} pressure ${state}.`;
+  }
+  return `${activeRows.length} objectives show supply-aware pressure.`;
+}
+
+function normalizeReadFirst(value: unknown): ViewSnapshot["read_first"] {
+  const row = toObject(value);
+  if (!Object.keys(row).length) {
+    return null;
+  }
+  return {
+    scenario: toNonEmptyString(row.scenario),
+    turn: toFiniteNumber(row.turn),
+    phase: toNonEmptyString(row.phase),
+    campaign_status: toNonEmptyString(row.campaign_status),
+    key_objective: toNonEmptyString(row.key_objective),
+    pressure_summary: toNonEmptyString(row.pressure_summary),
+    latest_report: toNonEmptyString(row.latest_report),
+  };
+}
+
 function toFiniteNumber(value: unknown): number | null {
   if (typeof value === "number" && Number.isFinite(value)) {
     return value;
@@ -689,14 +797,17 @@ function inferScenarioRoster(payload: unknown): string[] {
 
 export function normalizeSnapshot(payload: unknown): ViewSnapshot {
   const root = toObject(unwrapBridgeEnvelope(payload));
+  const contract = toObject(root.contract);
   const game = toObject(root.game);
   const scenario = toObject(root.scenario);
+  const operation = toObject(root.operation);
   const engine = toObject(root.engine);
   const engineClock = toObject(engine.clock);
   const time = toObject(root.time);
   const gameTime = toObject(game.time);
   const weather = toObject(root.weather);
   const campaign = toObject(root.campaign);
+  const score = toObject(root.score);
   const pressure = toObject(root.pressure);
   const reports = toObject(root.reports);
   const staff = toObject(root.staff);
@@ -741,9 +852,45 @@ export function normalizeSnapshot(payload: unknown): ViewSnapshot {
   );
   const syntheticBaiReport = buildSyntheticBaiReport(baiReport, currentHours);
   const normalizedBaiReport = normalizeSnapshotBaiReport(baiReport);
-  const scoreBySide = Object.keys(toStringMap(campaign.score_by_side)).length
-    ? toStringMap(campaign.score_by_side)
-    : toStringMap(game.vp);
+  const scoreBySideFromRoot = toStringMap(score.score_by_side);
+  const scoreBySideFromCampaign = toStringMap(campaign.score_by_side);
+  const scoreBySide = Object.keys(scoreBySideFromRoot).length
+    ? scoreBySideFromRoot
+    : Object.keys(scoreBySideFromCampaign).length
+      ? scoreBySideFromCampaign
+      : toStringMap(game.vp);
+  const winScore = toFiniteNumber(score.win_score) ?? toFiniteNumber(campaign.win_score);
+  const objectiveTruth = normalizeObjectiveTruth(root.objective_truth);
+  const rootObjectiveState = toBooleanMap(root.objective_state);
+  const campaignObjectiveState = toBooleanMap(campaign.objective_state);
+  const objectiveState = Object.keys(rootObjectiveState).length ? rootObjectiveState : campaignObjectiveState;
+  const objectivePressure = normalizeObjectivePressure(pressure.objective_pressure, pressure.by_objective);
+  const directPressureByObjective = normalizeObjectivePressureRows(pressure.by_objective);
+  const pressureByObjective = Object.keys(directPressureByObjective).length
+    ? directPressureByObjective
+    : objectivePressure?.by_objective ?? {};
+  const totalPressureScore = toFiniteNumber(pressure.total_pressure_score) ?? objectivePressure?.total_pressure_score ?? null;
+  const pressureReasons = toStringList(pressure.reasons);
+  const objectivePressureReasons = objectivePressure?.reasons ?? [];
+  const normalizedPressureReasons = pressureReasons.length ? pressureReasons : objectivePressureReasons;
+  const pressureSummary = toNonEmptyString(pressure.summary)
+    ?? summarizeObjectivePressure(pressureByObjective, totalPressureScore);
+  const pressureSemantics = toNonEmptyString(pressure.semantics) ?? objectivePressure?.semantics ?? null;
+  const normalizedContract = toNonEmptyString(contract.id)
+    ? {
+        id: String(contract.id),
+        version: toFiniteNumber(contract.version),
+        source: toNonEmptyString(contract.source),
+      }
+    : null;
+  const normalizedOperation = Object.keys(operation).length
+    ? {
+        id: toNonEmptyString(operation.id),
+        name: toNonEmptyString(operation.name),
+        theater_id: toNonEmptyString(operation.theater_id),
+      }
+    : null;
+  const readFirst = normalizeReadFirst(root.read_first);
   const reportRows = recent.map((item, index) => {
     const row = toObject(item);
     return {
@@ -824,10 +971,12 @@ export function normalizeSnapshot(payload: unknown): ViewSnapshot {
   );
 
   return {
+    contract: normalizedContract,
     scenario: {
       id: normalizedScenarioId,
       name: normalizedScenarioName,
     },
+    operation: normalizedOperation,
     time: {
       current_hours: currentHours,
       turn: turnValue,
@@ -871,16 +1020,27 @@ export function normalizeSnapshot(payload: unknown): ViewSnapshot {
     campaign: {
       status: String(campaign.status ?? (game.scenario ? "active" : "unknown")),
       score_by_side: scoreBySide,
-      win_score: typeof campaign.win_score === "number" ? campaign.win_score : null,
-      objective_state: Object.fromEntries(
-        Object.entries(toObject(campaign.objective_state)).filter(([, value]) => typeof value === "boolean"),
-      ) as Record<string, boolean>,
+      win_score: winScore,
+      objective_state: objectiveState,
     },
+    score: {
+      score_by_side: scoreBySide,
+      win_score: winScore,
+    },
+    objective_truth: objectiveTruth,
+    objective_state: objectiveState,
     pressure: {
-      active: Boolean(pressure.active),
-      summary: typeof pressure.summary === "string" ? pressure.summary : null,
-      reasons: Array.isArray(pressure.reasons) ? pressure.reasons.map((item) => String(item)) : [],
+      active: Boolean(pressure.active) || Boolean(totalPressureScore && totalPressureScore > 0) || Object.values(pressureByObjective).some((row) => {
+        const state = String(row.pressure_state ?? "").trim().toLowerCase();
+        return Boolean(state && state !== "none");
+      }),
+      summary: pressureSummary,
+      reasons: normalizedPressureReasons,
       details: toObject(pressure.details),
+      objective_pressure: objectivePressure,
+      by_objective: pressureByObjective,
+      total_pressure_score: totalPressureScore,
+      semantics: pressureSemantics,
     },
     reports: {
       pending_count: pendingCount,
@@ -1082,13 +1242,20 @@ export function normalizeSnapshot(payload: unknown): ViewSnapshot {
       const objectiveName = String(objective.name ?? objective.location_id ?? objective.id ?? "Objective");
       const anchorKey = toNonEmptyString(objective.location_id) ?? toNonEmptyString(objective.id) ?? toNonEmptyString(objective.name);
       const anchor = anchorKey ? locationAnchors.get(anchorKey) ?? null : null;
+      const truthState = toNonEmptyString(objective.truth_state ?? objective.objective_status);
+      const controllerSide = toNonEmptyString(objective.controller_side);
+      const objectivePressure = toObject(objective.pressure);
       const derivedState = typeof objective.state === "string"
         ? objective.state
-        : typeof objective.controlled === "boolean"
-          ? objective.controlled
-            ? `held_${String(objective.side ?? "unknown").toLowerCase()}`
-            : "unheld"
-          : "unheld";
+        : truthState === "contested"
+          ? "contested"
+          : truthState === "held" && controllerSide
+            ? `held_${controllerSide.toLowerCase()}`
+            : typeof objective.controlled === "boolean"
+              ? objective.controlled
+                ? `held_${String(objective.side ?? "unknown").toLowerCase()}`
+                : "unheld"
+              : "unheld";
       return {
         id: objectiveId,
         name: objectiveName,
@@ -1102,8 +1269,30 @@ export function normalizeSnapshot(payload: unknown): ViewSnapshot {
         label_anchor: normalizeMapLabelAnchor(objective.label_anchor),
         side: typeof objective.side === "string" ? objective.side : null,
         value: toFiniteNumber(objective.value),
-        controlled: typeof objective.controlled === "boolean" ? objective.controlled : null,
+        controlled: typeof objective.controlled === "boolean"
+          ? objective.controlled
+          : typeof objective.held === "boolean"
+            ? objective.held
+            : null,
         state: String(derivedState),
+        truth_state: truthState,
+        objective_status: toNonEmptyString(objective.objective_status) ?? truthState,
+        controller_side: controllerSide,
+        held: typeof objective.held === "boolean" ? objective.held : null,
+        contested: typeof objective.contested === "boolean" ? objective.contested : null,
+        objective_truth_key: toNonEmptyString(objective.objective_truth_key),
+        pressure_state: toNonEmptyString(objective.pressure_state) ?? toNonEmptyString(objectivePressure.state),
+        pressure_score: toFiniteNumber(objective.pressure_score) ?? toFiniteNumber(objectivePressure.score),
+        pressure: Object.keys(objectivePressure).length
+          ? {
+              state: toNonEmptyString(objectivePressure.state),
+              score: toFiniteNumber(objectivePressure.score),
+              nearby_unit_count: toFiniteNumber(objectivePressure.nearby_unit_count),
+              contributing_unit_count: toFiniteNumber(objectivePressure.contributing_unit_count),
+              low_supply_unit_count: toFiniteNumber(objectivePressure.low_supply_unit_count),
+              suppressed_unit_count: toFiniteNumber(objectivePressure.suppressed_unit_count),
+            }
+          : null,
         objective_type: typeof objective.objective_type === "string" ? objective.objective_type : null,
         importance_tier: toFiniteNumber(objective.importance_tier),
         visibility: typeof objective.visibility === "string" ? objective.visibility : "operational",
@@ -1132,6 +1321,7 @@ export function normalizeSnapshot(payload: unknown): ViewSnapshot {
       can_load_snapshot: Boolean(capabilities.can_load_snapshot),
       can_export_replay: Boolean(capabilities.can_export_replay),
     },
+    read_first: readFirst,
   };
 }
 

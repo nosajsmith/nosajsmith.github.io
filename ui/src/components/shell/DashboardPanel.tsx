@@ -1,8 +1,9 @@
 import type { ViewSnapshot } from "../../types/viewSnapshot";
-import { humanizeIntent, humanizePressureReason, pressureFallback } from "../../lib/view_snapshot.js";
+import { humanizeIntent, pressureFallback } from "../../lib/view_snapshot.js";
 import {
   summarizeCampaign,
   summarizeObjectives,
+  summarizePressure,
   summarizeReports,
   summarizeScore,
 } from "./dashboard_summary.js";
@@ -13,8 +14,9 @@ type DashboardPanelProps = {
 
 export default function DashboardPanel({ snapshot }: DashboardPanelProps) {
   const campaign = summarizeCampaign(snapshot);
-  const score = summarizeScore(snapshot.campaign.score_by_side);
-  const objectives = summarizeObjectives(snapshot.objectives);
+  const score = summarizeScore(snapshot);
+  const objectives = summarizeObjectives(snapshot.objectives, snapshot);
+  const pressure = summarizePressure(snapshot);
   const reports = summarizeReports(snapshot.reports);
 
   return (
@@ -106,12 +108,12 @@ export default function DashboardPanel({ snapshot }: DashboardPanelProps) {
 
       <section className="shell-card shell-briefing">
         <div className="shell-card__title">Pressure</div>
-        <div className="shell-card__body">{pressureFallback(snapshot.pressure)}</div>
-        {snapshot.pressure.reasons.length ? (
+        <div className="shell-card__body">{pressure.summary ?? pressureFallback(snapshot.pressure)}</div>
+        {pressure.reasons.length ? (
           <div className="shell-taglist">
-            {snapshot.pressure.reasons.slice(0, 4).map((reason) => (
+            {pressure.reasons.slice(0, 4).map((reason) => (
               <span className="shell-tag" key={reason}>
-                {humanizePressureReason(reason)}
+                {reason}
               </span>
             ))}
           </div>

@@ -57,30 +57,32 @@ export function renderStateScreenSmoke(title, message) {
 }
 
 export function renderLauncherSmoke({
-  title = "Theater of Operations",
-  subtitle = "Inchon",
+  title = "Theater of Operations: Korea",
+  subtitle = "Operational Publisher Preview",
   theaterLabel = "Korea Theater • Operation Chromite",
   scenarioName = "Inchon MVP",
   bridgeStatus = "Connected",
   objective = "Seoul",
-  musicLabel = "Theme active",
+  musicLabel = "Theme playing",
   musicVolume = "34%",
 } = {}) {
   return renderToStaticMarkup(
     React.createElement(
       "section",
       null,
-      React.createElement("div", null, "Publisher Demo Vertical Slice"),
+      React.createElement("div", null, "Publisher Preview Build"),
       React.createElement("h1", null, `${title} ${subtitle}`),
       React.createElement("div", null, theaterLabel),
-      React.createElement("div", null, "Current Vertical Slice: Inchon"),
-      React.createElement("div", null, "Shell Handoff Direct shell handoff ready"),
-      React.createElement("div", null, "Franchise Key Art"),
+      React.createElement("div", null, "Playable Publisher Preview"),
+      React.createElement("div", null, "Operational Command Shell"),
+      React.createElement("div", null, "One-Turn Playable Loop"),
+      React.createElement("div", null, "Command Shell Command shell ready"),
+      React.createElement("div", null, "Publisher Preview Key Art"),
       React.createElement("div", null, scenarioName),
       React.createElement("div", null, `Bridge ${bridgeStatus}`),
       React.createElement("div", null, `Objective ${objective}`),
-      React.createElement("div", null, `Launcher Audio ${musicLabel}`),
-      React.createElement("div", null, `Optional Menu Theme ${musicVolume}`),
+      React.createElement("div", null, `Preview Audio ${musicLabel}`),
+      React.createElement("div", null, `Opening Theme ${musicVolume}`),
     ),
   );
 }

@@ -233,23 +233,6 @@ function objectiveAtHex(snapshot, targetHex) {
   }) ?? null;
 }
 
-function nearestObjective(snapshot, targetHex) {
-  if (!targetHex) {
-    return null;
-  }
-  const objectives = Array.isArray(snapshot?.objectives) ? snapshot.objectives : [];
-  return [...objectives]
-    .filter((objective) => toNumber(objective?.x) != null && toNumber(objective?.y) != null)
-    .sort((left, right) => {
-      const leftDistance = distanceBetween(left, targetHex) ?? Number.POSITIVE_INFINITY;
-      const rightDistance = distanceBetween(right, targetHex) ?? Number.POSITIVE_INFINITY;
-      if (leftDistance !== rightDistance) {
-        return leftDistance - rightDistance;
-      }
-      return String(left?.name ?? left?.id ?? "").localeCompare(String(right?.name ?? right?.id ?? ""));
-    })[0] ?? null;
-}
-
 function enemyTargetAtHex(snapshot, unit, targetHex) {
   if (!targetHex || !unit) {
     return null;
@@ -579,7 +562,7 @@ export function buildMapCommandPreview(snapshot, unitId, targetHex) {
   }
 
   const enemyTarget = enemyTargetAtHex(snapshot, unit, roundedTargetHex);
-  const matchedObjective = objectiveAtHex(snapshot, roundedTargetHex) ?? nearestObjective(snapshot, roundedTargetHex);
+  const matchedObjective = objectiveAtHex(snapshot, roundedTargetHex);
   const distance = Number((distanceBetween(currentHex, roundedTargetHex) ?? 0).toFixed(2));
   const quickMoveReach = estimateQuickMoveReach(unit);
   const attackReach = 1.75;
@@ -589,7 +572,7 @@ export function buildMapCommandPreview(snapshot, unitId, targetHex) {
     ? false
     : commandIntent === "attack"
       ? distance <= attackReach
-      : distance <= quickMoveReach;
+      : Boolean(matchedObjective) && distance <= quickMoveReach;
   const targetLabel = enemyTarget?.name
     || matchedObjective?.name
     || formatHexLabel(roundedTargetHex);
@@ -606,7 +589,9 @@ export function buildMapCommandPreview(snapshot, unitId, targetHex) {
         : `${unit.name} can move toward ${targetLabel} through the planner approval path.`
       : commandIntent === "attack"
         ? `${unit.name} is not in immediate attack position. Seed the planner for a staged attack toward ${targetLabel}.`
-        : `${targetLabel} sits beyond the current quick-order reach estimate. Seed the planner for a deliberate move.`;
+        : matchedObjective
+          ? `${targetLabel} sits beyond the current quick-order reach estimate. Seed the planner for a deliberate move.`
+          : `${targetLabel} needs deliberate objective review before approval.`;
 
   return {
     available: true,

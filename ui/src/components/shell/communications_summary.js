@@ -228,7 +228,8 @@ function summarizeLocalPressure(snapshot) {
       .filter(Boolean),
   )];
 
-  let summary = normalizeString(snapshot?.pressure?.summary);
+  let summary = normalizeString(snapshot?.read_first?.pressure_summary)
+    || normalizeString(snapshot?.pressure?.summary);
   if (!summary) {
     if (labels.length === 1) {
       summary = `${labels[0]} remains the active sector.`;
@@ -246,6 +247,67 @@ function summarizeLocalPressure(snapshot) {
   };
 }
 
+function isAuthoritativeSnapshot(snapshot) {
+  return Boolean(
+    snapshot
+      && typeof snapshot === "object"
+      && (
+        snapshot?.contract?.id === "view.snapshot"
+        || (snapshot?.read_first && typeof snapshot.read_first === "object")
+      ),
+  );
+}
+
+function buildReadFirstMessage(snapshot) {
+  const readFirst = snapshot?.read_first && typeof snapshot.read_first === "object"
+    ? snapshot.read_first
+    : null;
+  if (!readFirst) {
+    return null;
+  }
+
+  const scenario = normalizeString(readFirst.scenario);
+  const keyObjective = normalizeString(readFirst.key_objective);
+  const campaignStatus = normalizeString(readFirst.campaign_status);
+  const pressureSummary = normalizeString(readFirst.pressure_summary)
+    || normalizeString(snapshot?.pressure?.summary);
+  const latestReport = normalizeString(readFirst.latest_report);
+  const turn = numericValue(readFirst.turn) ?? numericValue(snapshot?.time?.turn);
+  const phase = normalizeString(readFirst.phase) || normalizeString(snapshot?.time?.phase);
+  const summary = uniqueStrings([
+    keyObjective ? `Key objective ${keyObjective}` : "",
+    pressureSummary,
+    latestReport ? `Latest report ${latestReport}` : "",
+  ], 3).join(". ");
+  const body = [
+    scenario ? `Scenario: ${scenario}` : "",
+    turn != null ? `Turn: ${turn}` : "",
+    phase ? `Phase: ${humanizeToken(phase)}` : "",
+    campaignStatus ? `Campaign: ${humanizeToken(campaignStatus)}` : "",
+    keyObjective ? `Key objective: ${keyObjective}` : "",
+    pressureSummary ? `Pressure: ${pressureSummary}` : "",
+    latestReport ? `Latest report: ${latestReport}` : "",
+  ].filter(Boolean).join("\n");
+
+  if (!summary && !body) {
+    return null;
+  }
+
+  return {
+    id: `snapshot-read-first-${turn ?? "now"}`,
+    title: "Current Operational Picture",
+    kind: "Read First",
+    showKind: true,
+    summary: summary || body.replace(/\n/g, " "),
+    body: body || summary,
+    severity: snapshot?.pressure?.active ? "warning" : "info",
+    timeLabel: formatCommunicationTime(numericValue(snapshot?.time?.current_hours)),
+    senderLabel: "View Snapshot",
+    insigniaCode: "VS",
+    isDemo: false,
+  };
+}
+
 function buildSyntheticMessages(snapshot, operations = []) {
   if (!snapshot || typeof snapshot !== "object") {
     return [];
@@ -257,9 +319,9 @@ function buildSyntheticMessages(snapshot, operations = []) {
   const timeValue = numericValue(snapshot?.time?.current_hours);
   const turnValue = numericValue(snapshot?.time?.turn);
   const timeLabel = formatCommunicationTime(timeValue);
-  const objectiveRaw = labelFromValue(report?.main_objective);
+  const objectiveRaw = normalizeString(snapshot?.read_first?.key_objective) || labelFromValue(report?.main_objective);
   const objective = koreaScenario && containsLegacySouthPacificText(objectiveRaw) ? "" : objectiveRaw;
-  const operationRaw = labelFromValue(report?.chosen_operation);
+  const operationRaw = labelFromValue(report?.chosen_operation) || normalizeString(snapshot?.ai?.last_intent);
   const operation = koreaScenario && containsLegacySouthPacificText(operationRaw) ? "" : operationRaw;
   const posture = normalizeString(report?.posture) ? humanizeToken(report.posture) : "";
   const reserveLevel = formatReserveLevel(report?.reserve_level);
@@ -444,8 +506,15 @@ export function summarizeCommunications(input = { pending_count: null, recent: [
       isDemo: false,
     };
   });
+  const readFirstMessage = buildReadFirstMessage(snapshot);
   const syntheticMessages = buildSyntheticMessages(snapshot, operations);
-  const messages = dedupeMessages([...syntheticMessages, ...reportMessages]);
+  const messages = isAuthoritativeSnapshot(snapshot)
+    ? dedupeMessages([
+        ...reportMessages,
+        ...(readFirstMessage ? [readFirstMessage] : []),
+        ...syntheticMessages,
+      ])
+    : dedupeMessages([...syntheticMessages, ...reportMessages]);
 
   return {
     pending: reports?.pending_count ?? null,

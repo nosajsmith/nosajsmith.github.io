@@ -1,4 +1,10 @@
-import { humanizeScenarioLabel, humanizeToken } from "./view_snapshot.js";
+import {
+  buildObjectiveDisplayName,
+  containsLegacySouthPacificText,
+  humanizeScenarioLabel,
+  humanizeToken,
+  isKoreaScenarioContext,
+} from "./view_snapshot.js";
 import { pickPreferredPitchScenario, scenarioKeysMatch } from "./scenario_adapter.js";
 
 export const LAUNCHER_SESSION_KEY = "too.inchon.launcher.dismissed";
@@ -54,18 +60,18 @@ export function deriveLauncherPrimaryAction({ hasSnapshot, phase, selectedScenar
 
 export function describeLauncherMusicState({ available, enabled, playing }) {
   if (available === false) {
-    return "Theme unavailable";
+    return "Audio unavailable";
   }
   if (enabled && playing) {
-    return "Theme active";
+    return "Theme playing";
   }
   if (enabled) {
-    return "Cueing theme...";
+    return "Starting theme...";
   }
   if (available) {
-    return "Theme ready";
+    return "Theme available";
   }
-  return "Music standby";
+  return "Audio standby";
 }
 
 export function selectLauncherScenario(currentScenario, scenarios) {
@@ -76,6 +82,76 @@ export function selectLauncherScenario(currentScenario, scenarios) {
   return pickPreferredPitchScenario(roster) ?? "";
 }
 
+function readUnknownLabel(value) {
+  if (value == null) {
+    return null;
+  }
+  if (typeof value === "string" || typeof value === "number") {
+    const raw = String(value).trim();
+    return raw ? humanizeToken(raw) : null;
+  }
+  if (typeof value === "object") {
+    for (const key of ["name", "label", "title", "objective_id", "target_objective", "target_location_id", "id"]) {
+      const candidate = value[key];
+      if (candidate != null) {
+        const raw = String(candidate).trim();
+        if (raw) {
+          return humanizeToken(raw);
+        }
+      }
+    }
+  }
+  return null;
+}
+
+function sanitizeLauncherSnapshotText(value, scenarioContext) {
+  const text = String(value ?? "").trim();
+  if (!text) {
+    return "";
+  }
+  return isKoreaScenarioContext(scenarioContext) && containsLegacySouthPacificText(text) ? "" : text;
+}
+
+export function deriveLauncherObjectiveLabel(snapshot, scenarioContext = snapshot) {
+  const snapshotObjective = sanitizeLauncherSnapshotText(snapshot?.read_first?.key_objective, scenarioContext);
+  if (snapshotObjective) {
+    return snapshotObjective;
+  }
+  const greaseObjective = sanitizeLauncherSnapshotText(snapshot?.grease_board?.objective, scenarioContext);
+  if (greaseObjective) {
+    return greaseObjective;
+  }
+  const aiObjective = sanitizeLauncherSnapshotText(readUnknownLabel(snapshot?.bai_report?.main_objective), scenarioContext);
+  if (aiObjective) {
+    return aiObjective;
+  }
+  const suppressLegacy = isKoreaScenarioContext(scenarioContext);
+  const topObjective = [...(snapshot?.objectives ?? [])]
+    .filter((objective) => !(suppressLegacy && containsLegacySouthPacificText(objective?.name)))
+    .sort((left, right) => (Number(right.value ?? 0) - Number(left.value ?? 0)))
+    .find((objective) => Boolean(objective.name || objective.id));
+  if (topObjective) {
+    return buildObjectiveDisplayName(topObjective);
+  }
+  return "Seoul Axis";
+}
+
+export function deriveLauncherMainEffortLabel(snapshot, scenarioContext = snapshot) {
+  const greaseEffort = sanitizeLauncherSnapshotText(snapshot?.grease_board?.main_effort, scenarioContext);
+  if (greaseEffort) {
+    return greaseEffort;
+  }
+  const chosenOperation = sanitizeLauncherSnapshotText(readUnknownLabel(snapshot?.bai_report?.chosen_operation), scenarioContext);
+  if (chosenOperation) {
+    return chosenOperation;
+  }
+  const aiIntent = sanitizeLauncherSnapshotText(snapshot?.ai?.last_intent, scenarioContext);
+  if (aiIntent) {
+    return humanizeToken(aiIntent);
+  }
+  return "Inchon / Seoul Push";
+}
+
 export function summarizeLauncherBridgeState({ connected, snapshot, phase }) {
   const bridgeConnected = Boolean(connected || snapshot);
   return {
@@ -84,7 +160,7 @@ export function summarizeLauncherBridgeState({ connected, snapshot, phase }) {
     scenarioStatus: snapshot
       ? "Live operational picture ready"
       : bridgeConnected
-        ? "Bridge connected, awaiting launch state"
+        ? "Bridge connected, awaiting scenario state"
         : phase === "bridge_error"
           ? "Bridge offline"
           : "Awaiting launch state",

@@ -8,3 +8,6 @@ artifacts/operations_console/manifests/
 artifacts/orl/
 *.bak
 *.bak.*
+
+.venv/
+.codex/

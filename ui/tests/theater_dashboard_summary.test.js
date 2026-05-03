@@ -367,3 +367,41 @@ test("theater dashboard comparison mode uses the immediately previous snapshot o
   assert(summary.comparison.highlights.some((item) => /Active pressure now centered on Bloody Ridge/i.test(item)));
   assert(summary.comparison.highlights.some((item) => /1st Marines: Readiness -4/i.test(item)));
 });
+
+test("theater dashboard campaign board prefers snapshot score, objective truth, pressure, and read-first framing", () => {
+  const snapshot = buildDashboardSnapshot();
+  snapshot.score = { score_by_side: { ALLIED: 75, AXIS: 33 }, win_score: 150 };
+  snapshot.read_first = {
+    key_objective: "Henderson Field",
+    pressure_summary: "Snapshot pressure says Henderson is degraded.",
+  };
+  snapshot.objectives[0] = {
+    ...snapshot.objectives[0],
+    state: "held_allied",
+    objective_truth_key: "ALLIED:HENDERSON_FIELD",
+  };
+  snapshot.objective_truth = {
+    "ALLIED:HENDERSON_FIELD": { status: "contested", controller_side: "AXIS" },
+  };
+  snapshot.pressure = {
+    summary: "Legacy pressure summary.",
+    reasons: [],
+    active: false,
+    by_objective: {
+      "ALLIED:HENDERSON_FIELD": {
+        location_id: "HENDERSON_FIELD",
+        pressure_state: "degraded",
+        pressure_score: 40,
+      },
+    },
+    total_pressure_score: 40,
+  };
+
+  const summary = summarizeTheaterDashboard(snapshot);
+
+  assert.equal(summary.campaignPicture.objectiveProgress, "Contested 1");
+  assert.equal(summary.campaignPicture.keyObjective, "Henderson Field (Contested)");
+  assert.equal(summary.campaignPicture.scoreSummary, "Allied 75 • Axis 33");
+  assert.equal(summary.campaignPicture.pressureSummary, "Snapshot pressure says Henderson is degraded.");
+  assert.equal(summary.context.pressureSummary, "Snapshot pressure says Henderson is degraded.");
+});

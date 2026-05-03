@@ -3,6 +3,7 @@ import type { ViewSnapshot } from "../../types/viewSnapshot";
 import { inferScenarioPresentation } from "../../lib/view_snapshot.js";
 import { buildMapScene } from "./map_scene.js";
 import type { TrackedDemoOperation } from "./operations_planner_types";
+import OperationsBoard from "./OperationsBoard";
 import { summarizeTheaterDashboard } from "./theater_dashboard_summary.js";
 
 type DashboardBranchTarget = "Land" | "Air" | "Naval" | "Logistics" | "Intelligence" | "Reinforcements";
@@ -123,6 +124,8 @@ export default function TheaterDashboardScreen({
           ) : null}
         </div>
       </header>
+
+      <OperationsBoard snapshot={snapshot} operations={operations} />
 
       <div className="shell-theaterdash__tier shell-theaterdash__tier--primary">
         <section className="shell-theaterdash__panel shell-card shell-theaterdash__panel--campaign">

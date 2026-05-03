@@ -93,6 +93,35 @@ test("home command bar ignores stale Guadalcanal AI labels when the active slice
   assert.match(summary.operations.detail, /Objective Seoul/);
 });
 
+test("home command bar prefers read-first objective and pressure over compatibility fallbacks", () => {
+  const summary = summarizeHomeCommandBar({
+    scenario: { id: "snapshot_demo", name: "Snapshot Demo" },
+    campaign: { status: "ongoing" },
+    time: { turn: 5, time_remaining_hours: 30, current_hours: 24 },
+    read_first: {
+      key_objective: "Snapshot Ridge",
+      pressure_summary: "Snapshot pressure is the current first-read.",
+    },
+    objectives: [{ id: "o1", state: "unheld", name: "Fallback Objective", value: 10, side: "ALLIED" }],
+    pressure: { summary: "Legacy pressure summary.", reasons: ["legacy_pressure_reason"] },
+    reports: { pending_count: 0, recent: [] },
+    bai_report: {
+      main_objective: { name: "Legacy AI Objective" },
+      chosen_operation: { name: "Legacy AI Operation" },
+      unit_orders: [],
+    },
+    ai: { last_intent: "legacy_ai_intent" },
+    units: [],
+    airfields: [],
+    ports: [],
+    naval_support_windows: [],
+  });
+
+  assert.match(summary.operations.detail, /Objective Snapshot Ridge/);
+  assert.doesNotMatch(summary.operations.detail, /Legacy AI Objective|Fallback Objective/);
+  assert.equal(summary.pressureStaff.pressure, "Snapshot pressure is the current first-read.");
+});
+
 test("home command bar uses live dispatch count when the bridge does not expose a queue count", () => {
   const summary = summarizeHomeCommandBar({
     reports: {

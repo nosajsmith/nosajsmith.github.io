@@ -15,8 +15,49 @@ function normalizeText(value) {
     .trim();
 }
 
+function objectiveTruthKey(objective) {
+  const explicit = String(objective?.objective_truth_key ?? "").trim().toUpperCase();
+  if (explicit) {
+    return explicit;
+  }
+  const side = String(objective?.side ?? "").trim().toUpperCase();
+  const location = String(objective?.location_id ?? objective?.id ?? objective?.name ?? "").trim().toUpperCase();
+  return side && location ? `${side}:${location}` : "";
+}
+
+function objectivePressureActive(state, score) {
+  const normalized = normalizeText(state);
+  return Boolean((normalized && normalized !== "none") || (typeof score === "number" && score > 0));
+}
+
+function alliedObjectiveAtRisk(objective) {
+  if (objective?.side !== "ALLIED") {
+    return false;
+  }
+  const state = normalizeText(objective?.rawState);
+  const controllerSide = normalizeText(objective?.controllerSide);
+  if (["contested", "neutral", "unheld"].includes(state)) {
+    return true;
+  }
+  if (state === "held" && controllerSide && controllerSide !== "allied") {
+    return true;
+  }
+  return state === "held axis" || state === "held enemy" || state === "held opponent";
+}
+
 function objectiveDisplayIndex(snapshot) {
   const objectives = Array.isArray(snapshot?.objectives) ? snapshot.objectives : [];
+  const objectiveTruth = snapshot?.objective_truth && typeof snapshot.objective_truth === "object" ? snapshot.objective_truth : {};
+  const directPressureByObjective = snapshot?.pressure?.by_objective && typeof snapshot.pressure.by_objective === "object"
+    ? snapshot.pressure.by_objective
+    : {};
+  const nestedPressureByObjective = snapshot?.pressure?.objective_pressure?.by_objective
+    && typeof snapshot.pressure.objective_pressure.by_objective === "object"
+    ? snapshot.pressure.objective_pressure.by_objective
+    : {};
+  const pressureByObjective = Object.keys(directPressureByObjective).length
+    ? directPressureByObjective
+    : nestedPressureByObjective;
   const duplicateNames = new Set(
     objectives
       .map((objective) => String(objective?.name ?? "").trim())
@@ -25,17 +66,42 @@ function objectiveDisplayIndex(snapshot) {
   );
 
   return new Map(
-    objectives.map((objective) => [
-      String(objective?.id || ""),
-      {
-        id: String(objective?.id || ""),
-        name: buildObjectiveDisplayName(objective, duplicateNames),
-        side: String(objective?.side || ""),
-        state: humanizeObjectiveState(objective?.state),
-        rawState: String(objective?.state ?? ""),
-        value: typeof objective?.value === "number" ? objective.value : 0,
-      },
-    ]),
+    objectives.map((objective) => {
+      const key = objectiveTruthKey(objective);
+      const truth = key ? objectiveTruth[key] ?? {} : {};
+      const pressure = key ? pressureByObjective[key] ?? {} : {};
+      const rawState = String(
+        truth?.status
+        ?? objective?.truth_state
+        ?? objective?.objective_status
+        ?? objective?.state
+        ?? "",
+      );
+      const controllerSide = String(truth?.controller_side ?? objective?.controller_side ?? "");
+      const displayState = normalizeText(rawState) === "held" && controllerSide
+        ? `held_${controllerSide.toLowerCase()}`
+        : rawState;
+      const pressureState = String(objective?.pressure_state ?? pressure?.pressure_state ?? "");
+      const pressureScore = typeof objective?.pressure_score === "number"
+        ? objective.pressure_score
+        : typeof pressure?.pressure_score === "number"
+          ? pressure.pressure_score
+          : null;
+      return [
+        String(objective?.id || ""),
+        {
+          id: String(objective?.id || ""),
+          name: buildObjectiveDisplayName(objective, duplicateNames),
+          side: String(objective?.side || ""),
+          state: humanizeObjectiveState(displayState),
+          rawState,
+          controllerSide,
+          value: typeof objective?.value === "number" ? objective.value : 0,
+          pressureState,
+          pressureScore,
+        },
+      ];
+    }),
   );
 }
 
@@ -84,11 +150,19 @@ function buildPressureAxes(areas, objectivesById, localReports, pressureReasons)
     const objective = area.objectiveId ? objectivesById.get(area.objectiveId) ?? null : null;
     const matchedReport = localReports.find((report) => report.localAreaId === area.id) ?? null;
     const matchedReasons = areaReasonMatches(area, pressureReasons);
-    const objectiveRisk = objective?.side === "ALLIED" && objective?.rawState === "unheld";
+    const objectiveRisk = alliedObjectiveAtRisk(objective);
+    const objectivePressure = objectivePressureActive(objective?.pressureState, objective?.pressureScore);
 
-    if (!objectiveRisk && !matchedReport && !matchedReasons.length) {
+    if (!objectiveRisk && !matchedReport && !matchedReasons.length && !objectivePressure) {
       continue;
     }
+
+    const objectivePressureDetail = objectivePressure
+      ? [
+          objective?.pressureState ? `Objective pressure ${humanizeToken(objective.pressureState).toLowerCase()}` : "Objective pressure active",
+          objective?.pressureScore != null ? `score ${objective.pressureScore}` : "",
+        ].filter(Boolean).join(" • ")
+      : "";
 
     axes.push({
       id: area.id,
@@ -96,7 +170,9 @@ function buildPressureAxes(areas, objectivesById, localReports, pressureReasons)
       kindLabel: humanizeToken(area.kind),
       status: objectiveRisk ? "At Risk" : "Under Pressure",
       detail: matchedReport?.summary
-        ?? (matchedReasons.length ? matchedReasons.map((reason) => humanizePressureReason(reason)).join(" • ") : objective?.state ?? "No current local pressure note."),
+        ?? (matchedReasons.length
+          ? matchedReasons.map((reason) => humanizePressureReason(reason)).join(" • ")
+          : (objectivePressureDetail || objective?.state || "No current local pressure note.")),
     });
   }
 
@@ -106,13 +182,17 @@ function buildPressureAxes(areas, objectivesById, localReports, pressureReasons)
 function buildOverallStatus(areas, objectivesById, localReports, pressureReasons) {
   const atRiskObjective = areas.find((area) => {
     const objective = area.objectiveId ? objectivesById.get(area.objectiveId) ?? null : null;
-    return objective?.side === "ALLIED" && objective.rawState === "unheld";
+    return alliedObjectiveAtRisk(objective);
   });
 
   if (atRiskObjective) {
     return "At Risk";
   }
-  if (localReports.length || pressureReasons.length) {
+  const pressureObjective = areas.find((area) => {
+    const objective = area.objectiveId ? objectivesById.get(area.objectiveId) ?? null : null;
+    return objectivePressureActive(objective?.pressureState, objective?.pressureScore);
+  });
+  if (localReports.length || pressureReasons.length || pressureObjective) {
     return "Under Pressure";
   }
   return "Holding";
@@ -124,7 +204,7 @@ function buildImmediateConcern(areas, objectivesById, localReports, axes) {
       area,
       objective: area.objectiveId ? objectivesById.get(area.objectiveId) ?? null : null,
     }))
-    .filter((row) => row.objective?.side === "ALLIED" && row.objective.rawState === "unheld")
+    .filter((row) => alliedObjectiveAtRisk(row.objective))
     .sort((left, right) => (right.objective?.value ?? 0) - (left.objective?.value ?? 0))[0];
 
   if (atRiskArea) {
@@ -495,10 +575,11 @@ function buildEngagementAreas(areas, objectivesById, localReports, pressureReaso
       const objective = area.objectiveId ? objectivesById.get(area.objectiveId) ?? null : null;
       const matchedReports = localReports.filter((report) => report.localAreaId === area.id);
       const matchedReasons = areaReasonMatches(area, pressureReasons);
-      const objectiveRisk = objective?.side === "ALLIED" && objective?.rawState === "unheld";
+      const objectiveRisk = alliedObjectiveAtRisk(objective);
+      const objectivePressure = objectivePressureActive(objective?.pressureState, objective?.pressureScore);
       const reportIndex = matchedReports[0] ? localReports.findIndex((report) => report.id === matchedReports[0].id) : Number.MAX_SAFE_INTEGER;
       let status = "Under Pressure";
-      let priority = matchedReasons.length ? 1 : 0;
+      let priority = matchedReasons.length || objectivePressure ? 1 : 0;
 
       if (matchedReports.length) {
         status = "In Contact";
@@ -507,6 +588,13 @@ function buildEngagementAreas(areas, objectivesById, localReports, pressureReaso
         status = "At Risk";
         priority = 2;
       }
+
+      const objectivePressureDetail = objectivePressure
+        ? [
+            objective?.pressureState ? `Objective pressure ${humanizeToken(objective.pressureState).toLowerCase()}` : "Objective pressure active",
+            objective?.pressureScore != null ? `score ${objective.pressureScore}` : "",
+          ].filter(Boolean).join(" • ")
+        : "";
 
       return {
         id: area.id,
@@ -517,15 +605,16 @@ function buildEngagementAreas(areas, objectivesById, localReports, pressureReaso
         detail: matchedReports[0]?.summary
           ?? (matchedReasons.length
             ? matchedReasons.map((reason) => humanizePressureReason(reason)).join(" • ")
-            : objective?.state ?? "No current local engagement detail is exposed."),
+            : (objectivePressureDetail || objective?.state || "No current local engagement detail is exposed.")),
         priority,
         reportIndex,
         value: objective?.value ?? 0,
         matchedReports: matchedReports.length,
         matchedReasons: matchedReasons.length,
+        objectivePressure: objectivePressure ? 1 : 0,
       };
     })
-    .filter((row) => row.priority > 0 || row.matchedReasons || row.matchedReports)
+    .filter((row) => row.priority > 0 || row.matchedReasons || row.matchedReports || row.objectivePressure)
     .sort((left, right) => {
       if (left.reportIndex !== right.reportIndex) {
         return left.reportIndex - right.reportIndex;
@@ -538,6 +627,9 @@ function buildEngagementAreas(areas, objectivesById, localReports, pressureReaso
       }
       if (right.matchedReasons !== left.matchedReasons) {
         return right.matchedReasons - left.matchedReasons;
+      }
+      if (right.objectivePressure !== left.objectivePressure) {
+        return right.objectivePressure - left.objectivePressure;
       }
       if (right.value !== left.value) {
         return right.value - left.value;
@@ -637,7 +729,7 @@ function buildEngagementSummary(snapshot, areas, objectivesById, localReports, p
     note: "Built only from named local contact/pressure areas plus current formations located at those same exposed local positions. No inferred frontage or hidden engagement state is added.",
     hotspotsSummary: hotspotLabels.length ? hotspotLabels.join(" • ") : "No named local engagement focus is exposed.",
     formationSummary: formationLabels.length ? formationLabels.join(" • ") : "No formation is directly tied to the exposed local fight.",
-    hotspots: engagementAreas.slice(0, 4).map(({ priority, reportIndex, value, matchedReports, matchedReasons, locationId, ...area }) => area),
+    hotspots: engagementAreas.slice(0, 4).map(({ priority, reportIndex, value, matchedReports, matchedReasons, objectivePressure, locationId, ...area }) => area),
     formations,
   };
 }

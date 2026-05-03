@@ -25,3 +25,9 @@ test("map shell routes right-click quick commands through the planner-owned comm
   assert.match(appSource, /function commitFastCommand/);
   assert.match(appSource, /createApprovedOperation\(snapshot, seededPlannerState\)/);
 });
+
+test("objective fast commands preserve the clicked objective identity before preview seeding", () => {
+  assert.match(mapPanelShellSource, /data-objective-id=\{objective.id\}/);
+  assert.match(mapPanelShellSource, /closest\("\.shell-map__objective"\)/);
+  assert.match(mapPanelShellSource, /scene\.objectives\.find\(\(row\) => row\.id === objectiveId\)/);
+});

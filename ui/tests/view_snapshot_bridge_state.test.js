@@ -75,6 +75,155 @@ test("normalizeSnapshot adapts engine-style live bridge state into shell-friendl
   assert.ok(snapshot.objectives[0]?.y != null);
 });
 
+test("normalizeSnapshot preserves the view.snapshot contract as the shell first-read source", () => {
+  const snapshot = normalizeSnapshot({
+    contract: {
+      id: "view.snapshot",
+      version: 1,
+      source: "backend_read_model",
+    },
+    scenario: {
+      id: "contract_demo",
+      name: "Contract Demo",
+    },
+    operation: {
+      id: "contract_demo",
+      name: "Contract Demo",
+      theater_id: "demo_theater",
+    },
+    time: {
+      current_hours: 24,
+      turn: 2,
+      phase: "day",
+      time_remaining_hours: 48,
+    },
+    campaign: {
+      status: "active",
+      score_by_side: { ALLIED: 1, AXIS: 0 },
+      win_score: 999,
+      objective_state: { "LEGACY:HILL": false },
+    },
+    score: {
+      score_by_side: { ALLIED: 80, AXIS: 0 },
+      win_score: 120,
+    },
+    objective_truth: {
+      "ALLIED:HILL": {
+        status: "contested",
+        controller_side: null,
+        friendly_present: true,
+        enemy_present: true,
+      },
+    },
+    objective_state: {
+      "ALLIED:HILL": true,
+    },
+    pressure: {
+      active: false,
+      objective_pressure: {
+        semantics: "supply_aware_objective_pressure_v1",
+        radius: 1,
+        affects_scoring: false,
+        total_pressure_score: 50,
+        reasons: ["ALLIED:HILL:degraded_by_supply"],
+        by_objective: {
+          "ALLIED:HILL": {
+            side: "ALLIED",
+            location_id: "HILL",
+            objective_status: "contested",
+            pressure_state: "degraded",
+            pressure_score: 50,
+            nearby_unit_count: 1,
+            contributing_unit_count: 1,
+            low_supply_unit_count: 1,
+            suppressed_unit_count: 0,
+          },
+        },
+      },
+    },
+    reports: {
+      pending_count: null,
+      recent: [
+        {
+          id: "report-1",
+          kind: "objectives",
+          title: "Objective Update",
+          summary: "Hill 101 remains contested.",
+          severity: "info",
+          time: 24,
+          sender_label: "G8",
+        },
+      ],
+    },
+    ai: {
+      enabled: true,
+      side: "AXIS",
+      last_intent: "Delay Hill 101",
+      last_orders: 1,
+    },
+    read_first: {
+      scenario: "Contract Demo",
+      turn: 2,
+      phase: "day",
+      campaign_status: "active",
+      key_objective: "Hill 101",
+      pressure_summary: null,
+      latest_report: "Objective Update",
+    },
+    objectives: [
+      {
+        id: "obj_hill",
+        location_id: "HILL",
+        name: "Hill 101",
+        side: "ALLIED",
+        value: 80,
+        truth_state: "contested",
+        objective_status: "contested",
+        controller_side: null,
+        held: false,
+        contested: true,
+        objective_truth_key: "ALLIED:HILL",
+        pressure_state: "degraded",
+        pressure_score: 50,
+        pressure: {
+          state: "degraded",
+          score: 50,
+          nearby_unit_count: 1,
+          contributing_unit_count: 1,
+          low_supply_unit_count: 1,
+          suppressed_unit_count: 0,
+        },
+        x: 10,
+        y: 10,
+      },
+    ],
+    units: [],
+  });
+
+  assert.equal(snapshot.contract?.id, "view.snapshot");
+  assert.equal(snapshot.contract?.version, 1);
+  assert.equal(snapshot.operation?.id, "contract_demo");
+  assert.equal(snapshot.time.turn, 2);
+  assert.equal(snapshot.campaign.score_by_side.ALLIED, 80);
+  assert.equal(snapshot.score.win_score, 120);
+  assert.deepEqual(snapshot.campaign.objective_state, { "ALLIED:HILL": true });
+  assert.equal(snapshot.objective_truth["ALLIED:HILL"]?.status, "contested");
+  assert.equal(snapshot.objectives[0]?.state, "contested");
+  assert.equal(snapshot.objectives[0]?.truth_state, "contested");
+  assert.equal(snapshot.objectives[0]?.pressure_state, "degraded");
+  assert.equal(snapshot.objectives[0]?.pressure?.low_supply_unit_count, 1);
+  assert.equal(snapshot.pressure.active, true);
+  assert.equal(snapshot.pressure.summary, "HILL pressure degraded.");
+  assert.equal(snapshot.pressure.semantics, "supply_aware_objective_pressure_v1");
+  assert.equal(snapshot.pressure.objective_pressure?.affects_scoring, false);
+  assert.equal(snapshot.pressure.by_objective["ALLIED:HILL"]?.pressure_score, 50);
+  assert.equal(snapshot.pressure.reasons[0], "ALLIED:HILL:degraded_by_supply");
+  assert.equal(snapshot.reports.recent[0]?.title, "Objective Update");
+  assert.equal(snapshot.ai.last_intent, "Delay Hill 101");
+  assert.equal(snapshot.read_first?.key_objective, "Hill 101");
+  assert.equal(snapshot.read_first?.latest_report, "Objective Update");
+});
+
 test("normalizeSnapshot preserves grease board payloads when the bridge exposes them", () => {
   const snapshot = normalizeSnapshot({
     scenario: { id: "inchon_mvp", name: "Inchon MVP" },

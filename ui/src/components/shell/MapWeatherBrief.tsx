@@ -40,10 +40,10 @@ function toSentence(value: string, fallback: string) {
 export default function MapWeatherBrief({ snapshot }: MapWeatherBriefProps) {
   const weather = summarizeWeather(snapshot);
   const weatherImpact = buildWeatherImpactState(snapshot);
-  const stateLine = normalizeWeatherValue(weatherImpact.current || weather.condition, "Weather unavailable");
+  const stateLine = normalizeWeatherValue(weatherImpact.current || weather.condition, "Weather picture pending");
   const supportLine = weather.available
     ? toSentence(weather.cue, "No operational weather cue is exposed on the current shell path.")
-    : "No authoritative weather feed is exposed on the current shell path.";
+    : "No authoritative weather picture is exposed for this scenario yet.";
   const detailRows = [
     { label: "Temp", value: weather.temp },
     { label: "Wind", value: weather.wind },

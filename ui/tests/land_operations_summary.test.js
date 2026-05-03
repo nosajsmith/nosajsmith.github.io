@@ -175,3 +175,37 @@ test("land operations summary stays truthful when no visible land formations are
   assert.equal(summary.readinessPosture.rows.length, 0);
   assert.equal(summary.operations.rows.length, 0);
 });
+
+test("land operations summary treats raw unit supply as percent when no sustainment-days detail is exposed", () => {
+  const summary = summarizeLandOperations({
+    scenario: { id: "inchon_mvp", name: "Inchon Demo Vertical Slice" },
+    units: [
+      {
+        id: "u-fallback",
+        side: "ALLIED",
+        name: "ROK Marine Regiment",
+        kind: "ground",
+        unit_type: "INFANTRY",
+        supply: 80,
+        readiness: 66,
+        inspector: {
+          operational_state: {
+            posture: "move",
+            readiness: 66,
+            fatigue: 6,
+            loc: { state: "connected", label: "Connected", detail: "Port corridor intact." },
+          },
+          supply: {
+            supply_pct: 80,
+            supply_display: "80%",
+            supply_days_current: null,
+          },
+        },
+      },
+    ],
+    objectives: [],
+  });
+
+  assert.equal(summary.readinessPosture.rows[0].name, "ROK Marine Regiment");
+  assert.equal(summary.readinessPosture.rows[0].sustainment, "80% supply • Connected");
+});

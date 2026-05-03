@@ -1706,16 +1706,32 @@ export default function MapPanelShell({
     }
   }
 
+  function resolveFastCommandObjectiveHex(event: MouseEvent<SVGSVGElement>) {
+    const eventTarget = event.target instanceof Element ? event.target : null;
+    const objectiveId = eventTarget?.closest(".shell-map__objective")?.getAttribute("data-objective-id");
+    if (!objectiveId) {
+      return null;
+    }
+
+    const objective = scene.objectives.find((row) => row.id === objectiveId) ?? null;
+    if (!objective) {
+      return null;
+    }
+
+    return axialRound(objective.x, objective.y);
+  }
+
   function handleMapContextMenu(event: MouseEvent<SVGSVGElement>) {
     if (!selectedUnitId || greaseToolArmed || objectiveSelectionActive) {
       return;
     }
     event.preventDefault();
-    const pointerPoint = pointerToWorldPoint(event.clientX, event.clientY);
-    if (!pointerPoint) {
+    const objectiveTargetHex = resolveFastCommandObjectiveHex(event);
+    const pointerPoint = objectiveTargetHex ? null : pointerToWorldPoint(event.clientX, event.clientY);
+    const targetHex = objectiveTargetHex ?? (pointerPoint ? axialRound(pointerPoint.worldPoint.x, pointerPoint.worldPoint.y) : null);
+    if (!targetHex) {
       return;
     }
-    const targetHex = axialRound(pointerPoint.worldPoint.x, pointerPoint.worldPoint.y);
     const preview = buildMapCommandPreview(snapshot, selectedUnitId, targetHex);
     if (!preview?.available) {
       return;
@@ -2593,6 +2609,7 @@ export default function MapPanelShell({
                 transform={`translate(${objective.cameraDisplayAnchor.x}, ${objective.cameraDisplayAnchor.y}) scale(${zoomPresentation.counterScale})`}
                 role="button"
                 tabIndex={0}
+                data-objective-id={objective.id}
                 aria-pressed={!objectiveSelectionActive ? selectedObjectiveId === objective.id : undefined}
                 aria-label={objectiveSelectionActive ? `Mark ${objective.name} as the operation objective area` : `Inspect ${objective.name}`}
                 onClick={objectiveSelectionActive
@@ -2646,12 +2663,28 @@ export default function MapPanelShell({
                   zoom={camera.zoom}
                 />
                 {labelsLayerVisible && visibleLabelIds.has(`objective:${objective.id}:label`) ? (
-                  <text className="shell-map__objective-label" x={objective.labelX} y={objective.labelY} textAnchor={objective.labelAnchor}>
+                  <text
+                    className={
+                      `shell-map__objective-label is-${objective.settlement?.controlState ?? "unknown"}`
+                      + (objective.axisFocus ? " is-axis-focus" : "")
+                    }
+                    x={objective.labelX}
+                    y={objective.labelY}
+                    textAnchor={objective.labelAnchor}
+                  >
                     {objective.map_label || objective.displayName || objective.name}
                   </text>
                 ) : null}
                 {labelsLayerVisible && visibleLabelIds.has(`objective:${objective.id}:state`) ? (
-                  <text className="shell-map__objective-state" x={objective.stateX} y={objective.stateY} textAnchor={objective.stateAnchor}>
+                  <text
+                    className={
+                      `shell-map__objective-state is-${objective.settlement?.controlState ?? "unknown"}`
+                      + (objective.axisFocus ? " is-axis-focus" : "")
+                    }
+                    x={objective.stateX}
+                    y={objective.stateY}
+                    textAnchor={objective.stateAnchor}
+                  >
                     {objective.stateLabel}
                   </text>
                 ) : null}

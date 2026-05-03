@@ -39,6 +39,16 @@ export default function MainMapDrawer({
     previousSnapshotLabel,
   });
   const [screen, setScreen] = useState<"inspector" | "commander">("inspector");
+  const focusEyebrow = !selection
+    ? "Current Focus"
+    : selection.kind === "unit"
+      ? "Current Focus • Formation"
+      : "Current Focus • Site";
+  const focusLead = !selection
+    ? "Select a visible unit, objective, airfield, or port on the map to review current status and local reporting."
+    : selection.kind === "unit"
+      ? "Read readiness, posture, and local reporting before committing the next order."
+      : "Read site status, nearby forces, and local pressure before redirecting the main effort.";
   const locStateClass = inspector.header.loc?.state ? String(inspector.header.loc.state).trim().toLowerCase() : "";
   const sectionNodes = [];
   let previousGroup: string | null = null;
@@ -123,7 +133,7 @@ export default function MainMapDrawer({
   }, [selection?.kind, selection?.id, open]);
 
   return (
-    <aside className={"shell-drawer" + (open ? " is-open" : "") + (pinned ? " is-pinned" : "")} aria-label="Inspector drawer">
+    <aside className={"shell-drawer" + (open ? " is-open" : "") + (pinned ? " is-pinned" : "")} aria-label="Current focus drawer">
       <button
         type="button"
         className="shell-drawer__handle"
@@ -131,7 +141,7 @@ export default function MainMapDrawer({
         aria-expanded={open}
         aria-controls="shell-detail-drawer-panel"
       >
-        <span>Inspector</span>
+        <span>Current Focus</span>
         <span>{open ? "Hide" : "Open"}</span>
       </button>
 
@@ -139,21 +149,22 @@ export default function MainMapDrawer({
         <div className="shell-drawer__panel" id="shell-detail-drawer-panel">
           <div className="shell-drawer__head">
             <div>
-              <div className="shell-eyebrow">{inspector.header.eyebrow}</div>
+              <div className="shell-eyebrow">{focusEyebrow}</div>
               <h2 className="shell-panel__title">{inspector.header.title}</h2>
               <div className="shell-drawer__subtitle">{inspector.header.subtitle}</div>
+              <div className="shell-drawer__lead">{focusLead}</div>
             </div>
             <div className="shell-drawer__actions">
               {selection ? (
                 <button type="button" className="shell-button shell-button--secondary" onClick={onClearSelection}>
-                  Clear Selection
+                  Clear Focus
                 </button>
               ) : null}
               <button type="button" className="shell-button shell-button--secondary" onClick={onTogglePin}>
-                {pinned ? "Unpin Panel" : "Pin Panel"}
+                {pinned ? "Unpin Focus" : "Pin Focus"}
               </button>
               <button type="button" className="shell-button shell-button--secondary" onClick={onClose}>
-                Close
+                Close Panel
               </button>
             </div>
           </div>
@@ -194,9 +205,9 @@ export default function MainMapDrawer({
               </>
             ) : (
               <section className="shell-drawer__section shell-unitinspector__empty">
-                <div className="shell-drawer__title">Inspection State</div>
+                <div className="shell-drawer__title">No Current Focus</div>
                 <div className="shell-unitinspector__placeholder">
-                  No active selection is open. Select a visible unit, objective, airfield, or port marker to review its current state.
+                  Select a visible unit, objective, airfield, or port on the map to review state, readiness, and local reporting.
                 </div>
               </section>
             )}

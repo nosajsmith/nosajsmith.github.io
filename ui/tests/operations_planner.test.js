@@ -241,9 +241,9 @@ test("operations planner sanitizes stale demo planner state against the current 
   assert.equal(sanitized.approved, false);
 });
 
-test("map move shortcuts seed the existing planner state and remain planner-authored command objects", () => {
+test("map move shortcuts stay objective-driven when the clicked target lands on the objective hex", () => {
   const snapshot = buildPlannerSnapshot();
-  const preview = buildMapCommandPreview(snapshot, "u1", { q: 2, r: 0 });
+  const preview = buildMapCommandPreview(snapshot, "u1", { q: 1, r: 0 });
   assert.ok(preview);
   assert.equal(preview.commandIntent, "move");
   assert.equal(preview.mode, "immediate");
@@ -253,11 +253,33 @@ test("map move shortcuts seed the existing planner state and remain planner-auth
   assert.equal(seeded.commandSource, "map_shortcut");
   assert.equal(seeded.commandIntent, "move");
   assert.equal(seeded.seedUnitId, "u1");
-  assert.deepEqual(seeded.targetHex, { q: 2, r: 0 });
+  assert.deepEqual(seeded.targetHex, { q: 1, r: 0 });
   assert.equal(seeded.targetLabel, "Henderson Field");
   assert.equal(seeded.objectiveId, "o1");
   assert.equal(seeded.unitRoles.u1, "main_effort");
   assert.equal(seeded.approved, true);
+});
+
+test("map move shortcuts do not guess a named objective from a nearby hex", () => {
+  const snapshot = buildPlannerSnapshot();
+  const preview = buildMapCommandPreview(snapshot, "u1", { q: 2, r: 0 });
+  assert.ok(preview);
+  assert.equal(preview.commandIntent, "move");
+  assert.equal(preview.mode, "planner_review");
+  assert.equal(preview.targetLabel, "Hex 2, 0");
+  assert.equal(preview.objectiveId, null);
+  assert.equal(preview.objectiveName, null);
+  assert.match(preview.note, /deliberate objective review/i);
+
+  const seeded = seedPlannerStateFromMapCommand(snapshot, createOperationPlannerState(snapshot.scenario.id), preview);
+  assert.equal(seeded.commandSource, "map_shortcut");
+  assert.equal(seeded.commandIntent, "move");
+  assert.equal(seeded.seedUnitId, "u1");
+  assert.deepEqual(seeded.targetHex, { q: 2, r: 0 });
+  assert.equal(seeded.targetLabel, "Hex 2, 0");
+  assert.equal(seeded.objectiveId, null);
+  assert.equal(seeded.selectingObjective, true);
+  assert.equal(seeded.approved, false);
 });
 
 test("map attack shortcuts stay deterministic and use the same planner seed path", () => {

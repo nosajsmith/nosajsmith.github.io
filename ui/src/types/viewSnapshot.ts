@@ -45,11 +45,62 @@ export interface SnapshotCampaign {
   objective_state: Record<string, boolean>;
 }
 
+export interface SnapshotContract {
+  id: string;
+  version: number | null;
+  source: string | null;
+}
+
+export interface SnapshotOperation {
+  id: string | null;
+  name: string | null;
+  theater_id?: string | null;
+}
+
+export interface SnapshotScore {
+  score_by_side: Record<string, number>;
+  win_score: number | null;
+}
+
+export interface SnapshotObjectiveTruthRow {
+  status?: string | null;
+  controller_side?: string | null;
+  [key: string]: unknown;
+}
+
+export interface SnapshotObjectivePressureRow {
+  side?: string | null;
+  location_id?: string | null;
+  objective_status?: string | null;
+  controller_side?: string | null;
+  pressure_state?: string | null;
+  pressure_score?: number | null;
+  nearby_unit_count?: number | null;
+  contributing_unit_count?: number | null;
+  low_supply_unit_count?: number | null;
+  suppressed_unit_count?: number | null;
+  [key: string]: unknown;
+}
+
+export interface SnapshotObjectivePressure {
+  semantics: string | null;
+  radius: number | null;
+  supply_thresholds: Record<string, unknown>;
+  affects_scoring: boolean | null;
+  by_objective: Record<string, SnapshotObjectivePressureRow>;
+  total_pressure_score: number | null;
+  reasons: string[];
+}
+
 export interface SnapshotPressure {
   active: boolean;
   summary: string | null;
   reasons: string[];
   details: Record<string, unknown>;
+  objective_pressure: SnapshotObjectivePressure | null;
+  by_objective: Record<string, SnapshotObjectivePressureRow>;
+  total_pressure_score: number | null;
+  semantics: string | null;
 }
 
 export interface SnapshotReportRow {
@@ -365,6 +416,22 @@ export interface SnapshotObjective {
   value: number | null;
   controlled: boolean | null;
   state: string;
+  truth_state?: string | null;
+  objective_status?: string | null;
+  controller_side?: string | null;
+  held?: boolean | null;
+  contested?: boolean | null;
+  objective_truth_key?: string | null;
+  pressure_state?: string | null;
+  pressure_score?: number | null;
+  pressure?: {
+    state: string | null;
+    score: number | null;
+    nearby_unit_count: number | null;
+    contributing_unit_count: number | null;
+    low_supply_unit_count: number | null;
+    suppressed_unit_count: number | null;
+  } | null;
   objective_type?: string | null;
   importance_tier?: number | null;
   visibility?: string | null;
@@ -453,11 +520,26 @@ export interface SnapshotCapabilities {
   can_export_replay: boolean;
 }
 
+export interface SnapshotReadFirst {
+  scenario: string | null;
+  turn: number | null;
+  phase: string | null;
+  campaign_status: string | null;
+  key_objective: string | null;
+  pressure_summary: string | null;
+  latest_report: string | null;
+}
+
 export interface ViewSnapshot {
+  contract: SnapshotContract | null;
   scenario: SnapshotScenario;
+  operation: SnapshotOperation | null;
   time: SnapshotTime;
   weather: SnapshotWeather | null;
   campaign: SnapshotCampaign;
+  score: SnapshotScore;
+  objective_truth: Record<string, SnapshotObjectiveTruthRow>;
+  objective_state: Record<string, boolean>;
   pressure: SnapshotPressure;
   reports: SnapshotReports;
   staff: SnapshotStaff;
@@ -474,4 +556,5 @@ export interface ViewSnapshot {
   units: SnapshotUnit[];
   objectives: SnapshotObjective[];
   capabilities: SnapshotCapabilities;
+  read_first: SnapshotReadFirst | null;
 }

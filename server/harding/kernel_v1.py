@@ -8,7 +8,11 @@ from server.objectives.control_v1 import (
     compute_objective_state,
     compute_objective_status,
 )
-from server.politics.clock_v2 import PoliticalClockV2
+from server.ai.balck_v1 import BalckAIV2
+from server.politics.clock_v2 import (
+    PoliticalClockV2,
+    compute_supply_aware_objective_pressure,
+)
 
 
 SUPPORTED_AI_KINDS = {"attack", "support", "withdraw"}
@@ -60,14 +64,6 @@ class StaffModelV1:
 
     def reset(self) -> None:
         self.load = 0
-
-
-class BalckAIV1:
-    def __init__(self, side: str = "AXIS") -> None:
-        self.side = side
-
-    def decide_orders(self, state: Dict[str, Any], now: int) -> List[Dict[str, Any]]:
-        return []
 
 
 class ReplayV1:
@@ -137,7 +133,7 @@ class HardingKernelV1:
         self.scenario: Optional[Dict[str, Any]] = None
 
         self.ai_enabled = False
-        self.ai = BalckAIV1(side="AXIS")
+        self.ai = BalckAIV2(side="AXIS")
         self.ai_last_submit_hour = -999
         self.ai_min_interval_hours = 6
         self.politics = PoliticalClockV2(deadline_hours=72, player_side="ALLIED")
@@ -171,9 +167,21 @@ class HardingKernelV1:
         except Exception:
             score_by_side = {}
 
+        scenario = self.scenario if isinstance(self.scenario, dict) else {}
+        objective_status = dict(getattr(self, "objective_status", {}) or {})
+        try:
+            objective_pressure = compute_supply_aware_objective_pressure(
+                scenario,
+                objective_status,
+            )
+        except Exception:
+            objective_pressure = {}
+
         return {
-            "scenario": self.scenario if isinstance(self.scenario, dict) else {},
+            "scenario": scenario,
             "objective_state": dict(getattr(self, "objective_state", {}) or {}),
+            "objective_status": objective_status,
+            "objective_pressure": objective_pressure,
             "score_by_side": score_by_side,
         }
 

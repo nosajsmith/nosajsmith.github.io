@@ -51,6 +51,54 @@ test("communications summary suppresses demo fallback when a live snapshot exist
   assert.equal(summary.demoExample, null);
 });
 
+test("communications summary prefers view.snapshot reports and read-first before synthesized command context", () => {
+  const summary = summarizeCommunications({
+    contract: { id: "view.snapshot", version: 1, source: "backend_read_model" },
+    scenario: { id: "contract_demo", name: "Contract Demo" },
+    time: { turn: 2, current_hours: 24, phase: "day" },
+    campaign: { status: "active" },
+    read_first: {
+      scenario: "Contract Demo",
+      turn: 2,
+      phase: "day",
+      campaign_status: "active",
+      key_objective: "Hill 101",
+      pressure_summary: "Hill 101 pressure degraded.",
+      latest_report: "Objective Update",
+    },
+    reports: {
+      pending_count: 0,
+      recent: [
+        { id: "r1", kind: "status", title: "Earlier Logistics", summary: "Supply trains clear the road.", severity: "info", time: 18, sender_label: "G4" },
+        { id: "r2", kind: "objectives", title: "Objective Update", summary: "Hill 101 remains contested.", severity: "warning", time: 24, sender_label: "G8" },
+      ],
+    },
+    ai: { enabled: true, last_intent: "delay_hill_101" },
+    pressure: {
+      active: true,
+      summary: "Hill 101 pressure degraded.",
+      reasons: ["ALLIED:HILL:degraded_by_supply"],
+    },
+    bai_report: {
+      posture: "DEFENSIVE",
+      chosen_operation: { name: "Delay Hill 101" },
+      unit_orders: [{ unit_id: "u1", action: "hold", target_location_id: "HILL" }],
+    },
+    units: [{ id: "u1", name: "1st Battalion" }],
+  });
+
+  assert.equal(summary.pending, 0);
+  assert.equal(summary.latest?.id, "r2");
+  assert.equal(summary.latest?.title, "Objective Update");
+  assert.equal(summary.history[1]?.title, "Earlier Logistics");
+  const readFirst = summary.history.find((message) => message.title === "Current Operational Picture");
+  assert.ok(readFirst);
+  assert.match(readFirst.summary, /Hill 101 pressure degraded/i);
+  const aiUpdateIndex = summary.history.findIndex((message) => message.title === "AI Command Update");
+  assert.ok(aiUpdateIndex > 1);
+  assert.equal(summary.demoExample, null);
+});
+
 test("communications summary synthesizes AI command and order-flow messages from live snapshot state", () => {
   const summary = summarizeCommunications({
     time: { turn: 3, current_hours: 48 },

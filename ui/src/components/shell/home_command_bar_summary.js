@@ -5,7 +5,7 @@ import {
   isKoreaScenarioContext,
   pressureFallback,
 } from "../../lib/view_snapshot.js";
-import { summarizeCampaign, summarizeObjectives, summarizeReports } from "./dashboard_summary.js";
+import { summarizeCampaign, summarizeObjectives, summarizePressure, summarizeReports } from "./dashboard_summary.js";
 import { summarizeLocalSustainment, summarizeLogisticsBranch } from "./logistics_branch_summary.js";
 import { summarizeAirOperations, summarizeLocalAirSupport } from "./air_operations_summary.js";
 import { summarizeLocalNavalSupport, summarizeNavalOperations } from "./naval_operations_summary.js";
@@ -88,6 +88,7 @@ export function summarizeHomeCommandBar(snapshot, operations = []) {
   const koreaScenario = isKoreaScenarioContext(snapshot);
   const campaign = summarizeCampaign(snapshot);
   const objectives = summarizeObjectives(snapshot?.objectives);
+  const pressure = summarizePressure(snapshot);
   const reports = summarizeReports(snapshot?.reports);
   const logistics = summarizeLogisticsBranch(snapshot);
   const localSustainment = summarizeLocalSustainment(snapshot);
@@ -103,12 +104,16 @@ export function summarizeHomeCommandBar(snapshot, operations = []) {
   const timeRemainingLabel = campaign.timeRemaining != null ? `${campaign.timeRemaining}h remaining` : "Time remaining unavailable";
   const chosenOperationRaw = labelFromValue(snapshot?.bai_report?.chosen_operation);
   const mainObjectiveRaw = labelFromValue(snapshot?.bai_report?.main_objective);
+  const readFirstObjectiveRaw = normalizeString(snapshot?.read_first?.key_objective);
   const chosenOperation = koreaScenario && containsLegacySouthPacificText(chosenOperationRaw) ? "" : chosenOperationRaw;
+  const readFirstObjective = koreaScenario && containsLegacySouthPacificText(readFirstObjectiveRaw) ? "" : readFirstObjectiveRaw;
   const mainObjective = (
-    koreaScenario && containsLegacySouthPacificText(mainObjectiveRaw)
+    readFirstObjective
+    || (koreaScenario && containsLegacySouthPacificText(mainObjectiveRaw)
       ? ""
-      : mainObjectiveRaw
+      : mainObjectiveRaw)
   ) || objectives.key[0]?.name || "";
+  const pressureSummary = pressure.summary ?? pressureFallback(snapshot?.pressure ?? { summary: null, reasons: [] });
   const reserveLevel = formatReserveLevel(snapshot?.bai_report?.reserve_level);
   const aiOrderCount = Array.isArray(snapshot?.bai_report?.unit_orders) ? snapshot.bai_report.unit_orders.length : 0;
   const rawIntent = normalizeString(snapshot?.ai?.last_intent);
@@ -145,7 +150,7 @@ export function summarizeHomeCommandBar(snapshot, operations = []) {
         mainObjective ? `Objective ${mainObjective}` : operationsOverview.objectiveSituation,
         aiOrderCount ? `${aiOrderCount} task${aiOrderCount === 1 ? "" : "s"} issued` : "",
         reserveLevel ? `${reserveLevel} retained` : trackedOperations.lead?.statusDetail,
-        operationsOverview.immediateConcern || pressureFallback(snapshot?.pressure ?? { summary: null, reasons: [] }),
+        operationsOverview.immediateConcern || pressureSummary,
       ),
     },
     objectives: {
@@ -153,7 +158,7 @@ export function summarizeHomeCommandBar(snapshot, operations = []) {
       topState: objectives.byState[0] ? `${objectives.byState[0].state} ${objectives.byState[0].count}` : "No objectives tracked",
     },
     pressureStaff: {
-      pressure: pressureFallback(snapshot?.pressure ?? { summary: null, reasons: [] }),
+      pressure: pressureSummary,
       staff: snapshot?.staff?.summary ?? "Staff summary unavailable",
     },
     air: {

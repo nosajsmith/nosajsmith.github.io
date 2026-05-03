@@ -100,10 +100,88 @@ def test_engine_api_move_action_uses_current_movement_semantics_v1() -> None:
     unit = api.units.get("US-1MAR")
 
     assert accepted["status"] == "ok"
+    assert accepted["movement"] == {
+        "semantics": "movement_semantics_v1",
+        "resolved": True,
+        "action_type": "move",
+        "unit_id": "US-1MAR",
+        "from_location_id": "LUNGA",
+        "to_location_id": "TULAGI",
+        "destination": {
+            "field": "target",
+            "raw": "TULAGI",
+            "location_id": "TULAGI",
+        },
+        "posture": "ATTACK",
+        "moved": True,
+        "source": "PLAYER",
+    }
     assert rejected["status"] == "error"
+    assert rejected["code"] == "unknown_target"
+    assert rejected["movement"]["resolved"] is False
+    assert rejected["movement"]["from_location_id"] == "TULAGI"
+    assert rejected["movement"]["destination"] == {"field": "target", "raw": "NOPE"}
     assert unit is not None
     assert unit.location_id == "TULAGI"
     assert unit.posture == Posture.ATTACK
+
+
+def test_engine_api_movement_semantics_resolves_destination_to_map_location_id() -> None:
+    api = EngineAPI()
+    api.load_scenario("mini_gc_1942")
+
+    outcome = api.apply_player_action(
+        {"type": "MOVE", "unit_id": "US-1MAR", "target": " tulagi ", "posture": "move"}
+    )
+    unit = api.units.get("US-1MAR")
+
+    assert outcome["status"] == "ok"
+    assert outcome["movement"]["destination"] == {
+        "field": "target",
+        "raw": "tulagi",
+        "location_id": "TULAGI",
+    }
+    assert outcome["movement"]["to_location_id"] == "TULAGI"
+    assert outcome["movement"]["posture"] == "MOVE"
+    assert unit is not None
+    assert unit.location_id == "TULAGI"
+    assert unit.posture == Posture.MOVE
+
+
+def test_engine_api_movement_semantics_rejects_invalid_posture_without_state_change() -> None:
+    api = EngineAPI()
+    api.load_scenario("mini_gc_1942")
+
+    rejected = api.apply_player_action(
+        {"type": "move", "unit_id": "US-1MAR", "target": "TULAGI", "posture": "BROKEN"}
+    )
+    unit = api.units.get("US-1MAR")
+
+    assert rejected["status"] == "error"
+    assert rejected["code"] == "invalid_posture"
+    assert rejected["movement"]["resolved"] is False
+    assert rejected["movement"]["from_location_id"] == "LUNGA"
+    assert unit is not None
+    assert unit.location_id == "LUNGA"
+    assert unit.posture == Posture.DEFEND
+
+
+def test_engine_api_movement_semantics_allows_same_location_posture_update() -> None:
+    api = EngineAPI()
+    api.load_scenario("mini_gc_1942")
+
+    outcome = api.apply_player_action(
+        {"type": "move", "unit_id": "US-1MAR", "target": "LUNGA", "posture": "HOLD"}
+    )
+    unit = api.units.get("US-1MAR")
+
+    assert outcome["status"] == "ok"
+    assert outcome["movement"]["from_location_id"] == "LUNGA"
+    assert outcome["movement"]["to_location_id"] == "LUNGA"
+    assert outcome["movement"]["moved"] is False
+    assert unit is not None
+    assert unit.location_id == "LUNGA"
+    assert unit.posture == Posture.HOLD
 
 
 def test_engine_api_loads_server_scenario_directory_fallback() -> None:

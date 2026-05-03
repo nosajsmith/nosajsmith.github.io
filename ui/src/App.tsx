@@ -32,17 +32,17 @@ import type { FastCommandPreview, OperationPlannerState, TrackedDemoOperation } 
 import { makeWsRpc } from "./lib/ws_rpc";
 import {
   buildObjectiveDisplayName,
-  containsLegacySouthPacificText,
   humanizeScenarioLabel,
   humanizeSideLabel,
   humanizeToken,
   inferScenarioPresentation,
-  isKoreaScenarioContext,
 } from "./lib/view_snapshot.js";
 import {
   DEFAULT_LAUNCHER_MUSIC_VOLUME,
   LAUNCHER_MUSIC_SRC,
   LAUNCHER_SESSION_KEY,
+  deriveLauncherMainEffortLabel,
+  deriveLauncherObjectiveLabel,
   deriveLauncherPrimaryAction,
   describeLauncherMusicState,
   loadLauncherScenarioRoster,
@@ -227,9 +227,14 @@ function buildSelectionSummary(
       if (!objective) {
         return null;
       }
+      const truthState = objective.truth_state ?? objective.objective_status ?? objective.state;
+      const pressureState = objective.pressure_state && objective.pressure_state !== "none"
+        ? `Pressure ${humanizeToken(objective.pressure_state)}`
+        : "";
       const detail = [
-        objective.state ? humanizeToken(objective.state) : "",
-        objective.side ? humanizeSideLabel(objective.side) : "",
+        truthState ? humanizeToken(truthState) : "",
+        objective.controller_side ? `Controller ${humanizeSideLabel(objective.controller_side)}` : objective.side ? humanizeSideLabel(objective.side) : "",
+        pressureState,
         typeof objective.value === "number" ? `Value ${objective.value}` : "",
       ].filter(Boolean).join(" • ");
 
@@ -402,65 +407,6 @@ function readLauncherOpenPreference(): boolean {
   return !shouldStartInShell(window.location.search, persistedDismissed);
 }
 
-function readUnknownLabel(value: unknown): string | null {
-  if (value == null) {
-    return null;
-  }
-  if (typeof value === "string" || typeof value === "number") {
-    const raw = String(value).trim();
-    return raw ? humanizeToken(raw) : null;
-  }
-  if (typeof value === "object") {
-    for (const key of ["name", "label", "title", "objective_id", "target_objective", "target_location_id", "id"]) {
-      const candidate = (value as Record<string, unknown>)[key];
-      if (candidate != null) {
-        const raw = String(candidate).trim();
-        if (raw) {
-          return humanizeToken(raw);
-        }
-      }
-    }
-  }
-  return null;
-}
-
-function readLauncherObjective(snapshot: ViewSnapshot | null, scenarioContext: unknown = snapshot): string {
-  const suppressLegacy = isKoreaScenarioContext(scenarioContext);
-  const greaseObjective = snapshot?.grease_board?.objective?.trim();
-  if (greaseObjective && !(suppressLegacy && containsLegacySouthPacificText(greaseObjective))) {
-    return greaseObjective;
-  }
-  const aiObjective = readUnknownLabel(snapshot?.bai_report?.main_objective);
-  if (aiObjective && !(suppressLegacy && containsLegacySouthPacificText(aiObjective))) {
-    return aiObjective;
-  }
-  const topObjective = [...(snapshot?.objectives ?? [])]
-    .filter((objective) => !(suppressLegacy && containsLegacySouthPacificText(objective?.name)))
-    .sort((left, right) => (Number(right.value ?? 0) - Number(left.value ?? 0)))
-    .find((objective) => Boolean(objective.name || objective.id));
-  if (topObjective) {
-    return buildObjectiveDisplayName(topObjective);
-  }
-  return "Seoul Axis";
-}
-
-function readLauncherMainEffort(snapshot: ViewSnapshot | null, scenarioContext: unknown = snapshot): string {
-  const suppressLegacy = isKoreaScenarioContext(scenarioContext);
-  const greaseEffort = snapshot?.grease_board?.main_effort?.trim();
-  if (greaseEffort && !(suppressLegacy && containsLegacySouthPacificText(greaseEffort))) {
-    return greaseEffort;
-  }
-  const chosenOperation = readUnknownLabel(snapshot?.bai_report?.chosen_operation);
-  if (chosenOperation && !(suppressLegacy && containsLegacySouthPacificText(chosenOperation))) {
-    return chosenOperation;
-  }
-  const aiIntent = snapshot?.ai?.last_intent?.trim();
-  if (aiIntent && !(suppressLegacy && containsLegacySouthPacificText(aiIntent))) {
-    return humanizeToken(aiIntent);
-  }
-  return "Inchon / Seoul Push";
-}
-
 export default function App() {
   const rpc = useMemo(() => makeWsRpc(wsUrl(), { proto: "1.0" }), []);
   const isPrintPreview = useMemo(() => new URLSearchParams(window.location.search).get("print") === "1", []);
@@ -583,11 +529,11 @@ export default function App() {
     [launcherScenarioContext],
   );
   const launcherObjective = useMemo(
-    () => readLauncherObjective(snapshot, launcherScenarioContext),
+    () => deriveLauncherObjectiveLabel(snapshot, launcherScenarioContext),
     [snapshot, launcherScenarioContext],
   );
   const launcherMainEffort = useMemo(
-    () => readLauncherMainEffort(snapshot, launcherScenarioContext),
+    () => deriveLauncherMainEffortLabel(snapshot, launcherScenarioContext),
     [snapshot, launcherScenarioContext],
   );
   const launcherPrimaryAction = useMemo(
@@ -1008,22 +954,16 @@ export default function App() {
 
   async function stepSixHours() {
     setActionKind("step");
-    setControlStatus("Advancing by +6 hours...");
+    setControlStatus("Processing turn...");
     try {
       await rpc.connect();
       setConnected(true);
-      const advanceResult = await stepHours(rpc, 6);
+      await stepHours(rpc, 6);
       const refreshed = await loadSnapshot();
       if (refreshed) {
-        setControlStatus(
-          advanceResult.dtHoursApplied
-            ? "Advanced by +6 hours."
-            : advanceResult.command === "process_turn"
-              ? "Processed live turn update."
-              : "Advanced using bridge fallback timing.",
-        );
+        setControlStatus("Turn advanced.");
       } else {
-        setControlStatus("Time advanced, but refresh failed.");
+        setControlStatus("Turn advanced, but refresh failed.");
       }
     } catch (error) {
       setControlStatus(error instanceof Error ? error.message : "Unable to advance time.");
@@ -1060,7 +1000,7 @@ export default function App() {
       setControlStatus("Save is unavailable on this bridge.");
       return;
     }
-    setControlStatus("Snapshot save is not wired into this shell path yet.");
+    setControlStatus("Snapshot save is not exposed on this shell path yet.");
   }
 
   function loadSnapshotCapture() {
@@ -1068,7 +1008,7 @@ export default function App() {
       setControlStatus("Load is unavailable on this bridge.");
       return;
     }
-    setControlStatus("Snapshot load is not wired into this shell path yet.");
+    setControlStatus("Snapshot load is not exposed on this shell path yet.");
   }
 
   function finalizeEnterCommandShell() {
@@ -1455,7 +1395,7 @@ export default function App() {
     body = (
       <StateScreen
         title="Bridge unavailable"
-        message={message || "The shell could not connect to the active ws15 bridge."}
+        message={message || "The shell could not connect to the current bridge service."}
         action={
           <button className="shell-button" onClick={() => void loadSnapshot()} disabled={refreshing || !!actionKind}>
             Retry Connection
@@ -1467,14 +1407,14 @@ export default function App() {
     body = (
       <StateScreen
         title="Scenario not ready"
-        message={message || "A scenario has not been started on the active bridge yet."}
+        message={message || "No active scenario is running on the current bridge yet."}
         action={
           <>
             <button className="shell-button" onClick={() => void loadSnapshot()} disabled={refreshing || !!actionKind}>
-              Retry Snapshot
+              Refresh Picture
             </button>
             <button className="shell-button" onClick={() => void launchDemo()} disabled={refreshing || !!actionKind}>
-              Launch Demo Scenario
+              Launch Preview Scenario
             </button>
           </>
         }
@@ -1484,7 +1424,7 @@ export default function App() {
     body = (
       <StateScreen
         title="No scenarios available"
-        message={message || "The bridge responded, but no launchable scenarios were listed."}
+        message={message || "The bridge responded, but no launchable scenarios are currently listed."}
       />
     );
   } else {
@@ -1509,6 +1449,7 @@ export default function App() {
         aiActivityState={aiActivityState}
         autoSaveEnabled={autoSaveEnabled}
         selectionSummary={phase === "ready" && snapshot ? buildSelectionSummary(snapshot, selectedSelection, trackedOperations) : null}
+        selectionKind={phase === "ready" && snapshot ? selectedSelection?.kind ?? null : null}
         onSelectBranch={setActiveBranch}
         onOpenPlannerWorkbench={openPlannerWorkbench}
         onSelectScenario={setSelectedScenario}
@@ -1545,8 +1486,8 @@ export default function App() {
       />
       {launcherOpen && !isPrintPreview ? (
         <LauncherScreen
-          title="Theater of Operations"
-          subtitle="Inchon"
+          title="Theater of Operations: Korea"
+          subtitle="Operational Publisher Preview"
           theaterLabel={launcherPresentation.theaterLabel}
           scenarioName={launcherPresentation.scenarioLabel}
           scenarioStatus={launcherScenarioMismatch

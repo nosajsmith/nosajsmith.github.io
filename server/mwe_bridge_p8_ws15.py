@@ -37,6 +37,7 @@ import websockets
 from aiohttp import web
 
 from engine.engine_api import EngineAPI
+from server.view_snapshot import build_view_snapshot as build_backend_view_snapshot
 
 try:
     from scenario_store import (  # type: ignore
@@ -259,58 +260,13 @@ def resolve_requested_scenario(args: Dict[str, Any]) -> tuple[str, str, Dict[str
 def build_view_snapshot() -> Dict[str, Any]:
     require(RUNTIME.started and RUNTIME.scenario_data is not None, "not_ready", "Scenario is not active yet.")
 
-    state = RUNTIME.engine.get_game_state()
-    game = to_object(state.get("game"))
-    game_time = to_object(game.get("time"))
-    authored = RUNTIME.scenario_data or {}
-    authored_weather = authored.get("weather")
-    authored_units = authored.get("units") if isinstance(authored.get("units"), list) else []
-    day_value = int(game_time.get("day") or 1)
-    pressure_payload = derive_pressure_payload(authored)
-
-    return {
-        "scenario": {
-            "id": authored.get("id") or RUNTIME.scenario_id,
-            "name": authored.get("name") or game.get("scenario") or RUNTIME.scenario_name,
-            "theater_id": authored.get("theater_id"),
-            "map_package": authored.get("map_package"),
-        },
-        "time": {
-            "turn": int(game_time.get("turn") or day_value),
-            "current_hours": max(0, (day_value - 1) * 24),
-            "phase": game_time.get("phase"),
-        },
-        "weather": merge_weather_payload(game_time.get("weather"), authored_weather),
-        "campaign": {
-            "status": "active",
-            "score_by_side": game.get("vp") or {},
-        },
-        "pressure": pressure_payload,
-        "reports": {
-            "pending_count": None,
-            "recent": [],
-        },
-        "staff": {
-            "summary": to_object(authored.get("grease_board")).get("staff_notes"),
-        },
-        "ai": game.get("ai") or {},
-        "bai_report": state.get("bai_report") or {},
-        "grease_board": authored.get("grease_board"),
-        "map_presentation": authored.get("map_presentation"),
-        "local_pressure_areas": authored.get("local_pressure_areas") or [],
-        "named_features": authored.get("named_features") or [],
-        "airfields": authored.get("airfields") or [],
-        "ports": authored.get("ports") or [],
-        "naval_support_windows": authored.get("naval_support_windows") or [],
-        "objectives": authored.get("objectives") or [],
-        "units": merge_live_units(state.get("units") or [], authored_units),
-        "logs": RUNTIME.engine.get_logs(),
-        "capabilities": {
-            "can_save_snapshot": False,
-            "can_load_snapshot": False,
-            "can_export_replay": False,
-        },
-    }
+    return build_backend_view_snapshot(
+        scenario_id=RUNTIME.scenario_id,
+        scenario_name=RUNTIME.scenario_name,
+        authored_scenario=RUNTIME.scenario_data or {},
+        engine_state=RUNTIME.engine.get_game_state(),
+        engine_logs=RUNTIME.engine.get_logs(),
+    )
 
 
 async def handle_cmd(req: Dict[str, Any]) -> Dict[str, Any]:

@@ -19,6 +19,20 @@ def test_build_ai_decision_state_exposes_narrow_snapshot() -> None:
     assert state == {
         "scenario": {"units": [{"id": "JP-35BDE", "side": "AXIS"}], "objectives": []},
         "objective_state": {"AXIS:TULAGI": True},
+        "objective_status": {},
+        "objective_pressure": {
+            "semantics": "supply_aware_objective_pressure_v1",
+            "radius": 1,
+            "supply_thresholds": {
+                "critical_below": 10,
+                "adequate_at_or_above": 30,
+                "low_supply_factor": 0.5,
+            },
+            "affects_scoring": False,
+            "by_objective": {},
+            "total_pressure_score": 0.0,
+            "reasons": [],
+        },
         "score_by_side": {"AXIS": 3, "ALLIED": 1},
     }
 

@@ -1,6 +1,7 @@
 import type { ViewSnapshot } from "../../types/viewSnapshot";
 import { humanizeCampaignStatus, humanizeScenarioLabel, humanizeToken, inferScenarioPresentation } from "../../lib/view_snapshot.js";
 import { DEFAULT_PITCH_SCENARIO } from "../../lib/scenario_adapter.js";
+import type { InspectorSelectionKind } from "./inspector_types";
 import type { PlannerWorkbenchTab } from "./OperationPlannerPanel";
 
 type ActionKind = "refresh" | "launch" | "step" | "ai" | null;
@@ -29,6 +30,7 @@ type TopStripProps = {
   aiActivityState: "active" | "idle" | "unavailable";
   autoSaveEnabled: boolean;
   selectionSummary: { label: string; detail: string } | null;
+  selectionKind: InspectorSelectionKind | null;
   onSelectBranch: (branch: "Theatre" | "Land" | "Air" | "Naval" | "Logistics" | "Intelligence" | "Dashboard" | "Reinforcements") => void;
   onOpenPlannerWorkbench: (tab: PlannerWorkbenchTab) => void;
   onSelectScenario: (value: string) => void;
@@ -51,7 +53,7 @@ function buildScenarioInstant(currentHours: number | null, epoch: { year: number
 
 function formatScenarioCalendar(instant: Date | null): string {
   if (!instant) {
-    return "Calendar unavailable";
+    return "Calendar pending";
   }
   return new Intl.DateTimeFormat("en-GB", {
     day: "numeric",
@@ -87,6 +89,44 @@ const VIEW_OPTIONS = [
   { value: "Reinforcements", label: "Reinforcements" },
 ] as const;
 
+const DEMO_COMMANDS = [
+  {
+    id: "move",
+    label: "Move",
+    detail: "Plot movement through the current planner path.",
+    requiresUnit: true,
+    action: "planner",
+  },
+  {
+    id: "attack",
+    label: "Attack",
+    detail: "Shape offensive intent from the selected unit.",
+    requiresUnit: true,
+    action: "planner",
+  },
+  {
+    id: "hold_defend",
+    label: "Hold / Defend",
+    detail: "Frame a defensive posture in the planner.",
+    requiresUnit: true,
+    action: "planner",
+  },
+  {
+    id: "reserve_rest",
+    label: "Reserve / Rest",
+    detail: "Review reserve or rest posture for the current focus.",
+    requiresUnit: true,
+    action: "planner",
+  },
+  {
+    id: "end_turn",
+    label: "End Turn",
+    detail: "Resolve the next turn and refresh the snapshot picture.",
+    requiresUnit: false,
+    action: "step",
+  },
+] as const;
+
 export default function TopStrip({
   snapshot,
   activeBranch,
@@ -103,6 +143,7 @@ export default function TopStrip({
   aiActivityState,
   autoSaveEnabled,
   selectionSummary,
+  selectionKind,
   onSelectBranch,
   onOpenPlannerWorkbench,
   onSelectScenario,
@@ -116,15 +157,16 @@ export default function TopStrip({
   onLoad,
 }: TopStripProps) {
   const fallbackScenario = selectedScenario || DEFAULT_PITCH_SCENARIO;
+  const activeViewLabel = VIEW_OPTIONS.find((option) => option.value === activeBranch)?.label ?? activeBranch;
   const presentation = inferScenarioPresentation(snapshot ?? { scenario: { id: fallbackScenario, name: fallbackScenario } });
   const scenarioName = presentation.scenarioLabel || humanizeScenarioLabel(snapshot?.scenario.name ?? fallbackScenario);
   const currentHours = snapshot?.time.current_hours ?? null;
   const scenarioInstant = buildScenarioInstant(currentHours, presentation.calendarEpoch);
   const turnLabel = snapshot?.time.turn != null ? String(snapshot.time.turn) : "--";
   const day = currentHours != null ? `Day ${Math.floor(currentHours / 24) + 1}` : "Day ?";
-  const phaseLabel = snapshot?.time.phase ? humanizeToken(snapshot.time.phase) : "Phase unavailable";
+  const phaseLabel = snapshot?.time.phase ? humanizeToken(snapshot.time.phase) : "Phase pending";
   const unitCount = snapshot?.units.length ?? null;
-  const campaignStatus = snapshot?.campaign?.status ? humanizeCampaignStatus(snapshot.campaign.status) : "Status unavailable";
+  const campaignStatus = snapshot?.campaign?.status ? humanizeCampaignStatus(snapshot.campaign.status) : "Campaign picture pending";
   const calendar = formatScenarioCalendar(scenarioInstant);
   const referenceClocks = presentation.referenceClocks.map((clock) => ({
     label: clock.label,
@@ -135,19 +177,45 @@ export default function TopStrip({
   const controlsBusy = refreshing || actionKind !== null;
   const scenarioControlDisabled = scenariosLoading || controlsBusy;
   const canStep = hasSnapshot && !controlsBusy;
+  const hasUnitFocus = selectionKind === "unit";
   const canToggleAi = hasSnapshot && !controlsBusy && aiControlAvailable;
   const refreshDisabled = controlsBusy;
   const replayUnavailable = !capabilities?.can_export_replay;
   const saveUnavailable = !capabilities?.can_save_snapshot;
   const loadUnavailable = !capabilities?.can_load_snapshot;
+  const commandContext = !hasSnapshot
+    ? "Command shell framing is ready. Load a scenario to bring in the operational picture."
+    : activeBranch === "Theatre"
+      ? "Theatre view. Work from the map, then open Current Focus or review the operational feed."
+      : `Current view: ${activeViewLabel}. Review this branch, then return to Theatre for direct map orders.`;
+  const readFirstFocus = snapshot?.read_first?.key_objective?.trim() || "";
+  const readFirstDetail = [
+    snapshot?.read_first?.pressure_summary,
+    snapshot?.read_first?.latest_report ? `Latest report: ${snapshot.read_first.latest_report}` : "",
+    snapshot?.ai?.last_intent ? `AI: ${humanizeToken(snapshot.ai.last_intent)}` : "",
+  ].filter(Boolean).join(" • ");
+  const focusLabel = selectionSummary
+    ? selectionSummary.label
+    : !hasSnapshot
+      ? "Awaiting operational picture"
+      : activeBranch === "Theatre"
+        ? readFirstFocus || "Map selection pending"
+        : `${activeViewLabel} overview`;
+  const focusDetail = selectionSummary
+    ? selectionSummary.detail
+    : !hasSnapshot
+      ? "Load a scenario to bring the live picture into focus."
+      : activeBranch === "Theatre"
+        ? readFirstDetail || "Select a visible unit, objective, airfield, or port to open Current Focus."
+        : "No unit or site is currently selected.";
   const baiTone = aiActivityState === "active" ? "is-live" : "is-idle";
   const baiTitle = !hasSnapshot
-    ? "BAI status is unavailable until a scenario picture is loaded."
+    ? "BAI remains unavailable until a scenario picture is loaded."
     : aiActivityState === "active"
-      ? "BAI is actively evaluating or processing."
+      ? "BAI is evaluating the current picture."
       : aiControlAvailable
-        ? "BAI is idle and not actively processing."
-        : "BAI control is unavailable on this bridge.";
+        ? "BAI is standing by on the current picture."
+        : "BAI control is not exposed on this bridge.";
   const bridgeTitle = connected ? "Bridge connection is live and reporting." : "Bridge connection is offline or not reporting.";
   const autoSaveTitle = autoSaveEnabled ? "Auto Save is enabled for this shell." : "Auto Save is disabled for this shell.";
   const actionButtons = [
@@ -173,6 +241,12 @@ export default function TopStrip({
       onClick: onLoad,
     },
   ];
+  const primaryCommandId = hasUnitFocus ? "move" : "end_turn";
+  const commandFlow = !hasSnapshot
+    ? "Load a scenario to arm demo controls."
+    : hasUnitFocus
+      ? `Current Focus is command-ready: ${focusLabel}.`
+      : "Select a unit on the map to arm Move, Attack, Hold, and Reserve.";
 
   return (
     <header className="shell-topstrip">
@@ -181,6 +255,12 @@ export default function TopStrip({
         <h1 className="shell-title">{presentation.shellTitle}</h1>
         <div className="shell-topstrip__identity-note">
           {[scenarioName, presentation.frontLabel, campaignStatus].filter(Boolean).join(" • ")}
+        </div>
+        <div className="shell-topstrip__contextline">{commandContext}</div>
+        <div className="shell-topstrip__focusline" title={focusDetail}>
+          <span className="shell-topstrip__focus-label">Current Focus</span>
+          <strong>{focusLabel}</strong>
+          <span className="shell-topstrip__focus-detail">{focusDetail}</span>
         </div>
       </div>
 
@@ -273,27 +353,58 @@ export default function TopStrip({
                     </option>
                   ))
                 ) : (
-                  <option value="">{scenariosLoading ? "Loading scenarios..." : "No scenarios available"}</option>
+                  <option value="">{scenariosLoading ? "Refreshing roster..." : "No scenarios listed"}</option>
                 )}
               </select>
               <button className="shell-button" onClick={onLaunchScenario} disabled={scenarioControlDisabled || !selectedScenario}>
-                {actionKind === "launch" ? "Launching..." : "Launch"}
+                {actionKind === "launch" ? "Loading..." : "Load Scenario"}
               </button>
             </div>
           </div>
 
           <div className="shell-control-group">
-            <span className="shell-control-group__label">Operations</span>
+            <span className="shell-control-group__label">Picture</span>
             <div className="shell-control-row">
-              <button className="shell-button" onClick={onStepSixHours} disabled={!canStep}>
-                {actionKind === "step" ? "Stepping..." : "Step +6h"}
-              </button>
               <button className="shell-button shell-button--secondary" onClick={onRefresh} disabled={refreshDisabled}>
-                {refreshing || actionKind === "refresh" ? "Refreshing..." : "Refresh"}
+                {refreshing || actionKind === "refresh" ? "Refreshing..." : "Refresh Picture"}
               </button>
             </div>
           </div>
         </div>
+
+        <section className="shell-operator-controls" aria-label="Demo controls / operator affordances">
+          <div className="shell-operator-controls__head">
+            <span className="shell-control-group__label">Demo Controls</span>
+            <strong>{hasUnitFocus ? "Unit Orders" : "Turn Flow"}</strong>
+          </div>
+          <div className="shell-operator-controls__focus" title={focusDetail}>
+            <span>Focus</span>
+            <strong>{focusLabel}</strong>
+          </div>
+          <div className="shell-operator-controls__grid">
+            {DEMO_COMMANDS.map((command) => {
+              const disabled = command.action === "step"
+                ? !canStep
+                : !hasSnapshot || controlsBusy || (command.requiresUnit && !hasUnitFocus);
+              const title = disabled && command.requiresUnit && hasSnapshot && !hasUnitFocus
+                ? "Select a unit on the map before issuing this command."
+                : command.detail;
+              return (
+                <button
+                  key={command.id}
+                  type="button"
+                  className={`shell-operator-controls__command${command.id === primaryCommandId ? " is-primary" : ""}`}
+                  onClick={command.action === "step" ? onStepSixHours : () => onOpenPlannerWorkbench("plan")}
+                  disabled={disabled}
+                  title={title}
+                >
+                  <span>{command.action === "step" && actionKind === "step" ? "Processing..." : command.label}</span>
+                </button>
+              );
+            })}
+          </div>
+          <div className="shell-operator-controls__flow">{commandFlow}</div>
+        </section>
 
         <aside className="shell-statusstrip" aria-label="Command status strip" title={controlStatus || undefined}>
           <button

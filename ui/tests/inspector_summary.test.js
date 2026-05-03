@@ -95,6 +95,64 @@ test("inspector summary renders objective selections as stacked multi-entity vie
   assert.match(sectionByTitle(summary, "Notes / Warnings").rows[0].value, /probing fire/i);
 });
 
+test("inspector summary prefers view.snapshot objective truth and pressure for current focus", () => {
+  const snapshot = {
+    contract: { id: "view.snapshot", version: 1, source: "backend_read_model" },
+    objectives: [
+      {
+        id: "obj_hill",
+        location_id: "HILL",
+        name: "Hill 101",
+        side: "ALLIED",
+        value: 80,
+        state: "held_allied",
+        truth_state: "contested",
+        objective_status: "contested",
+        controller_side: null,
+        controlled: false,
+        objective_truth_key: "ALLIED:HILL",
+        pressure_state: "degraded",
+        pressure_score: 50,
+        x: 4,
+        y: 4,
+      },
+    ],
+    objective_truth: {
+      "ALLIED:HILL": {
+        status: "contested",
+        controller_side: null,
+      },
+    },
+    pressure: {
+      active: true,
+      reasons: ["ALLIED:HILL:degraded_by_supply"],
+      by_objective: {
+        "ALLIED:HILL": {
+          pressure_state: "degraded",
+          pressure_score: 50,
+        },
+      },
+    },
+    airfields: [],
+    ports: [],
+    units: [],
+    local_pressure_areas: [],
+    reports: { recent: [] },
+  };
+
+  const summary = summarizeInspector(snapshot, { kind: "objective", id: "obj_hill" });
+  const objectiveStatus = sectionByTitle(summary, "Objective / Control Status");
+  const operational = sectionByTitle(summary, "Operational Significance");
+
+  assert.equal(summary.summary.rows[1].value, "Contested");
+  assert.equal(objectiveStatus.rows.find((row) => row.label === "Status")?.value, "Contested");
+  assert.equal(objectiveStatus.rows.find((row) => row.label === "Controller")?.value, "None exposed");
+  assert.equal(objectiveStatus.rows.find((row) => row.label === "Objective Pressure")?.value, "Degraded");
+  assert.equal(objectiveStatus.rows.find((row) => row.label === "Pressure Score")?.value, 50);
+  assert.equal(operational.rows.find((row) => row.label === "Current Pressure")?.value, "Degraded • score 50");
+  assert.match(summary.summary.rows[3].value, /ALLIED HILL degraded by supply/i);
+});
+
 test("inspector summary renders selected airbases with truthful infrastructure placeholders", () => {
   const snapshot = {
     objectives: [],

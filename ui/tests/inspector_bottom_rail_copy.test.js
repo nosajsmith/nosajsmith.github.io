@@ -71,15 +71,17 @@ test("reports and weather cards surface clearer state wording", () => {
   assert.match(homeCommandBarSource, /landAlert/);
   assert.match(homeCommandBarSource, /landOperation/);
 
-  assert.match(reportsFeedSource, /Dispatch queue unavailable/);
+  assert.match(reportsFeedSource, /Dispatch picture pending/);
   assert.match(reportsFeedSource, /No pending dispatches/);
   assert.match(reportsFeedSource, /Current Dispatch/);
-  assert.match(reportsFeedSource, /Review dispatch history, pending traffic, and current reporting gaps/);
+  assert.match(reportsFeedSource, /Read the latest dispatch first, then open Communications Center for the wider traffic picture/);
+  assert.match(reportsFeedSource, /Open Communications Center to review dispatch history, pending traffic, and reporting gaps/);
 
   assert.match(mapWeatherBriefSource, /shell-weather__summary-title">Weather/);
   assert.match(mapWeatherBriefSource, /shell-weather__summary-state/);
   assert.match(mapWeatherBriefSource, /shell-weather__summary-support/);
   assert.match(mapWeatherBriefSource, /shell-weather__detail-grid/);
+  assert.match(mapWeatherBriefSource, /Weather picture pending/);
   assert.match(mapWeatherBriefSource, /label: "Sight"/);
   assert.match(mapWeatherBriefSource, /label: "Ground"/);
   assert.match(mapWeatherBriefSource, /label: "Air"/);

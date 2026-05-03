@@ -30,6 +30,34 @@ function normalizeId(value) {
   return String(value ?? "").trim().toUpperCase();
 }
 
+function objectiveTruthKey(objective) {
+  const explicit = String(objective?.objective_truth_key ?? "").trim().toUpperCase();
+  if (explicit) {
+    return explicit;
+  }
+  const side = normalizeId(objective?.side);
+  const location = normalizeId(objective?.location_id ?? objective?.id ?? objective?.name);
+  return side && location ? `${side}:${location}` : "";
+}
+
+function uniqueStrings(items) {
+  const seen = new Set();
+  const rows = [];
+  for (const item of items) {
+    const text = String(item ?? "").trim();
+    if (!text) {
+      continue;
+    }
+    const key = text.toLowerCase();
+    if (seen.has(key)) {
+      continue;
+    }
+    seen.add(key);
+    rows.push(text);
+  }
+  return rows;
+}
+
 function summarizeLocState(unit) {
   const loc = unit?.inspector?.operational_state?.loc;
   if (!loc || typeof loc !== "object") {
@@ -124,7 +152,21 @@ function buildContext(snapshot, selection, entity) {
       || coordMatch(unit, entity)
   ));
   const relatedReports = reports.filter((report) => matchingAreas.some((area) => area.id === report?.local_area_id));
-  const pressureReasons = matchingAreas.flatMap((area) => (Array.isArray(area?.pressure_reasons) ? area.pressure_reasons : []));
+  const objectiveKeys = new Set(relatedObjectives.map((objective) => objectiveTruthKey(objective)).filter(Boolean));
+  const objectiveTruthRows = Object.entries(snapshot?.objective_truth ?? {})
+    .filter(([key]) => objectiveKeys.has(String(key).trim().toUpperCase()))
+    .map(([, row]) => row);
+  const objectivePressureRows = Object.entries(snapshot?.pressure?.by_objective ?? {})
+    .filter(([key]) => objectiveKeys.has(String(key).trim().toUpperCase()))
+    .map(([, row]) => row);
+  const localPressureReasons = matchingAreas.flatMap((area) => (Array.isArray(area?.pressure_reasons) ? area.pressure_reasons : []));
+  const snapshotPressureReasons = Array.isArray(snapshot?.pressure?.reasons)
+    ? snapshot.pressure.reasons.filter((reason) => {
+        const normalized = String(reason ?? "").trim().toUpperCase();
+        return Array.from(objectiveKeys).some((key) => normalized.startsWith(`${key}:`) || normalized.includes(key));
+      })
+    : [];
+  const pressureReasons = uniqueStrings([...localPressureReasons, ...snapshotPressureReasons]);
 
   return {
     matchingAreas,
@@ -134,6 +176,8 @@ function buildContext(snapshot, selection, entity) {
     relatedUnits,
     relatedReports,
     pressureReasons,
+    objectiveTruthRows,
+    objectivePressureRows,
     locationIds,
   };
 }
@@ -174,6 +218,15 @@ function buildObjectiveStatusSection(selection, entity, context) {
       body: "No current objective or control status is exposed for this site.",
     };
   }
+  const truth = context.objectiveTruthRows[0] ?? {};
+  const pressure = context.objectivePressureRows[0] ?? {};
+  const truthState = objective.truth_state
+    ?? objective.objective_status
+    ?? truth.status
+    ?? objective.state;
+  const controllerSide = objective.controller_side ?? truth.controller_side ?? null;
+  const pressureState = objective.pressure_state ?? pressure.pressure_state ?? null;
+  const pressureScore = objective.pressure_score ?? pressure.pressure_score ?? null;
 
   return {
     id: "objective-status",
@@ -182,9 +235,12 @@ function buildObjectiveStatusSection(selection, entity, context) {
     variant: "key-list",
     rows: [
       { label: "Objective", value: formatValue(objective.name, "Objective unavailable") },
-      { label: "Status", value: objective.state ? humanizeToken(objective.state) : "Unavailable" },
+      { label: "Status", value: truthState ? humanizeToken(truthState) : "Unavailable" },
       { label: "Assigned Side", value: objective.side ? humanizeToken(objective.side) : "Unavailable" },
+      { label: "Controller", value: controllerSide ? humanizeToken(controllerSide) : "None exposed" },
       { label: "Controlled", value: formatBoolean(objective.controlled) },
+      { label: "Objective Pressure", value: pressureState ? humanizeToken(pressureState) : "No objective pressure exposed" },
+      { label: "Pressure Score", value: pressureScore != null ? pressureScore : "Unavailable" },
       { label: "Objective Value", value: objective.value != null ? objective.value : "Unavailable" },
     ],
   };
@@ -246,6 +302,15 @@ function buildInfrastructureSection(selection, entity, context) {
 
 function buildOperationalSignificanceSection(selection, context) {
   const leadArea = context.matchingAreas[0] ?? null;
+  const objectivePressure = context.objectivePressureRows[0] ?? null;
+  const pressureValue = objectivePressure?.pressure_state
+    ? [
+        humanizeToken(objectivePressure.pressure_state),
+        objectivePressure.pressure_score != null ? `score ${objectivePressure.pressure_score}` : "",
+      ].filter(Boolean).join(" • ")
+    : context.pressureReasons.length
+      ? context.pressureReasons.map((reason) => humanizePressureReason(reason)).join(" • ")
+      : "No pressure signal exposed";
   const locSummary = context.relatedUnits.length
     ? context.relatedUnits.map((unit) => summarizeLocState(unit)).join(" • ")
     : "No nearby LOC state is exposed from collocated formations.";
@@ -266,7 +331,7 @@ function buildOperationalSignificanceSection(selection, context) {
     variant: "key-list",
     rows: [
       { label: "Pressure Area", value: leadArea ? `${leadArea.label} • ${humanizeToken(leadArea.kind)}` : "No local pressure area exposed" },
-      { label: "Current Pressure", value: context.pressureReasons.length ? context.pressureReasons.map((reason) => humanizePressureReason(reason)).join(" • ") : "No pressure signal exposed" },
+      { label: "Current Pressure", value: pressureValue },
       { label: "LOC Nearby", value: locSummary },
       { label: "Support Link", value: supportRelevance },
     ],
@@ -356,15 +421,21 @@ function buildEntitySummary(selection, entity, context) {
     : selection.kind === "airfield"
       ? "Airbase"
       : "Port / Supply Node";
+  const objectiveState = objective?.truth_state
+    ?? objective?.objective_status
+    ?? context.objectiveTruthRows[0]?.status
+    ?? objective?.state;
   const leadConcern = context.pressureReasons.length
     ? humanizePressureReason(context.pressureReasons[0])
-    : "No current pressure cue exposed";
+    : context.objectivePressureRows[0]?.pressure_state
+      ? `Objective pressure ${humanizeToken(context.objectivePressureRows[0].pressure_state)}`
+      : "No current pressure cue exposed";
 
   return {
     title: "Current Summary",
     rows: [
       { label: "Site Type", value: typeLabel },
-      { label: "Control", value: objective?.state ? humanizeToken(objective.state) : "No control status exposed" },
+      { label: "Control", value: objectiveState ? humanizeToken(objectiveState) : "No control status exposed" },
       { label: "Forces Here", value: context.relatedUnits.length ? String(context.relatedUnits.length) : "None exposed" },
       { label: "Immediate Concern", value: leadConcern },
     ],

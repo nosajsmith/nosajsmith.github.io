@@ -96,8 +96,8 @@ function extractFormationState(unit) {
       ? operational.loc.label.trim()
       : (typeof operational?.loc?.state === "string" && operational.loc.state.trim() ? `LOC ${humanizeToken(operational.loc.state)}` : "LOC unavailable"),
     locDetail: typeof operational?.loc?.detail === "string" && operational.loc.detail.trim() ? operational.loc.detail.trim() : "LOC detail unavailable",
-    supplyPct: numericValue(supply?.supply_pct),
-    supplyDays: numericValue(supply?.supply_days_current ?? supply?.supply_display ?? unit?.supply),
+    supplyPct: numericValue(supply?.supply_pct ?? unit?.supply),
+    supplyDays: numericValue(supply?.supply_days_current),
     support: Array.isArray(attachmentsSupport?.support) ? attachmentsSupport.support.map((item) => String(item ?? "").trim()).filter(Boolean) : [],
     attachments: Array.isArray(attachmentsSupport?.attachments) ? attachmentsSupport.attachments.map((item) => String(item ?? "").trim()).filter(Boolean) : [],
     detached: Array.isArray(attachmentsSupport?.detached) ? attachmentsSupport.detached.map((item) => String(item ?? "").trim()).filter(Boolean) : [],

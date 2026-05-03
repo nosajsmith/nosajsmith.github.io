@@ -1,5 +1,5 @@
 import { formatCommunicationTime, summarizeCommunications } from "./communications_summary.js";
-import { summarizeCampaign, summarizeObjectives, summarizeScore } from "./dashboard_summary.js";
+import { summarizeCampaign, summarizeObjectives, summarizePressure, summarizeScore } from "./dashboard_summary.js";
 import { summarizeHendersonPressureBoard } from "./henderson_pressure_board_summary.js";
 import { summarizeIntelligenceBranch } from "./intelligence_branch_summary.js";
 import { buildWeatherImpactState } from "./map_scene.js";
@@ -245,12 +245,19 @@ function extractLandFormationState(unit) {
   };
 }
 
-function summarizeCampaignPicture(campaign, objectives, score, pressureSummary) {
+function summarizeCampaignPicture(snapshot, campaign, objectives, score, pressureSummary) {
   const objectiveProgress = objectives?.byState?.length
     ? objectives.byState.map((row) => `${row.state} ${row.count}`).join(" • ")
     : "Objective-state detail unavailable.";
-  const keyObjective = objectives?.key?.[0]
-    ? `${objectives.key[0].name} (${objectives.key[0].state})`
+  const readFirstObjective = String(snapshot?.read_first?.key_objective ?? "").trim();
+  const matchingReadFirstObjective = readFirstObjective
+    ? objectives?.key?.find((objective) => objective.name === readFirstObjective) ?? null
+    : null;
+  const keyObjectiveRow = matchingReadFirstObjective ?? objectives?.key?.[0] ?? null;
+  const keyObjective = keyObjectiveRow
+    ? `${readFirstObjective || keyObjectiveRow.name} (${keyObjectiveRow.state})`
+    : readFirstObjective
+      ? readFirstObjective
     : "No key objective is exposed on the current shell path.";
   const scoreSummary = Array.isArray(score) && score.length
     ? score.map((row) => `${row.label} ${row.value}`).join(" • ")
@@ -1245,8 +1252,9 @@ function summarizeTurnBriefModule(campaign, localBattle, supportPicture, communi
 
 export function summarizeTheaterDashboard(snapshot, previousSnapshot = null, operations = []) {
   const campaign = summarizeCampaign(snapshot);
-  const objectives = summarizeObjectives(snapshot?.objectives);
-  const score = summarizeScore(snapshot?.campaign?.score_by_side);
+  const objectives = summarizeObjectives(snapshot?.objectives, snapshot);
+  const score = summarizeScore(snapshot);
+  const pressure = summarizePressure(snapshot);
   const communications = summarizeCommunications(snapshot, operations);
   const intelligenceBranch = summarizeIntelligenceBranch(snapshot, operations);
   const localBattle = summarizeHendersonPressureBoard(snapshot, operations);
@@ -1258,7 +1266,7 @@ export function summarizeTheaterDashboard(snapshot, previousSnapshot = null, ope
   const reinforcementsWithdrawals = summarizeReinforcementsModule(snapshot);
   const forceQuality = summarizeForceQualityMatrix(units);
   const supportPicture = summarizeSupportPicture(snapshot, localBattle);
-  const campaignPicture = summarizeCampaignPicture(campaign, objectives, score, pressureFallback(snapshot?.pressure ?? { summary: null, reasons: [] }));
+  const campaignPicture = summarizeCampaignPicture(snapshot, campaign, objectives, score, pressure.summary ?? pressureFallback(snapshot?.pressure ?? { summary: null, reasons: [] }));
   const landForces = summarizeLandForcesModule(units);
   const operationsSummary = summarizeTrackedOperations(snapshot, operations);
   const staff = {
@@ -1282,7 +1290,7 @@ export function summarizeTheaterDashboard(snapshot, previousSnapshot = null, ope
     context: {
       unitsTracked: units.length,
       objectivesTracked: objectives.total,
-      pressureSummary: pressureFallback(snapshot?.pressure ?? { summary: null, reasons: [] }),
+      pressureSummary: pressure.summary ?? pressureFallback(snapshot?.pressure ?? { summary: null, reasons: [] }),
     },
     land: {
       totalUnits: units.length,

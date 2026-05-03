@@ -3,6 +3,8 @@ import assert from "node:assert/strict";
 
 import { renderLauncherSmoke } from "../src/components/shell/smoke_render.js";
 import {
+  deriveLauncherMainEffortLabel,
+  deriveLauncherObjectiveLabel,
   deriveLauncherPrimaryAction,
   describeLauncherMusicState,
   loadLauncherScenarioRoster,
@@ -46,11 +48,11 @@ test("launcher helpers preserve direct-shell fast path and live launch defaults"
   );
   assert.equal(
     describeLauncherMusicState({ available: true, enabled: true, playing: true }),
-    "Theme active",
+    "Theme playing",
   );
   assert.equal(
     describeLauncherMusicState({ available: true, enabled: false, playing: false }),
-    "Theme ready",
+    "Theme available",
   );
 });
 
@@ -59,19 +61,21 @@ test("launcher smoke render uses operator-facing title treatment", () => {
     scenarioName: "Inchon MVP",
     bridgeStatus: "Connected",
     objective: "Seoul",
-    musicLabel: "Theme active",
+    musicLabel: "Theme playing",
   });
 
-  assert.match(html, /Publisher Demo Vertical Slice/);
-  assert.match(html, /Theater of Operations Inchon/);
+  assert.match(html, /Publisher Preview Build/);
+  assert.match(html, /Theater of Operations: Korea Operational Publisher Preview/);
   assert.match(html, /Korea Theater .* Operation Chromite/);
-  assert.match(html, /Current Vertical Slice: Inchon/);
-  assert.match(html, /Shell Handoff Direct shell handoff ready/);
-  assert.match(html, /Franchise Key Art/);
+  assert.match(html, /Playable Publisher Preview/);
+  assert.match(html, /Operational Command Shell/);
+  assert.match(html, /One-Turn Playable Loop/);
+  assert.match(html, /Command Shell Command shell ready/);
+  assert.match(html, /Publisher Preview Key Art/);
   assert.match(html, /Bridge Connected/);
   assert.match(html, /Objective Seoul/);
-  assert.match(html, /Launcher Audio Theme active/);
-  assert.match(html, /Optional Menu Theme 34%/);
+  assert.match(html, /Preview Audio Theme playing/);
+  assert.match(html, /Opening Theme 34%/);
 });
 
 test("launcher roster loader preserves reachable-bridge populated-roster behavior", async () => {
@@ -119,9 +123,29 @@ test("launcher bridge summary stays truthful when snapshot data is present", () 
     {
       bridgeConnected: true,
       bridgeStatus: "Connected",
-      scenarioStatus: "Bridge connected, awaiting launch state",
+      scenarioStatus: "Bridge connected, awaiting scenario state",
       currentTurn: "Turn pending",
       currentPhase: "Phase pending",
     },
   );
+});
+
+test("launcher labels prefer read-first objective before legacy command fallbacks", () => {
+  const snapshot = {
+    scenario: { id: "inchon_mvp", name: "Operation Chromite" },
+    read_first: { key_objective: "Seoul Corridor" },
+    grease_board: {
+      objective: "Henderson Field",
+      main_effort: "Secure Kimpo Road",
+    },
+    bai_report: {
+      main_objective: { name: "Bloody Ridge" },
+      chosen_operation: { name: "Hold Henderson Perimeter" },
+    },
+    ai: { last_intent: "hold_henderson_perimeter" },
+    objectives: [{ id: "o1", name: "Kimpo Airfield", value: 100 }],
+  };
+
+  assert.equal(deriveLauncherObjectiveLabel(snapshot, snapshot), "Seoul Corridor");
+  assert.equal(deriveLauncherMainEffortLabel(snapshot, snapshot), "Secure Kimpo Road");
 });
